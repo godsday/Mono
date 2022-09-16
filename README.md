@@ -1,8 +1,8 @@
 # Mono - Wallet Controller.
 
-## Frontend - Flutter ,Backend - Hive Database
+## Frontend - Flutter , Backend - Hive Database
 
-Mono is a money management application.Which is completely developed by flutter framework.
+##### Mono - money management application.Which is completely developed by flutter framework. Advanced User Interface.
 
 
 ## Screens
@@ -22,10 +22,10 @@ Mono is a money management application.Which is completely developed by flutter 
 
 ## Features
 
-### CRED operation
+### CRED operations
 ### Animations
-### Graphial Representaion
-### Dark theme
+### Graphial Representaions
+### Switch themes
 ### Notifications
 
    
@@ -36,4 +36,6 @@ Mono is a money management application.Which is completely developed by flutter 
 
 ![img](./screenshot/second.png)
 
-# PlayStore Link  [Mono](https://play.google.com/store/apps/details?id=in.ror.mono)
+# PlayStore Link 
+## [Mono](https://play.google.com/store/apps/details?id=in.ror.mono)
+
