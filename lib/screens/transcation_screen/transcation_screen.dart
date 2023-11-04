@@ -73,6 +73,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
               ClipPath(
                 clipper: CurveClipper(),
                 child: Container(
+                  color: Theme.of(context).dividerColor,
+                  height: 15.0.h,
                   child: Center(
                     child: Text(
                       " All Transctions",
@@ -83,8 +85,6 @@ class _TranscationScreenState extends State<TranscationScreen> {
                       ),
                     ),
                   ),
-                  color: Theme.of(context).dividerColor,
-                  height: 15.0.h,
                 ),
               ),
               Padding(
@@ -130,13 +130,13 @@ class _TranscationScreenState extends State<TranscationScreen> {
                             },
                             icon: Icon(
                               Icons.calendar_month_outlined,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               size: 15.sp,
                             ),
                             label: Text(
                               "Pick Date",
                               style: TextStyle(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                               ),
                             ),
                           )
@@ -175,7 +175,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                           : ListView.builder(
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                TranscationModel _value = newlist[index];
+                                TranscationModel value = newlist[index];
 
                                 return Slidable(
                                   key: const ValueKey(1),
@@ -197,10 +197,10 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                                           builder: (context) =>
                                                               EditScreen(
                                                                   value:
-                                                                      _value)));
+                                                                      value)));
 
                                               setState(() {
-                                                _value = newvalue;
+                                                value = newvalue;
                                               });
                                             })),
                                       ]),
@@ -216,7 +216,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                             label: 'Delete',
                                             onPressed: ((context) {
                                               TranscationDB.instance
-                                                  .deletetranscation(_value.id);
+                                                  .deletetranscation(value.id);
                                               TranscationDB.instance.refresh();
                                               setState(() {});
 
@@ -243,27 +243,27 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                                 HexColor('#efefef'),
                                             radius: 26,
                                             child: Text(
-                                              parsedate(_value.date),
+                                              parsedate(value.date),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 10.sp),
                                             ),
                                           ),
-                                          title: Text(_value.category,
+                                          title: Text(value.category,
                                               maxLines: 1,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12.sp)),
                                           subtitle: Text(
-                                            "${_value.purpose}",
+                                            "${value.purpose}",
                                             maxLines: 1,
                                           ),
-                                          trailing: _value.type == 'Expense'
+                                          trailing: value.type == 'Expense'
                                               ? SizedBox(
                                                   width: 34.w,
                                                   child: AutoSizeText(
-                                                    "- ₹${_value.amount}",
+                                                    "- ₹${value.amount}",
                                                     style: TextStyle(
                                                         fontSize: 13.sp,
                                                         fontWeight:
@@ -277,7 +277,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                               : SizedBox(
                                                   width: 35.w,
                                                   child: AutoSizeText(
-                                                    "+ ₹${_value.amount}",
+                                                    "+ ₹${value.amount}",
                                                     style: TextStyle(
                                                         fontSize: 13.sp,
                                                         fontWeight:
@@ -342,9 +342,9 @@ class _TranscationScreenState extends State<TranscationScreen> {
   }
 
   String parsedate(DateTime date) {
-    final _date = DateFormat().add_MMMd().format(date);
-    final _splitdate = _date.split(" ");
-    return '${_splitdate.last}\n${_splitdate.first}';
+    final date0 = DateFormat().add_MMMd().format(date);
+    final splitdate = date0.split(" ");
+    return '${splitdate.last}\n${splitdate.first}';
   }
 
   showdatepicker() async {

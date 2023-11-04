@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Stack(
               alignment: Alignment.topCenter,
+              clipBehavior: Clip.none,
               children: [
                 ClipPath(
                   clipper: CurveClipper(),
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: 18.h,
                   left: 10.w,
                   child: Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       Container(
                         height: 24.h,
@@ -132,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 24.h,
                           )),
                     ],
-                    clipBehavior: Clip.none,
                   ),
                 ),
                 Positioned(
@@ -145,7 +146,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ],
-              clipBehavior: Clip.none,
             ),
             Column(
               children: [
@@ -160,6 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
+                        width: 39.w,
+                        height: 22.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Theme.of(context).indicatorColor),
                         child: Padding(
                           padding: const EdgeInsets.all(13.0),
                           child: Column(
@@ -196,13 +201,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
+                      ),
+                      Container(
                         width: 39.w,
                         height: 22.h,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).indicatorColor),
-                      ),
-                      Container(
+                            color: Theme.of(context).hoverColor),
                         child: Padding(
                           padding: const EdgeInsets.all(13.0),
                           child: Column(
@@ -238,11 +243,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        width: 39.w,
-                        height: 22.h,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).hoverColor),
                       ),
                     ],
                   ),
@@ -258,12 +258,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(context,
                               CustomPageRoute(child: const AddScreen()));
                         },
+                        backgroundColor: HexColor('#FFC727'),
                         child: Icon(
                           Icons.add,
                           color: Colors.black,
                           size: 28.sp,
                         ),
-                        backgroundColor: HexColor('#FFC727'),
                       ),
                     ),
                   )

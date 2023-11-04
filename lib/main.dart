@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
+import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
 import 'package:mono/screens/widgets/theme.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
   NotificationProvider notificationProvider = NotificationProvider();
+  AppState appState = AppState();
 
   void getCurrentNotification() async {
     notificationProvider.notifValue =
@@ -60,6 +62,9 @@ class _MyAppState extends State<MyApp> {
       return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) {
+              return appState;
+            }),
+            ChangeNotifierProvider(create: (_) {
               return themeChangeProvider;
             }),
             ChangeNotifierProvider(create: (_) {
@@ -67,13 +72,12 @@ class _MyAppState extends State<MyApp> {
             })
           ],
           child: Consumer<DarkThemeProvider>(builder: (context, value, child) {
-            
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: Styles.themeData(themeChangeProvider.darkTheme, context),
               home: const SplashScreen(),
             );
-    }));
+          }));
     });
   }
 }

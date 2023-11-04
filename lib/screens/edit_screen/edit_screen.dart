@@ -80,6 +80,7 @@ class _EditScreenState extends State<EditScreen> {
           child: SizedBox(
             height: 90.h,
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
                 ClipPath(
                   clipper: CurveClipper(),
@@ -211,10 +212,8 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                elevation: 0,
+                                elevation: 0, backgroundColor: Theme.of(context).dialogBackgroundColor,
                                 side: const BorderSide(color: Colors.grey),
-                                primary:
-                                    Theme.of(context).dialogBackgroundColor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -278,18 +277,18 @@ class _EditScreenState extends State<EditScreen> {
                               
                                 updatetranscation();
                               },
-                              child: const Text(
-                                'Update',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 246, 243, 243)),
-                              ),
                               style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).primaryColorLight,
+                                backgroundColor: Theme.of(context).primaryColorLight,
                                 elevation: 2,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 minimumSize: const Size(400, 55),
+                              ),
+                              child: const Text(
+                                'Update',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 246, 243, 243)),
                               ),
                             ),
                           ],
@@ -299,7 +298,6 @@ class _EditScreenState extends State<EditScreen> {
                   ),
                 )
               ],
-              clipBehavior: Clip.none,
             ),
           ),
         ),
@@ -326,8 +324,8 @@ class _EditScreenState extends State<EditScreen> {
     final amountval = _amountcontrol.text;
     final purposeval = _notescontrol.text;
 
-    final _parseamount = double.tryParse(amountval);
-    if (_parseamount == null|| _parseamount.isNegative||_parseamount==0) {
+    final parseamount = double.tryParse(amountval);
+    if (parseamount == null|| parseamount.isNegative||parseamount==0) {
       final snack =customSnak(context, message: "Enter valid number");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
     }
@@ -335,16 +333,16 @@ class _EditScreenState extends State<EditScreen> {
       final snack =customSnak(context, message: "Please select category");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
     }
-    final _model = TranscationModel(
+    final model = TranscationModel(
         type: transctiontypeid!,
-        amount: _parseamount,
+        amount: parseamount,
         date: selectedDate,
         category: categoryid!,
         purpose: purposeval,
         id: widget.value.id);
 
-    TranscationDB.instance.updatetranscation(_model);
+    TranscationDB.instance.updatetranscation(model);
 
-    Navigator.of(context).pop(_model);
+    Navigator.of(context).pop(model);
   }
 }

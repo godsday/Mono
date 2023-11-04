@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -11,11 +13,11 @@ class NotificationApi {
 
   Future init({bool initScheduled = false}) async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
-    const settings = InitializationSettings(android: android, iOS: iOS);
+    // const iOS = ios();
+    const settings = InitializationSettings(android: android);
     await _notifications.initialize(
       settings,
-      onSelectNotification: (payload) async {
+      onDidReceiveNotificationResponse: (dynamic payload) async {
         onNotifications.add(payload);
       },
     );
@@ -31,7 +33,7 @@ class NotificationApi {
     return const NotificationDetails(
       android: AndroidNotificationDetails('channel id', 'channel name',
           importance: Importance.max),
-      iOS: IOSNotificationDetails(),
+      // iOS: IOSNotificationDetails(),
     );
   }
 
@@ -40,7 +42,7 @@ class NotificationApi {
     String? title,
     String? body,
     String? payload,
-    required Time scheduleDate,
+    required DateTime scheduleDate,
   }) async =>
       _notifications.zonedSchedule(id, title, body,
           _schuduleDaily(scheduleDate), await _notificationDetails(),
@@ -50,7 +52,7 @@ class NotificationApi {
               UILocalNotificationDateInterpretation.absoluteTime,
           matchDateTimeComponents: DateTimeComponents.time);
 
-  static tz.TZDateTime _schuduleDaily(Time time) {
+  static tz.TZDateTime _schuduleDaily(DateTime time) {
     final now = tz.TZDateTime.now(tz.local)
         .add(Duration(hours: time.hour, minutes: time.minute, seconds: 0));
 

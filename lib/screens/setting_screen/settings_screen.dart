@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mono/constants/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/notification_provider.dart';
@@ -102,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               body:
                                                   "Don't Forget To Add Your Transaction",
                                               scheduleDate:
-                                                  const Time(10, 06, 00))
+                                                  DateTime(10, 06, 00))
                                           : const SizedBox();
                                     }),
                                 SizedBox(

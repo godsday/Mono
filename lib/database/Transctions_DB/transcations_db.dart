@@ -74,11 +74,11 @@ class TranscationDB implements TranscationDbfunctions {
       }
     });
 
-    yesterdaylistnotifier.notifyListeners();
-    transcationNotifier.notifyListeners();
-    expenselistnotifier.notifyListeners();
-    incomelistnotifier.notifyListeners();
-    todaylistnotifier.notifyListeners();
+    // yesterdaylistnotifier.notifyListeners();
+    // transcationNotifier.notifyListeners();
+    // expenselistnotifier.notifyListeners();
+    // incomelistnotifier.notifyListeners();
+    // todaylistnotifier.notifyListeners();
   }
 
   @override
@@ -106,7 +106,7 @@ class TranscationDB implements TranscationDbfunctions {
         customlistnotifier.value.add(data);
       }
     }
-    customlistnotifier.notifyListeners();
+    // customlistnotifier.notifyListeners();
   }
 
   @override

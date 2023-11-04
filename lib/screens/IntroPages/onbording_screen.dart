@@ -19,6 +19,7 @@ class OnboardScreen extends StatelessWidget {
             // ignore: avoid_unnecessary_containers
             Container(
               child: Stack(
+                clipBehavior: Clip.none,
                 children: [
                   ClipPath(
                     clipper: WaveClipper(),
@@ -35,7 +36,6 @@ class OnboardScreen extends StatelessWidget {
                         width: 30.h,
                       )),
                 ],
-                clipBehavior: Clip.none,
               ),
             ),
             Column(children: [

@@ -66,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
       body: Stack(
@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
               AnimatedContainer(
                   duration: const Duration(milliseconds: 2000),
                   curve: Curves.fastLinearToSlowEaseIn,
-                  height: _height / _fontSize),
+                  height: height / _fontSize),
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 2000),
                 opacity: _textOpacity,
@@ -149,8 +149,8 @@ class PageTransition extends PageRouteBuilder {
               alignment: Alignment.bottomCenter,
               child: SizeTransition(
                 sizeFactor: animation,
-                child: page,
                 axisAlignment: 0,
+                child: page,
               ),
             );
           },
