@@ -14,6 +14,8 @@ import 'package:mono/screens/widgets/add_clipper.dart';
 import 'package:mono/screens/widgets/bottomnavigationbar.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
+import '../widgets/backButton.dart';
+
 class AddScreen extends StatefulWidget {
   const AddScreen({Key? key}) : super(key: key);
 
@@ -28,11 +30,10 @@ class _AddScreenState extends State<AddScreen> {
   String? selectedValue;
   String? transctiontypeid;
   String? categoryid;
+  final amountcontrol = TextEditingController();
+  final notescontrol = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
-
-  final _amountcontrol = TextEditingController();
-  final _notescontrol = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
   List<String> incomeList = [
@@ -60,11 +61,11 @@ class _AddScreenState extends State<AddScreen> {
   void initState() {
     super.initState();
 
-    transcationType.add({"id": "Income", 'name': 'Income'});
-    transcationType.add({
-      "id": 'Expense',
-      "name": 'Expense',
-    });
+    // transcationType.add({"id": "Income", 'name': 'Income'});
+    // transcationType.add({
+    //   "id": 'Expense',
+    //   "name": 'Expense',
+    // });
 
     // categorieslist = [
     //   {
@@ -107,6 +108,13 @@ class _AddScreenState extends State<AddScreen> {
                     color: Theme.of(context).dividerColor,
                     height: 40.h,
                   ),
+                ),
+                Positioned(
+                  top: 2.h,
+                  left: 2.w,
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: const Baxkbutton()),
                 ),
                 Positioned(
                   top: 5.h,
@@ -153,10 +161,10 @@ class _AddScreenState extends State<AddScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Radio.adaptive(
-                                          groupValue: provider.selectedValue,
+                                          groupValue: provider.selectedType,
                                           value: "Expense",
                                           onChanged: (String? value) {
-                                            provider.selectedValue = value!;
+                                            provider.selectedType = value!;
                                             provider.categorySelected =
                                                 expenseList.first;
                                           }),
@@ -165,13 +173,12 @@ class _AddScreenState extends State<AddScreen> {
                                         width: 20.sp,
                                       ),
                                       Radio.adaptive(
-                                          groupValue: provider.selectedValue,
+                                          groupValue: provider.selectedType,
                                           value: "Income",
                                           onChanged: (String? value) {
-                                            provider.selectedValue = value!;
+                                            provider.selectedType = value!;
                                             provider.categorySelected =
                                                 incomeList.first;
-                                            print("checking ${selectedValue}");
                                           }),
                                       textstyle("Income"),
                                     ]),
@@ -216,15 +223,18 @@ class _AddScreenState extends State<AddScreen> {
                               height: 1.5.h,
                             ),
                             TextFormField(
+                              autofocus: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return;
                                 }
                                 return null;
                               },
-                              controller: _amountcontrol,
+                              controller: amountcontrol,
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(12),
+                                LengthLimitingTextInputFormatter(6),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
                               ],
                               keyboardType: TextInputType.number,
                               decoration: textfielddecor("Enter Amount"),
@@ -240,7 +250,7 @@ class _AddScreenState extends State<AddScreen> {
                               builder: (context, provider, child) =>
                                   ElevatedButton.icon(
                                 onPressed: () async {
-                                  final date = await pickDate(context);
+                                  final date = await provider.pickDate(context);
                                   if (date == null) return;
 
                                   provider.selectedDate = date;
@@ -252,7 +262,7 @@ class _AddScreenState extends State<AddScreen> {
                                 label: Padding(
                                   padding: const EdgeInsets.only(right: 150.0),
                                   child: Text(
-                                    '${selectedDate.day} / ${selectedDate.month} / ${selectedDate.year}',
+                                    '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
                                     style: const TextStyle(color: Colors.grey),
                                   ),
                                 ),
@@ -276,32 +286,43 @@ class _AddScreenState extends State<AddScreen> {
                               height: 1.5.h,
                             ),
                             Consumer<AppState>(
-                              builder: (context, provider, child) =>
-                                  DropdownButton(
-                                isExpanded: true,
-                                hint: textstyle("Select Category"),
-                                onChanged: (String? value) {
-                                  print(
-                                      "checking ${provider.categorySelected}");
-                                  provider.categorySelected!.isNotEmpty;
-                                  provider.categorySelected = value;
-                                },
-                                items: provider.selectedValue == "Income"
-                                    ? incomeList.map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList()
-                                    : expenseList.map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                value: provider.categorySelected,
+                              builder: (context, provider, child) => Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButton(
+                                  elevation: 0,
+                                  underline: const SizedBox(),
+                                  menuMaxHeight: 220.sp,
+                                  iconEnabledColor: mainHexcolor,
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0),
+                                  isExpanded: true,
+                                  autofocus: true,
+                                  hint: textstyle("Select Category"),
+                                  onChanged: (String? value) {
+                                    provider.categorySelected = value;
+                                  },
+                                  items: provider.selectedType == "Income"
+                                      ? incomeList
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                          return DropdownMenuItem<String>(
+                                            // alignment: Alignment.,
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList()
+                                      : expenseList
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                  value: provider.categorySelected,
+                                ),
                               ),
                             ),
 
@@ -352,15 +373,17 @@ class _AddScreenState extends State<AddScreen> {
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(8)
                               ],
-                              controller: _notescontrol,
+                              controller: notescontrol,
                               keyboardType: TextInputType.text,
                               decoration: textfielddecor('Enter Notes'),
                             ),
                             SizedBox(height: 3.5.h),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formkey.currentState!.validate()) {
-                                  addtransbutton();
+                                  Provider.of<AppState>(context, listen: false)
+                                      .addtransbutton(
+                                          context, amountcontrol, notescontrol);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -389,45 +412,5 @@ class _AddScreenState extends State<AddScreen> {
         ),
       ),
     );
-  }
-
-  Future<DateTime?> pickDate(context) async {
-    final selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
-    );
-    if (selected != null && selected != selectedDate) {
-      setState(() {
-        selectedDate = selected;
-      });
-    }
-    return null;
-  }
-
-  Future addtransbutton() async {
-    final amountval = _amountcontrol.text;
-    final purposeval = _notescontrol.text;
-
-    final parseamount = double.tryParse(amountval);
-    if (parseamount == null || parseamount == 0 || parseamount.isNegative) {
-      final snack = customSnak(context, message: "Enter valid number");
-      return ScaffoldMessenger.of(context).showSnackBar(snack);
-    }
-    // if (categoryid == null) {
-    //   return;
-    // }
-
-    final model = TranscationModel(
-        type: transctiontypeid!,
-        amount: parseamount,
-        date: selectedDate,
-        category: categoryid!,
-        purpose: purposeval,
-        id: DateTime.now().millisecondsSinceEpoch.toString());
-    TranscationDB.instance.addtranscation(model);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const BottomNavigator()));
   }
 }
