@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    TranscationDB.instance.refresh();
+    Provider.of<AppState>(context, listen: false).refresh();
 
     getnamedata();
   }
@@ -59,15 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: 5.h,
                   left: 10.w,
                   child: Text("Hi, $enteredname ",
-                      style: TextStyle(fontFamily:"DancingScript",
-                          color: Colors.white, fontSize: 23.sp, )),
+                      style: TextStyle(
+                        fontFamily: "DancingScript",
+                        color: Colors.white,
+                        fontSize: 23.sp,
+                      )),
                 ),
                 Positioned(
                   top: 11.h,
                   left: 10.w,
                   child: Text(
                     "Welcome back !",
-                    style: TextStyle(fontFamily: "DancingScript",
+                    style: TextStyle(
+                        fontFamily: "DancingScript",
                         color: Colors.white,
                         fontSize: 24.sp,
                         fontWeight: FontWeight.bold),
@@ -101,19 +107,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 1.99.h,
                               ),
-                              AutoSizeText(
-                                totalBalance.toStringAsFixed(1),
-                                maxLines: 1,
-                                minFontSize: 23,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30.0.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              Consumer<AppState>(
+                                  builder: (context, provider, child) {
+                                return AutoSizeText(
+                                  provider.totalBalance.toStringAsFixed(1),
+                                  maxLines: 1,
+                                  minFontSize: 23,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30.0.sp,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }),
                               const Spacer(),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: ((context) =>const TranscationScreen())));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              const TranscationScreen())));
                                 },
                                 child: const Text(
                                   "See details",
@@ -184,17 +197,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 5.h,
                               ),
-                              AutoSizeText(
-                                totalIncome.toStringAsFixed(1),
-                                minFontSize: 13,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 18.0.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              Consumer<AppState>(
+                                  builder: (context, provider, child) {
+                                return AutoSizeText(
+                                  provider.totalIncome.toStringAsFixed(1),
+                                  minFontSize: 13,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 18.0.sp,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }),
                               Text(
                                 "Income",
-                                style:TextStyle(fontFamily: "Merriweather",
+                                style: TextStyle(
+                                    fontFamily: "Merriweather",
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).focusColor),
                               ),
@@ -228,16 +245,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 5.h,
                               ),
-                              AutoSizeText(
-                                totalExpense.toStringAsFixed(1),
-                                minFontSize: 13,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 18.0.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              Consumer<AppState>(
+                                  builder: (context, provider, child) {
+                                return AutoSizeText(
+                                  provider.totalExpense.toStringAsFixed(1),
+                                  minFontSize: 13,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 18.0.sp,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }),
                               Text("Expense",
-                                  style: TextStyle(fontFamily: "Merriweather",
+                                  style: TextStyle(
+                                      fontFamily: "Merriweather",
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).focusColor)),
                             ],
@@ -254,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 10.h,
                       child: FloatingActionButton(
                         onPressed: () {
-                          TranscationDB.instance.refresh();
+                          // TranscationDB.instance.refresh();
                           Navigator.push(context,
                               CustomPageRoute(child: const AddScreen()));
                         },

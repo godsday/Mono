@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:airplane_mode_checker/airplane_mode_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
@@ -6,10 +10,16 @@ import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
+import 'package:mono/screens/widgets/flight_mode_bt.dart';
 import 'package:mono/screens/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'providers/notification_provider.dart';
+
+Timer? fightTimer;
+DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+NotificationProvider notificationProvider = NotificationProvider();
+AppState appState = AppState();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +30,21 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
     Hive.registerAdapter(TranscationModelAdapter());
   }
-  await TranscationDB.instance.refresh();
+
   await TranscationDB.instance.getalltranscation();
+
   runApp(
-    const MyApp(),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) {
+        return appState;
+      }),
+      ChangeNotifierProvider(create: (_) {
+        return themeChangeProvider;
+      }),
+      ChangeNotifierProvider(create: (_) {
+        return notificationProvider;
+      })
+    ], child: const MyApp()),
   );
 }
 
@@ -35,10 +56,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DarkThemeProvider themeChangeProvider = DarkThemeProvider();
-  NotificationProvider notificationProvider = NotificationProvider();
-  AppState appState = AppState();
-
   void getCurrentNotification() async {
     notificationProvider.notifValue =
         await notificationProvider.notificationPreference.getnotification();
@@ -51,33 +68,68 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await checkflight(context);
+      // await Provider.of<AppState>(context, listen: false).refresh();
+    });
+    scheduleMicrotask(() async {});
     getCurrentAppTheme();
     getCurrentNotification();
+    // Provider.of<AppState>(context, listen: false).refresh();
     super.initState();
+  }
+
+  Future checkflight(context) async {
+    String platformVersion;
+    try {
+      platformVersion = (await AirplaneModeChecker.platformVersion)!;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    try {
+      fightTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        final status = await AirplaneModeChecker.checkAirplaneMode();
+
+        if (status == AirplaneModeStatus.on) {
+          Provider.of<AppState>(context, listen: false).isFilghtMode = true;
+          // isFlight = true;
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => FlightModeBt(),
+          ));
+          // showbtflight(context);
+          print("------------------------------------t");
+        } else {
+          // isFlight = false;
+          Provider.of<AppState>(context, listen: false).isFilghtMode = false;
+          print("------------------------------------f");
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    // return isFlight;
+  }
+
+  showbtflight(context) async {
+    if (Provider.of<AppState>(context, listen: false).isFilghtMode == true) {
+      if (fightTimer!.isActive) {
+        await showFightBt(context);
+        fightTimer!.cancel();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) {
-              return appState;
-            }),
-            ChangeNotifierProvider(create: (_) {
-              return themeChangeProvider;
-            }),
-            ChangeNotifierProvider(create: (_) {
-              return notificationProvider;
-            })
-          ],
-          child: Consumer<DarkThemeProvider>(builder: (context, value, child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: Styles.themeData(themeChangeProvider.darkTheme, context),
-              home: const SplashScreen(),
-            );
-          }));
+      return Consumer<DarkThemeProvider>(builder: (context, value, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+          home: const SplashScreen(),
+        );
+      });
     });
   }
 }
