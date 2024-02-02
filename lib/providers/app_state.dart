@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../database/Transctions_DB/transcations_db.dart';
 import '../models/transcation_model/transcation_model.dart';
 import '../screens/transcation_screen/transcation_screen.dart';
@@ -91,6 +92,8 @@ class AppState extends ChangeNotifier {
     if (parseamount == null || parseamount == 0 || parseamount.isNegative) {
       final snack = customSnak(context, message: "Enter valid number");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
+    } else {
+      totalBalance = parseamount;
     }
     // if (categoryid == null) {
     //   return;
@@ -104,9 +107,10 @@ class AppState extends ChangeNotifier {
         purpose: purposeval,
         id: DateTime.now().millisecondsSinceEpoch.toString());
     TranscationDB.instance.addtranscation(model);
-    // final _list = await TranscationDB.instance.getalltranscation();
 
-    // totalBalanceCheck(_list);
+    final _list = await TranscationDB.instance.getalltranscation();
+
+    totalBalanceCheck(_list);
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const BottomNavigator()));
   }

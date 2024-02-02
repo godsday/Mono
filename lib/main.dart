@@ -69,7 +69,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await checkflight(context);
+      // await checkflight(context);
+      final _list = await TranscationDB.instance.getalltranscation();
+
+      Provider.of<AppState>(context, listen: false).totalBalanceCheck(_list);
       // await Provider.of<AppState>(context, listen: false).refresh();
     });
     scheduleMicrotask(() async {});
@@ -79,46 +82,46 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  Future checkflight(context) async {
-    String platformVersion;
-    try {
-      platformVersion = (await AirplaneModeChecker.platformVersion)!;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+  // Future checkflight(context) async {
+  //   String platformVersion;
+  //   try {
+  //     platformVersion = (await AirplaneModeChecker.platformVersion)!;
+  //   } on PlatformException {
+  //     platformVersion = 'Failed to get platform version.';
+  //   }
 
-    try {
-      fightTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        final status = await AirplaneModeChecker.checkAirplaneMode();
+  //   // try {
+  //   //   fightTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+  //   //     final status = await AirplaneModeChecker.checkAirplaneMode();
 
-        if (status == AirplaneModeStatus.on) {
-          Provider.of<AppState>(context, listen: false).isFilghtMode = true;
-          // isFlight = true;
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => FlightModeBt(),
-          ));
-          // showbtflight(context);
-          print("------------------------------------t");
-        } else {
-          // isFlight = false;
-          Provider.of<AppState>(context, listen: false).isFilghtMode = false;
-          print("------------------------------------f");
-        }
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-    // return isFlight;
-  }
+  //   //     if (status == AirplaneModeStatus.on) {
+  //   //       Provider.of<AppState>(context, listen: false).isFilghtMode = true;
+  //   //       // isFlight = true;
+  //   //       Navigator.of(context).push(MaterialPageRoute(
+  //   //         builder: (context) => FlightModeBt(),
+  //   //       ));
+  //   //       // showbtflight(context);
+  //   //       print("------------------------------------t");
+  //   //     } else {
+  //   //       // isFlight = false;
+  //   //       Provider.of<AppState>(context, listen: false).isFilghtMode = false;
+  //   //       print("------------------------------------f");
+  //   //     }
+  //   //   });
+  //   // } catch (e) {
+  //   //   print(e.toString());
+  //   // }
+  //   // return isFlight;
+  // }
 
-  showbtflight(context) async {
-    if (Provider.of<AppState>(context, listen: false).isFilghtMode == true) {
-      if (fightTimer!.isActive) {
-        await showFightBt(context);
-        fightTimer!.cancel();
-      }
-    }
-  }
+  // showbtflight(context) async {
+  // if (Provider.of<AppState>(context, listen: false).isFilghtMode == true) {
+  //   if (fightTimer!.isActive) {
+  //     await showFightBt(context);
+  //     fightTimer!.cancel();
+  //   }
+  // }
+  // }
 
   @override
   Widget build(BuildContext context) {
