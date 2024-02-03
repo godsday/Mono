@@ -16,13 +16,13 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
   List pages = [
-    const ProfileScreen(),
+    // const ProfileScreen(),
     const TranscationScreen(),
     const HomeScreen(),
     const AcheivemntsScreen(),
-    const SettingsScreen(),
+    // const SettingsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -30,16 +30,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_2_rounded), label: "Profile"),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.arrow_2_squarepath), label: "More"),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.grading_outlined), label: "Acheviements"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.settings), label: "Settings"),
         ],
         backgroundColor: Theme.of(context).primaryColor,
         iconSize: 30,

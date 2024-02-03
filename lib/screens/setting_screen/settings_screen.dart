@@ -57,6 +57,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ClipPath(
                         clipper: WaveClipper(),
                         child: Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                                blurStyle: BlurStyle.outer,
+                                blurRadius: 2.sp,
+                                spreadRadius: 4.sp,
+                                color: Theme.of(context).dividerColor)
+                          ]),
                           color: Theme.of(context).dividerColor,
                           height: 17.0.h,
                         ),
@@ -126,51 +133,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: themepovider.darkTheme,
                                 ),
                                 const Divider(),
-                                Text(
-                                  "More",
-                                  style: TextStyle(
-                                      color: Colors.grey.shade400,
-                                      fontSize: 14.sp),
-                                ),
+                                // Text(
+                                //   "More",
+                                //   style: TextStyle(
+                                //       color: Colors.grey.shade400,
+                                //       fontSize: 14.sp),
+                                // ),
                                 SizedBox(
                                   height: 2.h,
                                 ),
-                                ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Theme.of(context)
-                                                    .primaryColorDark),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size(1.w, 5.5.h))),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AboutScreen()));
-                                    },
-                                    child: const Text("About",
-                                        style: TextStyle())),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Theme.of(context)
-                                                    .primaryColorDark),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size(1.w, 5.5.h))),
-                                    onPressed: () async {
-                                      // ignore: deprecated_member_use
-                                      if (!await launch(
-                                          'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
-                                        throw 'Could not send massage';
-                                      }
-                                    },
-                                    child: const Text("Send feedback")),
+                                // ElevatedButton(
+                                //     style: ButtonStyle(
+                                //         backgroundColor:
+                                //             MaterialStateProperty.all(
+                                //                 Theme.of(context)
+                                //                     .primaryColorDark),
+                                //         minimumSize: MaterialStateProperty.all(
+                                //             Size(1.w, 5.5.h))),
+                                //     onPressed: () {
+                                //       Navigator.push(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //               builder: (context) =>
+                                //                   const AboutScreen()));
+                                //     },
+                                //     child: const Text("About",
+                                //         style: TextStyle())),
+                                // SizedBox(
+                                //   height: 1.5.h,
+                                // ),
+                                // ElevatedButton(
+                                //     style: ButtonStyle(
+                                //         backgroundColor:
+                                //             MaterialStateProperty.all(
+                                //                 Theme.of(context)
+                                //                     .primaryColorDark),
+                                //         minimumSize: MaterialStateProperty.all(
+                                //             Size(1.w, 5.5.h))),
+                                //     onPressed: () async {
+                                //       // ignore: deprecated_member_use
+                                //       if (!await launch(
+                                //           'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
+                                //         throw 'Could not send massage';
+                                //       }
+                                //     },
+                                //     child: const Text("Send feedback")),
                                 SizedBox(
                                   height: 1.5.h,
                                 ),
