@@ -22,7 +22,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     const TranscationScreen(),
     const HomeScreen(),
     const AcheivemntsScreen(),
-    // const SettingsScreen(),
+    const SettingsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -38,8 +38,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.grading_outlined), label: "Acheviements"),
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.settings), label: "Settings"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: "Settings"),
         ],
         backgroundColor: Theme.of(context).primaryColor,
         iconSize: 30,

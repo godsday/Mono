@@ -59,12 +59,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Container(
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
-                                blurStyle: BlurStyle.outer,
+                                blurStyle: BlurStyle.normal,
                                 blurRadius: 2.sp,
                                 spreadRadius: 4.sp,
                                 color: Theme.of(context).dividerColor)
                           ]),
-                          color: Theme.of(context).dividerColor,
+                          // color: Theme.of(context).dividerColor,
                           height: 17.0.h,
                         ),
                       ),

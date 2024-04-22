@@ -9,6 +9,7 @@ import 'package:mono/constants/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
+import 'package:mono/screens/home_screen/drawer_widget.dart';
 import 'package:mono/screens/home_screen/sample.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
@@ -92,17 +93,24 @@ class _HomeScreenState extends State<HomeScreen>
         // brightness: Brightness.dark,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(Icons.menu_rounded),
-          splashColor: Colors.transparent,
-          onPressed: () {
-            if (_bool == true) {
-              _animationController.forward();
-            } else {
-              _animationController.reverse();
-            }
-            _bool = false;
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 5.sp,
+            backgroundColor: Colors.black54,
+            child: IconButton(
+              icon: Icon(Icons.person_4_sharp),
+              splashColor: Colors.transparent,
+              onPressed: () {
+                if (_bool == true) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse();
+                }
+                _bool = false;
+              },
+            ),
+          ),
         ),
       ),
       body: Stack(
@@ -144,118 +152,125 @@ class _HomeScreenState extends State<HomeScreen>
                   Positioned(
                     top: 12.h,
                     left: 5.w,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          height: 28.h,
-                          width: 90.w,
-                          decoration: BoxDecoration(
-                              // boxShadow: ,
-                              // backgroundBlendMode: BlendMode.s,
-                              color: HexColor("#37474F"),
-                              boxShadow: [
-                                BoxShadow(
-                                    spreadRadius: 1.sp,
-                                    blurRadius: 2.sp,
-                                    color: Colors.transparent)
-                              ],
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 38.w, top: 16.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: .5.h,
-                                ),
-                                const Text(
-                                  "Available balance",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                SizedBox(
-                                  height: 1.99.h,
-                                ),
-                                Consumer<AppState>(
-                                    builder: (context, provider, child) {
-                                  return AutoSizeText(
-                                    provider.totalBalance.toStringAsFixed(1),
-                                    maxLines: 1,
-                                    minFontSize: 23,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30.0.sp,
-                                        fontWeight: FontWeight.bold),
-                                  );
-                                }),
-                                const Spacer(),
-                                /*  TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                const TranscationScreen())));
-                                  },
-                                  child: const Text(
-                                    "See details",
+                    child: InkWell(
+                      onTap: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const TranscationScreen(),
+                        ));
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            height: 28.h,
+                            width: 90.w,
+                            decoration: BoxDecoration(
+                                // boxShadow: ,
+                                // backgroundBlendMode: BlendMode.s,
+                                color: HexColor("#37474F"),
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 1.sp,
+                                      blurRadius: 2.sp,
+                                      color: Colors.transparent)
+                                ],
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 38.w, top: 15.h),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: .5.h,
+                                  ),
+                                  const Text(
+                                    "Available balance",
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                ),*/
-                              ],
+                                  SizedBox(
+                                    height: 1.98.h,
+                                  ),
+                                  Consumer<AppState>(
+                                      builder: (context, provider, child) {
+                                    return AutoSizeText(
+                                      provider.totalBalance.toStringAsFixed(1),
+                                      maxLines: 1,
+                                      minFontSize: 23,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 30.0.sp,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }),
+                                  const Spacer(),
+                                  /*  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  const TranscationScreen())));
+                                    },
+                                    child: const Text(
+                                      "See details",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),*/
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          top: 2.h,
-                          left: 10.w,
-                          child: Text("Hi, $enteredname ",
-                              style: TextStyle(
-                                fontFamily: "DancingScript",
-                                color: Colors.white,
-                                fontSize: 23.sp,
-                              )),
-                        ),
-                        // Positioned(
-                        //     top: -12.h,
-                        //     right: -10.w,
-                        //     child: Image(
-                        //       image:
-                        //           const AssetImage("assets/images/piggybank.png"),
-                        //       width: 24.0.h,
-                        //       height: 24.h,
-                        //     )),
-                        Positioned(
-                          // top: h,
-                          right: 1.w,
-                          child: ClipRect(
-                            child: Align(
-                                alignment: Alignment.topCenter,
-                                child: SizedBox(
-                                  width: 24.0.h,
-                                  height: 24.h,
-                                  // Height of the visible portion
-                                  child: ShaderMask(
-                                    shaderCallback: (Rect bounds) {
-                                      return LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.transparent,
-                                          Colors.black
-                                        ],
-                                      ).createShader(bounds);
-                                    },
-                                    blendMode: BlendMode.dstIn,
-                                    child: Image.asset(
-                                      'assets/images/piggybank.png', // Replace 'your_image.jpg' with your image asset
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                          Positioned(
+                            top: 2.h,
+                            left: 10.w,
+                            child: Text("Hi, $enteredname ",
+                                style: TextStyle(
+                                  fontFamily: "DancingScript",
+                                  color: Colors.white,
+                                  fontSize: 23.sp,
                                 )),
                           ),
-                        ),
-                      ],
+                          // Positioned(
+                          //     top: -12.h,
+                          //     right: -10.w,
+                          //     child: Image(
+                          //       image:
+                          //           const AssetImage("assets/images/piggybank.png"),
+                          //       width: 24.0.h,
+                          //       height: 24.h,
+                          //     )),
+                          Positioned(
+                            // top: h,
+                            right: 1.w,
+                            child: ClipRect(
+                              child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: SizedBox(
+                                    width: 24.0.h,
+                                    height: 24.h,
+                                    // Height of the visible portion
+                                    child: ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black
+                                          ],
+                                        ).createShader(bounds);
+                                      },
+                                      blendMode: BlendMode.dstIn,
+                                      child: Image.asset(
+                                        'assets/images/piggybank.png', // Replace 'your_image.jpg' with your image asset
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -385,6 +400,8 @@ class _HomeScreenState extends State<HomeScreen>
                         width: 10.h,
                         height: 10.h,
                         child: FloatingActionButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(37)),
                           onPressed: () {
                             // TranscationDB.instance.refresh();
                             Navigator.push(context,
@@ -404,91 +421,9 @@ class _HomeScreenState extends State<HomeScreen>
               )
             ],
           ),
-          CustomNavigationDrawer()
+          customNavigationDrawer(
+              context, _bool, _animation1, _animation2, _animation3)
         ],
-      ),
-    );
-  }
-
-  Widget CustomNavigationDrawer() {
-    double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
-    return BackdropFilter(
-      filter: ImageFilter.blur(
-          sigmaY: _animation1.value, sigmaX: _animation1.value),
-      child: Container(
-        height: _bool ? 0 : _height,
-        width: _bool ? 0 : _width,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          colors: [mainHexcolor, Colors.transparent],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        )),
-        child: Center(
-          child: Transform.scale(
-            scale: _animation3.value,
-            child: Container(
-              width: _width * .9,
-              height: _width * 1.3,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(_animation2.value),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const CircleAvatar(
-                    backgroundColor: Colors.black12,
-                    radius: 35,
-                    child: Icon(
-                      Icons.person_outline_rounded,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      MyTile(Icons.settings_outlined, 'Settings', () {
-                        HapticFeedback.lightImpact();
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SettingsScreen(),
-                        ));
-                      }),
-                      MyTile(Icons.info_outline_rounded, 'About', () {
-                        HapticFeedback.lightImpact();
-                        // Fluttertoast.showToast(
-                        //   msg: 'Button pressed',
-                        // );
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AboutScreen()));
-                      }),
-                      MyTile(Icons.feedback_outlined, 'Feedback', () async {
-                        HapticFeedback.lightImpact();
-                        // Fluttertoast.showToast(
-                        //   msg: 'Button pressed',
-                        // );
-                        if (!await launch(
-                            'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
-                          throw 'Could not send massage';
-                        }
-                      }),
-                      MyTile(Icons.find_in_page_outlined, 'Privacy Policy', () {
-                        HapticFeedback.lightImpact();
-                        // Fluttertoast.showToast(
-                        //   msg: 'Button pressed',
-                        // );
-                      }),
-                    ],
-                  ),
-                  const SizedBox(),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -508,38 +443,4 @@ class CurveClipper extends CustomClipper<Path> {
   bool shouldReclip(covariant CustomClipper oldClipper) {
     return true;
   }
-}
-
-Widget MyTile(
-  IconData icon,
-  String title,
-  VoidCallback voidCallback,
-) {
-  return Column(
-    children: [
-      ListTile(
-        tileColor: Colors.black.withOpacity(.08),
-        leading: CircleAvatar(
-          backgroundColor: Colors.black12,
-          child: Icon(
-            icon,
-            color: Colors.white,
-          ),
-        ),
-        onTap: voidCallback,
-        title: Text(
-          title,
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1),
-        ),
-        trailing: Icon(
-          Icons.arrow_right,
-          color: Colors.white,
-        ),
-      ),
-      // divider()
-    ],
-  );
 }

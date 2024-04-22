@@ -115,6 +115,22 @@ class AppState extends ChangeNotifier {
         MaterialPageRoute(builder: (context) => const BottomNavigator()));
   }
 
+  listingmethod() {
+    if (itemvalue == "Income") {
+      return incomelistnotifier;
+    } else if (itemvalue == "Expense") {
+      return expenselistnotifier;
+    } else if (itemvalue == "Today") {
+      return todaylistnotifier;
+    } else if (itemvalue == "Yesterday") {
+      return yesterdaylistnotifier;
+    } else if (itemvalue == "Custom") {
+      return customlistnotifier;
+    } else {
+      return transcationNotifier;
+    }
+  }
+
   headinginnermethod() {
     if (itemvalue == "Income") {
       return HeadingMethod(
@@ -219,22 +235,6 @@ class AppState extends ChangeNotifier {
       }
     }
     // customlistnotifier.notifyListeners();
-  }
-
-  listingmethod() {
-    if (itemvalue == "Income") {
-      return incomelistnotifier;
-    } else if (itemvalue == "Expense") {
-      return expenselistnotifier;
-    } else if (itemvalue == "Today") {
-      return todaylistnotifier;
-    } else if (itemvalue == "Yesterday") {
-      return yesterdaylistnotifier;
-    } else if (itemvalue == "Custom") {
-      return customlistnotifier;
-    } else {
-      return transcationNotifier;
-    }
   }
 
   String parsedate(DateTime date) {
