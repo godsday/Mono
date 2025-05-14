@@ -102,14 +102,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         notificationProvider.notifValue =
                                             newvalue;
                                       });
-                                      notificationProvider.notifValue == true
-                                          ? NotificationApi.shownotification(
-                                              title: 'Mono',
-                                              body:
-                                                  "Don't Forget To Add Your Transaction",
-                                              scheduleDate:
-                                                  DateTime(10, 06, 00))
-                                          : const SizedBox();
+                                      // notificationProvider.notifValue == true
+                                      //     ? NotificationApi.shownotification(
+                                      //         title: 'Mono',
+                                      //         body:
+                                      //             "Don't Forget To Add Your Transaction",
+                                      //         scheduleDate:
+                                      //             DateTime(10, 06, 00))
+                                      //     : const SizedBox();
                                     }),
                                 SizedBox(
                                   height: 2.h,

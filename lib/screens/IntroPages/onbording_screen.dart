@@ -13,39 +13,52 @@ class OnboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50),
         child: Column(
           children: [
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  ClipPath(
-                    clipper: WaveClipper(),
-                    child: Container(
-                      color: HexColor('#EEF8F7'),
-                      height: 60.0.h,
+            headingtext("Spend Smarter Save More"),
+            
+            Flexible(
+              child: Container(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipPath(
+                      clipper: WaveClipper(),
+                      child: Container(
+                        color: HexColor('#EEF8F7'),
+                        height: 60.0.h,
+                      ),
                     ),
-                  ),
-                  Positioned(
-                      bottom: -2.h,
-                      right: 23.w,
-                      child: Image.asset(
-                        'assets/images/OO.png',
-                        width: 30.h,
-                      )),
-                ],
+                    Positioned(
+                        bottom: -2.h,
+                        right: 23.w,
+                        child: Image.asset(
+                          'assets/images/OO.png',
+                          width: 30.h,
+                        )),
+                  ],
+                ),
               ),
             ),
             Column(children: [
               SizedBox(
                 height: 3.h,
               ),
-              headingtext("Spend Smarter"),
-              headingtext("Save More"),
               SizedBox(
-                height: 3.h,
+                height: 2.h,
+              ),
+              Container(
+                width: 80.w,
+                height: 5.h,
+                child: Text(
+                    "Take control of your money with powerful tracking and planning tools",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16.sp)),
+              ),
+              SizedBox(
+                height: 1.5.h,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 100, right: 100),
@@ -88,6 +101,9 @@ class OnboardScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 4.h,
               ),
             ]),
           ],

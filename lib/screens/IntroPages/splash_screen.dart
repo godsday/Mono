@@ -129,7 +129,7 @@ class _SplashScreenState extends State<SplashScreen>
     nameisther == null
         ? _navigator()
         : Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const BottomNavigator()));
+            MaterialPageRoute(builder: (context) =>  OnboardScreen()));
   }
 }
 

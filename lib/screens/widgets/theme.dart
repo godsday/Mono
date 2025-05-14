@@ -34,9 +34,7 @@ class Styles {
       dialogBackgroundColor:
           isDarkTheme ? const Color.fromARGB(234, 102, 82, 110) : Colors.white,
       // ignore: deprecated_member_use
-      errorColor: isDarkTheme
-          ? const Color.fromARGB(255, 151, 151, 161)
-          : HexColor('#EEEEEE'),
+      // errorColor: isDarkTheme
 
       primaryColorLight: isDarkTheme
           ? const Color.fromARGB(255, 74, 73, 71)
