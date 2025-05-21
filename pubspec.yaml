@@ -81,6 +81,7 @@ flutter:
     - assets/images/onboardbg.png
     - assets/images/animation/paymentshero1.json
     - assets/images/onboard_bacground.svg
+    - assets/images/rings.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
