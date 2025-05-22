@@ -2,12 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/transaction_type.dart';
+import 'package:mono/main.dart';
 
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
+import 'package:mono/screens/add_screen/decoration_functions.dart';
 import 'package:mono/screens/home_screen/drawer_widget.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
+import 'package:mono/utils/app_textstyle.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -138,9 +143,10 @@ class _HomeScreenState extends State<HomeScreen>
               //     )),
               Positioned(
                 top: 5.h,
-                left: 9.w,
+                left: 7.w,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("Hi $enteredname,",
                         style: TextStyle(
@@ -159,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               Positioned(
                   top: 4.h,
-                  right: 8.w,
+                  right: 7.w,
                   child: Container(
                     width: 7.w,
                     height: 7.h,
@@ -178,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen>
                   top: 30.h,
                   left: 12.w,
                   child: Container(
-                    height: 15.h,
+                    height: 12.h,
                     width: 76.w,
                     decoration: BoxDecoration(
                         color: HexColor("#37474F"),
@@ -186,17 +192,18 @@ class _HomeScreenState extends State<HomeScreen>
                   )),
 
               Positioned(
-                top: 15.h,
-                left: 9.w,
+                top: 14.h,
+                left: 7.w,
+                right: 7.w,
                 child: InkWell(
                   // onTap: () async {
                   //   Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => const TranscationScreen(),
                   //   ));
                   // },
+                  // Total Balance Card
                   child: Container(
-                    height: 28.h,
-                    width: 82.w,
+                    height: 25.5.h,
                     decoration: BoxDecoration(
                         // boxShadow: ,
                         // backgroundBlendMode: BlendMode.s,
@@ -209,46 +216,136 @@ class _HomeScreenState extends State<HomeScreen>
                         ],
                         borderRadius: BorderRadius.circular(12.0)),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 8.w, top: 2.h),
+                      padding:
+                          EdgeInsets.only(left: 4.w, top: 1.6.h, right: 4.w),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: .5.h,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Total balance",
+                                    style: AppTextStyles.poppins18w500White(
+                                        context),
+                                  ),
+                                  SizedBox(
+                                    height: .5.h,
+                                  ),
+                                  Consumer<AppState>(
+                                      builder: (context, provider, child) {
+                                    return AutoSizeText(
+                                      provider.totalBalance.toStringAsFixed(1),
+                                      maxLines: 1,
+                                      minFontSize: 23,
+                                      style: AppTextStyles
+                                              .roboto18w600SemiBoldWhite(
+                                                  context)!
+                                          .copyWith(fontSize: 24.sp),
+                                    );
+                                  }),
+
+                                  /*  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  const TranscationScreen())));
+                                    },
+                                    child: const Text(
+                                      "See details",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),*/
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 1.5.h),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'This month',
+                                          style: AppTextStyles
+                                                  .poppins12w300White(context)!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w400),
+                                        ),
+                                        SizedBox(
+                                          width: 1.w,
+                                        ),
+                                        SizedBox(
+                                            width: 5.w,
+                                            height: 1.h,
+                                            child: Transform.scale(
+                                              scale: .4,
+                                              child: Switch.adaptive(
+                                                  value: true,
+                                                  onChanged: (value) {}),
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Text(
+                                    "Spend cycle April 15 - May 15",
+                                    style: AppTextStyles.poppins12w300White(
+                                            context)!
+                                        .copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const Text(
-                            "Total balance",
-                            style: TextStyle(color: Colors.white),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.keyboard_arrow_up_rounded,
+                                color: mainHexcolor,
+                              ),
+                              Text(
+                                "25 % ",
+                                style:
+                                    AppTextStyles.poppins12w300White(context),
+                              ),
+                              Text(
+                                " higher compared to last month",
+                                style:
+                                    AppTextStyles.poppins12w300White(context)!
+                                        .copyWith(fontSize: 9),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 1.98.h,
-                          ),
-                          Consumer<AppState>(
-                              builder: (context, provider, child) {
-                            return AutoSizeText(
-                              provider.totalBalance.toStringAsFixed(1),
-                              maxLines: 1,
-                              minFontSize: 23,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30.0.sp,
-                                  fontWeight: FontWeight.bold),
-                            );
-                          }),
-                          const Spacer(),
-                          /*  TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const TranscationScreen())));
-                            },
-                            child: const Text(
-                              "See details",
-                              style: TextStyle(color: Colors.white),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 2.h, left: 5.w, right: 5.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                IncomeExpenseCard(
+                                  transactionType: "Earnings",
+                                  value: appState.totalIncome,
+                                ),
+                                IncomeExpenseCard(
+                                  transactionType: "Spendings",
+                                  value: appState.totalExpense,
+                                )
+                              ],
                             ),
-                          ),*/
+                          )
                         ],
                       ),
                     ),
@@ -256,9 +353,9 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
               Positioned(
-                  top: 22.h,
+                  top: 20.3.h,
                   child: Image(
-                    width: 50.w,
+                    width: 47.w,
                     image: AssetImage(
                       'assets/images/rings.png',
                     ),
@@ -301,6 +398,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ],
           ),
+          Spacer(),
           Column(
             children: [
               Text(
@@ -437,6 +535,34 @@ class _HomeScreenState extends State<HomeScreen>
               context, _bool, _animation1, _animation2, _animation3),
         ],
       ),
+    );
+  }
+}
+
+class IncomeExpenseCard extends StatelessWidget {
+  final String transactionType;
+  final double value;
+
+  const IncomeExpenseCard({
+    super.key,
+    required this.transactionType,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          transactionType,
+          style: AppTextStyles.poppins18w500White(context),
+        ),
+        Text(
+          value.toString(),
+          style: AppTextStyles.roboto18w600SemiBoldWhite(context),
+        ),
+      ],
     );
   }
 }

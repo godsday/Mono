@@ -20,89 +20,100 @@ class OnboardScreen extends StatelessWidget {
         FocusScope.of(context).unfocus(); // Dismisses the keyboard
       },
       child: Scaffold(
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 60.h,
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage('assets/images/onboardbg.png'),
-                  fit: BoxFit.cover,
-                )),
-                child: Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: Column(
+          resizeToAvoidBottomInset: true,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Stack(
                     children: [
-                      FittedBox(
-                        child: Text("Spend Smarter Save More",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.roboto22w800Green(context)),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
                       Container(
-                          width: 80.w,
-                          height: 5.h,
-                          child: Text(
-                              "Take control of your money with \n powerful tracking and planning tools",
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.roboto15w400grey(context))),
-                      SizedBox(
-                        height: 2.h,
+                        height: 60.h,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('assets/images/onboardbg.png'),
+                          fit: BoxFit.cover,
+                        )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Column(
+                            children: [
+                              FittedBox(
+                                child: Text("Spend Smarter Save More",
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyles.roboto22w800Green(
+                                        context)),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Container(
+                                  width: 80.w,
+                                  height: 5.h,
+                                  child: Text(
+                                      "Take control of your money with \n powerful tracking and planning tools",
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.roboto15w400grey(
+                                          context))),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 135.0, left: 85, right: 85),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/OO.png',
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  NameTextfieldWidget(namecontroller: namecontroller),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        left: 40,
+                        right: 40,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          gotohome(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                HexColor('#69AEA9'),
+                                HexColor('#3F8782')
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Get Started",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 135.0, left: 85, right: 85),
-                child: Image(
-                  image: AssetImage(
-                    'assets/images/OO.png',
-                  ),
-                ),
-              ),
-            ],
-          ),
-          NameTextfieldWidget(namecontroller: namecontroller),
-          Padding(
-              padding: EdgeInsets.only(
-                left: 40,
-                right: 40,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  gotohome(context);
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [HexColor('#69AEA9'), HexColor('#3F8782')],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Get Started",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )),
-        ],
-      )),
+            ),
+          )),
     );
   }
 

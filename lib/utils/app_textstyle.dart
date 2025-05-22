@@ -17,10 +17,26 @@ class AppTextStyles {
         fontWeight: FontWeight.w400,
         color: HexColor("#5C5A5A"));
   }
-  static TextStyle? poppins(context) {
-    return GoogleFonts.robotoSlab(
+
+  static TextStyle? poppins15w400(context) {
+    return GoogleFonts.poppins(
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
         color: HexColor("#5C5A5A"));
+  }
+
+  static TextStyle? poppins12w300White(context) {
+    return GoogleFonts.poppins(
+        fontSize: 12.sp, fontWeight: FontWeight.w300, color: Colors.white);
+  }
+
+  static TextStyle? poppins18w500White(context) {
+    return GoogleFonts.poppins(
+        fontSize: 18.sp, fontWeight: FontWeight.w500, color: Colors.white);
+  }
+
+  static TextStyle? roboto18w600SemiBoldWhite(context) {
+    return GoogleFonts.roboto(
+        fontSize: 20.sp, fontWeight: FontWeight.w600, color: Colors.white);
   }
 }
