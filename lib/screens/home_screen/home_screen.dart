@@ -1,16 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/constants/app_color.dart';
-import 'package:mono/constants/transaction_type.dart';
 import 'package:mono/main.dart';
-
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
-import 'package:mono/screens/add_screen/decoration_functions.dart';
-import 'package:mono/screens/home_screen/drawer_widget.dart';
-import 'package:mono/screens/transcation_screen/transcation_screen.dart';
+import 'package:mono/screens/home_screen/widgets/bottom_card_L_shape.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
+import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
+import 'package:mono/ts/drawer_widget.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
 import 'package:mono/utils/app_textstyle.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -117,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen>
             clipBehavior: Clip.none,
             children: [
               ClipPath(
-                clipper: CurveClipper(),
+                clipper: CurveClipper2(),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).dividerColor,
@@ -202,154 +201,7 @@ class _HomeScreenState extends State<HomeScreen>
                   //   ));
                   // },
                   // Total Balance Card
-                  child: Container(
-                    height: 25.5.h,
-                    decoration: BoxDecoration(
-                        // boxShadow: ,
-                        // backgroundBlendMode: BlendMode.s,
-                        color: HexColor("#37474F"),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.sp,
-                              blurRadius: 2.sp,
-                              color: Colors.transparent)
-                        ],
-                        borderRadius: BorderRadius.circular(12.0)),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(left: 4.w, top: 1.6.h, right: 4.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Total balance",
-                                    style: AppTextStyles.poppins18w500White(
-                                        context),
-                                  ),
-                                  SizedBox(
-                                    height: .5.h,
-                                  ),
-                                  Consumer<AppState>(
-                                      builder: (context, provider, child) {
-                                    return AutoSizeText(
-                                      provider.totalBalance.toStringAsFixed(1),
-                                      maxLines: 1,
-                                      minFontSize: 23,
-                                      style: AppTextStyles
-                                              .roboto18w600SemiBoldWhite(
-                                                  context)!
-                                          .copyWith(fontSize: 24.sp),
-                                    );
-                                  }),
-
-                                  /*  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: ((context) =>
-                                                  const TranscationScreen())));
-                                    },
-                                    child: const Text(
-                                      "See details",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),*/
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 1.5.h),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'This month',
-                                          style: AppTextStyles
-                                                  .poppins12w300White(context)!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w400),
-                                        ),
-                                        SizedBox(
-                                          width: 1.w,
-                                        ),
-                                        SizedBox(
-                                            width: 5.w,
-                                            height: 1.h,
-                                            child: Transform.scale(
-                                              scale: .4,
-                                              child: Switch.adaptive(
-                                                  value: true,
-                                                  onChanged: (value) {}),
-                                            ))
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Text(
-                                    "Spend cycle April 15 - May 15",
-                                    style: AppTextStyles.poppins12w300White(
-                                            context)!
-                                        .copyWith(
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.keyboard_arrow_up_rounded,
-                                color: mainHexcolor,
-                              ),
-                              Text(
-                                "25 % ",
-                                style:
-                                    AppTextStyles.poppins12w300White(context),
-                              ),
-                              Text(
-                                " higher compared to last month",
-                                style:
-                                    AppTextStyles.poppins12w300White(context)!
-                                        .copyWith(fontSize: 9),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 2.h, left: 5.w, right: 5.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                IncomeExpenseCard(
-                                  transactionType: "Earnings",
-                                  value: appState.totalIncome,
-                                ),
-                                IncomeExpenseCard(
-                                  transactionType: "Spendings",
-                                  value: appState.totalExpense,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: TotalBalanceCard(),
                 ),
               ),
               Positioned(
@@ -406,12 +258,12 @@ class _HomeScreenState extends State<HomeScreen>
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 2.h),
-              Stack(children: [
+              /*  Stack(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: 39.w,
+                      width: 39.w, 
                       height: 22.h,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -529,12 +381,61 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 )
               ]),
+           */
+              // SizedBox(
+              //   width: 12,
+              // ),
+              // LShapeWidget(orientation: LShapeOrientation.leftLegOnRight)
             ],
           ),
-          customNavigationDrawer(
-              context, _bool, _animation1, _animation2, _animation3),
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16),
+                child: Row(
+                  children: [
+                    LShapeWidget(
+                      orientation: LShapeOrientation.leftLegOnLeft,
+                      color: greenContainer,
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    LShapeWidget(
+                      orientation: LShapeOrientation.leftLegOnRight,
+                      color: redContainer,
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 8.h,
+                left: 41.w,
+                child: Container(
+                  width: 10.h,
+                  height: 10.h,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: Colors.white),
+                      shape: BoxShape.circle,
+                      color: Colors.amber),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                    size: 28.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
+
+      // FloatingActionButtonLocation.miniCenterFloat,
+      // floatingActionButton: Container(
+      //   width: 15.w,
+      //   height: 10.h,
+      //   decoration: BoxDecoration(color: Colors.amber),
+      // ),
     );
   }
 }
@@ -559,26 +460,10 @@ class IncomeExpenseCard extends StatelessWidget {
           style: AppTextStyles.poppins18w500White(context),
         ),
         Text(
-          value.toString(),
+          "₹ ${value.toString()}",
           style: AppTextStyles.roboto18w600SemiBoldWhite(context),
         ),
       ],
     );
-  }
-}
-
-class CurveClipper extends CustomClipper<Path> {
-  @override
-  getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height / 1.17);
-    path.quadraticBezierTo(size.width, size.height, size.width, size.height);
-    path.lineTo(size.width, 0);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper oldClipper) {
-    return true;
   }
 }

@@ -39,4 +39,10 @@ class AppTextStyles {
     return GoogleFonts.roboto(
         fontSize: 20.sp, fontWeight: FontWeight.w600, color: Colors.white);
   }
+   static TextStyle roboto16w600Black = GoogleFonts.roboto(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: HexColor('#222222'),
+  );
+
 }

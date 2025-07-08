@@ -147,260 +147,268 @@ class _AddScreenState extends State<AddScreen> {
                       key: _formkey,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            textstyle("Transcation type"),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Consumer<AppState>(
-                                builder: (context, provider, child) => Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Radio.adaptive(
-                                          groupValue: provider.selectedType,
-                                          value: "Expense",
-                                          onChanged: (String? value) {
-                                            provider.selectedType = value!;
-                                            provider.categorySelected =
-                                                expenseList.first;
-                                          }),
-                                      textstyle("Expense"),
-                                      SizedBox(
-                                        width: 20.sp,
-                                      ),
-                                      Radio.adaptive(
-                                          groupValue: provider.selectedType,
-                                          value: "Income",
-                                          onChanged: (String? value) {
-                                            provider.selectedType = value!;
-                                            provider.categorySelected =
-                                                incomeList.first;
-                                          }),
-                                      textstyle("Income"),
-                                    ]),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              textstyle("Transcation type"),
+                              SizedBox(
+                                height: 1.5.h,
                               ),
-                            ),
-
-                            // FormHelper.dropDownWidget(
-                            //     context,
-                            //     "Select Transcation Type",
-                            //     transctiontypeid,
-                            //     transcationType, (onchangeval) {
-                            //   categoryid = null;
-                            //   setState(() {});
-                            //   transctiontypeid = onchangeval;
-                            //   categories = categorieslist
-                            //       .where((categoryItem) =>
-                            //           categoryItem["parentId"].toString() ==
-                            //           onchangeval.toString())
-                            //       .toList();
-                            // }, (onValidate) {
-                            //   final snack = customSnak(context,
-                            //       message: "Select transcation type ");
-                            //   if (transctiontypeid == null) {
-                            //     return ScaffoldMessenger.of(context)
-                            //         .showSnackBar(snack);
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
-                            //     borderColor: Colors.grey,
-                            //     borderRadius: 10,
-                            //     borderFocusColor: mainHexcolor,
-                            //     paddingLeft: 1,
-                            //     paddingRight: 1,
-                            //     textColor: Colors.white),
-
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            textstyle('Amount'),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
-                            TextFormField(
-                              autofocus: true,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return;
-                                }
-                                return null;
-                              },
-                              controller: amountcontrol,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(6),
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9]')),
-                              ],
-                              keyboardType: TextInputType.number,
-                              decoration: textfielddecor("Enter Amount"),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            textstyle("Date"),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
-                            Consumer<AppState>(
-                              builder: (context, provider, child) =>
-                                  ElevatedButton.icon(
-                                onPressed: () async {
-                                  final date = await provider.pickDate(context);
-                                  if (date == null) return;
-
-                                  provider.selectedDate = date;
-                                },
-                                icon: const Icon(
-                                  Icons.calendar_month,
-                                  color: Colors.grey,
+                              SizedBox(
+                                width: double.infinity,
+                                child: Consumer<AppState>(
+                                  builder: (context, provider, child) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Radio.adaptive(
+                                            groupValue: provider.selectedType,
+                                            value: "Expense",
+                                            onChanged: (String? value) {
+                                              provider.selectedType = value!;
+                                              provider.categorySelected =
+                                                  expenseList.first;
+                                            }),
+                                        textstyle("Expense"),
+                                        SizedBox(
+                                          width: 20.sp,
+                                        ),
+                                        Radio.adaptive(
+                                            groupValue: provider.selectedType,
+                                            value: "Income",
+                                            onChanged: (String? value) {
+                                              provider.selectedType = value!;
+                                              provider.categorySelected =
+                                                  incomeList.first;
+                                            }),
+                                        textstyle("Income"),
+                                      ]),
                                 ),
-                                label: Padding(
-                                  padding: const EdgeInsets.only(right: 150.0),
-                                  child: Text(
-                                    '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
-                                    style: const TextStyle(color: Colors.grey),
+                              ),
+
+                              // FormHelper.dropDownWidget(
+                              //     context,
+                              //     "Select Transcation Type",
+                              //     transctiontypeid,
+                              //     transcationType, (onchangeval) {
+                              //   categoryid = null;
+                              //   setState(() {});
+                              //   transctiontypeid = onchangeval;
+                              //   categories = categorieslist
+                              //       .where((categoryItem) =>
+                              //           categoryItem["parentId"].toString() ==
+                              //           onchangeval.toString())
+                              //       .toList();
+                              // }, (onValidate) {
+                              //   final snack = customSnak(context,
+                              //       message: "Select transcation type ");
+                              //   if (transctiontypeid == null) {
+                              //     return ScaffoldMessenger.of(context)
+                              //         .showSnackBar(snack);
+                              //   } else {
+                              //     return null;
+                              //   }
+                              // },
+                              //     borderColor: Colors.grey,
+                              //     borderRadius: 10,
+                              //     borderFocusColor: mainHexcolor,
+                              //     paddingLeft: 1,
+                              //     paddingRight: 1,
+                              //     textColor: Colors.white),
+
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              textstyle('Amount'),
+                              SizedBox(
+                                height: 1.5.h,
+                              ),
+                              TextFormField(
+                                autofocus: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return;
+                                  }
+                                  return null;
+                                },
+                                controller: amountcontrol,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(6),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                ],
+                                keyboardType: TextInputType.number,
+                                decoration: textfielddecor("Enter Amount"),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              textstyle("Date"),
+                              SizedBox(
+                                height: 1.5.h,
+                              ),
+                              Consumer<AppState>(
+                                builder: (context, provider, child) =>
+                                    ElevatedButton.icon(
+                                  onPressed: () async {
+                                    final date =
+                                        await provider.pickDate(context);
+                                    if (date == null) return;
+
+                                    provider.selectedDate = date;
+                                  },
+                                  icon: const Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.grey,
+                                  ),
+                                  label: Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 150.0),
+                                    child: Text(
+                                      '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    backgroundColor:
+                                        Theme.of(context).dialogBackgroundColor,
+                                    side: const BorderSide(color: Colors.grey),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    minimumSize: const Size(400, 50),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              textstyle("Categories"),
+                              SizedBox(
+                                height: 1.5.h,
+                              ),
+                              Consumer<AppState>(
+                                builder: (context, provider, child) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: DropdownButton(
+                                    elevation: 0,
+                                    underline: const SizedBox(),
+                                    menuMaxHeight: 220.sp,
+                                    iconEnabledColor: mainHexcolor,
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0),
+                                    isExpanded: true,
+                                    autofocus: true,
+                                    hint: textstyle("Select Category"),
+                                    onChanged: (String? value) {
+                                      provider.categorySelected = value;
+                                    },
+                                    items: provider.selectedType == "Income"
+                                        ? incomeList
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                            return DropdownMenuItem<String>(
+                                              // alignment: Alignment.,
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList()
+                                        : expenseList
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                    value: provider.categorySelected,
+                                  ),
+                                ),
+                              ),
+
+                              // FormHelper.dropDownWidget(
+                              //   context,
+                              //   "Select categories",
+                              //   categoryid,
+                              //   categories,
+                              //   (onchangeval) {
+                              //     setState(() {});
+                              //     categoryid = onchangeval;
+                              //   },
+                              //   (onValidate) {
+                              //     final snack = customSnak(context,
+                              //         message: "Please select category");
+                              //     if (categoryid == null) {
+                              //       return ScaffoldMessenger.of(context)
+                              //           .showSnackBar(snack);
+                              //     } else {
+                              //       return null;
+                              //     }
+                              //   },
+                              //   borderColor: Colors.grey,
+                              //   borderRadius: 10,
+                              //   borderFocusColor: mainHexcolor,
+                              //   optionValue: "Id",
+                              //   optionLabel: "Name",
+                              //   paddingLeft: 1,
+                              //   paddingRight: 1,
+                              // ),
+                              // AddTodoButton(
+                              //     selectedindex:
+                              //         selecteddropdownindexnotifier.value),
+
+                              //                    ElevatedButton(onPressed: (){
+                              //                         Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                              //   return const _AddTodoPopupCard();
+                              // }));
+                              //                    }, child:const Text("add categories")),///////////////////////////////////////
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              textstyle("Notes"),
+                              SizedBox(
+                                height: 1.5.h,
+                              ),
+                              TextFormField(
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(8)
+                                ],
+                                controller: notescontrol,
+                                keyboardType: TextInputType.text,
+                                decoration: textfielddecor('Enter Notes'),
+                              ),
+                              SizedBox(height: 3.5.h),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  if (_formkey.currentState!.validate()) {
+                                    Provider.of<AppState>(context,
+                                            listen: false)
+                                        .addtransbutton(context, amountcontrol,
+                                            notescontrol);
+                                  }
+                                },
                                 style: ElevatedButton.styleFrom(
-                                  elevation: 0,
+                                  elevation: 2,
                                   backgroundColor:
-                                      Theme.of(context).dialogBackgroundColor,
-                                  side: const BorderSide(color: Colors.grey),
+                                      Theme.of(context).primaryColorLight,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  minimumSize: const Size(400, 50),
+                                  minimumSize: const Size(400, 55),
+                                ),
+                                child: const Text(
+                                  'Add',
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            textstyle("Categories"),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
-                            Consumer<AppState>(
-                              builder: (context, provider, child) => Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButton(
-                                  elevation: 0,
-                                  underline: const SizedBox(),
-                                  menuMaxHeight: 220.sp,
-                                  iconEnabledColor: mainHexcolor,
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0),
-                                  isExpanded: true,
-                                  autofocus: true,
-                                  hint: textstyle("Select Category"),
-                                  onChanged: (String? value) {
-                                    provider.categorySelected = value;
-                                  },
-                                  items: provider.selectedType == "Income"
-                                      ? incomeList
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                          return DropdownMenuItem<String>(
-                                            // alignment: Alignment.,
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList()
-                                      : expenseList
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                  value: provider.categorySelected,
-                                ),
-                              ),
-                            ),
-
-                            // FormHelper.dropDownWidget(
-                            //   context,
-                            //   "Select categories",
-                            //   categoryid,
-                            //   categories,
-                            //   (onchangeval) {
-                            //     setState(() {});
-                            //     categoryid = onchangeval;
-                            //   },
-                            //   (onValidate) {
-                            //     final snack = customSnak(context,
-                            //         message: "Please select category");
-                            //     if (categoryid == null) {
-                            //       return ScaffoldMessenger.of(context)
-                            //           .showSnackBar(snack);
-                            //     } else {
-                            //       return null;
-                            //     }
-                            //   },
-                            //   borderColor: Colors.grey,
-                            //   borderRadius: 10,
-                            //   borderFocusColor: mainHexcolor,
-                            //   optionValue: "Id",
-                            //   optionLabel: "Name",
-                            //   paddingLeft: 1,
-                            //   paddingRight: 1,
-                            // ),
-                            // AddTodoButton(
-                            //     selectedindex:
-                            //         selecteddropdownindexnotifier.value),
-
-                            //                    ElevatedButton(onPressed: (){
-                            //                         Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                            //   return const _AddTodoPopupCard();
-                            // }));
-                            //                    }, child:const Text("add categories")),///////////////////////////////////////
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            textstyle("Notes"),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
-                            TextFormField(
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(8)
-                              ],
-                              controller: notescontrol,
-                              keyboardType: TextInputType.text,
-                              decoration: textfielddecor('Enter Notes'),
-                            ),
-                            SizedBox(height: 3.5.h),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (_formkey.currentState!.validate()) {
-                                  Provider.of<AppState>(context, listen: false)
-                                      .addtransbutton(
-                                          context, amountcontrol, notescontrol);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 2,
-                                backgroundColor:
-                                    Theme.of(context).primaryColorLight,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                minimumSize: const Size(400, 55),
-                              ),
-                              child: const Text(
-                                'Add',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

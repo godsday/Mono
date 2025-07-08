@@ -49,6 +49,8 @@ dependencies:
   timezone: ^0.10.1
   url_launcher: ^6.1.2
   animations: ^2.0.8
+  flutter_svg: ^2.1.0
+  cached_network_image: ^3.4.1
   
 
 

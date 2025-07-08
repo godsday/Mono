@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/screens/IntroPages/onbording_screen.dart';
+import 'package:mono/screens/home_screen/home_screen.dart';
 import 'package:mono/screens/widgets/bottomnavigationbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -30,7 +31,8 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     animation1 = Tween<double>(begin: 40, end: 20).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
+      CurvedAnimation(
+          parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
     )..addListener(() {
         setState(() {
           _textOpacity = 1.0;
@@ -122,7 +124,8 @@ class _SplashScreenState extends State<SplashScreen>
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => nameisthere == null ? OnboardScreen() : OnboardScreen(),
+        builder: (context) =>
+            nameisthere == null ? OnboardScreen() : BottomNavigator(),
       ),
     );
   }

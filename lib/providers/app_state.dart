@@ -10,17 +10,36 @@ import '../screens/widgets/bottomnavigationbar.dart';
 import '../screens/widgets/snackbar.dart';
 
 class AppState extends ChangeNotifier {
+  ValueNotifier<List<TranscationModel>> transcationNotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> incomelistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> expenselistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> todaylistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> yesterdaylistnotifier =
+      ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> customlistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> spendingCycleListNotifier =
+      ValueNotifier([]);
+
+  DateTimeRange? dateRange;
+  DateTime start = DateTime.now().subtract(const Duration(days: 3));
+  DateTime end = DateTime.now();
+  bool isThisMonth = false;
+  List<TranscationModel> _list = [];
+
+  //todo Check Flight mode
+
   bool _isFilghtMode = false;
   bool get isFilghtMode => _isFilghtMode;
+
   set isFilghtMode(bool value) {
     _isFilghtMode = value;
     notifyListeners();
   }
 
+  // Getters & Setters
+
   String _selectedType = "Expense";
-
   String get selectedType => _selectedType;
-
   set selectedType(String value) {
     _selectedType = value;
     notifyListeners();
@@ -40,29 +59,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<DateTime?> pickDate(context) async {
-    final selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
-    );
-
-    if (selected != null && selected != _selectedDate) {
-      _selectedDate = selected;
-    }
-    return _selectedDate;
-  }
-
-  String? _categorySelected;
-  String? get categorySelected => _categorySelected;
-  set categorySelected(String? value) {
-    _categorySelected = value;
-    notifyListeners();
-  }
-
   double _totalBalance = 0;
-
   double _totalIncome = 0;
   double _totalExpense = 0;
 
@@ -82,6 +79,29 @@ class AppState extends ChangeNotifier {
   set totalExpense(double value) {
     _totalExpense = value;
     notifyListeners();
+  }
+
+  String? _categorySelected;
+  String? get categorySelected => _categorySelected;
+  set categorySelected(String? value) {
+    _categorySelected = value;
+    notifyListeners();
+  }
+
+  // Date Range picker
+
+  Future<DateTime?> pickDate(context) async {
+    final selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+    );
+
+    if (selected != null && selected != _selectedDate) {
+      _selectedDate = selected;
+    }
+    return _selectedDate;
   }
 
   Future addtransbutton(context, amountcontrol, notescontrol) async {
@@ -109,14 +129,14 @@ class AppState extends ChangeNotifier {
         id: DateTime.now().millisecondsSinceEpoch.toString());
     TranscationDB.instance.addtranscation(model);
 
-    final _list = await TranscationDB.instance.getalltranscation();
+    _list = await TranscationDB.instance.getalltranscation();
 
     totalBalanceCheck(_list);
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const BottomNavigator()));
   }
 
-  listingmethod() {
+  /* listingmethod() {
     if (itemvalue == "Income") {
       return incomelistnotifier;
     } else if (itemvalue == "Expense") {
@@ -129,6 +149,25 @@ class AppState extends ChangeNotifier {
       return customlistnotifier;
     } else {
       return transcationNotifier;
+    }
+  }*/
+
+  ValueNotifier<List<TranscationModel>> listingMethod() {
+    switch (itemvalue) {
+      case "Income":
+        return incomelistnotifier;
+      case "Expense":
+        return expenselistnotifier;
+      case "Today":
+        return todaylistnotifier;
+      case "Yesterday":
+        return yesterdaylistnotifier;
+      case "Custom":
+        return customlistnotifier;
+      case "Spending Cycle":
+        return spendingCycleListNotifier;
+      default:
+        return transcationNotifier;
     }
   }
 
@@ -165,21 +204,11 @@ class AppState extends ChangeNotifier {
       }
       totalBalance = totalIncome - totalExpense;
     }
-    if (totalBalance < 0) {
-      totalBalance = 0;
-    }
+
     print("1 $totalBalance");
     print("2 $totalIncome");
     print("3 $totalExpense");
   }
-
-  ValueNotifier<List<TranscationModel>> transcationNotifier = ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> incomelistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> expenselistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> todaylistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> yesterdaylistnotifier =
-      ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> customlistnotifier = ValueNotifier([]);
 
   Future<void> refresh() async {
     final _list = await TranscationDB.instance.getalltranscation();
@@ -192,6 +221,7 @@ class AppState extends ChangeNotifier {
     incomelistnotifier.value.clear();
     expenselistnotifier.value.clear();
     todaylistnotifier.value.clear();
+    spendingCycleListNotifier.value.clear();
 
     transcationNotifier.value.addAll(_list);
 
@@ -237,16 +267,49 @@ class AppState extends ChangeNotifier {
     }
     // customlistnotifier.notifyListeners();
   }
+  /*void custompick(DateTime start, DateTime end) {
+  customlistnotifier.value.clear();
+
+  for (TranscationModel data in transcationNotifier.value) {
+    if (data.date.isAfter(start.subtract(const Duration(days: 1))) &&
+        data.date.isBefore(end.add(const Duration(days: 1)))) {
+      customlistnotifier.value.add(data);
+    }
+  }
+
+  customlistnotifier.notifyListeners();
+}*/
+
+  // Monthy cycle
+
+  void filterLast31Days() {
+    // spendingCycleListNotifier.value.clear();
+    DateTime today = DateTime.now();
+    DateTime cycleStart =
+        today.subtract(const Duration(days: 30)); // 31 days including today
+
+    List<TranscationModel> filtered = transcationNotifier.value.where((tx) {
+      return tx.date.isAfter(cycleStart.subtract(const Duration(days: 1))) &&
+          tx.date.isBefore(today.add(const Duration(days: 1)));
+    }).toList();
+
+    spendingCycleListNotifier.value = filtered;
+    spendingCycleListNotifier.notifyListeners();
+  }
+
+  String getSpendingCycleLabel() {
+    final today = DateTime.now();
+    final start = today.subtract(const Duration(days: 30));
+    final formatter = DateFormat('MMM dd'); // Example: Jun 12
+
+    return 'Spending Cycle: ${formatter.format(start)} – ${formatter.format(today)}';
+  }
 
   String parsedate(DateTime date) {
     final date0 = DateFormat().add_MMMd().format(date);
     final splitdate = date0.split(" ");
     return '${splitdate.last}\n${splitdate.first}';
   }
-
-  DateTimeRange? dateRange;
-  DateTime start = DateTime.now().subtract(const Duration(days: 3));
-  DateTime end = DateTime.now();
 
   showdatepicker(context) async {
     final newdateRange = await showDateRangePicker(
@@ -262,5 +325,19 @@ class AppState extends ChangeNotifier {
     end = dateRange!.end;
 
     custompick(start, end);
+  }
+
+  thisMonthSwitch(bool value) async {
+    isThisMonth = !isThisMonth;
+    print('isThisMonth $isThisMonth');
+    if (isThisMonth) {
+      filterLast31Days();
+      getSpendingCycleLabel();
+      totalBalanceCheck(spendingCycleListNotifier.value);
+    } else {
+      _list = await TranscationDB.instance.getalltranscation();
+      totalBalanceCheck(_list);
+    }
+    notifyListeners();
   }
 }
