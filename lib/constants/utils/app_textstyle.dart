@@ -44,5 +44,7 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: HexColor('#222222'),
   );
+  
+  
 
 }

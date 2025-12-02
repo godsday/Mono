@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
 import 'package:mono/screens/profile_screen/acheivements_screen.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
@@ -46,7 +46,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         showUnselectedLabels: false,
         showSelectedLabels: true,
         currentIndex: _selectedIndex,
-        selectedItemColor: mainHexcolor,
+        selectedItemColor: AppColor.mainHexcolor,
         unselectedItemColor: Colors.black45,
         onTap: _onitemtap,
       ),

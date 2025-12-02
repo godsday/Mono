@@ -1,17 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/constants/app_color.dart';
-import 'package:mono/main.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
 import 'package:mono/screens/home_screen/widgets/bottom_card_L_shape.dart';
 import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
 import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
 import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
-import 'package:mono/ts/drawer_widget.dart';
-import 'package:mono/screens/widgets/navigator_animation.dart';
-import 'package:mono/utils/app_textstyle.dart';
+import 'package:mono/constants/utils/app_textstyle.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -393,35 +389,55 @@ class _HomeScreenState extends State<HomeScreen>
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    LShapeWidget(
-                      orientation: LShapeOrientation.leftLegOnLeft,
-                      color: greenContainer,
+                    Consumer<AppState>(
+                      builder: (context, appState, child) {
+                        return LShapeWidget(
+                          type: "Income", 
+                          orientation: LShapeOrientation.leftLegOnLeft,
+                          color: AppColor.greenContainer,
+                          icons : Icons.account_balance,
+                          categories: appState.topIncomeCategories,
+                          totalAmount: appState.totalIncome,
+                        );
+                      },
                     ),
                     SizedBox(
                       width: 4.w,
                     ),
-                    LShapeWidget(
-                      orientation: LShapeOrientation.leftLegOnRight,
-                      color: redContainer,
+                    Consumer<AppState>(
+                      builder: (context, appState, child) {
+                        return LShapeWidget(
+                          type: "Expense",
+                          orientation: LShapeOrientation.leftLegOnRight,
+                          color: AppColor.redContainer,
+                          icons : Icons.account_balance_wallet,
+                          categories: appState.topExpenseCategories,
+                          totalAmount: appState.totalExpense,
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
               Positioned(
-                top: 8.h,
-                left: 41.w,
-                child: Container(
-                  width: 10.h,
-                  height: 10.h,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.white),
-                      shape: BoxShape.circle,
-                      color: Colors.amber),
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.black,
-                    size: 28.sp,
+                top: 8.6.h,
+                left: 40.5 .w,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddScreen())),
+                  child: Container(
+                    width: 8.5.h,
+                    height: 8.5.h,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: Colors.white),
+                        shape: BoxShape.circle,
+                        color: Colors.amber),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.black,
+                      size: 28.sp,
+                    ),
                   ),
                 ),
               ),
@@ -430,12 +446,7 @@ class _HomeScreenState extends State<HomeScreen>
         ],
       ),
 
-      // FloatingActionButtonLocation.miniCenterFloat,
-      // floatingActionButton: Container(
-      //   width: 15.w,
-      //   height: 10.h,
-      //   decoration: BoxDecoration(color: Colors.amber),
-      // ),
+
     );
   }
 }

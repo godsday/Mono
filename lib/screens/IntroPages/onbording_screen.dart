@@ -4,7 +4,7 @@ import 'package:mono/screens/widgets/bottomnavigationbar.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/utils/app_textstyle.dart';
+import 'package:mono/constants/utils/app_textstyle.dart';
 
 class OnboardScreen extends StatelessWidget {
   OnboardScreen({Key? key}) : super(key: key);

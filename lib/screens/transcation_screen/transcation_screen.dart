@@ -5,13 +5,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/edit_screen/edit_screen.dart';
 import 'package:mono/screens/widgets/add_clipper.dart';
 import 'package:mono/screens/widgets/snackbar.dart';
-import 'package:mono/ts/presentation/spending_dashboard_screen/spending_dashboard_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../models/transcation_model/transcation_model.dart';
@@ -157,7 +156,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
               height: 30.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: blueContainer,
+                color: AppColor.blueContainer,
               ),
               child: Column(
                 children: [

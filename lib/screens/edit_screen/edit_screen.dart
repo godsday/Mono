@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/screens/add_screen/decoration_functions.dart';
@@ -158,7 +158,7 @@ class _EditScreenState extends State<EditScreen> {
                               
                               borderColor: Colors.grey,
                               borderRadius: 10,
-                              borderFocusColor: mainHexcolor,
+                              borderFocusColor: AppColor.mainHexcolor,
                               paddingLeft: 1,
                               paddingRight: 1,
                             ),
@@ -247,7 +247,7 @@ class _EditScreenState extends State<EditScreen> {
                               },
                               borderColor: Colors.grey,
                               borderRadius: 10,
-                              borderFocusColor: mainHexcolor,
+                              borderFocusColor: AppColor.mainHexcolor,
                               optionValue: "Id",
                               optionLabel: "Name",
                               paddingLeft: 1,

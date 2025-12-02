@@ -8,6 +8,7 @@ import '../screens/transcation_screen/transcation_screen.dart';
 import '../screens/transcation_screen/transcation_widgets/heading_widget.dart';
 import '../screens/widgets/bottomnavigationbar.dart';
 import '../screens/widgets/snackbar.dart';
+import '../models/top_category_model.dart';
 
 class AppState extends ChangeNotifier {
   ValueNotifier<List<TranscationModel>> transcationNotifier = ValueNotifier([]);
@@ -19,6 +20,10 @@ class AppState extends ChangeNotifier {
   ValueNotifier<List<TranscationModel>> customlistnotifier = ValueNotifier([]);
   ValueNotifier<List<TranscationModel>> spendingCycleListNotifier =
       ValueNotifier([]);
+
+  // Top categories data
+  List<TopCategory> topIncomeCategories = [];
+  List<TopCategory> topExpenseCategories = [];
 
   DateTimeRange? dateRange;
   DateTime start = DateTime.now().subtract(const Duration(days: 3));
@@ -245,11 +250,90 @@ class AppState extends ChangeNotifier {
       }
     });
 
+    // Calculate top categories
+    calculateTopCategories(_list);
+
     // yesterdaylistnotifier.notifyListeners();
     // transcationNotifier.notifyListeners();
     // expenselistnotifier.notifyListeners();
     // incomelistnotifier.notifyListeners();
     // todaylistnotifier.notifyListeners();
+  }
+
+  void calculateTopCategories(List<TranscationModel> transactions) {
+    // Clear previous data
+    topIncomeCategories.clear();
+    topExpenseCategories.clear();
+
+    // Maps to store category totals
+    Map<String, double> incomeCategoryTotals = {};
+    Map<String, double> expenseCategoryTotals = {};
+
+    // Calculate totals for each category
+    for (var transaction in transactions) {
+      if (transaction.type == 'Income') {
+        if (incomeCategoryTotals.containsKey(transaction.category)) {
+          incomeCategoryTotals[transaction.category] =
+              incomeCategoryTotals[transaction.category]! + transaction.amount;
+        } else {
+          incomeCategoryTotals[transaction.category] = transaction.amount;
+        }
+      } else if (transaction.type == 'Expense') {
+        if (expenseCategoryTotals.containsKey(transaction.category)) {
+          expenseCategoryTotals[transaction.category] =
+              expenseCategoryTotals[transaction.category]! + transaction.amount;
+        } else {
+          expenseCategoryTotals[transaction.category] = transaction.amount;
+        }
+      }
+    }
+
+    // Convert maps to lists and sort by amount (descending)
+    List<MapEntry<String, double>> sortedIncomeCategories =
+        incomeCategoryTotals.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
+
+    List<MapEntry<String, double>> sortedExpenseCategories =
+        expenseCategoryTotals.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
+
+    // Calculate total amounts for percentage calculation
+    double totalIncome = sortedIncomeCategories.fold(
+        0, (sum, entry) => sum + entry.value);
+    double totalExpense = sortedExpenseCategories.fold(
+        0, (sum, entry) => sum + entry.value);
+
+    // Take top 3 categories for each type
+    int incomeCount = sortedIncomeCategories.length > 3
+        ? 3
+        : sortedIncomeCategories.length;
+    int expenseCount = sortedExpenseCategories.length > 3
+        ? 3
+        : sortedExpenseCategories.length;
+
+    // Create TopCategory objects for income
+    for (int i = 0; i < incomeCount; i++) {
+      var entry = sortedIncomeCategories[i];
+      double percentage = totalIncome > 0 ? (entry.value / totalIncome) * 100 : 0;
+      topIncomeCategories.add(TopCategory(
+        name: entry.key,
+        amount: entry.value,
+        percentage: percentage,
+      ));
+    }
+
+    // Create TopCategory objects for expense
+    for (int i = 0; i < expenseCount; i++) {
+      var entry = sortedExpenseCategories[i];
+      double percentage = totalExpense > 0 ? (entry.value / totalExpense) * 100 : 0;
+      topExpenseCategories.add(TopCategory(
+        name: entry.key,
+        amount: entry.value,
+        percentage: percentage,
+      ));
+    }
+
+    notifyListeners();
   }
 
   custompick(DateTime start, DateTime end) {

@@ -9,7 +9,6 @@ import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
 import 'package:mono/screens/widgets/theme.dart';
-import 'package:mono/ts/presentation/spending_dashboard_screen/provider/spending_dashboard_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'providers/notification_provider.dart';
@@ -18,8 +17,7 @@ Timer? fightTimer;
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 AppState appState = AppState();
-SpendingDashboardProvider spendingDashboardProvider =
-    SpendingDashboardProvider();
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,9 +42,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) {
         return notificationProvider;
       }),
-      ChangeNotifierProvider(create: (_) {
-        return spendingDashboardProvider;
-      })
+   
     ], child: const MyApp()),
   );
 }

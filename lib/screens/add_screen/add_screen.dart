@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/providers/app_state.dart';
@@ -300,7 +300,7 @@ class _AddScreenState extends State<AddScreen> {
                                     elevation: 0,
                                     underline: const SizedBox(),
                                     menuMaxHeight: 220.sp,
-                                    iconEnabledColor: mainHexcolor,
+                                    iconEnabledColor: AppColor.mainHexcolor,
                                     padding: const EdgeInsets.only(
                                         left: 8.0, right: 8.0),
                                     isExpanded: true,

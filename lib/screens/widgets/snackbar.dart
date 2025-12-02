@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 
 SnackBar customSnak(BuildContext context, {required message}) {
   return SnackBar(
-      backgroundColor: mainHexcolor,
+      backgroundColor: AppColor.mainHexcolor,
       duration: const Duration(milliseconds: 1500),
       content: Text(
         message,

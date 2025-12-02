@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/main.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
-import 'package:mono/utils/app_textstyle.dart';
+import 'package:mono/constants/utils/app_textstyle.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -89,7 +89,7 @@ class TotalBalanceCard extends StatelessWidget {
                                   .copyWith(fontWeight: FontWeight.w400),
                             ),
                             SizedBox(
-                              width: 1.w,
+                              width: 1.w,   
                             ),
                             SizedBox(
                                 width: 5.w,
@@ -125,7 +125,7 @@ class TotalBalanceCard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.keyboard_arrow_up_rounded,
-                          color: mainHexcolor,
+                          color: AppColor.mainHexcolor,
                         ),
                         Text(
                           "25 % ",

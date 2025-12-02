@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
@@ -95,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           fontWeight: FontWeight.w400),
                                     ),
                                     secondary: const Icon(Icons.notifications),
-                                    activeColor: mainHexcolor,
+                                    activeColor: AppColor.mainHexcolor,
                                     value: notificationProvider.notifValue,
                                     onChanged: (newvalue) {
                                       setState(() {
@@ -115,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   height: 2.h,
                                 ),
                                 SwitchListTile(
-                                  activeColor: mainHexcolor,
+                                  activeColor: AppColor.mainHexcolor,
                                   title: Text(
                                     "Dark Mode",
                                     style: TextStyle(
