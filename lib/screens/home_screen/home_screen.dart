@@ -8,6 +8,7 @@ import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
 import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
 import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
 import 'package:mono/constants/utils/app_textstyle.dart';
+import 'package:mono/screens/widgets/navigator_animation.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -22,10 +23,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   String enteredname = '';
-  late AnimationController _animationController;
-  late Animation<double> _animation1;
-  late Animation<double> _animation2;
-  late Animation<double> _animation3;
+  // late AnimationController _animationController;
+  // late Animation<double> _animation1;
+  // late Animation<double> _animation2;
+  // late Animation<double> _animation3;
 
   bool _bool = true;
 
@@ -35,46 +36,48 @@ class _HomeScreenState extends State<HomeScreen>
     Provider.of<AppState>(context, listen: false).refresh();
 
     getnamedata();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+  //   _animationController =
+  //       AnimationController(vsync: this, duration: Duration(milliseconds: 600));
 
-    _animation1 = Tween<double>(begin: 0, end: 20).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-      reverseCurve: Curves.easeIn,
-    ))
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.dismissed) {
-          _bool = true;
-        }
-      });
-    _animation2 = Tween<double>(begin: 0, end: .3).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-    _animation3 = Tween<double>(begin: .9, end: 1).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.fastLinearToSlowEaseIn,
-        reverseCurve: Curves.ease))
-      ..addListener(() {
-        setState(() {});
-      });
+  //   _animation1 = Tween<double>(begin: 0, end: 20).animate(CurvedAnimation(
+  //     parent: _animationController,
+  //     curve: Curves.easeOut,
+  //     reverseCurve: Curves.easeIn,
+  //   ))
+  //     ..addListener(() {
+  //       setState(() {});
+  //     })
+  //     ..addStatusListener((status) {
+  //       if (status == AnimationStatus.dismissed) {
+  //         _bool = true;
+  //       }
+  //     });
+  //   _animation2 = Tween<double>(begin: 0, end: .3).animate(_animationController)
+  //     ..addListener(() {
+  //       setState(() {});
+  //     });
+  //   _animation3 = Tween<double>(begin: .9, end: 1).animate(CurvedAnimation(
+  //       parent: _animationController,
+  //       curve: Curves.fastLinearToSlowEaseIn,
+  //       reverseCurve: Curves.ease))
+  //     ..addListener(() {
+  //       setState(() {});
+  //     });
   }
 
   getnamedata() async {
     final sharedprefer = await SharedPreferences.getInstance();
     enteredname = sharedprefer.getString('namekey')!;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // _animationController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -209,39 +212,39 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   )),
               Positioned(
-                right: 1.w,
-                bottom: -20.h,
+                right: 10.w,
+                bottom: 0.h,
                 child: ClipRect(
                   child: Align(
                       alignment: Alignment.topCenter,
                       child: SizedBox(
-                        width: 24.0.h,
-                        height: 24.h,
-                        // Height of the visible portion
-                        // child: ShaderMask(
-                        //   shaderCallback: (Rect bounds) {
-                        //     return LinearGradient(
-                        //       begin: Alignment.bottomCenter,
-                        //       end: Alignment.topCenter,
-                        //       colors: [Colors.transparent, Colors.black],
-                        //     ).createShader(bounds);
-                        //   },
-                        // blendMode: BlendMode.dstIn,
+                        width: 14.0.h,
+                        height: 14.h,
+                       // Height of the visible portion
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [Colors.transparent, Colors.black],
+                            ).createShader(bounds);
+                          },
+                        blendMode: BlendMode.dstIn,
                         child: Image.asset(
                           'assets/images/piggybank.png', // Replace 'your_image.jpg' with your image asset
                           fit: BoxFit.cover,
                         ),
                         // ),
-                      )),
+                      )),)
                 ),
               ),
               Positioned(
                 left: -11.w,
-                bottom: -30.h,
+                bottom: -10.h,
                 child: Image(
                   image: const AssetImage("assets/images/monotree.png"),
-                  width: 41.h,
-                  height: 41.h,
+                  width: 31.h,
+                  height: 31.h,
                 ),
               ),
             ],
@@ -378,10 +381,7 @@ class _HomeScreenState extends State<HomeScreen>
                 )
               ]),
            */
-              // SizedBox(
-              //   width: 12,
-              // ),
-              // LShapeWidget(orientation: LShapeOrientation.leftLegOnRight)
+             
             ],
           ),
           Stack(
@@ -425,7 +425,9 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8.6.h,
                 left: 40.5 .w,
                 child: GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddScreen())),
+                  onTap: () =>   Navigator.push(
+                            context, CustomPageRoute(child: const AddScreen())),
+                      
                   child: Container(
                     width: 8.5.h,
                     height: 8.5.h,

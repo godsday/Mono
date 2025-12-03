@@ -51,7 +51,7 @@ class TotalBalanceCard extends StatelessWidget {
                       ),
                       AutoSizeText(
                         appState.totalBalance < 0
-                            ? "Over Spended"
+                            ? "Over Spent"
                             : '₹ ${appState.totalBalance.toStringAsFixed(1)}',
                         maxLines: 1,
                         style: AppTextStyles.roboto18w600SemiBoldWhite(context)!
@@ -80,23 +80,24 @@ class TotalBalanceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 1.5.h),
+                        padding: EdgeInsets.only(top: .6.h),
                         child: Row(
                           children: [
                             Text(
                               'This month',
                               style: AppTextStyles.poppins12w300White(context)!
-                                  .copyWith(fontWeight: FontWeight.w400),
+                                  .copyWith(fontWeight: FontWeight.w400, fontSize: 14.sp),
                             ),
                             SizedBox(
-                              width: 1.w,   
+                              width: 1.5.w,   
                             ),
                             SizedBox(
                                 width: 5.w,
-                                height: 1.h,
+                                height: 2.h,
                                 child: Transform.scale(
-                                  scale: .4,
+                                  scale: .47,
                                   child: Switch.adaptive(
+                                    activeThumbColor: AppColor.mainHexcolor,
                                       value: appState.isThisMonth,
                                       onChanged: (value) {
                                         appState.thisMonthSwitch(value);
@@ -106,7 +107,7 @@ class TotalBalanceCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 1.h,
+                        height: .5.h,
                       ),
                       if (appState.isThisMonth)
                         Text(
@@ -121,23 +122,35 @@ class TotalBalanceCard extends StatelessWidget {
                 ],
               ),
               appState.isThisMonth
-                  ? Row(
-                      children: [
-                        Icon(
-                          Icons.keyboard_arrow_up_rounded,
-                          color: AppColor.mainHexcolor,
-                        ),
-                        Text(
-                          "25 % ",
-                          style: AppTextStyles.poppins12w300White(context),
-                        ),
-                        Text(
-                          " higher compared to last month",
-                          style: AppTextStyles.poppins12w300White(context)!
-                              .copyWith(fontSize: 9),
-                        ),
-                      ],
-                    )
+                  ? SizedBox(
+                    height: 5.7.h,
+                    child: Row(
+                        children: [
+                          Icon(
+                            appState.totalExpense > appState.totalIncome
+                                ? Icons.keyboard_arrow_down_rounded
+                                : Icons.keyboard_arrow_up_rounded,
+                            color: appState.totalExpense > appState.totalIncome
+                                ? Colors.red
+                                : Colors.green,
+                          ),
+                          Text(
+                            appState.totalExpense > appState.totalIncome
+                                ? "${((appState.totalExpense - appState.totalIncome) / appState.totalIncome * 100).toStringAsFixed(0)} % "
+                                : "You saved ${(appState.totalIncome - appState.totalExpense).toStringAsFixed(0)} % extra ",
+                            style: AppTextStyles.poppins12w300White(context),
+                          ),
+                          Text(
+                            appState.totalExpense > appState.totalIncome
+                                ? "higher compared to last month"
+                                : "compared to last month",
+                            style: AppTextStyles.poppins12w300White(context)!
+                                .copyWith(fontSize: 13.sp),
+                          ),
+                         
+                        ],
+                      ),
+                  )
                   : SizedBox(
                       height: 3.7.h,
                     ),

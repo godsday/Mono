@@ -6,10 +6,10 @@ class AcheivemntsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(
-          child: Container(
+      body: Column(
+          children: [ Container(
         color: Colors.blue,
-      )),
+      )]),
     );
   }
 }

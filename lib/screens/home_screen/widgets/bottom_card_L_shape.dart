@@ -26,7 +26,7 @@ class LShapeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double totalWidth = 43.5.w;
-    final double totalHeight = MediaQuery.of(context).size.height / 4.5;
+    final double totalHeight = MediaQuery.of(context).size.height / 4.8;
 
     return ClipPath(
       clipper: UnifiedCurvedLShapeClipper(

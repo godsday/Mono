@@ -6,10 +6,8 @@ import 'package:mono/screens/profile_screen/acheivements_screen.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 
-import '../profile_screen/pro_screen.dart';
-
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({Key? key}) : super(key: key);
+  const BottomNavigator({super.key});
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
