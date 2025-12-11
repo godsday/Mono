@@ -6,13 +6,12 @@ import 'package:sizer/sizer.dart';
 class HeadingMethod extends StatelessWidget {
   String headtext;
   String? amount;
-  HeadingMethod({Key? key, required this.headtext, this.amount = ''})
-      : super(key: key);
+  HeadingMethod({super.key, required this.headtext, this.amount = ''});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           headtext,

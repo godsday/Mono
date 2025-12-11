@@ -29,7 +29,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
   late TooltipBehavior _tooltipBehavior;
   //bool visible = false;
 
-  var item = [ 'Income','All', 'Expense'];
+  var item = ['Income', 'All', 'Expense'];
   bool _onFirstPage = true;
   final ScrollController _scrollController = ScrollController();
   
@@ -46,6 +46,287 @@ class _TranscationScreenState extends State<TranscationScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+  
+  Widget _getCategoryIcon(String category, String type) {
+    // Define icon mappings based on category
+    switch (category.toLowerCase()) {
+      case 'salary':
+        return Icon(Icons.account_balance_wallet, color: Colors.blue);
+      case 'shopping':
+        return Icon(Icons.shopping_cart, color: Colors.purple);
+      case 'food':
+        return Icon(Icons.fastfood, color: Colors.orange);
+      case 'travel':
+        return Icon(Icons.flight, color: Colors.blueAccent);
+      case 'medical':
+        return Icon(Icons.local_hospital, color: Colors.red);
+      case 'utilities':
+        return Icon(Icons.lightbulb, color: Colors.yellow);
+      case 'education':
+      case 'educations':
+        return Icon(Icons.school, color: Colors.green);
+      case 'entertainment':
+        return Icon(Icons.movie, color: Colors.pink);
+      case 'insurance':
+        return Icon(Icons.security, color: Colors.indigo);
+      case 'rental':
+        return Icon(Icons.home, color: Colors.brown);
+      case 'gift':
+        return Icon(Icons.card_giftcard, color: Colors.purpleAccent);
+      case 'freelance':
+        return Icon(Icons.work, color: Colors.teal);
+      case 'commission':
+        return Icon(Icons.business, color: Colors.deepOrange);
+    
+      case 'investments':
+        return Icon(Icons.trending_up, color: Colors.greenAccent);
+      case 'credit':
+        return Icon(Icons.credit_card, color: Colors.blueGrey);
+      case 'debit':
+        return Icon(Icons.account_balance, color: Colors.redAccent);
+      case 'other':
+        return Icon(
+          type == 'Income' ? Icons.attach_money : Icons.money_off,
+          color: type == 'Income' ? Colors.green : Colors.red,
+        );
+      default:
+        return Icon(
+          type == 'Income' ? Icons.arrow_downward : Icons.arrow_upward,
+          color: type == 'Income' ? Colors.green : Colors.red,
+        );
+    }
+  }
+  
+  Widget _buildFilterChip(String filterName, BuildContext context) {
+    return Consumer<AppState>(
+      builder: (context, provider, child) {
+        final isSelected = provider.itemvalue == filterName;
+        return GestureDetector(
+          onTap: () {
+            provider.itemvalue = filterName;
+            // Refresh the data when filter changes
+            provider.refresh();
+          },
+          child: Text(
+            filterName,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              fontSize: isSelected ? 14.sp : 12.sp,
+              color: isSelected ? Colors.blue : Colors.grey,
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  void _showCustomDatePicker(BuildContext context) async {
+    final dateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      initialDateRange: DateTimeRange(
+        start: DateTime.now().subtract(const Duration(days: 7)),
+        end: DateTime.now(),
+      ),
+    );
+    
+    if (dateRange != null) {
+      // Update the provider with the selected date range
+      final provider = Provider.of<AppState>(context, listen: false);
+      provider.itemvalue = 'Custom';
+      provider.custompick(
+        dateRange.start, 
+        dateRange.end
+      );
+      provider.refresh();
+    }
+  }
+  
+  Widget _buildGroupedTransactionList(List<TranscationModel> transactions) {
+    // Group transactions by date
+    Map<String, List<TranscationModel>> groupedTransactions = {};
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    DateFormat displayFormat = DateFormat('MMM d, yyyy');
+    
+    for (var transaction in transactions) {
+      String dateKey = dateFormat.format(transaction.date);
+      if (!groupedTransactions.containsKey(dateKey)) {
+        groupedTransactions[dateKey] = [];
+      }
+      groupedTransactions[dateKey]!.add(transaction);
+    }
+    
+    // Create a list of widgets with date headers and transactions
+    List<Widget> widgets = [];
+    
+    groupedTransactions.forEach((dateKey, transactionList) {
+      // Add date header
+      DateTime date = dateFormat.parse(dateKey);
+      String dateDisplay = displayFormat.format(date);
+      
+      // Check if it's today or yesterday
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final yesterday = DateTime(now.year, now.month, now.day - 1);
+      final transactionDate = DateTime(date.year, date.month, date.day);
+      
+      String dayLabel = '';
+      if (transactionDate.isAtSameMomentAs(today)) {
+        dayLabel = 'Today';
+      } else if (transactionDate.isAtSameMomentAs(yesterday)) {
+        dayLabel = 'Yesterday';
+      }
+      
+      widgets.add(
+        Container(
+          // alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 15.0, top: 10.0, bottom: 5.0,right: 15.0,),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (dayLabel.isNotEmpty)
+                Text(
+                  '$dayLabel ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                     color: Colors.grey[700],
+                  ),
+                ),
+              Text(
+                dateDisplay,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      
+      // Add transactions for this date
+      for (var transaction in transactionList) {
+        widgets.add(
+          Slidable(
+            key: ValueKey(transaction.id),
+            startActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  backgroundColor: Theme.of(context).hoverColor,
+                  foregroundColor: HexColor('#1976D2'),
+                  icon: Icons.edit,
+                  label: 'Edit',
+                  onPressed: ((context) async {
+                    final newvalue = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditScreen(value: transaction)
+                      )
+                    );
+                    
+                    setState(() {
+                      // Update transaction if needed
+                    });
+                  }),
+                ),
+              ],
+            ),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  backgroundColor: Theme.of(context).hoverColor,
+                  foregroundColor: HexColor('#B00020'),
+                  icon: Icons.delete,
+                  label: 'Delete',
+                  onPressed: ((context) {
+                    TranscationDB.instance.deletetranscation(transaction.id);
+                    Provider.of<AppState>(context, listen: false).refresh();
+                    
+                    setState(() {});
+                    
+                    final snack = customSnak(context, message: "Deleted");
+                    ScaffoldMessenger.of(context).showSnackBar(snack);
+                  }),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: InkWell(
+                  onTap: (() {}),
+                  focusColor: Colors.black38,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: HexColor('#efefef'),
+                      radius: 26,
+                      child: _getCategoryIcon(transaction.category, transaction.type),
+                    ),
+                    title: Text(
+                      transaction.category,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    subtitle: Text(
+                      Provider.of<AppState>(context, listen: false).parsedate(transaction.date),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    trailing: transaction.type == 'Expense'
+                      ? SizedBox(
+                          width: 34.w,
+                          child: AutoSizeText(
+                            "- ₹${transaction.amount}",
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                            maxLines: 1,
+                            textAlign: TextAlign.end,
+                          ),
+                        )
+                      : SizedBox(
+                          width: 35.w,
+                          child: AutoSizeText(
+                            "+ ₹${transaction.amount}",
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                            maxLines: 1,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    });
+    
+    return ListView(
+      padding: EdgeInsets.only(top: 3),
+      physics: const BouncingScrollPhysics(),
+      children: widgets,
+    );
   }
 
   @override
@@ -83,7 +364,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   child: ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 3,
+                    itemCount: item.length,
                     itemBuilder: (context, index) {
                       final isSelected = pro.itemvalue == item[index];
                       
@@ -227,16 +508,38 @@ class _TranscationScreenState extends State<TranscationScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).hoverColor,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildFilterChip('Today', context),
+                        _buildFilterChip('Weekly', context),
+                        _buildFilterChip('Monthly', context),
+                        IconButton(
+                          icon: Icon(Icons.calendar_month_outlined,  size: 15.sp,),
+                          color: Colors.blueGrey,
+                        
+                          onPressed: () {
+                            _showCustomDatePicker(context);
+                          }, 
+                        ),
+                      ],
+                    ),
+                  ),
                   Consumer<AppState>(builder: (context, provider, child) {
                     return Container(
-                        height: 6.h,
+                        height: 4.h,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).hoverColor,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10))),
-                        child: provider.headinginnermethod());
+ color: const Color.fromARGB(255, 215, 215, 214),                  ),
+                        child: Padding(padding: EdgeInsets.symmetric(horizontal: 15.0,),child: provider.headinginnermethod()));
                   }),
                   Expanded(
                     child: Container(
@@ -254,139 +557,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                     Lottie.asset(
                                         'assets/images/animation/paymentshero1.json')
                                   ])
-                                : ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      TranscationModel value = newlist[index];
-                                      print("newlist ${newlist[index].type}");
-                        
-                                      return Slidable(
-                                        key: const ValueKey(1),
-                                        startActionPane: ActionPane(
-                                            motion: const ScrollMotion(),
-                                            children: [
-                                              SlidableAction(
-                                                  backgroundColor:
-                                                      Theme.of(context).hoverColor,
-                                                  foregroundColor:
-                                                      HexColor('#1976D2'),
-                                                  icon: Icons.edit,
-                                                  label: 'Edit',
-                                                  onPressed: ((context) async {
-                                                    final newvalue =
-                                                        await Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    EditScreen(
-                                                                        value:
-                                                                            value)));
-                        
-                                                    setState(() {
-                                                      value = newvalue;
-                                                    });
-                                                  })),
-                                            ]),
-                                        endActionPane: ActionPane(
-                                            motion: const ScrollMotion(),
-                                            children: [
-                                              SlidableAction(
-                                                  backgroundColor:
-                                                      Theme.of(context).hoverColor,
-                                                  foregroundColor:
-                                                      HexColor('#B00020'),
-                                                  icon: Icons.delete,
-                                                  label: 'Delete',
-                                                  onPressed: ((context) {
-                                                    TranscationDB.instance
-                                                        .deletetranscation(
-                                                            value.id);
-                                                    // TranscationDB.instance.refresh();
-                                                    Provider.of<AppState>(context,
-                                                            listen: false)
-                                                        .refresh();
-                        
-                                                    setState(() {});
-                        
-                                                    final snack = customSnak(
-                                                        context,
-                                                        message: "Deleted");
-                        
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(snack);
-                                                  })),
-                                            ]),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: InkWell(
-                                              onTap: (() {}),
-                                              focusColor: Colors.black38,
-                                              child: ListTile(
-                                                leading: CircleAvatar(
-                                                  backgroundColor:
-                                                      HexColor('#efefef'),
-                                                  radius: 26,
-                                                  child: Text(
-                                                    Provider.of<AppState>(context,
-                                                            listen: false)
-                                                        .parsedate(value.date),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 10.sp),
-                                                  ),
-                                                ),
-                                                title: Text(value.category,
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 12.sp)),
-                                                subtitle: Text(
-                                                  "${value.purpose}",
-                                                  maxLines: 1,
-                                                ),
-                                                trailing: value.type == 'Expense'
-                                                    ? SizedBox(
-                                                        width: 34.w,
-                                                        child: AutoSizeText(
-                                                          "- ₹${value.amount}",
-                                                          style: TextStyle(
-                                                              fontSize: 15.sp,
-                                                              fontWeight:
-                                                                  FontWeight.w600,
-                                                              color: Colors.red),
-                                                          // minFontSize: 12,
-                                                          maxLines: 1,
-                                                          textAlign: TextAlign.end,
-                                                        ),
-                                                      )
-                                                    : SizedBox(
-                                                        width: 35.w,
-                                                        child: AutoSizeText(
-                                                          "+ ₹${value.amount}",
-                                                          style: TextStyle(
-                                                              fontSize: 15.sp,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              color: Colors.green),
-                                                          // minFontSize: 12,
-                                                          maxLines: 1,
-                                                          textAlign: TextAlign.end,
-                                                        ),
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: newlist.length,
-                                  );
+                                : _buildGroupedTransactionList(newlist);
                           }),
                     ),
                   ),

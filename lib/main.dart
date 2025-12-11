@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
+import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
@@ -28,8 +30,17 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
     Hive.registerAdapter(TranscationModelAdapter());
   }
+  
+  if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
+    Hive.registerAdapter(CategoryModelAdapter());
+  }
+  
+  if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
+    Hive.registerAdapter(CategoryTypeAdapter());
+  }
 
   await TranscationDB.instance.getalltranscation();
+  await CategoryDB.instance.initializeCategories();
 
   runApp(
     MultiProvider(providers: [

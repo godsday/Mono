@@ -8,6 +8,8 @@ class AppColor {
   static Color greenContainer = HexColor('#D9E7E5');
   static Color redContainer = HexColor('#E6E2E6');
   static Color textGrey = HexColor('525252');
+  static Color textSecondary = HexColor('666666');
+  
 }
 
 

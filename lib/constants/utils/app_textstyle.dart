@@ -1,4 +1,6 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/constants/utils/app_texttheme.dart';
 import 'package:sizer/sizer.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +46,25 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: HexColor('#222222'),
   );
+  
+    static TextStyle poppins16w400 = AppTextTheme.poppins(
+    fontSize: 14.sp,
+    color: AppColor.textSecondary,
+    fontWeight: FontWeight.w400,
+  );
+  
+  static TextStyle montserrat18w600 = AppTextTheme.montserrart(
+    fontSize: 18.sp,
+    color: AppColor.textSecondary,
+    fontWeight: FontWeight.w600,
+  
+  );
+//   fontFamily: 'poppins',
+//       fontSize: 15.0.sp,
+//         fontWeight: FontWeight.normal, color: AppColor.textSecondary);
+  
+// }
+  
   
   
 

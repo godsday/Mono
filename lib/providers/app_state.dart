@@ -20,6 +20,8 @@ class AppState extends ChangeNotifier {
   ValueNotifier<List<TranscationModel>> customlistnotifier = ValueNotifier([]);
   ValueNotifier<List<TranscationModel>> spendingCycleListNotifier =
       ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> weeklylistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> monthlylistnotifier = ValueNotifier([]);
 
   // Top categories data
   List<TopCategory> topIncomeCategories = [];
@@ -118,12 +120,13 @@ class AppState extends ChangeNotifier {
     if (parseamount == null || parseamount == 0 || parseamount.isNegative) {
       final snack = customSnak(context, message: "Enter valid number");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
-    } else {
-      totalBalance = parseamount;
     }
-    // if (categoryid == null) {
-    //   return;
-    // }
+    
+    // Check if category is selected
+    if (categorySelected == null || categorySelected!.isEmpty) {
+      final snack = customSnak(context, message: "Please select a category");
+      return ScaffoldMessenger.of(context).showSnackBar(snack);
+    }
 
     final model = TranscationModel(
         type: selectedType,
@@ -167,6 +170,10 @@ class AppState extends ChangeNotifier {
         return todaylistnotifier;
       case "Yesterday":
         return yesterdaylistnotifier;
+      case "Weekly":
+        return weeklylistnotifier;
+      case "Monthly":
+        return monthlylistnotifier;
       case "Custom":
         return customlistnotifier;
       case "Spending Cycle":
@@ -184,9 +191,16 @@ class AppState extends ChangeNotifier {
       return HeadingMethod(
           headtext: ' My spendings', amount: totalExpense.toStringAsFixed(1));
     } else if (itemvalue == 'Today') {
-      return HeadingMethod(headtext: 'Today');
+      double todayTotal = calculateTotalForList(todaylistnotifier);
+      return HeadingMethod(headtext: 'Today', amount: todayTotal.toStringAsFixed(1));
     } else if (itemvalue == 'Yesterday') {
       return HeadingMethod(headtext: 'Yesterday');
+    } else if (itemvalue == 'Weekly') {
+      double weeklyTotal = calculateTotalForList(weeklylistnotifier);
+      return HeadingMethod(headtext: 'This Week', amount: weeklyTotal.toStringAsFixed(1));
+    } else if (itemvalue == 'Monthly') {
+      double monthlyTotal = calculateTotalForList(monthlylistnotifier);
+      return HeadingMethod(headtext: 'This Month', amount: monthlyTotal.toStringAsFixed(1));
     } else if (itemvalue == 'Custom') {
       return HeadingMethod(headtext: 'Custom');
     } else {
@@ -227,6 +241,8 @@ class AppState extends ChangeNotifier {
     expenselistnotifier.value.clear();
     todaylistnotifier.value.clear();
     spendingCycleListNotifier.value.clear();
+    weeklylistnotifier.value.clear();
+    monthlylistnotifier.value.clear();
 
     transcationNotifier.value.addAll(_list);
 
@@ -247,6 +263,17 @@ class AppState extends ChangeNotifier {
         todaylistnotifier.value.add(transcationlist);
       } else if (_dates == _yesterday) {
         yesterdaylistnotifier.value.add(transcationlist);
+      }
+      
+      // Add to weekly list (last 7 days)
+      if (transcationlist.date.isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
+        weeklylistnotifier.value.add(transcationlist);
+      }
+      
+      // Add to monthly list (current month)
+      if (transcationlist.date.month == DateTime.now().month && 
+          transcationlist.date.year == DateTime.now().year) {
+        monthlylistnotifier.value.add(transcationlist);
       }
     });
 
@@ -339,17 +366,53 @@ class AppState extends ChangeNotifier {
   custompick(DateTime start, DateTime end) {
     customlistnotifier.value.clear();
 
+    // Normalize the start and end dates to compare only the date part (ignore time)
+    final startDate = DateTime(start.year, start.month, start.day);
+    final endDate = DateTime(end.year, end.month, end.day);
+    
     for (TranscationModel data in transcationNotifier.value) {
-      if ((data.date.day >= start.day) &&
-          (data.date.day <= end.day) &&
-          (data.date.month >= start.month) &&
-          (data.date.month >= end.month) &&
-          (data.date.year <= start.year) &&
-          (data.date.year >= end.year)) {
+      // Normalize the transaction date
+      final transactionDate = DateTime(data.date.year, data.date.month, data.date.day);
+      
+      // Check if transaction date is within the selected range (inclusive)
+      if (transactionDate.isAfter(startDate.subtract(const Duration(days: 1))) &&
+          transactionDate.isBefore(endDate.add(const Duration(days: 1)))) {
         customlistnotifier.value.add(data);
       }
     }
-    // customlistnotifier.notifyListeners();
+    customlistnotifier.notifyListeners();
+  }
+  
+  double calculateTotalForList(ValueNotifier<List<TranscationModel>> list) {
+    double total = 0;
+    for (var transaction in list.value) {
+      if (transaction.type == 'Income') {
+        total += transaction.amount;
+      } else if (transaction.type == 'Expense') {
+        total -= transaction.amount;
+      }
+    }
+    return total;
+  }
+  
+  double calculateIncomeForList(ValueNotifier<List<TranscationModel>> list) {
+    double total = 0;
+    for (var transaction in list.value) {
+      if (transaction.type == 'Income') {
+        total += transaction.amount;
+      }
+    }
+    return total;
+  }
+  
+  double calculateExpenseForList(ValueNotifier<List<TranscationModel>> list) {
+    double total = 0;
+    for (var transaction in list.value) {
+      if (transaction.type == 'Expense') {
+        total += transaction.amount;
+      }
+    }
+    return total;
   }
   /*void custompick(DateTime start, DateTime end) {
   customlistnotifier.value.clear();
@@ -392,7 +455,7 @@ class AppState extends ChangeNotifier {
   String parsedate(DateTime date) {
     final date0 = DateFormat().add_MMMd().format(date);
     final splitdate = date0.split(" ");
-    return '${splitdate.last}\n${splitdate.first}';
+    return '${splitdate.last} ${splitdate.first}';
   }
 
   showdatepicker(context) async {

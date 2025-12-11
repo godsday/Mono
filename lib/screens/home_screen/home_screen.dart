@@ -4,10 +4,12 @@ import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
 import 'package:mono/screens/home_screen/widgets/bottom_card_L_shape.dart';
+import 'package:mono/screens/home_screen/widgets/home_empty_state.dart';
 import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
 import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
 import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
 import 'package:mono/constants/utils/app_textstyle.dart';
+import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,33 +84,18 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //     // brightness: Brightness.dark,
-      //     elevation: 0,
-      //     backgroundColor: Colors.transparent,
-      //     actions: [
-      //       Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child: CircleAvatar(
-      //           radius: 4.sp,
-      //           backgroundColor: const Color.fromARGB(136, 26, 20, 20),
-      //           child: IconButton(
-      //             icon: Icon(Icons.lightbulb),
-      //             splashColor: const Color.fromARGB(0, 84, 43, 43),
-      //             onPressed: () {
-      //               // if (_bool == true) {
-      //               //   _animationController.forward();
-      //               // } else {
-      //               //   _animationController.reverse();
-      //               // }
-      //               // _bool = false;
-      //             },
-      //           ),
-      //         ),
-      //       ),
-      //     ]),
-      body: Column(
+      body: Consumer<AppState>(
+        builder: (context, appState, child) {
+          // Check if there are no transactions
+          final hasTransactions = appState.transcationNotifier.value.isNotEmpty;
+          
+          if (!hasTransactions) {
+            // Show empty state when there are no transactions
+            return const HomeEmptyState();
+          }
+          
+          // Show normal home screen when there are transactions
+          return Column(
         children: [
           Stack(
             alignment: Alignment.topCenter,
@@ -194,11 +181,11 @@ class _HomeScreenState extends State<HomeScreen>
                 left: 7.w,
                 right: 7.w,
                 child: InkWell(
-                  // onTap: () async {
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => const TranscationScreen(),
-                  //   ));
-                  // },
+                  onTap: () async {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const TranscationScreen(),
+                    ));
+                  },
                   // Total Balance Card
                   child: TotalBalanceCard(),
                 ),
@@ -446,9 +433,9 @@ class _HomeScreenState extends State<HomeScreen>
             ],
           ),
         ],
+      );
+        },
       ),
-
-
     );
   }
 }
