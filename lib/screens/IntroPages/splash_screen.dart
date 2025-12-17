@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mono/screens/IntroPages/onbording_screen.dart';
+import 'package:mono/screens/home_screen/home_screen.dart';
 import 'package:mono/screens/widgets/bottomnavigationbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -25,12 +25,15 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
 
-    animation1 = Tween<double>(begin: 40, end: 20).animate(CurvedAnimation(
-        parent: _controller, curve: Curves.fastLinearToSlowEaseIn))
-      ..addListener(() {
+    animation1 = Tween<double>(begin: 40, end: 20).animate(
+      CurvedAnimation(
+          parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
+    )..addListener(() {
         setState(() {
           _textOpacity = 1.0;
         });
@@ -38,23 +41,20 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    Timer(const Duration(seconds: 3), () {
-      setState(() {
-        _fontSize = 1.06;
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startSplash();
     });
+  }
 
-    Timer(const Duration(seconds: 4), () {
-      setState(() {
-        _containerOpacity = 1;
-      });
-    });
+  Future<void> startSplash() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() => _fontSize = 1.06);
 
-    Timer(const Duration(seconds: 2), () {
-      setState(() {
-        checkdata();
-      });
-    });
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() => _containerOpacity = 1.0);
+
+    await Future.delayed(const Duration(seconds: 2));
+    await checkdata();
   }
 
   @override
@@ -65,7 +65,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -74,9 +73,10 @@ class _SplashScreenState extends State<SplashScreen>
           Column(
             children: [
               AnimatedContainer(
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  height: height / _fontSize),
+                duration: const Duration(milliseconds: 2000),
+                curve: Curves.fastLinearToSlowEaseIn,
+                height: height / _fontSize,
+              ),
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 2000),
                 opacity: _textOpacity,
@@ -97,18 +97,17 @@ class _SplashScreenState extends State<SplashScreen>
               curve: Curves.fastLinearToSlowEaseIn,
               opacity: _containerOpacity,
               child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 1000),
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  height: 15.h,
-                  width: 15.h,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Image.asset(
-                    'assets/images/OrginalIcon.png',
-                  )),
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.fastLinearToSlowEaseIn,
+                height: 15.h,
+                width: 15.h,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorDark,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Image.asset('assets/images/OrginalIcon.png'),
+              ),
             ),
           ),
         ],
@@ -116,43 +115,18 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  Future _navigator() async {
-    await Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => OnboardScreen()));
-  }
-
-  checkdata() async {
+  Future<void> checkdata() async {
     final sharedprefer = await SharedPreferences.getInstance();
-    final nameisther = sharedprefer.getString('namekey');
-    await Future.delayed(const Duration(milliseconds: 5000));
+    final nameisthere = sharedprefer.getString('namekey');
 
-    nameisther == null
-        ? _navigator()
-        : Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const BottomNavigator()));
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            nameisthere == null ? OnboardScreen() : BottomNavigator(),
+      ),
+    );
   }
-}
-
-class PageTransition extends PageRouteBuilder {
-  final Widget page;
-
-  PageTransition(this.page)
-      : super(
-          pageBuilder: (context, animation, anotherAnimation) => page,
-          transitionDuration: const Duration(milliseconds: 2000),
-          transitionsBuilder: (context, animation, anotherAnimation, child) {
-            animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn,
-              parent: animation,
-            );
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: SizeTransition(
-                sizeFactor: animation,
-                axisAlignment: 0,
-                child: page,
-              ),
-            );
-          },
-        );
 }

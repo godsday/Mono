@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class Baxkbutton extends StatelessWidget {
-  const Baxkbutton({Key? key}) : super(key: key);
+  const Baxkbutton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return IconButton(
+        onPressed: () => Navigator.of(context).pop(),
+        icon: Icon(Icons.arrow_back_ios_new),
         alignment: Alignment.center,
-        width: 4.2.h,
-        height: 4.2.h,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7), color: Colors.white70),
-        child: Icon(
-          Icons.arrow_back_ios,
-          size: 13.sp,
-        ));
+      
+       
+        );
   }
 }

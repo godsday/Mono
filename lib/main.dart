@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
+import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
-import 'package:mono/screens/widgets/flight_mode_bt.dart';
 import 'package:mono/screens/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -19,6 +20,7 @@ DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 AppState appState = AppState();
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
@@ -28,8 +30,17 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
     Hive.registerAdapter(TranscationModelAdapter());
   }
+  
+  if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
+    Hive.registerAdapter(CategoryModelAdapter());
+  }
+  
+  if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
+    Hive.registerAdapter(CategoryTypeAdapter());
+  }
 
   await TranscationDB.instance.getalltranscation();
+  await CategoryDB.instance.initializeCategories();
 
   runApp(
     MultiProvider(providers: [
@@ -41,13 +52,14 @@ Future<void> main() async {
       }),
       ChangeNotifierProvider(create: (_) {
         return notificationProvider;
-      })
+      }),
+   
     ], child: const MyApp()),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -68,10 +80,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // await checkflight(context);
-      final _list = await TranscationDB.instance.getalltranscation();
-
-      Provider.of<AppState>(context, listen: false).totalBalanceCheck(_list);
-      // await Provider.of<AppState>(context, listen: false).refresh();
+      final list = await TranscationDB.instance.getalltranscation();
+      if (mounted) {
+        Provider.of<AppState>(context, listen: false).totalBalanceCheck(list);
+      } // await Provider.of<AppState>(context, listen: false).refresh();
     });
     scheduleMicrotask(() async {});
     getCurrentAppTheme();
@@ -126,6 +138,15 @@ class _MyAppState extends State<MyApp> {
     return Sizer(builder: (context, orientation, deviceType) {
       return Consumer<DarkThemeProvider>(builder: (context, value, child) {
         return MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'), // English
+            Locale('es'), // Spanish (you can add more later)
+          ],
           debugShowCheckedModeBanner: false,
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),
           home: const SplashScreen(),

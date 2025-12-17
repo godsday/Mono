@@ -4,6 +4,7 @@ import 'package:mono/screens/widgets/bottomnavigationbar.dart';
 import 'package:mono/screens/widgets/navigator_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mono/constants/utils/app_textstyle.dart';
 
 class OnboardScreen extends StatelessWidget {
   OnboardScreen({Key? key}) : super(key: key);
@@ -12,97 +13,107 @@ class OnboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Stack(
-                clipBehavior: Clip.none,
+    return GestureDetector(
+      behavior:
+          HitTestBehavior.opaque, // Ensures tap is detected on blank space
+      onTap: () {
+        FocusScope.of(context).unfocus(); // Dismisses the keyboard
+      },
+      child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ClipPath(
-                    clipper: WaveClipper(),
-                    child: Container(
-                      color: HexColor('#EEF8F7'),
-                      height: 60.0.h,
-                    ),
+                  Stack(
+                    children: [
+                      Container(
+                        height: 60.h,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('assets/images/onboardbg.png'),
+                          fit: BoxFit.cover,
+                        )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Column(
+                            children: [
+                              FittedBox(
+                                child: Text("Spend Smarter Save More",
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyles.roboto22w800Green(
+                                        context)),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Container(
+                                  width: 80.w,
+                                  height: 5.h,
+                                  child: Text(
+                                      "Take control of your money with \n powerful tracking and planning tools",
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.roboto15w400grey(
+                                          context))),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 135.0, left: 85, right: 85),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/OO.png',
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                      bottom: -2.h,
-                      right: 23.w,
-                      child: Image.asset(
-                        'assets/images/OO.png',
-                        width: 30.h,
+                  NameTextfieldWidget(namecontroller: namecontroller),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        left: 40,
+                        right: 40,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          gotohome(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                HexColor('#69AEA9'),
+                                HexColor('#3F8782')
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Get Started",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       )),
                 ],
               ),
             ),
-            Column(children: [
-              SizedBox(
-                height: 3.h,
-              ),
-              headingtext("Spend Smarter"),
-              headingtext("Save More"),
-              SizedBox(
-                height: 3.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 100, right: 100),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  controller: namecontroller,
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      isDense: true,
-                      filled: true,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: HexColor('#429690')),
-                          borderRadius: BorderRadius.circular(30)),
-                      fillColor: HexColor('#F4F5F5'),
-                      hintText: 'Please Enter Your name',
-                      hintStyle: TextStyle(fontSize: 8.5.sp),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: HexColor("#438883")),
-                          borderRadius: BorderRadius.circular(30))),
-                ),
-              ),
-              SizedBox(
-                height: 4.h,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(HexColor('#3E7C78')),
-                    shape: MaterialStateProperty.all(const StadiumBorder()),
-                    minimumSize:
-                        MaterialStateProperty.all(const Size(320, 55))),
-                onPressed: () {
-                  gotohome(context);
-                },
-                child: Text(
-                  "Get Started",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ]),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Text headingtext(String text) {
-    return Text(
-      text,
-      style: TextStyle(
-          fontSize: 27.0.sp,
-          fontWeight: FontWeight.bold,
-          color: HexColor("#438883")),
+          )),
     );
   }
 
@@ -116,6 +127,67 @@ class OnboardScreen extends StatelessWidget {
   }
 }
 
+class NameTextfieldWidget extends StatefulWidget {
+  const NameTextfieldWidget({
+    Key? key,
+    required this.namecontroller,
+  }) : super(key: key);
+
+  final TextEditingController namecontroller;
+
+  @override
+  State<NameTextfieldWidget> createState() => _NameTextfieldWidgetState();
+}
+
+class _NameTextfieldWidgetState extends State<NameTextfieldWidget> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 40, right: 40, top: 30, bottom: 20),
+      child: TextFormField(
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.text,
+        controller: widget.namecontroller,
+        focusNode: _focusNode,
+        decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            isDense: true,
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: HexColor('#DADADA')),
+                borderRadius: BorderRadius.circular(12)),
+            fillColor: HexColor('#FBF3F3'),
+            hintText: _isFocused ? null : 'Enter name here',
+            hintStyle: TextStyle(
+                fontSize: 16.sp, color: const Color.fromARGB(255, 59, 59, 58)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: HexColor("#DADADA")),
+                borderRadius: BorderRadius.circular(12))),
+      ),
+    );
+  }
+}
+/*
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -131,3 +203,4 @@ class WaveClipper extends CustomClipper<Path> {
     return true;
   }
 }
+*/

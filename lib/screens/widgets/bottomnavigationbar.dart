@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
-import 'package:mono/screens/profile_screen/acheivements_screen.dart';
+import 'package:mono/screens/profile_screen/financial_overview_page.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 
-import '../profile_screen/pro_screen.dart';
-
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({Key? key}) : super(key: key);
+  const BottomNavigator({super.key});
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
@@ -21,7 +19,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     // const ProfileScreen(),
     const TranscationScreen(),
     const HomeScreen(),
-    const AcheivemntsScreen(),
+    const FinancialOverviewPage(),
     const SettingsScreen(),
   ];
   @override
@@ -37,7 +35,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grading_outlined), label: "Acheviements"),
+              icon: Icon(Icons.grading_outlined), label: "Financial Hub"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
         ],
@@ -46,7 +44,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         showUnselectedLabels: false,
         showSelectedLabels: true,
         currentIndex: _selectedIndex,
-        selectedItemColor: mainHexcolor,
+        selectedItemColor: AppColor.mainHexcolor,
         unselectedItemColor: Colors.black45,
         onTap: _onitemtap,
       ),

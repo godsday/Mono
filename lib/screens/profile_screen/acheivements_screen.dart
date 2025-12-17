@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import '../widgets/financial_overview/header_section.dart';
+import '../widgets/financial_overview/budget_card.dart';
+import '../widgets/financial_overview/assets_card.dart';
+import '../widgets/financial_overview/dreams_card.dart';
 
-class AcheivemntsScreen extends StatelessWidget {
-  const AcheivemntsScreen({Key? key}) : super(key: key);
+class FinancialOverviewPage extends StatelessWidget {
+  const FinancialOverviewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(
-          child: Container(
-        color: Colors.blue,
-      )),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HeaderSection(),
+            const SizedBox(height: 30),
+            const BudgetCard(),
+            const SizedBox(height: 20),
+            const AssetsCard(),
+            const SizedBox(height: 20),
+            const DreamsCard(),
+          ],
+        ),
+      ),
     );
   }
 }

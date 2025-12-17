@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
@@ -34,9 +34,7 @@ class Styles {
       dialogBackgroundColor:
           isDarkTheme ? const Color.fromARGB(234, 102, 82, 110) : Colors.white,
       // ignore: deprecated_member_use
-      errorColor: isDarkTheme
-          ? const Color.fromARGB(255, 151, 151, 161)
-          : HexColor('#EEEEEE'),
+      // errorColor: isDarkTheme
 
       primaryColorLight: isDarkTheme
           ? const Color.fromARGB(255, 74, 73, 71)
@@ -50,7 +48,7 @@ class Styles {
           ? const Color.fromARGB(225, 61, 46, 75)
           : HexColor("#429690"),
       // ignore: deprecated_member_use
-      shadowColor: isDarkTheme ? Colors.blueGrey : accentHexColor,
+      shadowColor: isDarkTheme ? Colors.blueGrey : AppColor.accentHexColor,
       brightness: isDarkTheme ? Brightness.dark : Brightness.light,
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
           colorScheme: isDarkTheme

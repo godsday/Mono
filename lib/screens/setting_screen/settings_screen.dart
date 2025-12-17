@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/app_color.dart';
+import 'package:mono/constants/colors/app_color.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
@@ -95,27 +95,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           fontWeight: FontWeight.w400),
                                     ),
                                     secondary: const Icon(Icons.notifications),
-                                    activeColor: mainHexcolor,
+                                    activeColor: AppColor.mainHexcolor,
                                     value: notificationProvider.notifValue,
                                     onChanged: (newvalue) {
                                       setState(() {
                                         notificationProvider.notifValue =
                                             newvalue;
                                       });
-                                      notificationProvider.notifValue == true
-                                          ? NotificationApi.shownotification(
-                                              title: 'Mono',
-                                              body:
-                                                  "Don't Forget To Add Your Transaction",
-                                              scheduleDate:
-                                                  DateTime(10, 06, 00))
-                                          : const SizedBox();
+                                      // notificationProvider.notifValue == true
+                                      //     ? NotificationApi.shownotification(
+                                      //         title: 'Mono',
+                                      //         body:
+                                      //             "Don't Forget To Add Your Transaction",
+                                      //         scheduleDate:
+                                      //             DateTime(10, 06, 00))
+                                      //     : const SizedBox();
                                     }),
                                 SizedBox(
                                   height: 2.h,
                                 ),
                                 SwitchListTile(
-                                  activeColor: mainHexcolor,
+                                  activeColor: AppColor.mainHexcolor,
                                   title: Text(
                                     "Dark Mode",
                                     style: TextStyle(
