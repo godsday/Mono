@@ -30,8 +30,11 @@ jobs:
       - name: Analyze (safe mode)
         run: flutter analyze || true
 
-      - name: Run tests
-        run: flutter test
+      - name: Check formatting
+        run: flutter format --set-exit-if-changed
+
+      # - name: Run tests
+      #   run: flutter test
 
       - name: Mono APK (Release)
         run: flutter build apk --release

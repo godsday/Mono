@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class Baxkbutton extends StatelessWidget {
   const Baxkbutton({super.key});
@@ -7,11 +6,9 @@ class Baxkbutton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        icon: Icon(Icons.arrow_back_ios_new),
-        alignment: Alignment.center,
-      
-       
-        );
+      onPressed: () => Navigator.of(context).pop(),
+      icon: Icon(Icons.arrow_back_ios_new),
+      alignment: Alignment.center,
+    );
   }
 }

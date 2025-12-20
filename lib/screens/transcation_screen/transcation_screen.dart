@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../models/transcation_model/transcation_model.dart';
 import 'transcation_widgets/graph_widget.dart';
-import 'transcation_widgets/heading_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class TranscationScreen extends StatefulWidget {
