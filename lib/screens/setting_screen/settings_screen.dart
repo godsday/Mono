@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';

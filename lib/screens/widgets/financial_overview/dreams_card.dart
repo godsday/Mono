@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_texttheme.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 
 class DreamsCard extends StatelessWidget {
   const DreamsCard({Key? key}) : super(key: key);
@@ -108,12 +108,14 @@ class DreamsCard extends StatelessWidget {
                       vertical: 12,
                     ),
                   ),
-                  child: Text('Create New Dream',
-                  style: AppTextTheme.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),),
+                  child: Text(
+                    'Create New Dream',
+                    style: AppTextTheme.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -191,84 +193,86 @@ class _DreamCardState extends State<_DreamCard>
           ),
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    widget.icon,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  widget.icon,
+                  color: AppColor.mainHexcolor,
+                  size: 28,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  widget.title,
+                  style: AppTextTheme.montserrart(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
                     color: AppColor.mainHexcolor,
-                    size: 28,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.title,
-                    style: AppTextTheme.montserrart(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColor.mainHexcolor,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  'Goal: ${widget.goalAmount}',
+                  style: AppTextTheme.poppins(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'Saved: ${widget.savedAmount}',
+                  style: AppTextTheme.poppins(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    value: widget.progress,
+                    backgroundColor: AppColor.accentHexColor.withOpacity(0.3),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColor.mainHexcolor,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 15),
-                  Text(
-                    'Goal: ${widget.goalAmount}',
-                    style: AppTextTheme.poppins(
-                      fontSize: 13,
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Track goal action
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColor.mainHexcolor,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    'Saved: ${widget.savedAmount}',
-                    style: AppTextTheme.poppins(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      value: widget.progress,
-                      backgroundColor: AppColor.accentHexColor.withOpacity(0.3),
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColor.mainHexcolor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Track goal action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.mainHexcolor,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    child: Text('Track Goal',
+                  child: Text(
+                    'Track Goal',
                     style: AppTextTheme.poppins(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
-                    ),),
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
         ),
       ),
     );

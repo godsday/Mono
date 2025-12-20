@@ -9,17 +9,23 @@ import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
-import 'package:mono/screens/IntroPages/splash_screen.dart';
-import 'package:mono/screens/widgets/theme.dart';
+import 'package:mono/routes/app_router.dart';
+import 'package:mono/routes/route_names.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
+import 'package:mono/features/transaction/data/repositories/transaction_repository_impl.dart';
+import 'package:mono/features/transaction/domain/usecases/add_transaction.dart';
+import 'package:mono/features/transaction/domain/usecases/delete_transaction.dart';
+import 'package:mono/features/transaction/domain/usecases/get_transactions.dart';
+import 'package:mono/features/transaction/domain/usecases/update_transaction.dart';
+import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'providers/notification_provider.dart';
 
-Timer? fightTimer;
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 AppState appState = AppState();
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,17 +36,26 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
     Hive.registerAdapter(TranscationModelAdapter());
   }
-  
+
   if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
     Hive.registerAdapter(CategoryModelAdapter());
   }
-  
+
   if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
     Hive.registerAdapter(CategoryTypeAdapter());
   }
 
   await TranscationDB.instance.getalltranscation();
   await CategoryDB.instance.initializeCategories();
+
+  // Clean Architecture Setup
+  final localDataSource = TransactionLocalDataSourceImpl();
+  final repository =
+      TransactionRepositoryImpl(localDataSource: localDataSource);
+  final getTransactions = GetTransactions(repository);
+  final addTransaction = AddTransaction(repository);
+  final deleteTransaction = DeleteTransaction(repository);
+  final updateTransaction = UpdateTransaction(repository);
 
   runApp(
     MultiProvider(providers: [
@@ -53,7 +68,13 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) {
         return notificationProvider;
       }),
-   
+      ChangeNotifierProvider(
+          create: (_) => TransactionProvider(
+                getTransactionsUseCase: getTransactions,
+                addTransactionUseCase: addTransaction,
+                deleteTransactionUseCase: deleteTransaction,
+                updateTransactionUseCase: updateTransaction,
+              )),
     ], child: const MyApp()),
   );
 }
@@ -92,47 +113,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  // Future checkflight(context) async {
-  //   String platformVersion;
-  //   try {
-  //     platformVersion = (await AirplaneModeChecker.platformVersion)!;
-  //   } on PlatformException {
-  //     platformVersion = 'Failed to get platform version.';
-  //   }
-
-  //   // try {
-  //   //   fightTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-  //   //     final status = await AirplaneModeChecker.checkAirplaneMode();
-
-  //   //     if (status == AirplaneModeStatus.on) {
-  //   //       Provider.of<AppState>(context, listen: false).isFilghtMode = true;
-  //   //       // isFlight = true;
-  //   //       Navigator.of(context).push(MaterialPageRoute(
-  //   //         builder: (context) => FlightModeBt(),
-  //   //       ));
-  //   //       // showbtflight(context);
-  //   //       print("------------------------------------t");
-  //   //     } else {
-  //   //       // isFlight = false;
-  //   //       Provider.of<AppState>(context, listen: false).isFilghtMode = false;
-  //   //       print("------------------------------------f");
-  //   //     }
-  //   //   });
-  //   // } catch (e) {
-  //   //   print(e.toString());
-  //   // }
-  //   // return isFlight;
-  // }
-
-  // showbtflight(context) async {
-  // if (Provider.of<AppState>(context, listen: false).isFilghtMode == true) {
-  //   if (fightTimer!.isActive) {
-  //     await showFightBt(context);
-  //     fightTimer!.cancel();
-  //   }
-  // }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
@@ -149,7 +129,8 @@ class _MyAppState extends State<MyApp> {
           ],
           debugShowCheckedModeBanner: false,
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),
-          home: const SplashScreen(),
+          initialRoute: RouteNames.splash,
+          onGenerateRoute: AppRouter.onGenerateRoute,
         );
       });
     });

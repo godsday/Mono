@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
-import 'package:mono/screens/add_screen/decoration_functions.dart';
-import 'package:mono/screens/widgets/snackbar.dart';
+import 'package:mono/core/widgets/decoration_functions.dart';
+import 'package:mono/core/widgets/snackbar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/screens/widgets/add_clipper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -73,9 +73,7 @@ class _EditScreenState extends State<EditScreen> {
 
   @override
   Widget build(BuildContext context) {
-     
     return Scaffold(
-      
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -122,7 +120,10 @@ class _EditScreenState extends State<EditScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('transcation type',style: AppTextStyles.poppins16w400,  ),
+                            Text(
+                              'transcation type',
+                              style: AppTextStyles.poppins16w400,
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -136,7 +137,6 @@ class _EditScreenState extends State<EditScreen> {
                                 setState(() {});
                                 transctiontypeid = onchangeval;
 
-                               
                                 setState(() {
                                   categories = categorieslist
                                       .where((categoryItem) =>
@@ -146,17 +146,15 @@ class _EditScreenState extends State<EditScreen> {
                                 });
                               },
                               (onValidate) {
-                               
-                               final snack= customSnak(context, message: "Select transcation type ");
-                              if (transctiontypeid==null) {
-                                return  ScaffoldMessenger.of(context)
+                                final snack = customSnak(context,
+                                    message: "Select transcation type ");
+                                if (transctiontypeid == null) {
+                                  return ScaffoldMessenger.of(context)
                                       .showSnackBar(snack);
-                              }else{
-                                return null;
-                              }
-                              
+                                } else {
+                                  return null;
+                                }
                               },
-                              
                               borderColor: Colors.grey,
                               borderRadius: 10,
                               borderFocusColor: AppColor.mainHexcolor,
@@ -166,7 +164,10 @@ class _EditScreenState extends State<EditScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text('Amount',style: AppTextStyles.poppins16w400,),
+                            Text(
+                              'Amount',
+                              style: AppTextStyles.poppins16w400,
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -178,7 +179,7 @@ class _EditScreenState extends State<EditScreen> {
                                 return null;
                               },
                               controller: _amountcontrol,
-                               inputFormatters: [
+                              inputFormatters: [
                                 LengthLimitingTextInputFormatter(12),
                               ],
                               keyboardType: TextInputType.number,
@@ -187,7 +188,10 @@ class _EditScreenState extends State<EditScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text('Date',style: AppTextStyles.poppins16w400,),
+                            Text(
+                              'Date',
+                              style: AppTextStyles.poppins16w400,
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -213,7 +217,9 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                elevation: 0, backgroundColor: Theme.of(context).dialogBackgroundColor,
+                                elevation: 0,
+                                backgroundColor:
+                                    Theme.of(context).dialogBackgroundColor,
                                 side: const BorderSide(color: Colors.grey),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -224,7 +230,10 @@ class _EditScreenState extends State<EditScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text('Categories',style: AppTextStyles.poppins16w400,),
+                            Text(
+                              'Categories',
+                              style: AppTextStyles.poppins16w400,
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -238,7 +247,8 @@ class _EditScreenState extends State<EditScreen> {
                                 categoryid = onchangeval;
                               },
                               (onValidate) {
-                                final snack =customSnak(context,message: "Please select category");
+                                final snack = customSnak(context,
+                                    message: "Please select category");
                                 if (categoryid == null) {
                                   return ScaffoldMessenger.of(context)
                                       .showSnackBar(snack);
@@ -257,15 +267,17 @@ class _EditScreenState extends State<EditScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text('Notes',style: AppTextStyles.poppins16w400,),
+                            Text(
+                              'Notes',
+                              style: AppTextStyles.poppins16w400,
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
                             TextFormField(
-                               inputFormatters: [
+                              inputFormatters: [
                                 LengthLimitingTextInputFormatter(8)
                               ],
-                              
                               controller: _notescontrol,
                               keyboardType: TextInputType.text,
                               decoration: textfielddecor('Enter Notes'),
@@ -275,11 +287,11 @@ class _EditScreenState extends State<EditScreen> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                              
                                 updatetranscation();
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).primaryColorLight,
+                                backgroundColor:
+                                    Theme.of(context).primaryColorLight,
                                 elevation: 2,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -326,12 +338,12 @@ class _EditScreenState extends State<EditScreen> {
     final purposeval = _notescontrol.text;
 
     final parseamount = double.tryParse(amountval);
-    if (parseamount == null|| parseamount.isNegative||parseamount==0) {
-      final snack =customSnak(context, message: "Enter valid number");
+    if (parseamount == null || parseamount.isNegative || parseamount == 0) {
+      final snack = customSnak(context, message: "Enter valid number");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
     }
     if (categoryid == null) {
-      final snack =customSnak(context, message: "Please select category");
+      final snack = customSnak(context, message: "Please select category");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
     }
     final model = TranscationModel(

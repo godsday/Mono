@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_texttheme.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 
 class AssetsCard extends StatelessWidget {
-  const AssetsCard({Key? key}) : super(key: key);
+  const AssetsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +194,7 @@ class _AssetTile extends StatelessWidget {
             style: AppTextTheme.poppins(
               fontSize: 13,
               fontWeight: FontWeight.w500,
-              color: growth.startsWith('+')
-                  ? Colors.green
-                  : Colors.red,
+              color: growth.startsWith('+') ? Colors.green : Colors.red,
             ),
           ),
         ],

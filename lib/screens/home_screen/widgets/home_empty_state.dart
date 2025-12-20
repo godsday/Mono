@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
-import 'package:mono/screens/widgets/navigator_animation.dart';
+import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeEmptyState extends StatefulWidget {

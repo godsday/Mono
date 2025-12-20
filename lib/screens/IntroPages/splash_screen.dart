@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mono/screens/IntroPages/onbording_screen.dart';
-import 'package:mono/screens/home_screen/home_screen.dart';
-import 'package:mono/screens/widgets/bottomnavigationbar.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -121,12 +119,9 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
+    Navigator.pushReplacementNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) =>
-            nameisthere == null ? OnboardScreen() : BottomNavigator(),
-      ),
+      nameisthere == null ? RouteNames.onboarding : RouteNames.home,
     );
   }
 }

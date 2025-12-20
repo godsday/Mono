@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
-import 'package:mono/constants/utils/app_texttheme.dart';
-import 'package:sizer/sizer.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 
 InputDecoration dropdowndecor() {
   return InputDecoration(
@@ -21,11 +19,12 @@ InputDecoration textfielddecor(String text) {
     errorBorder: const OutlineInputBorder(
       borderSide: BorderSide(color: Colors.red, width: 2.0),
     ),
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(color: AppColor.mainHexcolor, width: 1.0)),
-    hintText: text, hintStyle: AppTextStyles.montserrat18w600.copyWith(color: AppColor.textGrey, fontSize: 14,fontWeight: FontWeight.normal),
-    
+    hintText: text,
+    hintStyle: AppTextStyles.montserrat18w600.copyWith(
+        color: AppColor.textGrey, fontSize: 14, fontWeight: FontWeight.normal),
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
   );
 }
-

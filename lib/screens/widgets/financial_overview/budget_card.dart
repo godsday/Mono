@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_texttheme.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 
 class BudgetCard extends StatefulWidget {
   const BudgetCard({Key? key}) : super(key: key);

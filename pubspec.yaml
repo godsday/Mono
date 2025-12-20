@@ -45,7 +45,7 @@ dependencies:
   shared_preferences: ^2.0.13
   sizer: ^3.0.5
   snippet_coder_utils: ^1.0.12
-  syncfusion_flutter_charts: ^29.1.41
+  syncfusion_flutter_charts: ^31.2.16
   timezone: ^0.10.1
   url_launcher: ^6.1.2
   animations: ^2.0.8
@@ -105,7 +105,27 @@ flutter:
     - family: Courgette
       fonts:
         - asset: assets/fonts/Courgette-Regular.ttf
-   
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/PoppinsExtraLight.ttf
+          weight: 300
+        - asset: assets/fonts/PoppinsRegular.ttf
+          weight: 400
+        - asset: assets/fonts/PoppinsMedium.ttf
+          weight: 500
+        - asset: assets/fonts/PoppinsSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PoppinsBold.ttf
+          weight: 700
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/MontserratRomanExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/MontserratMedium.ttf
+          weight: 500
+        - asset: assets/fonts/MontserratRomanBold.ttf
+          weight: 700
+
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,

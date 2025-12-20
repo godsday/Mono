@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
 import '../widgets/financial_overview/header_section.dart';
 import '../widgets/financial_overview/budget_card.dart';
 import '../widgets/financial_overview/assets_card.dart';
