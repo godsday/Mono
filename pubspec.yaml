@@ -136,3 +136,7 @@ l10n:
     arb-dir: lib/l10n
     template-arb-file: app_en.arb
     output-localization-file: app_localizations.dart   
+
+dependency_overrides:
+  win32: 5.0.9
+  archive: 3.3.8
