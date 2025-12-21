@@ -35,6 +35,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  win32: ^5.0.9    # Use a version compatible with your Dart SDK
+  archive: ^3.3.6 
   flutter_local_notifications: ^19.2.0
   flutter_slidable: ^4.0.0
   hexcolor: ^3.0.1
@@ -137,6 +139,4 @@ l10n:
     template-arb-file: app_en.arb
     output-localization-file: app_localizations.dart   
 
-dependency_overrides:
-  win32: 5.0.9
-  archive: 3.3.8
+
