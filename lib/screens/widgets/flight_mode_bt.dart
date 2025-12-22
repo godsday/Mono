@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class FlightModeBt extends StatefulWidget {
-  const FlightModeBt({Key? key}) : super(key: key);
+  const FlightModeBt({super.key});
 
   @override
   State<FlightModeBt> createState() => _FlightModeBtState();
