@@ -2,9 +2,6 @@
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tz;
-
 
 class NotificationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -29,14 +26,6 @@ class NotificationApi {
     // }
   }
 
-  static Future _notificationDetails() async {
-    return const NotificationDetails(
-      android: AndroidNotificationDetails('channel id', 'channel name',
-          importance: Importance.max),
-      // iOS: IOSNotificationDetails(),
-    );
-  }
-
   // static Future shownotification({
   //   int id = 0,
   //   String? title,
@@ -44,13 +33,13 @@ class NotificationApi {
   //   String? payload,
   //   required DateTime scheduleDate,
   // }) async =>
-      // _notifications.zonedSchedule(id, title, body,
-      //     _schuduleDaily(scheduleDate), await _notificationDetails(),
-      //     payload: payload,
-      //     androidAllowWhileIdle: true,
-      //     uiLocalNotificationDateInterpretation:
-      //         UILocalNotificationDateInterpretation.absoluteTime,
-          // matchDateTimeComponents: DateTimeComponents.time);
+  // _notifications.zonedSchedule(id, title, body,
+  //     _schuduleDaily(scheduleDate), await _notificationDetails(),
+  //     payload: payload,
+  //     androidAllowWhileIdle: true,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  // matchDateTimeComponents: DateTimeComponents.time);
 
   // static tz.TZDateTime _schuduleDaily(DateTime time) {
   //   final now = tz.TZDateTime.now(tz.local)

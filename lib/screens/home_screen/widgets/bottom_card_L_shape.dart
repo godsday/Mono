@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -102,7 +102,7 @@ class LShapeWidget extends StatelessWidget {
                                 if (idx < 1) SizedBox(height: 12.sp),
                               ],
                             );
-                          }).toList(),
+                          }),
                         ],
                       )
                     : Column(
@@ -164,7 +164,7 @@ class LShapeWidget extends StatelessWidget {
               left: orientation == LShapeOrientation.leftLegOnLeft ? -3.w : 0.w,
               right: 0,
               height: totalHeight * 0.76, // Adjust height of content area
-              child: Divider(
+              child: const Divider(
                 thickness: 1,
                 color: Colors.grey,
               ),
@@ -190,10 +190,11 @@ class LShapeWidget extends StatelessWidget {
               right: 0,
               height: totalHeight * 0.20, // Adjust height of header
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 247, 246, 246),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 247, 246, 246),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

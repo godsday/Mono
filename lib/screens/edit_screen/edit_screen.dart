@@ -13,9 +13,9 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 class EditScreen extends StatefulWidget {
   final TranscationModel value;
   const EditScreen({
-    Key? key,
+    super.key,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   State<EditScreen> createState() => _EditScreenState();
@@ -107,11 +107,13 @@ class _EditScreenState extends State<EditScreen> {
                     width: 90.0.w,
                     height: 82.h,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).dialogBackgroundColor,
+                        color: Theme.of(context).dialogTheme.backgroundColor ??
+                            Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.grey.withOpacity(1), blurRadius: 5)
+                              color: Colors.grey.withValues(alpha: 1),
+                              blurRadius: 5)
                         ]),
                     child: Form(
                       key: _formkey,
@@ -218,8 +220,10 @@ class _EditScreenState extends State<EditScreen> {
                               ),
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
-                                backgroundColor:
-                                    Theme.of(context).dialogBackgroundColor,
+                                backgroundColor: Theme.of(context)
+                                        .dialogTheme
+                                        .backgroundColor ??
+                                    Theme.of(context).cardColor,
                                 side: const BorderSide(color: Colors.grey),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),

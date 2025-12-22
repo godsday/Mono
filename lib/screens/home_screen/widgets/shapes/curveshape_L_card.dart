@@ -1,9 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
-
-
 
 enum LShapeOrientation {
   /// Standard L-shape: vertical leg on the left, horizontal base extends to the right.
@@ -153,10 +150,10 @@ class UnifiedCurvedLShapeClipper extends CustomClipper<Path> {
 
     // If the orientation is for the leg to be on the right, flip the entire path horizontally
     if (orientation == LShapeOrientation.leftLegOnRight) {
-      final Matrix4 flipMatrix = Matrix4.identity()
-        ..translate(totalWidth / 2, 0.0)
-        ..scale(-1.0, 1.0, 1.0)
-        ..translate(-totalWidth / 2, 0.0);
+      final Matrix4 flipMatrix =
+          Matrix4.translationValues(totalWidth / 2, 0.0, 0.0)
+            ..multiply(Matrix4.diagonal3Values(-1.0, 1.0, 1.0))
+            ..multiply(Matrix4.translationValues(-totalWidth / 2, 0.0, 0.0));
       return path.transform(flipMatrix.storage);
     }
 

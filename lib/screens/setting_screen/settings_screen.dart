@@ -5,14 +5,12 @@ import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/screens/IntroPages/splash_screen.dart';
 import 'package:mono/screens/add_screen/add_screen.dart';
-import 'package:mono/screens/setting_screen/settings_widgets/about_screen.dart';
 import 'package:mono/screens/setting_screen/settings_widgets/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -95,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           fontWeight: FontWeight.w400),
                                     ),
                                     secondary: const Icon(Icons.notifications),
-                                    activeColor: AppColor.mainHexcolor,
+                                    activeThumbColor: AppColor.mainHexcolor,
                                     value: notificationProvider.notifValue,
                                     onChanged: (newvalue) {
                                       setState(() {
@@ -115,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   height: 2.h,
                                 ),
                                 SwitchListTile(
-                                  activeColor: AppColor.mainHexcolor,
+                                  activeThumbColor: AppColor.mainHexcolor,
                                   title: Text(
                                     "Dark Mode",
                                     style: TextStyle(
@@ -184,10 +182,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ElevatedButton(
                                     style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
                                                 Theme.of(context)
                                                     .primaryColorDark),
-                                        minimumSize: MaterialStateProperty.all(
+                                        minimumSize: WidgetStateProperty.all(
                                             Size(1.w, 5.5.h))),
                                     onPressed: () async {
                                       showDialog(

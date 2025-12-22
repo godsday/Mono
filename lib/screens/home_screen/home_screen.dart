@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/providers/app_state.dart';
-import 'package:mono/screens/home_screen/widgets/bottom_card_L_shape.dart';
+import 'package:mono/screens/home_screen/widgets/bottom_card_l_shape.dart';
 import 'package:mono/screens/home_screen/widgets/home_empty_state.dart';
-import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
-import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curveshape_l_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_u_card.dart';
 import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/routes/route_names.dart';
@@ -29,8 +29,6 @@ class _HomeScreenState extends State<HomeScreen>
   // late Animation<double> _animation1;
   // late Animation<double> _animation2;
   // late Animation<double> _animation3;
-
-  bool _bool = true;
 
   @override
   void initState() {
@@ -156,12 +154,12 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Container(
                         width: 7.w,
                         height: 7.h,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color.fromARGB(255, 240, 238, 236)),
-                        child: Icon(
+                            color: Color.fromARGB(255, 240, 238, 236)),
+                        child: const Icon(
                           Icons.lightbulb,
-                          color: const Color.fromARGB(255, 60, 104, 125),
+                          color: Color.fromARGB(255, 60, 104, 125),
                           size: 18,
                         ),
                       )),
@@ -187,14 +185,14 @@ class _HomeScreenState extends State<HomeScreen>
                         Navigator.pushNamed(context, RouteNames.home);
                       },
                       // Total Balance Card
-                      child: TotalBalanceCard(),
+                      child: const TotalBalanceCard(),
                     ),
                   ),
                   Positioned(
                       top: 20.3.h,
                       child: Image(
                         width: 47.w,
-                        image: AssetImage(
+                        image: const AssetImage(
                           'assets/images/rings.png',
                         ),
                       )),
@@ -210,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen>
                           // Height of the visible portion
                           child: ShaderMask(
                             shaderCallback: (Rect bounds) {
-                              return LinearGradient(
+                              return const LinearGradient(
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                                 colors: [Colors.transparent, Colors.black],
@@ -236,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Column(
                 children: [
                   Text(

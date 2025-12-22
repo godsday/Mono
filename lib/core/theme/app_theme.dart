@@ -16,11 +16,7 @@ class Styles {
           : HexColor("#429690"),
       cardColor: isDarkTheme
           ? const Color.fromARGB(255, 70, 67, 70)
-          : Colors.white, //clip container
-//clip container
-      indicatorColor: isDarkTheme
-          ? const Color.fromARGB(66, 63, 68, 78)
-          : HexColor('#D9E7E5'), //income container
+          : Colors.white, //income container
 
       hoverColor: isDarkTheme
           ? const Color.fromARGB(235, 45, 41, 48)
@@ -29,10 +25,7 @@ class Styles {
 
       focusColor: isDarkTheme
           ? const Color.fromARGB(255, 253, 253, 250)
-          : Colors.blueGrey.shade700, //calender text income expense
-
-      dialogBackgroundColor:
-          isDarkTheme ? const Color.fromARGB(234, 102, 82, 110) : Colors.white,
+          : Colors.blueGrey.shade700,
       // ignore: deprecated_member_use
       // errorColor: isDarkTheme
 
@@ -56,7 +49,9 @@ class Styles {
               : const ColorScheme.light()),
       appBarTheme: const AppBarTheme(
         elevation: 0.0,
-      ),
+      ), dialogTheme: DialogThemeData(backgroundColor: isDarkTheme ? const Color.fromARGB(234, 102, 82, 110) : Colors.white), tabBarTheme: TabBarThemeData(indicatorColor: isDarkTheme
+          ? const Color.fromARGB(66, 63, 68, 78)
+          : HexColor('#D9E7E5')),
     );
   }
 }

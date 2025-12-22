@@ -23,38 +23,38 @@ class CategoryDB extends CategoryDbFunctions {
 
   @override
   Future<List<CategoryModel>> getCategories() async {
-    final _categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    return _categoryDB.values.toList();
+    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
+    return categoryDB.values.toList();
   }
 
   @override
   Future<void> insertCategory(CategoryModel value) async {
-    final _categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    await _categoryDB.put(value.id, value);
+    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
+    await categoryDB.put(value.id, value);
     refreshUI();
   }
 
   @override
   Future<void> deleteCategory(String id) async {
-    final _categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    await _categoryDB.delete(id);
+    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
+    await categoryDB.delete(id);
     refreshUI();
   }
 
   Future refreshUI() async {
-    final _allCategories = await getCategories();
-    incomeCategoriesList.value.clear();
-    expenseCategoriesList.value.clear();
+    final allCategories = await getCategories();
+    final List<CategoryModel> income = [];
+    final List<CategoryModel> expense = [];
 
-    await Future.forEach(_allCategories, (CategoryModel category) {
+    for (var category in allCategories) {
       if (category.type == CategoryType.income) {
-        incomeCategoriesList.value.add(category);
+        income.add(category);
       } else {
-        expenseCategoriesList.value.add(category);
+        expense.add(category);
       }
-    });
-    incomeCategoriesList.notifyListeners();
-    expenseCategoriesList.notifyListeners();
+    }
+    incomeCategoriesList.value = income;
+    expenseCategoriesList.value = expense;
   }
 
   Future<void> initializeCategories() async {
@@ -63,65 +63,65 @@ class CategoryDB extends CategoryDbFunctions {
     if (categories.isEmpty) {
       // Default income categories
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_salary",
+          id: "${DateTime.now().millisecondsSinceEpoch}_salary",
           type: CategoryType.income,
           name: "Salary"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_gift",
+          id: "${DateTime.now().millisecondsSinceEpoch}_gift",
           type: CategoryType.income,
           name: "Gift"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_rental",
+          id: "${DateTime.now().millisecondsSinceEpoch}_rental",
           type: CategoryType.income,
           name: "Rental"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_credit",
+          id: "${DateTime.now().millisecondsSinceEpoch}_credit",
           type: CategoryType.income,
           name: "Credit"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_other_income",
+          id: "${DateTime.now().millisecondsSinceEpoch}_other_income",
           type: CategoryType.income,
           name: "Other"));
 
       // Default expense categories
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_shopping",
+          id: "${DateTime.now().millisecondsSinceEpoch}_shopping",
           type: CategoryType.expense,
           name: "Shopping"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_travel",
+          id: "${DateTime.now().millisecondsSinceEpoch}_travel",
           type: CategoryType.expense,
           name: "Travel"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_food",
+          id: "${DateTime.now().millisecondsSinceEpoch}_food",
           type: CategoryType.expense,
           name: "Food"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_medical",
+          id: "${DateTime.now().millisecondsSinceEpoch}_medical",
           type: CategoryType.expense,
           name: "Medical"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_insurance",
+          id: "${DateTime.now().millisecondsSinceEpoch}_insurance",
           type: CategoryType.expense,
           name: "Insurance"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_utilities",
+          id: "${DateTime.now().millisecondsSinceEpoch}_utilities",
           type: CategoryType.expense,
           name: "Utilities"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_education",
+          id: "${DateTime.now().millisecondsSinceEpoch}_education",
           type: CategoryType.expense,
           name: "Education"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_entertainment",
+          id: "${DateTime.now().millisecondsSinceEpoch}_entertainment",
           type: CategoryType.expense,
           name: "Entertainment"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_debit",
+          id: "${DateTime.now().millisecondsSinceEpoch}_debit",
           type: CategoryType.expense,
           name: "Debit"));
       await insertCategory(CategoryModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString() + "_other_expense",
+          id: "${DateTime.now().millisecondsSinceEpoch}_other_expense",
           type: CategoryType.expense,
           name: "Other"));
     }

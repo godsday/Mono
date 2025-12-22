@@ -76,12 +76,12 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               child: Container(
                 width: 200,
                 height: 200,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color.fromARGB(64, 138, 234, 226), // 25% opacity glow
+                  color: Color.fromARGB(64, 138, 234, 226), // 25% opacity glow
                   boxShadow: [
                     BoxShadow(
-                      color: const Color.fromARGB(64, 22, 162, 232),
+                      color: Color.fromARGB(64, 22, 162, 232),
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),

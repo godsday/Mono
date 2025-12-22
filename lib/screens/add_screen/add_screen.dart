@@ -13,7 +13,7 @@ import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/category_model/category_model.dart';
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({Key? key}) : super(key: key);
+  const AddScreen({super.key});
 
   @override
   State<AddScreen> createState() => _AddScreenState();
@@ -106,6 +106,9 @@ class _AddScreenState extends State<AddScreen> {
 
                 // Check if category already exists
                 final allCategories = await CategoryDB.instance.getCategories();
+
+                if (!context.mounted) return;
+
                 bool categoryExists = allCategories.any((category) =>
                     category.name.toLowerCase() == categoryName.toLowerCase() &&
                     ((provider.selectedType == "Income" &&
@@ -129,6 +132,8 @@ class _AddScreenState extends State<AddScreen> {
                     name: categoryName.capitalizeFirstLetter());
 
                 await CategoryDB.instance.insertCategory(newCategory);
+
+                if (!context.mounted) return;
 
                 // Select the newly added category
                 provider.categorySelected =
@@ -199,7 +204,7 @@ class _AddScreenState extends State<AddScreen> {
                   left: 13.w,
                   child: Image(
                     width: 47.w,
-                    image: AssetImage(
+                    image: const AssetImage(
                       'assets/images/rings.png',
                     ),
                   )),
@@ -210,11 +215,12 @@ class _AddScreenState extends State<AddScreen> {
                   width: 90.0.w,
                   height: 75.h,
                   decoration: BoxDecoration(
-                      color: Theme.of(context).dialogBackgroundColor,
+                      color: Theme.of(context).dialogTheme.backgroundColor ??
+                          Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                            color: AppColor.shadowColor.withOpacity(1),
+                            color: AppColor.shadowColor.withValues(alpha: 1),
                             blurRadius: 5)
                       ]),
                   child: Form(
@@ -332,7 +338,9 @@ class _AddScreenState extends State<AddScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
-                                              .dialogBackgroundColor,
+                                                  .dialogTheme
+                                                  .backgroundColor ??
+                                              Theme.of(context).cardColor,
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           border: Border.all(
@@ -459,7 +467,8 @@ class _AddScreenState extends State<AddScreen> {
                                                           .montserrat18w600
                                                           .copyWith(
                                                         color: AppColor.textGrey
-                                                            .withOpacity(0.7),
+                                                            .withValues(
+                                                                alpha: 0.7),
                                                         fontSize: 12.sp,
                                                         fontWeight:
                                                             FontWeight.w500,
@@ -480,8 +489,9 @@ class _AddScreenState extends State<AddScreen> {
                                                           String>(
                                                         value: category.name,
                                                         child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                                   vertical:
                                                                       8.0),
                                                           child: Text(

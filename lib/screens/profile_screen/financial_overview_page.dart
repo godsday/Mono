@@ -5,24 +5,24 @@ import '../widgets/financial_overview/assets_card.dart';
 import '../widgets/financial_overview/dreams_card.dart';
 
 class FinancialOverviewPage extends StatelessWidget {
-  const FinancialOverviewPage({Key? key}) : super(key: key);
+  const FinancialOverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HeaderSection(),
-            const SizedBox(height: 30),
-            const BudgetCard(),
-            const SizedBox(height: 20),
-            const AssetsCard(),
-            const SizedBox(height: 20),
-            const DreamsCard(),
+            HeaderSection(),
+            SizedBox(height: 30),
+            BudgetCard(),
+            SizedBox(height: 20),
+            AssetsCard(),
+            SizedBox(height: 20),
+            DreamsCard(),
           ],
         ),
       ),

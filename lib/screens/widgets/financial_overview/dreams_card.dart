@@ -3,7 +3,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 
 class DreamsCard extends StatelessWidget {
-  const DreamsCard({Key? key}) : super(key: key);
+  const DreamsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class DreamsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -134,13 +134,12 @@ class _DreamCard extends StatefulWidget {
   final double progress;
 
   const _DreamCard({
-    Key? key,
     required this.icon,
     required this.title,
     required this.goalAmount,
     required this.savedAmount,
     required this.progress,
-  }) : super(key: key);
+  });
 
   @override
   State<_DreamCard> createState() => _DreamCardState();
@@ -185,7 +184,7 @@ class _DreamCardState extends State<_DreamCard>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -235,7 +234,8 @@ class _DreamCardState extends State<_DreamCard>
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
                     value: widget.progress,
-                    backgroundColor: AppColor.accentHexColor.withOpacity(0.3),
+                    backgroundColor:
+                        AppColor.accentHexColor.withValues(alpha: 0.3),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       AppColor.mainHexcolor,
                     ),

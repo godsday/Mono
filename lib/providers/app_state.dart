@@ -229,11 +229,11 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    final _list = await TranscationDB.instance.getalltranscation();
+    final list = await TranscationDB.instance.getalltranscation();
 
-    totalBalanceCheck(_list);
+    totalBalanceCheck(list);
 
-    _list.sort((first, second) => second.date.compareTo(first.date));
+    list.sort((first, second) => second.date.compareTo(first.date));
     yesterdaylistnotifier.value.clear();
     transcationNotifier.value.clear();
     incomelistnotifier.value.clear();
@@ -243,24 +243,24 @@ class AppState extends ChangeNotifier {
     weeklylistnotifier.value.clear();
     monthlylistnotifier.value.clear();
 
-    transcationNotifier.value.addAll(_list);
+    transcationNotifier.value.addAll(list);
 
-    final _today = DateFormat().add_yMMMMd().format(DateTime.now());
-    final _yesterday = DateFormat()
+    final today = DateFormat().add_yMMMMd().format(DateTime.now());
+    final yesterday = DateFormat()
         .add_yMMMMd()
         .format(DateTime.now().subtract(const Duration(days: 1)));
 
-    Future.forEach(_list, (TranscationModel transcationlist) {
-      final _dates = DateFormat().add_yMMMMd().format(transcationlist.date);
+    Future.forEach(list, (TranscationModel transcationlist) {
+      final dates = DateFormat().add_yMMMMd().format(transcationlist.date);
       if (transcationlist.type == 'Expense') {
         expenselistnotifier.value.add(transcationlist);
       } else {
         incomelistnotifier.value.add(transcationlist);
       }
 
-      if (_dates == _today) {
+      if (dates == today) {
         todaylistnotifier.value.add(transcationlist);
-      } else if (_dates == _yesterday) {
+      } else if (dates == yesterday) {
         yesterdaylistnotifier.value.add(transcationlist);
       }
 
@@ -278,7 +278,7 @@ class AppState extends ChangeNotifier {
     });
 
     // Calculate top categories
-    calculateTopCategories(_list);
+    calculateTopCategories(list);
 
     // yesterdaylistnotifier.notifyListeners();
     // transcationNotifier.notifyListeners();

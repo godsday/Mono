@@ -3,7 +3,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 
 class HeaderSection extends StatelessWidget {
-  const HeaderSection({Key? key}) : super(key: key);
+  const HeaderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class HeaderSection extends StatelessWidget {
             color: AppColor.mainHexcolor,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           'Your Budget, Assets & Dreams — all in one place',
           style: AppTextTheme.poppins(
@@ -27,7 +27,7 @@ class HeaderSection extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Container(
           height: 5,
           decoration: BoxDecoration(

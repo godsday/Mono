@@ -13,7 +13,7 @@ class AssetsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -80,7 +80,7 @@ class AssetsCard extends StatelessWidget {
 }
 
 class _AssetsGrid extends StatelessWidget {
-  const _AssetsGrid({Key? key}) : super(key: key);
+  const _AssetsGrid();
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +139,11 @@ class _AssetTile extends StatelessWidget {
   final String growth;
 
   const _AssetTile({
-    Key? key,
     required this.icon,
     required this.title,
     required this.value,
     required this.growth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +153,7 @@ class _AssetTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

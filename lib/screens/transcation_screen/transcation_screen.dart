@@ -17,7 +17,7 @@ import 'transcation_widgets/graph_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class TranscationScreen extends StatefulWidget {
-  const TranscationScreen({Key? key}) : super(key: key);
+  const TranscationScreen({super.key});
 
   @override
   State<TranscationScreen> createState() => _TranscationScreenState();
@@ -49,39 +49,39 @@ class _TranscationScreenState extends State<TranscationScreen> {
     // Define icon mappings based on category
     switch (category.toLowerCase()) {
       case 'salary':
-        return Icon(Icons.account_balance_wallet, color: Colors.blue);
+        return const Icon(Icons.account_balance_wallet, color: Colors.blue);
       case 'shopping':
-        return Icon(Icons.shopping_cart, color: Colors.purple);
+        return const Icon(Icons.shopping_cart, color: Colors.purple);
       case 'food':
-        return Icon(Icons.fastfood, color: Colors.orange);
+        return const Icon(Icons.fastfood, color: Colors.orange);
       case 'travel':
-        return Icon(Icons.flight, color: Colors.blueAccent);
+        return const Icon(Icons.flight, color: Colors.blueAccent);
       case 'medical':
-        return Icon(Icons.local_hospital, color: Colors.red);
+        return const Icon(Icons.local_hospital, color: Colors.red);
       case 'utilities':
-        return Icon(Icons.lightbulb, color: Colors.yellow);
+        return const Icon(Icons.lightbulb, color: Colors.yellow);
       case 'education':
       case 'educations':
-        return Icon(Icons.school, color: Colors.green);
+        return const Icon(Icons.school, color: Colors.green);
       case 'entertainment':
-        return Icon(Icons.movie, color: Colors.pink);
+        return const Icon(Icons.movie, color: Colors.pink);
       case 'insurance':
-        return Icon(Icons.security, color: Colors.indigo);
+        return const Icon(Icons.security, color: Colors.indigo);
       case 'rental':
-        return Icon(Icons.home, color: Colors.brown);
+        return const Icon(Icons.home, color: Colors.brown);
       case 'gift':
-        return Icon(Icons.card_giftcard, color: Colors.purpleAccent);
+        return const Icon(Icons.card_giftcard, color: Colors.purpleAccent);
       case 'freelance':
-        return Icon(Icons.work, color: Colors.teal);
+        return const Icon(Icons.work, color: Colors.teal);
       case 'commission':
-        return Icon(Icons.business, color: Colors.deepOrange);
+        return const Icon(Icons.business, color: Colors.deepOrange);
 
       case 'investments':
-        return Icon(Icons.trending_up, color: Colors.greenAccent);
+        return const Icon(Icons.trending_up, color: Colors.greenAccent);
       case 'credit':
-        return Icon(Icons.credit_card, color: Colors.blueGrey);
+        return const Icon(Icons.credit_card, color: Colors.blueGrey);
       case 'debit':
-        return Icon(Icons.account_balance, color: Colors.redAccent);
+        return const Icon(Icons.account_balance, color: Colors.redAccent);
       case 'other':
         return Icon(
           type == 'Income' ? Icons.attach_money : Icons.money_off,
@@ -130,6 +130,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
     );
 
     if (dateRange != null) {
+      if (!context.mounted) return;
       // Update the provider with the selected date range
       final provider = Provider.of<AppState>(context, listen: false);
       provider.itemvalue = 'Custom';
@@ -221,7 +222,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   icon: Icons.edit,
                   label: 'Edit',
                   onPressed: ((context) async {
-                    final newvalue = await Navigator.push(
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
@@ -328,7 +329,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
     });
 
     return ListView(
-      padding: EdgeInsets.only(top: 3),
+      padding: const EdgeInsets.only(top: 3),
       physics: const BouncingScrollPhysics(),
       children: widgets,
     );
@@ -442,7 +443,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
               child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(24), topRight: Radius.circular(24)),
               color: AppColor.blueContainer,
             ),
@@ -493,11 +494,11 @@ class _TranscationScreenState extends State<TranscationScreen> {
                         Consumer<AppState>(builder: (context, provider, child) {
                           return Container(
                               height: 4.h,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 215, 215, 214),
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 215, 215, 214),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 15.0,
                                   ),
                                   child: provider.headinginnermethod()));
