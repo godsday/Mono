@@ -59,4 +59,3 @@ android/key.properties
 ios/Pods/
 ios/.symlinks/
 ios/Flutter/ephemeral/
-ios/Podfile
