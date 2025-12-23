@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
-import 'package:sizer/sizer.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 
 // ignore: must_be_immutable
 class HeadingMethod extends StatelessWidget {

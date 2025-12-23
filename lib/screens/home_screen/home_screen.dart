@@ -1,16 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/providers/app_state.dart';
-import 'package:mono/screens/add_screen/add_screen.dart';
-import 'package:mono/screens/home_screen/widgets/bottom_card_L_shape.dart';
+import 'package:mono/screens/home_screen/widgets/bottom_card_l_shape.dart';
 import 'package:mono/screens/home_screen/widgets/home_empty_state.dart';
-import 'package:mono/screens/home_screen/widgets/shapes/curveshape_L_card.dart';
-import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_U_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curveshape_l_card.dart';
+import 'package:mono/screens/home_screen/widgets/shapes/curve_shape_u_card.dart';
 import 'package:mono/screens/home_screen/widgets/total_balance_card.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
-import 'package:mono/screens/transcation_screen/transcation_screen.dart';
-import 'package:mono/screens/widgets/navigator_animation.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -30,41 +30,39 @@ class _HomeScreenState extends State<HomeScreen>
   // late Animation<double> _animation2;
   // late Animation<double> _animation3;
 
-  bool _bool = true;
-
   @override
   void initState() {
     super.initState();
     Provider.of<AppState>(context, listen: false).refresh();
 
     getnamedata();
-  //   _animationController =
-  //       AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+    //   _animationController =
+    //       AnimationController(vsync: this, duration: Duration(milliseconds: 600));
 
-  //   _animation1 = Tween<double>(begin: 0, end: 20).animate(CurvedAnimation(
-  //     parent: _animationController,
-  //     curve: Curves.easeOut,
-  //     reverseCurve: Curves.easeIn,
-  //   ))
-  //     ..addListener(() {
-  //       setState(() {});
-  //     })
-  //     ..addStatusListener((status) {
-  //       if (status == AnimationStatus.dismissed) {
-  //         _bool = true;
-  //       }
-  //     });
-  //   _animation2 = Tween<double>(begin: 0, end: .3).animate(_animationController)
-  //     ..addListener(() {
-  //       setState(() {});
-  //     });
-  //   _animation3 = Tween<double>(begin: .9, end: 1).animate(CurvedAnimation(
-  //       parent: _animationController,
-  //       curve: Curves.fastLinearToSlowEaseIn,
-  //       reverseCurve: Curves.ease))
-  //     ..addListener(() {
-  //       setState(() {});
-  //     });
+    //   _animation1 = Tween<double>(begin: 0, end: 20).animate(CurvedAnimation(
+    //     parent: _animationController,
+    //     curve: Curves.easeOut,
+    //     reverseCurve: Curves.easeIn,
+    //   ))
+    //     ..addListener(() {
+    //       setState(() {});
+    //     })
+    //     ..addStatusListener((status) {
+    //       if (status == AnimationStatus.dismissed) {
+    //         _bool = true;
+    //       }
+    //     });
+    //   _animation2 = Tween<double>(begin: 0, end: .3).animate(_animationController)
+    //     ..addListener(() {
+    //       setState(() {});
+    //     });
+    //   _animation3 = Tween<double>(begin: .9, end: 1).animate(CurvedAnimation(
+    //       parent: _animationController,
+    //       curve: Curves.fastLinearToSlowEaseIn,
+    //       reverseCurve: Curves.ease))
+    //     ..addListener(() {
+    //       setState(() {});
+    //     });
   }
 
   getnamedata() async {
@@ -88,163 +86,164 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (context, appState, child) {
           // Check if there are no transactions
           final hasTransactions = appState.transcationNotifier.value.isNotEmpty;
-          
+
           if (!hasTransactions) {
+            log("checking no transc -----");
+
             // Show empty state when there are no transactions
             return const HomeEmptyState();
           }
-          
+          log("checking with transc -----");
           // Show normal home screen when there are transactions
           return Column(
-        children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            clipBehavior: Clip.none,
             children: [
-              ClipPath(
-                clipper: CurveClipper2(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
+              Stack(
+                alignment: Alignment.topCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  ClipPath(
+                    clipper: CurveClipper2(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      height: 55.h,
+                    ),
                   ),
-                  height: 55.h,
-                ),
-              ),
-              // Positioned(
-              //     top: 3.h,
-              //     left: 5.w,
-              //     child: InkWell(
-              //       onTap: () async {
-              //         Navigator.of(context).push(MaterialPageRoute(
-              //           builder: (context) => MyCustomUI(),
-              //         ));
-              //       },
-              //       child: CircleAvatar(
-              //           radius: 15.sp,
-              //           backgroundColor: Colors.amber,
-              //           child: Container(
-              //             child: Icon(Icons.person),
-              //           )),
-              //     )),
-              Positioned(
-                top: 5.h,
-                left: 7.w,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Hi $enteredname,",
-                        style: TextStyle(
-                          // fontFamily: "DancingScript",
-                          color: Colors.white,
-                          fontSize: 20.sp,
-                        )),
-                    Text("Good Morning  ",
-                        style: TextStyle(
-                          // fontFamily: "DancingScript",
-                          color: Colors.white,
-                          fontSize: 20.sp,
-                        )),
-                  ],
-                ),
-              ),
-              Positioned(
-                  top: 4.h,
-                  right: 7.w,
-                  child: Container(
-                    width: 7.w,
-                    height: 7.h,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color.fromARGB(255, 240, 238, 236)),
-                    child: Icon(
-                      Icons.lightbulb,
-                      color: const Color.fromARGB(255, 60, 104, 125),
-                      size: 18,
+                  // Positioned(
+                  //     top: 3.h,
+                  //     left: 5.w,
+                  //     child: InkWell(
+                  //       onTap: () async {
+                  //         Navigator.of(context).push(MaterialPageRoute(
+                  //           builder: (context) => MyCustomUI(),
+                  //         ));
+                  //       },
+                  //       child: CircleAvatar(
+                  //           radius: 15.sp,
+                  //           backgroundColor: Colors.amber,
+                  //           child: Container(
+                  //             child: Icon(Icons.person),
+                  //           )),
+                  //     )),
+                  Positioned(
+                    top: 5.h,
+                    left: 7.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Hi $enteredname,",
+                            style: TextStyle(
+                              // fontFamily: "DancingScript",
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                            )),
+                        Text("Good Morning  ",
+                            style: TextStyle(
+                              // fontFamily: "DancingScript",
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                            )),
+                      ],
                     ),
-                  )),
+                  ),
+                  Positioned(
+                      top: 4.h,
+                      right: 7.w,
+                      child: Container(
+                        width: 7.w,
+                        height: 7.h,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(255, 240, 238, 236)),
+                        child: const Icon(
+                          Icons.lightbulb,
+                          color: Color.fromARGB(255, 60, 104, 125),
+                          size: 18,
+                        ),
+                      )),
 
-              // detail card
-              Positioned(
-                  top: 30.h,
-                  left: 12.w,
-                  child: Container(
-                    height: 12.h,
-                    width: 76.w,
-                    decoration: BoxDecoration(
-                        color: HexColor("#37474F"),
-                        borderRadius: BorderRadius.circular(24.0)),
-                  )),
+                  // detail card
+                  Positioned(
+                      top: 30.h,
+                      left: 12.w,
+                      child: Container(
+                        height: 12.h,
+                        width: 76.w,
+                        decoration: BoxDecoration(
+                            color: HexColor("#37474F"),
+                            borderRadius: BorderRadius.circular(24.0)),
+                      )),
 
-              Positioned(
-                top: 14.h,
-                left: 7.w,
-                right: 7.w,
-                child: InkWell(
-                  onTap: () async {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const TranscationScreen(),
-                    ));
-                  },
-                  // Total Balance Card
-                  child: TotalBalanceCard(),
-                ),
-              ),
-              Positioned(
-                  top: 20.3.h,
-                  child: Image(
-                    width: 47.w,
-                    image: AssetImage(
-                      'assets/images/rings.png',
+                  Positioned(
+                    top: 14.h,
+                    left: 7.w,
+                    right: 7.w,
+                    child: InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, RouteNames.home);
+                      },
+                      // Total Balance Card
+                      child: const TotalBalanceCard(),
                     ),
-                  )),
-              Positioned(
-                right: 10.w,
-                bottom: 0.h,
-                child: ClipRect(
-                  child: Align(
+                  ),
+                  Positioned(
+                      top: 20.3.h,
+                      child: Image(
+                        width: 47.w,
+                        image: const AssetImage(
+                          'assets/images/rings.png',
+                        ),
+                      )),
+                  Positioned(
+                    right: 10.w,
+                    bottom: 0.h,
+                    child: ClipRect(
+                        child: Align(
                       alignment: Alignment.topCenter,
                       child: SizedBox(
-                        width: 14.0.h,
-                        height: 14.h,
-                       // Height of the visible portion
-                        child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [Colors.transparent, Colors.black],
-                            ).createShader(bounds);
-                          },
-                        blendMode: BlendMode.dstIn,
-                        child: Image.asset(
-                          'assets/images/piggybank.png', // Replace 'your_image.jpg' with your image asset
-                          fit: BoxFit.cover,
-                        ),
-                        // ),
-                      )),)
-                ),
+                          width: 14.0.h,
+                          height: 14.h,
+                          // Height of the visible portion
+                          child: ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [Colors.transparent, Colors.black],
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: Image.asset(
+                              'assets/images/piggybank.png', // Replace 'your_image.jpg' with your image asset
+                              fit: BoxFit.cover,
+                            ),
+                            // ),
+                          )),
+                    )),
+                  ),
+                  Positioned(
+                    left: -11.w,
+                    bottom: -10.h,
+                    child: Image(
+                      image: const AssetImage("assets/images/monotree.png"),
+                      width: 31.h,
+                      height: 31.h,
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                left: -11.w,
-                bottom: -10.h,
-                child: Image(
-                  image: const AssetImage("assets/images/monotree.png"),
-                  width: 31.h,
-                  height: 31.h,
-                ),
-              ),
-            ],
-          ),
-          Spacer(),
-          Column(
-            children: [
-              Text(
-                "Cash",
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 2.h),
-              /*  Stack(children: [
+              const Spacer(),
+              Column(
+                children: [
+                  Text(
+                    "Cash",
+                    style:
+                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 2.h),
+                  /*  Stack(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -368,72 +367,70 @@ class _HomeScreenState extends State<HomeScreen>
                 )
               ]),
            */
-             
-            ],
-          ),
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Consumer<AppState>(
-                      builder: (context, appState, child) {
-                        return LShapeWidget(
-                          type: "Income", 
-                          orientation: LShapeOrientation.leftLegOnLeft,
-                          color: AppColor.greenContainer,
-                          icons : Icons.account_balance,
-                          categories: appState.topIncomeCategories,
-                          totalAmount: appState.totalIncome,
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Consumer<AppState>(
-                      builder: (context, appState, child) {
-                        return LShapeWidget(
-                          type: "Expense",
-                          orientation: LShapeOrientation.leftLegOnRight,
-                          color: AppColor.redContainer,
-                          icons : Icons.account_balance_wallet,
-                          categories: appState.topExpenseCategories,
-                          totalAmount: appState.totalExpense,
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                ],
               ),
-              Positioned(
-                top: 8.6.h,
-                left: 40.5 .w,
-                child: GestureDetector(
-                  onTap: () =>   Navigator.push(
-                            context, CustomPageRoute(child: const AddScreen())),
-                      
-                  child: Container(
-                    width: 8.5.h,
-                    height: 8.5.h,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.white),
-                        shape: BoxShape.circle,
-                        color: Colors.amber),
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.black,
-                      size: 28.sp,
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Consumer<AppState>(
+                          builder: (context, appState, child) {
+                            return LShapeWidget(
+                              type: "Income",
+                              orientation: LShapeOrientation.leftLegOnLeft,
+                              color: AppColor.greenContainer,
+                              icons: Icons.account_balance,
+                              categories: appState.topIncomeCategories,
+                              totalAmount: appState.totalIncome,
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: 4.w,
+                        ),
+                        Consumer<AppState>(
+                          builder: (context, appState, child) {
+                            return LShapeWidget(
+                              type: "Expense",
+                              orientation: LShapeOrientation.leftLegOnRight,
+                              color: AppColor.redContainer,
+                              icons: Icons.account_balance_wallet,
+                              categories: appState.topExpenseCategories,
+                              totalAmount: appState.totalExpense,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                  Positioned(
+                    top: 8.6.h,
+                    left: 40.5.w,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                          context, RouteNames.addTransaction),
+                      child: Container(
+                        width: 8.5.h,
+                        height: 8.5.h,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 2, color: Colors.white),
+                            shape: BoxShape.circle,
+                            color: Colors.amber),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 28.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
-      );
+          );
         },
       ),
     );

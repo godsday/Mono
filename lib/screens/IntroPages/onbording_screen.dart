@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/screens/widgets/bottomnavigationbar.dart';
-import 'package:mono/screens/widgets/navigator_animation.dart';
+import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 
 class OnboardScreen extends StatelessWidget {
-  OnboardScreen({Key? key}) : super(key: key);
+  OnboardScreen({super.key});
 
   final namecontroller = TextEditingController();
 
@@ -31,7 +31,7 @@ class OnboardScreen extends StatelessWidget {
                       Container(
                         height: 60.h,
                         alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                           image: AssetImage('assets/images/onboardbg.png'),
                           fit: BoxFit.cover,
@@ -49,7 +49,7 @@ class OnboardScreen extends StatelessWidget {
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Container(
+                              SizedBox(
                                   width: 80.w,
                                   height: 5.h,
                                   child: Text(
@@ -64,8 +64,8 @@ class OnboardScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
+                      const Padding(
+                        padding: EdgeInsets.only(
                             top: 135.0, left: 85, right: 85),
                         child: Image(
                           image: AssetImage(
@@ -77,7 +77,7 @@ class OnboardScreen extends StatelessWidget {
                   ),
                   NameTextfieldWidget(namecontroller: namecontroller),
                   Padding(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         left: 40,
                         right: 40,
                       ),
@@ -122,16 +122,18 @@ class OnboardScreen extends StatelessWidget {
     final sharedprefer = await SharedPreferences.getInstance();
     sharedprefer.setString('namekey', namecontrol);
 
-    Navigator.pushAndRemoveUntil(context,
-        CustomPageRoute(child: const BottomNavigator()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        CustomPageRoute(child: const BottomNavigator(index: 1)),
+        (route) => false);
   }
 }
 
 class NameTextfieldWidget extends StatefulWidget {
   const NameTextfieldWidget({
-    Key? key,
+    super.key,
     required this.namecontroller,
-  }) : super(key: key);
+  });
 
   final TextEditingController namecontroller;
 

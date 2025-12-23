@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 
 SnackBar customSnak(BuildContext context, {required message}) {
   return SnackBar(

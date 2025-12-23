@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/constants/utils/app_texttheme.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 
 class BudgetCard extends StatefulWidget {
-  const BudgetCard({Key? key}) : super(key: key);
+  const BudgetCard({super.key});
 
   @override
   State<BudgetCard> createState() => _BudgetCardState();
@@ -41,7 +41,7 @@ class _BudgetCardState extends State<BudgetCard>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -103,7 +103,8 @@ class _BudgetCardState extends State<BudgetCard>
                 builder: (context, child) {
                   return LinearProgressIndicator(
                     value: _animation.value * 0.65,
-                    backgroundColor: AppColor.accentHexColor.withOpacity(0.3),
+                    backgroundColor:
+                        AppColor.accentHexColor.withValues(alpha: 0.3),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       AppColor.mainHexcolor,
                     ),
@@ -129,10 +130,10 @@ class _BudgetCardState extends State<BudgetCard>
                 ),
               ),
               const SizedBox(height: 10),
-              Wrap(
+              const Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children: const [
+                children: [
                   _CategoryChip(title: 'Food', amount: '₹8,400'),
                   _CategoryChip(title: 'Travel', amount: '₹4,200'),
                   _CategoryChip(title: 'Rent', amount: '₹12,000'),
@@ -178,17 +179,16 @@ class _CategoryChip extends StatelessWidget {
   final String amount;
 
   const _CategoryChip({
-    Key? key,
     required this.title,
     required this.amount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColor.accentHexColor.withOpacity(0.2),
+        color: AppColor.accentHexColor.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

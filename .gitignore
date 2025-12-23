@@ -44,3 +44,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# VS Code (recommended)
+.vscode/
+
+# Android / Gradle
+android/.gradle/
+android/local.properties
+android/key.properties
+*.keystore
+*.jks
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/

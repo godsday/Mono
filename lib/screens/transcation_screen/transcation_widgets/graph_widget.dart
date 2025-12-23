@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
-import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -10,11 +8,10 @@ import '../../../providers/app_state.dart';
 
 class GraphWidget extends StatefulWidget {
   const GraphWidget({
-    Key? key,
+    super.key,
     required TooltipBehavior tooltipBehavior,
     //required List<TranscationModel> chartData,
-  })  : _tooltipBehavior = tooltipBehavior,
-        super(key: key);
+  })  : _tooltipBehavior = tooltipBehavior;
 
   final TooltipBehavior _tooltipBehavior;
   // final List<TranscationModel> _chartData;
@@ -39,7 +36,7 @@ class _GraphWidgetState extends State<GraphWidget> {
 
     return Consumer<AppState>(builder: (context, provider, child) {
       return SfCircularChart(
-        legend: Legend(isVisible: true),
+        legend: const Legend(isVisible: true),
         tooltipBehavior: widget._tooltipBehavior,
         series: <CircularSeries>[
           DoughnutSeries<Chartdata, String>(

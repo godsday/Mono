@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/constants/colors/app_color.dart';
-import 'package:mono/main.dart';
+
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
-import 'package:mono/constants/utils/app_textstyle.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,12 +21,12 @@ class TotalBalanceCard extends StatelessWidget {
         decoration: BoxDecoration(
             // boxShadow: ,
             // backgroundBlendMode: BlendMode.s,
-            color: HexColor("#37474F"),
+            color: AppColor.totalBalanceCardBg,
             boxShadow: [
               BoxShadow(
                   spreadRadius: 1.sp,
                   blurRadius: 2.sp,
-                  color: Colors.transparent)
+                  color: AppColor.transparent)
             ],
             borderRadius: BorderRadius.circular(12.0)),
         child: Padding(
@@ -86,10 +85,12 @@ class TotalBalanceCard extends StatelessWidget {
                             Text(
                               'This month',
                               style: AppTextStyles.poppins12w300White(context)!
-                                  .copyWith(fontWeight: FontWeight.w400, fontSize: 14.sp),
+                                  .copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp),
                             ),
                             SizedBox(
-                              width: 1.5.w,   
+                              width: 1.5.w,
                             ),
                             SizedBox(
                                 width: 5.w,
@@ -97,7 +98,7 @@ class TotalBalanceCard extends StatelessWidget {
                                 child: Transform.scale(
                                   scale: .47,
                                   child: Switch.adaptive(
-                                    activeThumbColor: AppColor.mainHexcolor,
+                                      activeThumbColor: AppColor.mainHexcolor,
                                       value: appState.isThisMonth,
                                       onChanged: (value) {
                                         appState.thisMonthSwitch(value);
@@ -123,16 +124,16 @@ class TotalBalanceCard extends StatelessWidget {
               ),
               appState.isThisMonth
                   ? SizedBox(
-                    height: 5.7.h,
-                    child: Row(
+                      height: 5.7.h,
+                      child: Row(
                         children: [
                           Icon(
                             appState.totalExpense > appState.totalIncome
                                 ? Icons.keyboard_arrow_down_rounded
                                 : Icons.keyboard_arrow_up_rounded,
                             color: appState.totalExpense > appState.totalIncome
-                                ? Colors.red
-                                : Colors.green,
+                                ? AppColor.expenseRed
+                                : AppColor.incomeGreen,
                           ),
                           Text(
                             appState.totalExpense > appState.totalIncome
@@ -147,15 +148,14 @@ class TotalBalanceCard extends StatelessWidget {
                             style: AppTextStyles.poppins12w300White(context)!
                                 .copyWith(fontSize: 13.sp),
                           ),
-                         
                         ],
                       ),
-                  )
+                    )
                   : SizedBox(
                       height: 3.7.h,
                     ),
               Padding(
-                padding: EdgeInsets.only(top: 2.h, left: 5.w, right: 5.w),
+                padding: EdgeInsets.only(top: 1.h, left: 5.w, right: 5.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

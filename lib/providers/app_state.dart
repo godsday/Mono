@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mono/constants/transaction_type.dart';
-import 'package:provider/provider.dart';
+import 'package:mono/routes/route_names.dart';
 import '../database/Transctions_DB/transcations_db.dart';
-import '../models/transcation_model/transcation_model.dart';
-import '../screens/transcation_screen/transcation_screen.dart';
 import '../screens/transcation_screen/transcation_widgets/heading_widget.dart';
-import '../screens/widgets/bottomnavigationbar.dart';
-import '../screens/widgets/snackbar.dart';
+import '../models/transcation_model/transcation_model.dart';
+import '../core/widgets/snackbar.dart';
 import '../models/top_category_model.dart';
 
 class AppState extends ChangeNotifier {
@@ -121,7 +118,7 @@ class AppState extends ChangeNotifier {
       final snack = customSnak(context, message: "Enter valid number");
       return ScaffoldMessenger.of(context).showSnackBar(snack);
     }
-    
+
     // Check if category is selected
     if (categorySelected == null || categorySelected!.isEmpty) {
       final snack = customSnak(context, message: "Please select a category");
@@ -140,8 +137,7 @@ class AppState extends ChangeNotifier {
     _list = await TranscationDB.instance.getalltranscation();
 
     totalBalanceCheck(_list);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const BottomNavigator()));
+    Navigator.pushReplacementNamed(context, RouteNames.home);
   }
 
   /* listingmethod() {
@@ -192,15 +188,18 @@ class AppState extends ChangeNotifier {
           headtext: ' My spendings', amount: totalExpense.toStringAsFixed(1));
     } else if (itemvalue == 'Today') {
       double todayTotal = calculateTotalForList(todaylistnotifier);
-      return HeadingMethod(headtext: 'Today', amount: todayTotal.toStringAsFixed(1));
+      return HeadingMethod(
+          headtext: 'Today', amount: todayTotal.toStringAsFixed(1));
     } else if (itemvalue == 'Yesterday') {
       return HeadingMethod(headtext: 'Yesterday');
     } else if (itemvalue == 'Weekly') {
       double weeklyTotal = calculateTotalForList(weeklylistnotifier);
-      return HeadingMethod(headtext: 'This Week', amount: weeklyTotal.toStringAsFixed(1));
+      return HeadingMethod(
+          headtext: 'This Week', amount: weeklyTotal.toStringAsFixed(1));
     } else if (itemvalue == 'Monthly') {
       double monthlyTotal = calculateTotalForList(monthlylistnotifier);
-      return HeadingMethod(headtext: 'This Month', amount: monthlyTotal.toStringAsFixed(1));
+      return HeadingMethod(
+          headtext: 'This Month', amount: monthlyTotal.toStringAsFixed(1));
     } else if (itemvalue == 'Custom') {
       return HeadingMethod(headtext: 'Custom');
     } else {
@@ -230,11 +229,11 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    final _list = await TranscationDB.instance.getalltranscation();
+    final list = await TranscationDB.instance.getalltranscation();
 
-    totalBalanceCheck(_list);
+    totalBalanceCheck(list);
 
-    _list.sort((first, second) => second.date.compareTo(first.date));
+    list.sort((first, second) => second.date.compareTo(first.date));
     yesterdaylistnotifier.value.clear();
     transcationNotifier.value.clear();
     incomelistnotifier.value.clear();
@@ -244,41 +243,42 @@ class AppState extends ChangeNotifier {
     weeklylistnotifier.value.clear();
     monthlylistnotifier.value.clear();
 
-    transcationNotifier.value.addAll(_list);
+    transcationNotifier.value.addAll(list);
 
-    final _today = DateFormat().add_yMMMMd().format(DateTime.now());
-    final _yesterday = DateFormat()
+    final today = DateFormat().add_yMMMMd().format(DateTime.now());
+    final yesterday = DateFormat()
         .add_yMMMMd()
         .format(DateTime.now().subtract(const Duration(days: 1)));
 
-    Future.forEach(_list, (TranscationModel transcationlist) {
-      final _dates = DateFormat().add_yMMMMd().format(transcationlist.date);
+    Future.forEach(list, (TranscationModel transcationlist) {
+      final dates = DateFormat().add_yMMMMd().format(transcationlist.date);
       if (transcationlist.type == 'Expense') {
         expenselistnotifier.value.add(transcationlist);
       } else {
         incomelistnotifier.value.add(transcationlist);
       }
 
-      if (_dates == _today) {
+      if (dates == today) {
         todaylistnotifier.value.add(transcationlist);
-      } else if (_dates == _yesterday) {
+      } else if (dates == yesterday) {
         yesterdaylistnotifier.value.add(transcationlist);
       }
-      
+
       // Add to weekly list (last 7 days)
-      if (transcationlist.date.isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
+      if (transcationlist.date
+          .isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
         weeklylistnotifier.value.add(transcationlist);
       }
-      
+
       // Add to monthly list (current month)
-      if (transcationlist.date.month == DateTime.now().month && 
+      if (transcationlist.date.month == DateTime.now().month &&
           transcationlist.date.year == DateTime.now().year) {
         monthlylistnotifier.value.add(transcationlist);
       }
     });
 
     // Calculate top categories
-    calculateTopCategories(_list);
+    calculateTopCategories(list);
 
     // yesterdaylistnotifier.notifyListeners();
     // transcationNotifier.notifyListeners();
@@ -325,23 +325,22 @@ class AppState extends ChangeNotifier {
           ..sort((a, b) => b.value.compareTo(a.value));
 
     // Calculate total amounts for percentage calculation
-    double totalIncome = sortedIncomeCategories.fold(
-        0, (sum, entry) => sum + entry.value);
-    double totalExpense = sortedExpenseCategories.fold(
-        0, (sum, entry) => sum + entry.value);
+    double totalIncome =
+        sortedIncomeCategories.fold(0, (sum, entry) => sum + entry.value);
+    double totalExpense =
+        sortedExpenseCategories.fold(0, (sum, entry) => sum + entry.value);
 
     // Take top 3 categories for each type
-    int incomeCount = sortedIncomeCategories.length > 3
-        ? 3
-        : sortedIncomeCategories.length;
-    int expenseCount = sortedExpenseCategories.length > 3
-        ? 3
-        : sortedExpenseCategories.length;
+    int incomeCount =
+        sortedIncomeCategories.length > 3 ? 3 : sortedIncomeCategories.length;
+    int expenseCount =
+        sortedExpenseCategories.length > 3 ? 3 : sortedExpenseCategories.length;
 
     // Create TopCategory objects for income
     for (int i = 0; i < incomeCount; i++) {
       var entry = sortedIncomeCategories[i];
-      double percentage = totalIncome > 0 ? (entry.value / totalIncome) * 100 : 0;
+      double percentage =
+          totalIncome > 0 ? (entry.value / totalIncome) * 100 : 0;
       topIncomeCategories.add(TopCategory(
         name: entry.key,
         amount: entry.value,
@@ -352,7 +351,8 @@ class AppState extends ChangeNotifier {
     // Create TopCategory objects for expense
     for (int i = 0; i < expenseCount; i++) {
       var entry = sortedExpenseCategories[i];
-      double percentage = totalExpense > 0 ? (entry.value / totalExpense) * 100 : 0;
+      double percentage =
+          totalExpense > 0 ? (entry.value / totalExpense) * 100 : 0;
       topExpenseCategories.add(TopCategory(
         name: entry.key,
         amount: entry.value,
@@ -369,20 +369,22 @@ class AppState extends ChangeNotifier {
     // Normalize the start and end dates to compare only the date part (ignore time)
     final startDate = DateTime(start.year, start.month, start.day);
     final endDate = DateTime(end.year, end.month, end.day);
-    
+
     for (TranscationModel data in transcationNotifier.value) {
       // Normalize the transaction date
-      final transactionDate = DateTime(data.date.year, data.date.month, data.date.day);
-      
+      final transactionDate =
+          DateTime(data.date.year, data.date.month, data.date.day);
+
       // Check if transaction date is within the selected range (inclusive)
-      if (transactionDate.isAfter(startDate.subtract(const Duration(days: 1))) &&
+      if (transactionDate
+              .isAfter(startDate.subtract(const Duration(days: 1))) &&
           transactionDate.isBefore(endDate.add(const Duration(days: 1)))) {
         customlistnotifier.value.add(data);
       }
     }
     customlistnotifier.notifyListeners();
   }
-  
+
   double calculateTotalForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {
@@ -394,7 +396,7 @@ class AppState extends ChangeNotifier {
     }
     return total;
   }
-  
+
   double calculateIncomeForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {
@@ -404,7 +406,7 @@ class AppState extends ChangeNotifier {
     }
     return total;
   }
-  
+
   double calculateExpenseForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {

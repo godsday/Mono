@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mono/constants/colors/app_color.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
 import 'package:mono/screens/profile_screen/financial_overview_page.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
 import 'package:mono/screens/transcation_screen/transcation_screen.dart';
 
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({super.key});
+  final int index;
+  const BottomNavigator({super.key, required this.index});
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
