@@ -33,9 +33,6 @@ class _AddScreenState extends State<AddScreen> {
 
   final _formkey = GlobalKey<FormState>();
 
-  // Cache the provider reference to safely access it in dispose()
-  AppState? _appStateProvider;
-
   // Helper method to get a valid category for the dropdown
   String? _getValidCategory(AppState provider) {
     // If no category is selected, return null to show the hint
@@ -138,6 +135,8 @@ class _AddScreenState extends State<AddScreen> {
                 // Select the newly added category
                 provider.categorySelected =
                     categoryName.capitalizeFirstLetter();
+                await provider.loadCategories();
+                if (!context.mounted) return;
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
@@ -165,13 +164,11 @@ class _AddScreenState extends State<AddScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Cache the provider reference to safely use it in dispose()
-    _appStateProvider = Provider.of<AppState>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<AppState>(context, listen: false);
+      provider.loadCategories();
+      provider.categorySelected = null;
+    });
   }
 
   @override
@@ -244,41 +241,52 @@ class _AddScreenState extends State<AddScreen> {
                                 builder: (context, provider, child) => Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Radio.adaptive(
+                                      RadioGroup<String>(
                                           groupValue: provider.selectedType,
-                                          value: "Expense",
                                           onChanged: (String? value) {
                                             provider.selectedType = value!;
                                             // Clear category selection when switching type
                                             provider.categorySelected = null;
-                                          }),
-                                      Text(
-                                        "Expense",
-                                        style: AppTextStyles.poppins16w400
-                                            .copyWith(
-                                                color: AppColor.blueGrey700,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16.sp),
-                                      ),
-                                      SizedBox(
-                                        width: 20.sp,
-                                      ),
-                                      Radio.adaptive(
-                                          groupValue: provider.selectedType,
-                                          value: "Income",
-                                          onChanged: (String? value) {
-                                            provider.selectedType = value!;
-                                            // Clear category selection when switching type
-                                            provider.categorySelected = null;
-                                          }),
-                                      Text(
-                                        "Income",
-                                        style: AppTextStyles.poppins16w400
-                                            .copyWith(
-                                                color: AppColor.blueGrey700,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16.sp),
-                                      ),
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Radio.adaptive(
+                                                value: "Expense",
+                                                activeColor:
+                                                    AppColor.mainHexcolor,
+                                              ),
+                                              Text(
+                                                "Expense",
+                                                style: AppTextStyles
+                                                    .poppins16w400
+                                                    .copyWith(
+                                                        color: AppColor
+                                                            .blueGrey700,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16.sp),
+                                              ),
+                                              SizedBox(
+                                                width: 20.sp,
+                                              ),
+                                              Radio.adaptive(
+                                                value: "Income",
+                                                activeColor:
+                                                    AppColor.mainHexcolor,
+                                              ),
+                                              Text(
+                                                "Income",
+                                                style: AppTextStyles
+                                                    .poppins16w400
+                                                    .copyWith(
+                                                        color: AppColor
+                                                            .blueGrey700,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16.sp),
+                                              ),
+                                            ],
+                                          )),
                                     ]),
                               ),
                             ),
@@ -382,160 +390,116 @@ class _AddScreenState extends State<AddScreen> {
                               height: .5.h,
                             ),
                             Consumer<AppState>(
-                              builder: (context, provider, child) =>
-                                  FutureBuilder<List<CategoryModel>>(
-                                      future:
-                                          CategoryDB.instance.getCategories(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
+                              builder: (context, provider, child) {
+                                // Filter categories based on selected transaction type
+                                final categories = provider.allCategories
+                                    .where((category) =>
+                                        (provider.selectedType == "Income" &&
+                                            category.type ==
+                                                CategoryType.income) ||
+                                        (provider.selectedType == "Expense" &&
+                                            category.type ==
+                                                CategoryType.expense))
+                                    .toList();
 
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                              'Error: ${snapshot.error}');
-                                        }
+                                if (categories.isEmpty) {
+                                  return const Text('No categories available');
+                                }
 
-                                        if (!snapshot.hasData ||
-                                            snapshot.data!.isEmpty) {
-                                          return const Text(
-                                              'No categories available');
-                                        }
-
-                                        // Filter categories based on selected transaction type
-                                        final categories = snapshot.data!
-                                            .where((category) =>
-                                                (provider.selectedType ==
-                                                        "Income" &&
-                                                    category.type ==
-                                                        CategoryType.income) ||
-                                                (provider.selectedType ==
-                                                        "Expense" &&
-                                                    category.type ==
-                                                        CategoryType.expense))
-                                            .toList();
-
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: AppColor.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Theme(
-                                                  data: Theme.of(context)
-                                                      .copyWith(
-                                                    splashColor:
-                                                        AppColor.lightGrey,
-                                                    highlightColor:
-                                                        AppColor.lightGrey,
-                                                    hoverColor:
-                                                        AppColor.lightGrey,
-                                                    focusColor:
-                                                        AppColor.lightGrey,
-                                                  ),
-                                                  child: DropdownButton<String>(
-                                                    value: _getValidCategory(
-                                                        provider),
-                                                    icon: Icon(
-                                                      Icons
-                                                          .keyboard_arrow_down_rounded,
-                                                      size: 24.sp,
-                                                    ),
-                                                    elevation: 2,
-                                                    dropdownColor:
-                                                        AppColor.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    underline: const SizedBox(),
-                                                    menuMaxHeight: 300.sp,
-                                                    iconEnabledColor:
-                                                        AppColor.mainHexcolor,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 12.0),
-                                                    isExpanded: true,
-                                                    hint: Text(
-                                                      'Select Category',
-                                                      style: AppTextStyles
-                                                          .montserrat18w600
-                                                          .copyWith(
-                                                        color: AppColor.textGrey
-                                                            .withValues(
-                                                                alpha: 0.7),
-                                                        fontSize: 12.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                    onChanged: (String? value) {
-                                                      if (value != null) {
-                                                        provider.categorySelected =
-                                                            value;
-                                                      }
-                                                    },
-                                                    items: categories.map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (CategoryModel
-                                                            category) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: category.name,
-                                                        child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical:
-                                                                      8.0),
-                                                          child: Text(
-                                                            category.name,
-                                                            style: AppTextStyles
-                                                                .poppins16w400
-                                                                .copyWith(
-                                                              color: AppColor
-                                                                  .textPrimary,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontSize: 15.sp,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                ),
-                                              ),
-                                              IconButton(
-                                                style: ButtonStyle(
-                                                  elevation:
-                                                      WidgetStateProperty.all(
-                                                          3),
-                                                  backgroundColor:
-                                                      WidgetStateProperty.all(
-                                                          AppColor
-                                                              .mainHexcolor),
-                                                ),
-                                                icon: Icon(
-                                                  Icons.add,
-                                                  color: AppColor.white,
-                                                ),
-                                                onPressed: () {
-                                                  _showAddCategoryDialog(
-                                                      context, provider);
-                                                },
-                                              ),
-                                            ],
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: AppColor.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Theme(
+                                          data: Theme.of(context).copyWith(
+                                            splashColor: AppColor.lightGrey,
+                                            highlightColor: AppColor.lightGrey,
+                                            hoverColor: AppColor.lightGrey,
+                                            focusColor: AppColor.lightGrey,
                                           ),
-                                        );
-                                      }),
+                                          child: DropdownButton<String>(
+                                            value: _getValidCategory(provider),
+                                            icon: Icon(
+                                              Icons.keyboard_arrow_down_rounded,
+                                              size: 24.sp,
+                                            ),
+                                            elevation: 2,
+                                            dropdownColor: AppColor.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            underline: const SizedBox(),
+                                            menuMaxHeight: 300.sp,
+                                            iconEnabledColor:
+                                                AppColor.mainHexcolor,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12.0),
+                                            isExpanded: true,
+                                            hint: Text(
+                                              'Select Category',
+                                              style: AppTextStyles
+                                                  .montserrat18w600
+                                                  .copyWith(
+                                                color: AppColor.textGrey
+                                                    .withValues(alpha: 0.7),
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            onChanged: (String? value) {
+                                              if (value != null) {
+                                                provider.categorySelected =
+                                                    value;
+                                              }
+                                            },
+                                            items: categories
+                                                .map<DropdownMenuItem<String>>(
+                                                    (CategoryModel category) {
+                                              return DropdownMenuItem<String>(
+                                                value: category.name,
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
+                                                  child: Text(
+                                                    category.name,
+                                                    style: AppTextStyles
+                                                        .poppins16w400
+                                                        .copyWith(
+                                                      color:
+                                                          AppColor.textPrimary,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 15.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        style: ButtonStyle(
+                                          elevation: WidgetStateProperty.all(3),
+                                          backgroundColor:
+                                              WidgetStateProperty.all(
+                                                  AppColor.mainHexcolor),
+                                        ),
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: AppColor.white,
+                                        ),
+                                        onPressed: () {
+                                          _showAddCategoryDialog(
+                                              context, provider);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 1.5.h,
@@ -624,7 +588,7 @@ class _AddScreenState extends State<AddScreen> {
 
     // Use cached provider reference instead of looking it up from context
     // This is safe because we cached it in didChangeDependencies()
-    _appStateProvider?.categorySelected = "";
+    // _appStateProvider?.categorySelected = ""; // Removed to prevent setState error during navigation
 
     super.dispose();
   }

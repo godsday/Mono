@@ -33,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    Provider.of<AppState>(context, listen: false).refresh();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AppState>(context, listen: false).refresh();
+    });
 
     getnamedata();
     //   _animationController =

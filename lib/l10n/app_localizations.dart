@@ -6,6 +6,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_hi.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +94,11 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('es'),
+    Locale('hi')
+  ];
 
   /// No description provided for @welcome.
   ///
@@ -111,6 +117,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'₹'**
   String get currency_symbol;
+
+  /// No description provided for @onboarding_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend Smarter Save More'**
+  String get onboarding_title;
+
+  /// No description provided for @onboarding_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take control of your money with powerful tracking and planning tools'**
+  String get onboarding_subtitle;
+
+  /// No description provided for @enter_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get enter_name_hint;
+
+  /// No description provided for @get_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get get_started;
+
+  /// No description provided for @select_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get select_language;
 }
 
 class _AppLocalizationsDelegate
@@ -124,7 +160,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en'].contains(locale.languageCode);
+      <String>['en', 'es', 'hi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -135,6 +171,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'hi':
+      return AppLocalizationsHi();
   }
 
   throw FlutterError(

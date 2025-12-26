@@ -2,5 +2,10 @@
   "@@locale": "en",
   "welcome": "Hi, Welcome!",
   "total_balance": "Total Balance",
-  "currency_symbol": "₹"
+  "currency_symbol": "₹",
+  "onboarding_title": "Spend Smarter Save More",
+  "onboarding_subtitle": "Take control of your money with powerful tracking and planning tools",
+  "enter_name_hint": "Nickname",
+  "get_started": "Get Started",
+  "select_language": "Select Language"
 }

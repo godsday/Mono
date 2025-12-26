@@ -1,3 +1,5 @@
+import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/models/category_model/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/routes/route_names.dart';
@@ -29,6 +31,8 @@ class AppState extends ChangeNotifier {
   DateTime end = DateTime.now();
   bool isThisMonth = false;
   List<TranscationModel> _list = [];
+  List<CategoryModel> _allCategories = [];
+  List<CategoryModel> get allCategories => _allCategories;
 
   //todo Check Flight mode
 
@@ -210,22 +214,26 @@ class AppState extends ChangeNotifier {
   }
 
   void totalBalanceCheck(List<TranscationModel> data) {
-    totalBalance = 0;
-    totalIncome = 0;
-    totalExpense = 0;
+    double income = 0;
+    double expense = 0;
+
     for (var value in data) {
       if (value.type == "Income") {
-        totalIncome = totalIncome + value.amount;
+        income += value.amount;
+      } else if (value.type == 'Expense') {
+        expense += value.amount;
       }
-      if (value.type == 'Expense') {
-        totalExpense = totalExpense + value.amount;
-      }
-      totalBalance = totalIncome - totalExpense;
     }
 
-    print("1 $totalBalance");
-    print("2 $totalIncome");
-    print("3 $totalExpense");
+    _totalIncome = income;
+    _totalExpense = expense;
+    _totalBalance = income - expense;
+
+    notifyListeners();
+
+    print("Total Balance: $_totalBalance");
+    print("Total Income: $_totalIncome");
+    print("Total Expense: $_totalExpense");
   }
 
   Future<void> refresh() async {
@@ -487,6 +495,11 @@ class AppState extends ChangeNotifier {
       _list = await TranscationDB.instance.getalltranscation();
       totalBalanceCheck(_list);
     }
+    notifyListeners();
+  }
+
+  Future<void> loadCategories() async {
+    _allCategories = await CategoryDB.instance.getCategories();
     notifyListeners();
   }
 }

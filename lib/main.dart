@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -26,6 +28,7 @@ import 'providers/notification_provider.dart';
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 AppState appState = AppState();
+LocaleProvider localeProvider = LocaleProvider();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +50,7 @@ Future<void> main() async {
 
   await TranscationDB.instance.getalltranscation();
   await CategoryDB.instance.initializeCategories();
+  await appState.loadCategories();
 
   // Clean Architecture Setup
   final localDataSource = TransactionLocalDataSourceImpl();
@@ -67,6 +71,9 @@ Future<void> main() async {
       }),
       ChangeNotifierProvider(create: (_) {
         return notificationProvider;
+      }),
+      ChangeNotifierProvider(create: (_) {
+        return localeProvider;
       }),
       ChangeNotifierProvider(
           create: (_) => TransactionProvider(
@@ -116,19 +123,19 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return Consumer<DarkThemeProvider>(builder: (context, value, child) {
+      return Consumer2<DarkThemeProvider, LocaleProvider>(
+          builder: (context, darkThemeValue, localeValue, child) {
         return MaterialApp(
+          locale: localeValue.locale,
           localizationsDelegates: const [
+            AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('en'), // English
-            Locale('es'), // Spanish (you can add more later)
-          ],
+          supportedLocales: L10n.all,
           debugShowCheckedModeBanner: false,
-          theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+          theme: Styles.themeData(darkThemeValue.darkTheme, context),
           initialRoute: RouteNames.splash,
           onGenerateRoute: AppRouter.onGenerateRoute,
         );

@@ -51,12 +51,12 @@ android {
     }
 
     signingConfigs {
-        debug {
-        storeFile file("$rootDir/debug.keystore")
-        storePassword "android"
-        keyAlias "androiddebugkey"
-        keyPassword "android"
-    }
+    //     debug {
+    //     storeFile file("$rootDir/debug.keystore")
+    //     storePassword "android"
+    //     keyAlias "androiddebugkey"
+    //     keyPassword "android"
+    // }
     release {
         // comment out the real keystore
         // storeFile file("key.jks")
@@ -65,7 +65,7 @@ android {
         // keyPassword "your_key_password"
 
         // use debug signing temporarily
-        storeFile file("$rootDir/debug.keystore")
+     storeFile file("$rootDir/debug.keystore")
         storePassword "android"
         keyAlias "androiddebugkey"
         keyPassword "android"
@@ -78,11 +78,11 @@ android {
         // }
     }
 
-    // buildTypes {
-    //     release {
-    //         signingConfig signingConfigs.release
-    //     }
-    // }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 flutter {
