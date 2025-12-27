@@ -4,7 +4,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/screens/home_screen/home_screen.dart';
 import 'package:mono/screens/profile_screen/financial_overview_page.dart';
 import 'package:mono/screens/setting_screen/settings_screen.dart';
-import 'package:mono/screens/transcation_screen/transcation_screen.dart';
+import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
 
 class BottomNavigator extends StatefulWidget {
   final int index;

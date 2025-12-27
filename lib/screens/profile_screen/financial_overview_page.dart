@@ -12,17 +12,23 @@ class FinancialOverviewPage extends StatelessWidget {
     return const Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HeaderSection(),
-            SizedBox(height: 30),
-            BudgetCard(),
-            SizedBox(height: 20),
-            AssetsCard(),
-            SizedBox(height: 20),
-            DreamsCard(),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  SizedBox(height: 30),
+                  BudgetCard(),
+                  SizedBox(height: 20),
+                  AssetsCard(),
+                  SizedBox(height: 20),
+                  DreamsCard(),
+                ],
+              ),
+            )
           ],
         ),
       ),

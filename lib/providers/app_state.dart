@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/routes/route_names.dart';
 import '../database/Transctions_DB/transcations_db.dart';
-import '../screens/transcation_screen/transcation_widgets/heading_widget.dart';
+import '../features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
 import '../models/transcation_model/transcation_model.dart';
 import '../core/widgets/snackbar.dart';
 import '../models/top_category_model.dart';

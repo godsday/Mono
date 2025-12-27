@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../providers/app_state.dart';
+import '../../../../../providers/app_state.dart';
 
 class GraphWidget extends StatefulWidget {
   const GraphWidget({
     super.key,
     required TooltipBehavior tooltipBehavior,
     //required List<TranscationModel> chartData,
-  })  : _tooltipBehavior = tooltipBehavior;
+  }) : _tooltipBehavior = tooltipBehavior;
 
   final TooltipBehavior _tooltipBehavior;
   // final List<TranscationModel> _chartData;

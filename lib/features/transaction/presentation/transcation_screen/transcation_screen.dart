@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/edit_screen/edit_screen.dart';
@@ -12,7 +13,7 @@ import 'package:mono/screens/widgets/add_clipper.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../models/transcation_model/transcation_model.dart';
+import '../../../../models/transcation_model/transcation_model.dart';
 import 'transcation_widgets/graph_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -342,22 +343,42 @@ class _TranscationScreenState extends State<TranscationScreen> {
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ClipPath(
-            clipper: CurveClipper(),
-            child: Container(
-              color: Theme.of(context).dividerColor,
-              height: 15.0.h,
-              child: Center(
-                child: Text(
-                  "Recent Transactions",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
+          Stack(
+            children: [
+              ClipPath(
+                clipper: CurveClipper(),
+                child: Container(
+                  color: Theme.of(context).dividerColor,
+                  height: 15.0.h,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      "Recent Transactions",
+                      style: AppTextTheme.montserrart(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.white,
+                      ),
+                    ),
+
+                    // Image(
+                    //       width: 47.w,
+                    //       image: const AssetImage(
+                    //         'assets/images/rings.png',
+                    //       ),
+                    //     ),
+                    //
                   ),
                 ),
               ),
-            ),
+              const Positioned(
+                  top: 2,
+                  child: Image(
+                    image: AssetImage(
+                      'assets/images/rings.png',
+                    ),
+                  )),
+            ],
           ),
           Container(
             width: double.infinity,

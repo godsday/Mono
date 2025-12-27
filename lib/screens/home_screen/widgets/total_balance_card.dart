@@ -28,7 +28,7 @@ class TotalBalanceCard extends StatelessWidget {
                   blurRadius: 2.sp,
                   color: AppColor.transparent)
             ],
-            borderRadius: BorderRadius.circular(12.0)),
+            borderRadius: BorderRadius.circular(20.0)),
         child: Padding(
           padding: EdgeInsets.only(left: 4.w, top: 1.6.h, right: 4.w),
           child: Column(
