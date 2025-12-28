@@ -1,7 +1,7 @@
 import '../../domain/entities/transaction_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_local_data_source.dart';
-import '../models/transaction_model.dart';
+import '../../../../../models/transcation_model/transcation_model.dart';
 
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionLocalDataSource localDataSource;
@@ -10,7 +10,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   Future<void> addTransaction(TransactionEntity transaction) async {
-    final model = TransactionModel.fromEntity(transaction);
+    final model = TranscationModel(
+      id: transaction.id,
+      type: transaction.type,
+      amount: transaction.amount,
+      date: transaction.date,
+      category: transaction.category,
+      purpose: transaction.purpose,
+    );
     await localDataSource.addTransaction(model);
   }
 
@@ -27,12 +34,28 @@ class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<List<TransactionEntity>> getTransactions() async {
     final models = await localDataSource.getTransactions();
-    return models.map((model) => model.toEntity()).toList();
+    return models
+        .map((model) => TransactionEntity(
+              id: model.id,
+              type: model.type,
+              amount: model.amount,
+              date: model.date,
+              category: model.category,
+              purpose: model.purpose,
+            ))
+        .toList();
   }
 
   @override
   Future<void> updateTransaction(TransactionEntity transaction) async {
-    final model = TransactionModel.fromEntity(transaction);
+    final model = TranscationModel(
+      id: transaction.id,
+      type: transaction.type,
+      amount: transaction.amount,
+      date: transaction.date,
+      category: transaction.category,
+      purpose: transaction.purpose,
+    );
     await localDataSource.updateTransaction(model);
   }
 }

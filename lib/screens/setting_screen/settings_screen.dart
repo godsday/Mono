@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
@@ -55,13 +56,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ClipPath(
                         clipper: WaveClipper(),
                         child: Container(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                blurStyle: BlurStyle.normal,
-                                blurRadius: 2.sp,
-                                spreadRadius: 4.sp,
-                                color: Theme.of(context).dividerColor)
-                          ]),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF429690), Color(0xFF1E4744)],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(15),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
                           // color: Theme.of(context).dividerColor,
                           height: 17.0.h,
                         ),
@@ -249,12 +257,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     top: 5.h,
                     child: Text(
                       "Settings",
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                      style: AppTextTheme.montserrart(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.white,
+                      ),
                     ),
                   ),
+                  Positioned(
+                      top: 5.h,
+                      left: 33.w,
+                      child: Image(
+                        width: 57.w,
+                        image: const AssetImage(
+                          'assets/images/rings.png',
+                        ),
+                      )),
                 ],
               ),
             ),

@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/screens/edit_screen/edit_screen.dart';
 import 'package:mono/screens/widgets/add_clipper.dart';
@@ -343,43 +344,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            children: [
-              ClipPath(
-                clipper: CurveClipper(),
-                child: Container(
-                  color: Theme.of(context).dividerColor,
-                  height: 15.0.h,
-                  width: double.infinity,
-                  child: Center(
-                    child: Text(
-                      "Recent Transactions",
-                      style: AppTextTheme.montserrart(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.white,
-                      ),
-                    ),
-
-                    // Image(
-                    //       width: 47.w,
-                    //       image: const AssetImage(
-                    //         'assets/images/rings.png',
-                    //       ),
-                    //     ),
-                    //
-                  ),
-                ),
-              ),
-              const Positioned(
-                  top: 2,
-                  child: Image(
-                    image: AssetImage(
-                      'assets/images/rings.png',
-                    ),
-                  )),
-            ],
-          ),
+          const TranscationHeader(),
           Container(
             width: double.infinity,
             height: 40,

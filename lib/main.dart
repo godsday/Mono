@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
@@ -82,6 +83,7 @@ Future<void> main() async {
                 deleteTransactionUseCase: deleteTransaction,
                 updateTransactionUseCase: updateTransaction,
               )),
+      ChangeNotifierProvider(create: (_) => HomeProvider()),
     ], child: const MyApp()),
   );
 }

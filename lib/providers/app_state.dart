@@ -112,6 +112,7 @@ class AppState extends ChangeNotifier {
     return _selectedDate;
   }
 
+  @Deprecated('Use TransactionProvider.addTransaction instead')
   Future addtransbutton(context, amountcontrol, notescontrol) async {
     final amountval = amountcontrol.text;
     final purposeval = notescontrol.text;

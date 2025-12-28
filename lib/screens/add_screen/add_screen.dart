@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/providers/app_state.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
@@ -11,6 +12,8 @@ import 'package:sizer/sizer.dart';
 import 'package:mono/screens/widgets/add_clipper.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/category_model/category_model.dart';
+import '../../features/transaction/presentation/providers/transaction_provider.dart';
+import '../../features/transaction/domain/entities/transaction_entity.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -183,7 +186,20 @@ class _AddScreenState extends State<AddScreen> {
               ClipPath(
                 clipper: CurveClipper(),
                 child: Container(
-                  color: Theme.of(context).dividerColor,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFF429690), Color(0xFF1E4744)],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
                   height: 40.h,
                 ),
               ),
@@ -192,8 +208,11 @@ class _AddScreenState extends State<AddScreen> {
                 left: 26.w,
                 child: Text(
                   "Add Transcations",
-                  style: AppTextStyles.montserrat18w600
-                      .copyWith(color: AppColor.white),
+                  style: AppTextTheme.montserrart(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.white,
+                  ),
                 ),
               ),
               Positioned(
@@ -542,10 +561,28 @@ class _AddScreenState extends State<AddScreen> {
 
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
-                                    Provider.of<AppState>(context,
+
+                                    final amount =
+                                        double.parse(amountcontrol.text);
+                                    final entity = TransactionEntity(
+                                      id: DateTime.now()
+                                          .millisecondsSinceEpoch
+                                          .toString(),
+                                      type: provider.selectedType,
+                                      amount: amount,
+                                      date: provider.selectedDate,
+                                      category: provider.categorySelected!,
+                                      purpose: notescontrol.text,
+                                    );
+
+                                    await Provider.of<TransactionProvider>(
+                                            context,
                                             listen: false)
-                                        .addtransbutton(context, amountcontrol,
-                                            notescontrol);
+                                        .addTransaction(entity);
+
+                                    if (context.mounted) {
+                                      Navigator.of(context).pop();
+                                    }
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

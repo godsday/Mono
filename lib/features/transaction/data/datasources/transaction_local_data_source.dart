@@ -1,28 +1,26 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../models/transaction_model.dart';
-// Will create this later or now
+import '../../../../../models/transcation_model/transcation_model.dart';
 
 abstract class TransactionLocalDataSource {
-  Future<List<TransactionModel>> getTransactions();
-  Future<void> addTransaction(TransactionModel transaction);
-  Future<void> updateTransaction(TransactionModel transaction);
+  Future<List<TranscationModel>> getTransactions();
+  Future<void> addTransaction(TranscationModel transaction);
+  Future<void> updateTransaction(TranscationModel transaction);
   Future<void> deleteTransaction(String id);
   Future<void> clearTransactions();
 }
 
 class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
-  static const String boxName =
-      'transcation-db'; // Keeping legacy name for data persistence
+  static const String boxName = 'transcation-db';
 
-  Future<Box<TransactionModel>> _openBox() async {
+  Future<Box<TranscationModel>> _openBox() async {
     if (Hive.isBoxOpen(boxName)) {
-      return Hive.box<TransactionModel>(boxName);
+      return Hive.box<TranscationModel>(boxName);
     }
-    return await Hive.openBox<TransactionModel>(boxName);
+    return await Hive.openBox<TranscationModel>(boxName);
   }
 
   @override
-  Future<void> addTransaction(TransactionModel transaction) async {
+  Future<void> addTransaction(TranscationModel transaction) async {
     final box = await _openBox();
     await box.put(transaction.id, transaction);
   }
@@ -40,13 +38,13 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
   }
 
   @override
-  Future<List<TransactionModel>> getTransactions() async {
+  Future<List<TranscationModel>> getTransactions() async {
     final box = await _openBox();
     return box.values.toList();
   }
 
   @override
-  Future<void> updateTransaction(TransactionModel transaction) async {
+  Future<void> updateTransaction(TranscationModel transaction) async {
     final box = await _openBox();
     await box.put(transaction.id, transaction);
   }
