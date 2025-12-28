@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/constants/colors/app_colors.dart';
-import '../../../../core/theme/app_texttheme.dart';
+import '../../../../../core/constants/colors/app_colors.dart';
+import '../../../../../core/theme/app_texttheme.dart';
 import '../pages/add_budget_screen.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../providers/financial_overview_provider.dart';

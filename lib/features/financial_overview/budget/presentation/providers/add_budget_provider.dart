@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../database/categories_DB/category_db.dart';
-import '../../../../models/category_model/category_model.dart';
+import '../../../../../database/categories_DB/category_db.dart';
+import '../../../../../models/category_model/category_model.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 
 class AddBudgetProvider extends ChangeNotifier {

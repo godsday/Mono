@@ -25,6 +25,16 @@ import 'package:mono/features/transaction/domain/usecases/get_transactions.dart'
 import 'package:mono/features/transaction/domain/usecases/update_transaction.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'providers/notification_provider.dart';
+import 'package:mono/features/financial_overview/assets/data/repositories/asset_repository_impl.dart';
+import 'package:mono/features/financial_overview/assets/domain/usecases/add_asset_usecase.dart';
+import 'package:mono/features/financial_overview/assets/domain/usecases/delete_asset_usecase.dart';
+import 'package:mono/features/financial_overview/assets/domain/usecases/get_assets_usecase.dart';
+import 'package:mono/features/financial_overview/assets/presentation/providers/assets_provider.dart';
+import 'package:mono/features/financial_overview/goals/data/repositories/goal_repository_impl.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_usecase.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
+import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
@@ -62,6 +72,18 @@ Future<void> main() async {
   final deleteTransaction = DeleteTransaction(repository);
   final updateTransaction = UpdateTransaction(repository);
 
+  // Assets Setup
+  final assetRepository = AssetRepositoryImpl();
+  final getAssets = GetAssetsUseCase(assetRepository);
+  final addAsset = AddAssetUseCase(assetRepository);
+  final deleteAsset = DeleteAssetUseCase(assetRepository);
+
+  // Goals Setup
+  final goalRepository = GoalRepositoryImpl();
+  final getGoals = GetGoalsUseCase(goalRepository);
+  final addGoal = AddGoalUseCase(goalRepository);
+  final updateGoalProgress = UpdateGoalProgressUseCase(goalRepository);
+
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) {
@@ -84,6 +106,18 @@ Future<void> main() async {
                 updateTransactionUseCase: updateTransaction,
               )),
       ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ChangeNotifierProvider(
+          create: (_) => AssetsProvider(
+                getAssetsUseCase: getAssets,
+                addAssetUseCase: addAsset,
+                deleteAssetUseCase: deleteAsset,
+              )),
+      ChangeNotifierProvider(
+          create: (_) => GoalsProvider(
+                getGoalsUseCase: getGoals,
+                addGoalUseCase: addGoal,
+                updateGoalProgressUseCase: updateGoalProgress,
+              )),
     ], child: const MyApp()),
   );
 }
