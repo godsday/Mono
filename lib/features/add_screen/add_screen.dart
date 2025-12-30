@@ -9,11 +9,11 @@ import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/screens/widgets/add_clipper.dart';
+import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/category_model/category_model.dart';
-import '../../features/transaction/presentation/providers/transaction_provider.dart';
-import '../../features/transaction/domain/entities/transaction_entity.dart';
+import '../transaction/presentation/providers/transaction_provider.dart';
+import '../transaction/domain/entities/transaction_entity.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});

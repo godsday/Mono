@@ -5,12 +5,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/features/edit_screen/edit_screen.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
 import 'package:mono/providers/app_state.dart';
-import 'package:mono/screens/edit_screen/edit_screen.dart';
-import 'package:mono/screens/widgets/add_clipper.dart';
+
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
-import 'package:mono/screens/widgets/add_clipper.dart';
+import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:sizer/sizer.dart';
 
 class TranscationHeader extends StatelessWidget {

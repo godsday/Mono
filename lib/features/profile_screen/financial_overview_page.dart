@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
-import '../../features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
-import '../../features/financial_overview/budget/presentation/providers/financial_overview_provider.dart';
-import '../../features/financial_overview/budget/presentation/widgets/budget_overview_card.dart';
-import '../../features/financial_overview/budget/presentation/widgets/first_time_budget_card.dart';
-import '../../features/financial_overview/header_section.dart';
-import '../../features/financial_overview/assets/presentation/providers/assets_provider.dart';
-import '../../features/financial_overview/assets/presentation/widgets/assets_overview_card.dart';
-import '../../features/financial_overview/assets/presentation/widgets/first_time_asset_card.dart';
-import '../../features/financial_overview/goals/presentation/providers/goals_provider.dart';
-import '../../features/financial_overview/goals/presentation/widgets/goals_overview_card.dart';
-import '../../features/financial_overview/goals/presentation/widgets/first_time_goal_card.dart';
+import '../financial_overview/budget/data/repositories/budget_repository_impl.dart';
+import '../financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
+import '../financial_overview/budget/presentation/providers/financial_overview_provider.dart';
+import '../financial_overview/budget/presentation/widgets/budget_overview_card.dart';
+import '../financial_overview/budget/presentation/widgets/first_time_budget_card.dart';
+import '../financial_overview/header_section.dart';
+import '../financial_overview/assets/presentation/providers/assets_provider.dart';
+import '../financial_overview/assets/presentation/widgets/assets_overview_card.dart';
+import '../financial_overview/assets/presentation/widgets/first_time_asset_card.dart';
+import '../financial_overview/goals/presentation/providers/goals_provider.dart';
+import '../financial_overview/goals/presentation/widgets/goals_overview_card.dart';
+import '../financial_overview/goals/presentation/widgets/first_time_goal_card.dart';
 
 class FinancialOverviewPage extends StatefulWidget {
   const FinancialOverviewPage({super.key});
@@ -59,10 +59,10 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                     const SizedBox(height: 30),
                     Consumer<FinancialOverviewProvider>(
                       builder: (context, provider, _) {
-                        if (provider.isLoading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                        // if (provider.isLoading) {
+                        //   return const Center(
+                        //       child: CircularProgressIndicator());
+                        // }
 
                         if (provider.isFirstTimeUser) {
                           return const FirstTimeBudgetCard();
@@ -76,10 +76,10 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                     // Assets Section
                     Consumer<AssetsProvider>(
                       builder: (context, provider, _) {
-                        if (provider.isLoading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                        // if (provider.isLoading) {
+                        //   return const Center(
+                        //       child: CircularProgressIndicator());
+                        // }
                         if (provider.assets.isEmpty) {
                           return const FirstTimeAssetCard();
                         } else {
@@ -93,10 +93,10 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                     // Goals Section
                     Consumer<GoalsProvider>(
                       builder: (context, provider, _) {
-                        if (provider.isLoading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                        // if (provider.isLoading) {
+                        //   return const Center(
+                        //       child: CircularProgressIndicator());
+                        // }
                         if (provider.goals.isEmpty) {
                           return const FirstTimeGoalCard();
                         } else {

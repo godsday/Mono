@@ -123,7 +123,7 @@ class TotalBalanceCard extends StatelessWidget {
               ),
               appState.isThisMonth
                   ? SizedBox(
-                      height: 5.7.h,
+                      height: 6.5.h,
                       child: Row(
                         children: [
                           Icon(
@@ -151,7 +151,7 @@ class TotalBalanceCard extends StatelessWidget {
                       ),
                     )
                   : SizedBox(
-                      height: 3.7.h,
+                      height: 6.5.h,
                     ),
               Padding(
                 padding: EdgeInsets.only(top: 1.h, left: 5.w, right: 5.w),

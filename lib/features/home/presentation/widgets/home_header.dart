@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/colors/app_colors.dart';
-
-extension StringExtension on String {
-  String capitalizeFirstLetter() {
-    return "${this[0].toUpperCase()}${substring(1)}";
-  }
-}
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -22,7 +17,7 @@ class HomeHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Hi ${homeProvider.userName}",
+              "Hi ${homeProvider.userName.capitalizeFirstLetter()}",
               style: AppTextTheme.montserrart(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,

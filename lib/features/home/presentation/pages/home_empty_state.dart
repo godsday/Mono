@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/screens/add_screen/add_screen.dart';
+import 'package:mono/features/add_screen/add_screen.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,12 +22,12 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     // Staggered animations
     _illustrationAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
@@ -35,21 +35,21 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
         curve: Curves.easeOut,
       ),
     );
-    
+
     _textAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.15, 1.0, curve: Curves.easeOut),
       ),
     );
-    
+
     _buttonAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.25, 1.0, curve: Curves.easeOut),
       ),
     );
-    
+
     // Start animation after frame
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
@@ -98,7 +98,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Title with gradient text and animation
           FadeTransition(
             opacity: _textAnimation,
@@ -116,14 +116,15 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white, // This color will be ignored due to ShaderMask
+                  color: Colors
+                      .white, // This color will be ignored due to ShaderMask
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Subtitle with animation
           FadeTransition(
             opacity: _textAnimation,
@@ -139,7 +140,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             ),
           ),
           const SizedBox(height: 32),
-          
+
           // Primary Button with animation
           FadeTransition(
             opacity: _buttonAnimation,
@@ -172,7 +173,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             ),
           ),
           const SizedBox(height: 28),
-          
+
           // Footer text
           const Text(
             "Your data is safely encrypted.",

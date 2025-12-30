@@ -7,7 +7,7 @@ import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/screens/widgets/add_clipper.dart';
+import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
 class EditScreen extends StatefulWidget {

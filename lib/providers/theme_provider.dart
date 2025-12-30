@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/screens/setting_screen/settings_widgets/sharedprefernce.dart';
+import 'package:mono/features/setting_screen/settings_widgets/sharedprefernce.dart';
 
 class DarkThemeProvider with ChangeNotifier {
   DarkThemePreferences darkThemePreferences = DarkThemePreferences();
@@ -12,4 +12,3 @@ class DarkThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-

@@ -25,7 +25,7 @@ class IncomeExpenseCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(horizontal: 4.1.w, vertical: 1.5.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

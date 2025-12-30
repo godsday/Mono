@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
-import 'package:mono/screens/widgets/bottomnavigationbar.dart';
+import 'package:mono/features/widgets/bottomnavigationbar.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/main.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
 import 'package:mono/features/home/presentation/widgets/total_balance_card.dart';
@@ -60,33 +61,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 alignment: Alignment.topCenter,
                 clipBehavior: Clip.none,
                 children: [
-                  ClipPath(
-                    clipper: CurveClipper2(),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(15),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      height: 55.h,
-                    ),
-                  ),
+                  // curve shape
+                  const HomepageCurveShape(),
 
+                  // name and greeting Header
                   Positioned(
                     top: 5.h,
                     left: 7.w,
                     child: const HomeHeader(),
                   ),
 
+                  // lightbulb icon
                   Positioned(
                     top: 4.h,
                     right: 7.w,
@@ -118,6 +103,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             borderRadius: BorderRadius.circular(24.0)),
                       )),
 
+                  // total balance card
                   Positioned(
                     top: 14.h,
                     left: 7.w,
@@ -133,7 +119,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       image: const AssetImage('assets/images/rings.png'),
                     ),
                   ),
-
                   Positioned(
                     right: 5.w,
                     bottom: 4.h,
@@ -197,8 +182,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           orientation: LShapeOrientation.leftLegOnLeft,
                           color: AppColor.greenContainer,
                           icons: Icons.account_balance,
-                          categories: transactionProvider.topIncomeCategories,
-                          totalAmount: transactionProvider.totalIncome,
+                          categories: appState.topIncomeCategories,
+                          totalAmount: appState.totalIncome,
                         ),
                         SizedBox(width: 4.w),
                         LShapeWidget(
@@ -206,8 +191,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           orientation: LShapeOrientation.leftLegOnRight,
                           color: AppColor.redContainer,
                           icons: Icons.account_balance_wallet,
-                          categories: transactionProvider.topExpenseCategories,
-                          totalAmount: transactionProvider.totalExpense,
+                          categories: appState.topExpenseCategories,
+                          totalAmount: appState.totalExpense,
                         ),
                       ],
                     ),
@@ -239,6 +224,36 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class HomepageCurveShape extends StatelessWidget {
+  const HomepageCurveShape({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: CurveClipper2(),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF429690), Color(0xFF1E4744)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(15),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        height: 55.h,
       ),
     );
   }
