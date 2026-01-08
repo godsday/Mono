@@ -463,7 +463,7 @@ class _AddScreenState extends State<AddScreen> {
                                                   .copyWith(
                                                 color: AppColor.textGrey
                                                     .withValues(alpha: 0.7),
-                                                fontSize: 12.sp,
+                                                fontSize: 15.sp,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),

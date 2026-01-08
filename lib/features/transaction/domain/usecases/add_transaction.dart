@@ -7,6 +7,7 @@ class AddTransaction {
   AddTransaction(this.repository);
 
   Future<void> call(TransactionEntity transaction) async {
+    print("adding transcation : $transaction");
     return await repository.addTransaction(transaction);
   }
 }

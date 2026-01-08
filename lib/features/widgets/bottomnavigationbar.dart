@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 // import 'package:mono/screens/home_screen/home_screen.dart'; // Deprecated
 import 'package:mono/features/home/presentation/pages/home_page.dart';
-import 'package:mono/features/profile_screen/financial_overview_page.dart';
+import 'package:mono/features/financial_overview/financial_overview_page.dart';
 import 'package:mono/features/setting_screen/settings_screen.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
 

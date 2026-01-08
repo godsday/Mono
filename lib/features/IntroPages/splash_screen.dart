@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -65,50 +66,54 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 2000),
-                curve: Curves.fastLinearToSlowEaseIn,
-                height: height / _fontSize,
-              ),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 2000),
-                opacity: _textOpacity,
-                child: Text(
-                  'MONO',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.sp,
+      // backgroundColor: Theme.of(context).primaryColorDark,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(gradient: AppColor.mainGradient),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 2000),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  height: height / _fontSize,
+                ),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 2000),
+                  opacity: _textOpacity,
+                  child: Text(
+                    'MONO',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.sp,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Center(
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 5000),
-              curve: Curves.fastLinearToSlowEaseIn,
-              opacity: _containerOpacity,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 1000),
+              ],
+            ),
+            Center(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 5000),
                 curve: Curves.fastLinearToSlowEaseIn,
-                height: 15.h,
-                width: 15.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorDark,
-                  borderRadius: BorderRadius.circular(30),
+                opacity: _containerOpacity,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 1000),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  height: 15.h,
+                  width: 15.h,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Image.asset('assets/images/OrginalIcon.png'),
                 ),
-                child: Image.asset('assets/images/OrginalIcon.png'),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

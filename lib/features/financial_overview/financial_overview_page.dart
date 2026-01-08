@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../financial_overview/budget/data/repositories/budget_repository_impl.dart';
-import '../financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
-import '../financial_overview/budget/presentation/providers/financial_overview_provider.dart';
-import '../financial_overview/budget/presentation/widgets/budget_overview_card.dart';
-import '../financial_overview/budget/presentation/widgets/first_time_budget_card.dart';
-import '../financial_overview/header_section.dart';
-import '../financial_overview/assets/presentation/providers/assets_provider.dart';
-import '../financial_overview/assets/presentation/widgets/assets_overview_card.dart';
-import '../financial_overview/assets/presentation/widgets/first_time_asset_card.dart';
-import '../financial_overview/goals/presentation/providers/goals_provider.dart';
-import '../financial_overview/goals/presentation/widgets/goals_overview_card.dart';
-import '../financial_overview/goals/presentation/widgets/first_time_goal_card.dart';
+import 'budget/data/repositories/budget_repository_impl.dart';
+import 'budget/domain/usecases/get_current_month_budget_usecase.dart';
+import 'budget/presentation/providers/financial_overview_provider.dart';
+import 'budget/presentation/widgets/budget_overview_card.dart';
+import 'budget/presentation/widgets/first_time_budget_card.dart';
+import 'header_section.dart';
+import 'assets/presentation/providers/assets_provider.dart';
+import 'assets/presentation/widgets/assets_overview_card.dart';
+import 'assets/presentation/widgets/first_time_asset_card.dart';
+import 'goals/presentation/providers/goals_provider.dart';
+import 'goals/presentation/widgets/goals_overview_card.dart';
+import 'goals/presentation/widgets/first_time_goal_card.dart';
 
 class FinancialOverviewPage extends StatefulWidget {
   const FinancialOverviewPage({super.key});
@@ -56,14 +56,8 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 30),
                     Consumer<FinancialOverviewProvider>(
                       builder: (context, provider, _) {
-                        // if (provider.isLoading) {
-                        //   return const Center(
-                        //       child: CircularProgressIndicator());
-                        // }
-
                         if (provider.isFirstTimeUser) {
                           return const FirstTimeBudgetCard();
                         } else {

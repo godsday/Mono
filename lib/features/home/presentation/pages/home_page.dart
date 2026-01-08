@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return Scaffold(
       body: Consumer<TransactionProvider>(
         builder: (context, transactionProvider, child) {
+          print("transactions: called");
           if (transactionProvider.transactions.isEmpty &&
               !transactionProvider.isLoading) {
             return const HomeEmptyState();

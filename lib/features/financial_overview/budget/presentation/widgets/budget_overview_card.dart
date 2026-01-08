@@ -52,7 +52,6 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -62,10 +61,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
           ),
         ],
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFFF9F5FF),
-            Colors.white,
-          ],
+          colors: [Color(0xFF521F66), Color(0xFF84509B)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

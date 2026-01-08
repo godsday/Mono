@@ -15,6 +15,7 @@ class TotalBalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(builder: (context, appState, child) {
+      print("total balance called: ${appState.totalBalance}");
       return Container(
         height: 25.5.h,
         decoration: BoxDecoration(
@@ -48,14 +49,16 @@ class TotalBalanceCard extends StatelessWidget {
                         height: .5.h,
                       ),
                       AutoSizeText(
-                        appState.totalBalance < 0
-                            ? "Over Spent"
-                            : '₹ ${appState.totalBalance.toStringAsFixed(1)}',
+                        appState.totalBalance == 0
+                            ? "is Zero"
+                            : appState.totalBalance < 0
+                                ? "Over Spent"
+                                : '₹ ${appState.totalBalance.toStringAsFixed(0)}',
                         maxLines: 1,
                         style: AppTextStyles.roboto18w600SemiBoldWhite(context)!
                             .copyWith(
                                 fontSize:
-                                    appState.totalBalance < 0 ? 19.sp : 24.sp),
+                                    appState.totalBalance < 0 ? 19.sp : 19.sp),
                       ),
 
                       /*  TextButton(
