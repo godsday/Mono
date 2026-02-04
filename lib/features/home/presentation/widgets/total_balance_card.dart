@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/features/home/presentation/widgets/income_expense_card.dart';
-import 'package:mono/providers/app_state.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -14,8 +14,8 @@ class TotalBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(builder: (context, appState, child) {
-      print("total balance called: ${appState.totalBalance}");
+    return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
+      print("total balance called: ${homeProvider.transactions}");
       return Container(
         height: 25.5.h,
         decoration: BoxDecoration(
@@ -49,16 +49,19 @@ class TotalBalanceCard extends StatelessWidget {
                         height: .5.h,
                       ),
                       AutoSizeText(
-                        appState.totalBalance == 0
+                        homeProvider.totalBalance() == 0
                             ? "is Zero"
-                            : appState.totalBalance < 0
+                            : homeProvider.totalBalance() < 0
                                 ? "Over Spent"
-                                : '₹ ${appState.totalBalance.toStringAsFixed(0)}',
+                                : homeProvider.isThisMonth
+                                    ? '₹ ${homeProvider.getThisMonthBalance().toStringAsFixed(0)}'
+                                    : '₹ ${homeProvider.totalBalance().toStringAsFixed(0)}',
                         maxLines: 1,
                         style: AppTextStyles.roboto18w600SemiBoldWhite(context)!
                             .copyWith(
-                                fontSize:
-                                    appState.totalBalance < 0 ? 19.sp : 19.sp),
+                                fontSize: homeProvider.totalBalance() < 0
+                                    ? 19.sp
+                                    : 19.sp),
                       ),
 
                       /*  TextButton(
@@ -101,9 +104,9 @@ class TotalBalanceCard extends StatelessWidget {
                                   scale: .47,
                                   child: Switch.adaptive(
                                       activeThumbColor: AppColor.mainHexcolor,
-                                      value: appState.isThisMonth,
+                                      value: homeProvider.isThisMonth,
                                       onChanged: (value) {
-                                        appState.thisMonthSwitch(value);
+                                        homeProvider.thisMonthSwitch(value);
                                       }),
                                 ))
                           ],
@@ -112,9 +115,9 @@ class TotalBalanceCard extends StatelessWidget {
                       SizedBox(
                         height: .5.h,
                       ),
-                      if (appState.isThisMonth)
+                      if (homeProvider.isThisMonth)
                         Text(
-                          appState.getSpendingCycleLabel(),
+                          homeProvider.getSpendingCycleLabel(),
                           style: AppTextStyles.poppins12w300White(context)!
                               .copyWith(
                             fontWeight: FontWeight.w400,
@@ -124,27 +127,31 @@ class TotalBalanceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              appState.isThisMonth
+              homeProvider.isThisMonth
                   ? SizedBox(
                       height: 6.5.h,
                       child: Row(
                         children: [
                           Icon(
-                            appState.totalExpense > appState.totalIncome
+                            homeProvider.totalExpense() >
+                                    homeProvider.totalIncome()
                                 ? Icons.keyboard_arrow_down_rounded
                                 : Icons.keyboard_arrow_up_rounded,
-                            color: appState.totalExpense > appState.totalIncome
+                            color: homeProvider.totalExpense() >
+                                    homeProvider.totalIncome()
                                 ? AppColor.expenseRed
                                 : AppColor.incomeGreen,
                           ),
                           Text(
-                            appState.totalExpense > appState.totalIncome
-                                ? "${((appState.totalExpense - appState.totalIncome) / appState.totalIncome * 100).toStringAsFixed(0)} % "
-                                : "You saved ${(appState.totalIncome - appState.totalExpense).toStringAsFixed(0)} % extra ",
+                            homeProvider.totalExpense() >
+                                    homeProvider.totalIncome()
+                                ? "${((homeProvider.totalExpense() - homeProvider.totalIncome()) / homeProvider.totalIncome() * 100).toStringAsFixed(0)} % "
+                                : "You saved ${(homeProvider.totalIncome() - homeProvider.totalExpense()).toStringAsFixed(0)} % extra ",
                             style: AppTextStyles.poppins12w300White(context),
                           ),
                           Text(
-                            appState.totalExpense > appState.totalIncome
+                            homeProvider.totalExpense() >
+                                    homeProvider.totalIncome()
                                 ? "higher compared to last month"
                                 : "compared to last month",
                             style: AppTextStyles.poppins12w300White(context)!
@@ -157,18 +164,22 @@ class TotalBalanceCard extends StatelessWidget {
                       height: 6.5.h,
                     ),
               Padding(
-                padding: EdgeInsets.only(top: 1.h, left: 5.w, right: 5.w),
+                padding: EdgeInsets.only(top: 1.h, left: 5.w, right: 4.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     IncomeExpenseCard(
                       transactionType: "Earnings",
-                      value: appState.totalIncome,
+                      value: homeProvider.isThisMonth
+                          ? homeProvider.getThisMonthIncome()
+                          : homeProvider.totalIncome(),
                     ),
                     IncomeExpenseCard(
                       transactionType: "Spendings",
-                      value: appState.totalExpense,
+                      value: homeProvider.isThisMonth
+                          ? homeProvider.getThisMonthExpense()
+                          : homeProvider.totalExpense(),
                     )
                   ],
                 ),

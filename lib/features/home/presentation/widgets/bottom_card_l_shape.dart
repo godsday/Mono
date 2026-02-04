@@ -173,7 +173,7 @@ class LShapeWidget extends StatelessWidget {
             Positioned(
               bottom: -24.sp,
               left:
-                  orientation == LShapeOrientation.leftLegOnLeft ? 3.5.w : 16.w,
+                  orientation == LShapeOrientation.leftLegOnLeft ? 3.5.w : 14.w,
               right: 0,
               height: totalHeight * 0.04.h, // Adjust height of content area
               child: Text(

@@ -1,5 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mono/features/home/data/repositories/home_repository_imp.dart';
+import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
+import 'package:mono/features/home/domain/usecase/calculate_this_month.dart';
+import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
+import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
+import 'package:mono/features/home/domain/usecase/get_top_categories.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
@@ -10,7 +16,6 @@ import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/transcation_model/transcation_model.dart';
 import 'package:mono/models/category_model/category_model.dart';
-import 'package:mono/providers/app_state.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/routes/app_router.dart';
 import 'package:mono/routes/route_names.dart';
@@ -38,7 +43,7 @@ import 'package:mono/features/financial_overview/goals/presentation/providers/go
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
-AppState appState = AppState();
+
 LocaleProvider localeProvider = LocaleProvider();
 
 Future<void> main() async {
@@ -61,16 +66,23 @@ Future<void> main() async {
 
   await TranscationDB.instance.getalltranscation();
   await CategoryDB.instance.initializeCategories();
-  await appState.loadCategories();
+  // await appState.loadCategories();
 
   // Clean Architecture Setup
   final localDataSource = TransactionLocalDataSourceImpl();
   final repository =
       TransactionRepositoryImpl(localDataSource: localDataSource);
+
   final getTransactions = GetTransactions(repository);
   final addTransaction = AddTransaction(repository);
   final deleteTransaction = DeleteTransaction(repository);
   final updateTransaction = UpdateTransaction(repository);
+  final homeRepository = HomeRepositoryImp();
+  final totalBalanceUseCase = TotalBalanceUseCase(homeRepository);
+  final totalIncomeUseCase = TotalIncomeUseCase(homeRepository);
+  final totalExpenseUseCase = TotalExpenseUseCase(homeRepository);
+  final calculateThisMonth = CalculateThisMonth(homeRepository);
+  final getTopCategoriesUseCase = GetTopCategories(homeRepository);
 
   // Assets Setup
   final assetRepository = AssetRepositoryImpl();
@@ -87,9 +99,6 @@ Future<void> main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) {
-        return appState;
-      }),
-      ChangeNotifierProvider(create: (_) {
         return themeChangeProvider;
       }),
       ChangeNotifierProvider(create: (_) {
@@ -105,7 +114,18 @@ Future<void> main() async {
                 deleteTransactionUseCase: deleteTransaction,
                 updateTransactionUseCase: updateTransaction,
               )),
-      ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ChangeNotifierProxyProvider<TransactionProvider, HomeProvider>(
+        create: (_) => HomeProvider(
+            getTopCategoriesUseCase: getTopCategoriesUseCase,
+            calculateThisMonth: calculateThisMonth,
+            totalBalanceUseCase: totalBalanceUseCase,
+            totalIncomeUseCase: totalIncomeUseCase,
+            totalExpenseUseCase: totalExpenseUseCase),
+        update: (context, transactionProvider, homeProvider) {
+          homeProvider!.updateTransactions(transactionProvider.transactions);
+          return homeProvider;
+        },
+      ),
       ChangeNotifierProvider(
           create: (_) => AssetsProvider(
                 getAssetsUseCase: getAssets,
@@ -144,9 +164,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // await checkflight(context);
-      final list = await TranscationDB.instance.getalltranscation();
+      // final list = await TranscationDB.instance.getalltranscation();
       if (mounted) {
-        Provider.of<AppState>(context, listen: false).totalBalanceCheck(list);
+        // Provider.of<HomeProvider>(context, listen: false).updateTransactions(list.map((e) => e.toEntity()).toList());
+        // Provider.of<AppState>(context, listen: false).totalBalanceCheck(list);
       } // await Provider.of<AppState>(context, listen: false).refresh();
     });
     scheduleMicrotask(() async {});

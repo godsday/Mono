@@ -7,13 +7,13 @@ import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/features/edit_screen/edit_screen.dart';
+import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
-import 'package:mono/providers/app_state.dart';
 
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../../../models/transcation_model/transcation_model.dart';
 import 'transcation_widgets/graph_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -34,7 +34,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
   @override
   void initState() {
     // TranscationDB.instance.refresh();
-    Provider.of<AppState>(context, listen: false).refresh();
+    Provider.of<TransactionProvider>(context, listen: false).refresh();
 
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
@@ -97,7 +97,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
   }
 
   Widget _buildFilterChip(String filterName, BuildContext context) {
-    return Consumer<AppState>(
+    return Consumer<TransactionProvider>(
       builder: (context, provider, child) {
         final isSelected = provider.itemvalue == filterName;
         return GestureDetector(
@@ -133,16 +133,16 @@ class _TranscationScreenState extends State<TranscationScreen> {
     if (dateRange != null) {
       if (!context.mounted) return;
       // Update the provider with the selected date range
-      final provider = Provider.of<AppState>(context, listen: false);
+      final provider = Provider.of<TransactionProvider>(context, listen: false);
       provider.itemvalue = 'Custom';
       provider.custompick(dateRange.start, dateRange.end);
       provider.refresh();
     }
   }
 
-  Widget _buildGroupedTransactionList(List<TranscationModel> transactions) {
+  Widget _buildGroupedTransactionList(List<TransactionEntity> transactions) {
     // Group transactions by date
-    Map<String, List<TranscationModel>> groupedTransactions = {};
+    Map<String, List<TransactionEntity>> groupedTransactions = {};
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     DateFormat displayFormat = DateFormat('MMM d, yyyy');
 
@@ -229,9 +229,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                             builder: (context) =>
                                 EditScreen(value: transaction)));
 
-                    setState(() {
-                      // Update transaction if needed
-                    });
+                    // Update transaction if needed
                   }),
                 ),
               ],
@@ -246,7 +244,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   label: 'Delete',
                   onPressed: ((context) {
                     TranscationDB.instance.deletetranscation(transaction.id);
-                    Provider.of<AppState>(context, listen: false).refresh();
+                    Provider.of<TransactionProvider>(context, listen: false)
+                        .refresh();
 
                     setState(() {});
 
@@ -286,7 +285,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                       ),
                     ),
                     subtitle: Text(
-                      Provider.of<AppState>(context, listen: false)
+                      Provider.of<TransactionProvider>(context, listen: false)
                           .parsedate(transaction.date),
                       style: TextStyle(
                         color: Colors.black,
@@ -348,7 +347,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
             width: double.infinity,
             height: 40,
             alignment: Alignment.center,
-            child: Consumer<AppState>(
+            child: Consumer<TransactionProvider>(
               builder: (context, pro, child) {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.0.w),
@@ -434,7 +433,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
             ),
             child: Column(
               children: [
-                Consumer<AppState>(builder: (context, pro, child) {
+                Consumer<TransactionProvider>(builder: (context, pro, child) {
                   return pro.itemvalue == "All"
                       ? VisibleChart(tooltipBehavior: _tooltipBehavior)
                       : pro.itemvalue == "Income"
@@ -476,7 +475,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                             ],
                           ),
                         ),
-                        Consumer<AppState>(builder: (context, provider, child) {
+                        Consumer<TransactionProvider>(
+                            builder: (context, provider, child) {
                           return Container(
                               height: 4.h,
                               decoration: const BoxDecoration(
@@ -493,10 +493,11 @@ class _TranscationScreenState extends State<TranscationScreen> {
                             color: const Color.fromARGB(255, 215, 215, 214),
                             child: ValueListenableBuilder(
                                 valueListenable:
-                                    Provider.of<AppState>(context, listen: true)
+                                    Provider.of<TransactionProvider>(context,
+                                            listen: true)
                                         .listingMethod(),
                                 builder: (BuildContext context,
-                                    List<TranscationModel> newlist, _) {
+                                    List<TransactionEntity> newlist, _) {
                                   return newlist.isEmpty
                                       ? Stack(children: [
                                           Lottie.asset(

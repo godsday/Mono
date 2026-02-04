@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/main.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
@@ -175,28 +176,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0, right: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        LShapeWidget(
-                          type: "Income",
-                          orientation: LShapeOrientation.leftLegOnLeft,
-                          color: AppColor.greenContainer,
-                          icons: Icons.account_balance,
-                          categories: appState.topIncomeCategories,
-                          totalAmount: appState.totalIncome,
-                        ),
-                        SizedBox(width: 4.w),
-                        LShapeWidget(
-                          type: "Expense",
-                          orientation: LShapeOrientation.leftLegOnRight,
-                          color: AppColor.redContainer,
-                          icons: Icons.account_balance_wallet,
-                          categories: appState.topExpenseCategories,
-                          totalAmount: appState.totalExpense,
-                        ),
-                      ],
-                    ),
+                    child: Consumer<HomeProvider>(
+                        builder: (context, homeProvider, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          LShapeWidget(
+                            type: "Income",
+                            orientation: LShapeOrientation.leftLegOnLeft,
+                            color: AppColor.greenContainer,
+                            icons: Icons.account_balance,
+                            categories: homeProvider.topIncomeCategories,
+                            totalAmount: homeProvider.totalIncome(),
+                          ),
+                          SizedBox(width: 4.w),
+                          LShapeWidget(
+                            type: "Expense",
+                            orientation: LShapeOrientation.leftLegOnRight,
+                            color: AppColor.redContainer,
+                            icons: Icons.account_balance_wallet,
+                            categories: homeProvider.topExpenseCategories,
+                            totalAmount: homeProvider.totalExpense(),
+                          ),
+                        ],
+                      );
+                    }),
                   ),
                   Positioned(
                     top: 8.6.h,

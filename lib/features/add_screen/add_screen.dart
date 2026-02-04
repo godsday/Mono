@@ -3,14 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
-import 'package:mono/core/utils/extension/app_extension.dart';
-import 'package:mono/providers/app_state.dart';
+import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import '../transaction/presentation/providers/transaction_provider.dart';
 import '../transaction/domain/entities/transaction_entity.dart';
@@ -23,21 +21,13 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
-  List<dynamic> transcationType = [];
-  List<dynamic> categorieslist = [];
-  List<dynamic> categories = [];
-  String? selectedValue;
-  String? transctiontypeid;
-  String? categoryid;
   final amountcontrol = TextEditingController();
   final notescontrol = TextEditingController();
-
-  DateTime selectedDate = DateTime.now();
 
   final _formkey = GlobalKey<FormState>();
 
   // Helper method to get a valid category for the dropdown
-  String? _getValidCategory(AppState provider) {
+  String? _getValidCategory(TransactionProvider provider) {
     // If no category is selected, return null to show the hint
     if (provider.categorySelected == null ||
         provider.categorySelected!.isEmpty) {
@@ -47,129 +37,12 @@ class _AddScreenState extends State<AddScreen> {
     return provider.categorySelected;
   }
 
-  // Method to show dialog for adding custom categories
-  void _showAddCategoryDialog(BuildContext context, AppState provider) async {
-    final categoryNameController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Add Custom Category',
-            style: AppTextStyles.montserrat18w600.copyWith(
-              color: Theme.of(context).textTheme.bodyLarge?.color,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Enter a name for your new category',
-                style: AppTextStyles.poppins16w400.copyWith(
-                  color: AppColor.grey600,
-                  fontSize: 14.sp,
-                ),
-              ),
-              SizedBox(height: 1.h),
-              TextField(
-                controller: categoryNameController,
-                decoration: textfielddecor("Category name"),
-                autofocus: true,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Cancel',
-                style: AppTextStyles.poppins16w400.copyWith(
-                  color: AppColor.grey600,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                String categoryName = categoryNameController.text.trim();
-                final data = categoryName.capitalizeFirstLetter().toString();
-                print(data);
-                if (categoryName.isEmpty) {
-                  // Show error if category name is empty
-                  ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
-                      message: "Category name cannot be empty"));
-                  return;
-                }
-
-                // Check if category already exists
-                final allCategories = await CategoryDB.instance.getCategories();
-
-                if (!context.mounted) return;
-
-                bool categoryExists = allCategories.any((category) =>
-                    category.name.toLowerCase() == categoryName.toLowerCase() &&
-                    ((provider.selectedType == "Income" &&
-                            category.type == CategoryType.income) ||
-                        (provider.selectedType == "Expense" &&
-                            category.type == CategoryType.expense)));
-
-                if (categoryExists) {
-                  // Show error if category already exists
-                  ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
-                      message: "Category '$categoryName' already exists"));
-                  return;
-                }
-
-                // Add to database
-                final newCategory = CategoryModel(
-                    id: DateTime.now().millisecondsSinceEpoch.toString(),
-                    type: provider.selectedType == "Income"
-                        ? CategoryType.income
-                        : CategoryType.expense,
-                    name: categoryName.capitalizeFirstLetter());
-
-                await CategoryDB.instance.insertCategory(newCategory);
-
-                if (!context.mounted) return;
-
-                // Select the newly added category
-                provider.categorySelected =
-                    categoryName.capitalizeFirstLetter();
-                await provider.loadCategories();
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColor.mainHexcolor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                'Save',
-                style: AppTextStyles.poppins16w400.copyWith(
-                  color: AppColor.white,
-                ),
-              ),
-            ),
-          ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<AppState>(context, listen: false);
-      provider.loadCategories();
+      final provider = Provider.of<TransactionProvider>(context, listen: false);
+      // provider.loadCategories();
       provider.categorySelected = null;
     });
   }
@@ -256,7 +129,7 @@ class _AddScreenState extends State<AddScreen> {
                             ),
                             SizedBox(
                               width: double.infinity,
-                              child: Consumer<AppState>(
+                              child: Consumer<TransactionProvider>(
                                 builder: (context, provider, child) => Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -351,7 +224,7 @@ class _AddScreenState extends State<AddScreen> {
                             SizedBox(
                               height: .5.h,
                             ),
-                            Consumer<AppState>(
+                            Consumer<TransactionProvider>(
                                 builder: (context, provider, child) => InkWell(
                                       onTap: () async {
                                         final date =
@@ -408,7 +281,7 @@ class _AddScreenState extends State<AddScreen> {
                             SizedBox(
                               height: .5.h,
                             ),
-                            Consumer<AppState>(
+                            Consumer<TransactionProvider>(
                               builder: (context, provider, child) {
                                 // Filter categories based on selected transaction type
                                 final categories = provider.allCategories
@@ -511,7 +384,7 @@ class _AddScreenState extends State<AddScreen> {
                                           color: AppColor.white,
                                         ),
                                         onPressed: () {
-                                          _showAddCategoryDialog(
+                                          showAddCategoryDialog(
                                               context, provider);
                                         },
                                       ),
@@ -547,9 +420,10 @@ class _AddScreenState extends State<AddScreen> {
                                   // Validate form before submitting
                                   if (_formkey.currentState!.validate()) {
                                     // Check if category is selected
-                                    final provider = Provider.of<AppState>(
-                                        context,
-                                        listen: false);
+                                    final provider =
+                                        Provider.of<TransactionProvider>(
+                                            context,
+                                            listen: false);
                                     if (provider.categorySelected == null ||
                                         provider.categorySelected!.isEmpty) {
                                       ScaffoldMessenger.of(context)
