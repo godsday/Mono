@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
+import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
+import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
@@ -14,8 +17,12 @@ class TransactionProvider with ChangeNotifier {
   final AddTransaction addTransactionUseCase;
   final DeleteTransaction deleteTransactionUseCase;
   final UpdateTransaction updateTransactionUseCase;
+  final TotalBalanceUseCase totalBalanceUseCase;
+  final TotalIncomeUseCase totalIncomeUseCase;
+  final TotalExpenseUseCase totalExpenseUseCase;
 
   List<TranscationModel> _transactions = [];
+
   bool _isLoading = false;
   String? _error;
 
@@ -24,7 +31,13 @@ class TransactionProvider with ChangeNotifier {
     required this.addTransactionUseCase,
     required this.deleteTransactionUseCase,
     required this.updateTransactionUseCase,
+    required this.totalBalanceUseCase,
+    required this.totalIncomeUseCase,
+    required this.totalExpenseUseCase,
   });
+
+  // double get totalBalance => homeProvider.totalBalance;
+
   DateTimeRange? dateRange;
   DateTime start = DateTime.now().subtract(const Duration(days: 3));
   DateTime end = DateTime.now();
@@ -45,6 +58,7 @@ class TransactionProvider with ChangeNotifier {
   ValueNotifier<List<TranscationModel>> monthlylistnotifier = ValueNotifier([]);
 
   List<TranscationModel> get transactions => _transactions;
+
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -76,6 +90,7 @@ class TransactionProvider with ChangeNotifier {
       await addTransactionUseCase(transaction);
       // Optimistic update or reload
       await loadTransactions();
+      await refresh();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -86,6 +101,7 @@ class TransactionProvider with ChangeNotifier {
     try {
       await deleteTransactionUseCase(id);
       await loadTransactions();
+      await refresh();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -96,6 +112,7 @@ class TransactionProvider with ChangeNotifier {
     try {
       await updateTransactionUseCase(transaction);
       await loadTransactions();
+      await refresh();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -116,27 +133,26 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double _totalBalance = 0;
-  double _totalIncome = 0;
-  double _totalExpense = 0;
+  double get totalBalance => totalBalanceUseCase(_transactions);
+  double get totalIncome => totalIncomeUseCase(_transactions);
+  double get totalExpense => totalExpenseUseCase(_transactions);
 
-  double get totalBalance => _totalBalance;
-  set totalBalance(double value) {
-    _totalBalance = value;
-    notifyListeners();
-  }
+  // set totalBalance(double value) {
+  //   _totalBalance = value;
+  //   notifyListeners();
+  // }
 
-  double get totalIncome => _totalIncome;
-  set totalIncome(double value) {
-    _totalIncome = value;
-    notifyListeners();
-  }
+  // double get totalIncome => _totalIncome;
+  // set totalIncome(double value) {
+  //   _totalIncome = totalIncomeUseCase(_transactions);
+  //   notifyListeners();
+  // }
 
-  double get totalExpense => _totalExpense;
-  set totalExpense(double value) {
-    _totalExpense = value;
-    notifyListeners();
-  }
+  // double get totalExpense => _totalExpense;
+  // set totalExpense(double value) {
+  //   _totalExpense = totalExpenseUseCase(_transactions);
+  //   notifyListeners();
+  // }
 
   String? _categorySelected;
   String? get categorySelected => _categorySelected;
@@ -349,13 +365,10 @@ class TransactionProvider with ChangeNotifier {
       }
     });
 
-    // Calculate top categories
-    // calculateTopCategories(list);
-
-    // yesterdaylistnotifier.notifyListeners();
-    // transcationNotifier.notifyListeners();
-    // expenselistnotifier.notifyListeners();
-    // incomelistnotifier.notifyListeners();
-    // todaylistnotifier.notifyListeners();
+    yesterdaylistnotifier.notifyListeners();
+    transcationNotifier.notifyListeners();
+    expenselistnotifier.notifyListeners();
+    incomelistnotifier.notifyListeners();
+    todaylistnotifier.notifyListeners();
   }
 }

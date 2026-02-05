@@ -5,12 +5,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/features/edit_screen/edit_screen.dart';
-import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
+import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
 
 import 'package:mono/core/widgets/snackbar.dart';
@@ -46,56 +44,6 @@ class _TranscationScreenState extends State<TranscationScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  Widget _getCategoryIcon(String category, String type) {
-    // Define icon mappings based on category
-    switch (category.toLowerCase()) {
-      case 'salary':
-        return const Icon(Icons.account_balance_wallet, color: Colors.blue);
-      case 'shopping':
-        return const Icon(Icons.shopping_cart, color: Colors.purple);
-      case 'food':
-        return const Icon(Icons.fastfood, color: Colors.orange);
-      case 'travel':
-        return const Icon(Icons.flight, color: Colors.blueAccent);
-      case 'medical':
-        return const Icon(Icons.local_hospital, color: Colors.red);
-      case 'utilities':
-        return const Icon(Icons.lightbulb, color: Colors.yellow);
-      case 'education':
-      case 'educations':
-        return const Icon(Icons.school, color: Colors.green);
-      case 'entertainment':
-        return const Icon(Icons.movie, color: Colors.pink);
-      case 'insurance':
-        return const Icon(Icons.security, color: Colors.indigo);
-      case 'rental':
-        return const Icon(Icons.home, color: Colors.brown);
-      case 'gift':
-        return const Icon(Icons.card_giftcard, color: Colors.purpleAccent);
-      case 'freelance':
-        return const Icon(Icons.work, color: Colors.teal);
-      case 'commission':
-        return const Icon(Icons.business, color: Colors.deepOrange);
-
-      case 'investments':
-        return const Icon(Icons.trending_up, color: Colors.greenAccent);
-      case 'credit':
-        return const Icon(Icons.credit_card, color: Colors.blueGrey);
-      case 'debit':
-        return const Icon(Icons.account_balance, color: Colors.redAccent);
-      case 'other':
-        return Icon(
-          type == 'Income' ? Icons.attach_money : Icons.money_off,
-          color: type == 'Income' ? Colors.green : Colors.red,
-        );
-      default:
-        return Icon(
-          type == 'Income' ? Icons.arrow_downward : Icons.arrow_upward,
-          color: type == 'Income' ? Colors.green : Colors.red,
-        );
-    }
   }
 
   Widget _buildFilterChip(String filterName, BuildContext context) {
@@ -245,12 +193,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   icon: Icons.delete,
                   label: 'Delete',
                   onPressed: ((context) {
-                    TransactionLocalDataSourceImpl.instance
-                        .deleteTransaction(transaction.id);
                     Provider.of<TransactionProvider>(context, listen: false)
-                        .refresh();
-
-                    setState(() {});
+                        .deleteTransaction(transaction.id);
 
                     final snack = customSnak(context, message: "Deleted");
                     ScaffoldMessenger.of(context).showSnackBar(snack);
@@ -275,8 +219,9 @@ class _TranscationScreenState extends State<TranscationScreen> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: _getCategoryIcon(
-                            transaction.category, transaction.type),
+                        child: GetCategoryIcon(
+                            category: transaction.category,
+                            type: transaction.type),
                       ),
                     ),
                     title: Text(
@@ -331,10 +276,13 @@ class _TranscationScreenState extends State<TranscationScreen> {
       }
     });
 
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.only(top: 3),
       physics: const BouncingScrollPhysics(),
-      children: widgets,
+      itemCount: widgets.length,
+      itemBuilder: (context, index) {
+        return widgets[index];
+      },
     );
   }
 

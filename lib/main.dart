@@ -11,7 +11,6 @@ import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/models/category_model/category_model.dart';
@@ -109,6 +108,9 @@ Future<void> main() async {
       }),
       ChangeNotifierProvider(
           create: (_) => TransactionProvider(
+                totalBalanceUseCase: totalBalanceUseCase,
+                totalIncomeUseCase: totalIncomeUseCase,
+                totalExpenseUseCase: totalExpenseUseCase,
                 getTransactionsUseCase: getTransactions,
                 addTransactionUseCase: addTransaction,
                 deleteTransactionUseCase: deleteTransaction,

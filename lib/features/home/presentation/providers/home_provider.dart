@@ -5,7 +5,6 @@ import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
 import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
 import 'package:mono/features/home/domain/usecase/get_top_categories.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
 import 'package:mono/models/top_category_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,46 +22,47 @@ class HomeProvider with ChangeNotifier {
     required this.totalExpenseUseCase,
     required this.calculateThisMonth,
   });
-  String _userName = '';
+
+  List<TranscationModel> _transactions = [];
   bool _isThisMonth = false;
+  String _userName = '';
+
+  // ---------------- GETTERS ----------------
 
   bool get isThisMonth => _isThisMonth;
   String get userName => _userName;
-  List<TranscationModel> _transactions = [];
-
-  ValueNotifier<List<TranscationModel>> spendingCycleListNotifier =
-      ValueNotifier([]);
-  ValueNotifier<List<TranscationModel>> transcationNotifier = ValueNotifier([]);
-
   List<TranscationModel> get transactions => _transactions;
 
-  double totalBalance() {
-    return totalBalanceUseCase.call(_transactions);
+  double get totalBalance => totalBalanceUseCase(_transactions);
+
+  double get totalIncome => totalIncomeUseCase(_transactions);
+
+  double get totalExpense => totalExpenseUseCase(_transactions);
+
+  List<TopCategory> get topIncomeCategories =>
+      getTopCategoriesUseCase.getTopCategories(
+        _transactions,
+        'Income',
+      );
+
+  List<TopCategory> get topExpenseCategories =>
+      getTopCategoriesUseCase.getTopCategories(
+        _transactions,
+        'Expense',
+      );
+
+  List<TranscationModel> get spendingCycleTransactions {
+    if (!_isThisMonth) return _transactions;
+    return calculateThisMonth.filterLast31Days(_transactions);
   }
 
-  double totalIncome() {
-    return totalIncomeUseCase.call(_transactions);
-  }
+  String get spendingCycleLabel => calculateThisMonth.getSpendingCycleLabel();
 
-  double totalExpense() {
-    return totalExpenseUseCase.call(_transactions);
-  }
-
-  void filterLast31Days() {
-    spendingCycleListNotifier.value.clear();
-    final filtered = calculateThisMonth.filterLast31Days(_transactions);
-    spendingCycleListNotifier.value = filtered;
-    spendingCycleListNotifier.notifyListeners();
-  }
+  // ---------------- ACTIONS ----------------
 
   void updateTransactions(List<TranscationModel> transactions) {
     _transactions = transactions;
-
     notifyListeners();
-  }
-
-  String getSpendingCycleLabel() {
-    return calculateThisMonth.getSpendingCycleLabel();
   }
 
   void toggleThisMonth(bool value) {
@@ -70,10 +70,14 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<TopCategory> get topIncomeCategories =>
-      getTopCategoriesUseCase.getTopCategories(_transactions, 'Income');
-  List<TopCategory> get topExpenseCategories =>
-      getTopCategoriesUseCase.getTopCategories(_transactions, 'Expense');
+  double get thisMonthBalance =>
+      calculateThisMonth.getThisMonthBalance(_transactions);
+
+  double get thisMonthIncome =>
+      calculateThisMonth.getThisMonthIncome(_transactions);
+
+  double get thisMonthExpense =>
+      calculateThisMonth.getThisMonthExpense(_transactions);
 
   Future<void> loadUserName() async {
     final prefs = await SharedPreferences.getInstance();
@@ -82,39 +86,9 @@ class HomeProvider with ChangeNotifier {
   }
 
   String get greeting {
-    var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning';
-    }
-    if (hour < 17) {
-      return 'Good Afternoon';
-    }
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
-  }
-
-  List<TopCategory> getTopCategories(String type) {
-    return getTopCategoriesUseCase.getTopCategories(transactions, type);
-  }
-
-  double getThisMonthBalance() {
-    return calculateThisMonth.getThisMonthBalance(transactions);
-  }
-
-  double getThisMonthIncome() {
-    return calculateThisMonth.getThisMonthIncome(transactions);
-  }
-
-  double getThisMonthExpense() {
-    return calculateThisMonth.getThisMonthExpense(transactions);
-  }
-
-  thisMonthSwitch(bool value) async {
-    _isThisMonth = !isThisMonth;
-    print('isThisMonth $isThisMonth');
-    if (isThisMonth) {
-      filterLast31Days();
-      getSpendingCycleLabel();
-    }
-    notifyListeners();
   }
 }

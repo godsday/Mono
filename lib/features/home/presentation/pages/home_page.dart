@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
-import 'package:mono/main.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
 import 'package:mono/features/home/presentation/widgets/total_balance_card.dart';
@@ -187,7 +186,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             color: AppColor.greenContainer,
                             icons: Icons.account_balance,
                             categories: homeProvider.topIncomeCategories,
-                            totalAmount: homeProvider.totalIncome(),
+                            totalAmount: homeProvider.totalIncome,
                           ),
                           SizedBox(width: 4.w),
                           LShapeWidget(
@@ -196,7 +195,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             color: AppColor.redContainer,
                             icons: Icons.account_balance_wallet,
                             categories: homeProvider.topExpenseCategories,
-                            totalAmount: homeProvider.totalExpense(),
+                            totalAmount: homeProvider.totalExpense,
                           ),
                         ],
                       );
