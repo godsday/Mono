@@ -1,14 +1,31 @@
-import 'package:mono/features/home/domain/repositories/home_repository.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/models/top_category_model.dart';
 
 class GetTopCategories {
-  final HomeRepository homeRepository;
-
-  GetTopCategories(this.homeRepository);
-
   List<TopCategory> getTopCategories(
-      String type, List<TransactionEntity> transactions) {
-    return homeRepository.getTopCategories(transactions, type);
+      List<TranscationModel> transactions, String type) {
+    var categoryTotals = <String, double>{};
+    double totalTypeAmount = 0;
+
+    // Filter transactions by type and calculate totals
+    var transactionsOfType = transactions.where((t) => t.type == type).toList();
+    for (var t in transactionsOfType) {
+      categoryTotals[t.category] = (categoryTotals[t.category] ?? 0) + t.amount;
+      totalTypeAmount += t.amount;
+    }
+    print(totalTypeAmount);
+    // Convert to TopCategory list
+    var topCategories = categoryTotals.entries.map((entry) {
+      return TopCategory(
+        name: entry.key,
+        amount: entry.value,
+        percentage: totalTypeAmount > 0 ? (entry.value / totalTypeAmount) : 0,
+      );
+    }).toList();
+
+    // Sort by amount descending
+    topCategories.sort((a, b) => b.amount.compareTo(a.amount));
+
+    return topCategories.take(2).toList();
   }
 }

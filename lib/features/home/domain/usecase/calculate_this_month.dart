@@ -1,28 +1,57 @@
-import 'package:mono/features/home/domain/repositories/home_repository.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
+import 'package:intl/intl.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 class CalculateThisMonth {
-  final HomeRepository homeRepository;
+  List<TranscationModel> filterLast31Days(List<TranscationModel> transactions) {
+    DateTime today = DateTime.now();
+    DateTime cycleStart =
+        today.subtract(const Duration(days: 30)); // 31 days including today
 
-  CalculateThisMonth(this.homeRepository);
-
-  filterLast31Days(List<TransactionEntity> transactions) {
-    return homeRepository.filterLast31Days(transactions);
+    List<TranscationModel> filtered = transactions.where((tx) {
+      return tx.date.isAfter(cycleStart.subtract(const Duration(days: 1))) &&
+          tx.date.isBefore(today.add(const Duration(days: 1)));
+    }).toList();
+    return filtered;
   }
 
-  getSpendingCycleLabel() {
-    return homeRepository.getSpendingCycleLabel();
+  String getSpendingCycleLabel() {
+    final today = DateTime.now();
+    final start = today.subtract(const Duration(days: 30));
+    final formatter = DateFormat('MMM dd'); // Example: Jun 12
+    return 'Spending Cycle: ${formatter.format(start)} – ${formatter.format(today)}';
   }
 
-  getThisMonthIncome(List<TransactionEntity> transactions) {
-    return homeRepository.getThisMonthIncome(transactions);
+  double getThisMonthIncome(List<TranscationModel> transactions) {
+    List<TranscationModel> thisMonthTransactions = transactions.where((t) {
+      return t.date.month == DateTime.now().month &&
+          t.date.year == DateTime.now().year;
+    }).toList();
+
+    double thisMonthTotalIncome = thisMonthTransactions
+        .where((t) => t.type == 'Income')
+        .fold(0, (sum, t) => sum + t.amount);
+    return thisMonthTotalIncome;
   }
 
-  getThisMonthExpense(List<TransactionEntity> transactions) {
-    return homeRepository.getThisMonthExpense(transactions);
+  double getThisMonthExpense(List<TranscationModel> transactions) {
+    List<TranscationModel> thisMonthTransactions = transactions.where((t) {
+      return t.date.month == DateTime.now().month &&
+          t.date.year == DateTime.now().year;
+    }).toList();
+    double thisMonthTotalExpense = thisMonthTransactions
+        .where((t) => t.type == 'Expense')
+        .fold(0, (sum, t) => sum + t.amount);
+    return thisMonthTotalExpense;
   }
 
-  getThisMonthBalance(List<TransactionEntity> transactions) {
-    return homeRepository.getThisMonthBalance(transactions);
+  double getThisMonthBalance(List<TranscationModel> transactions) {
+    List<TranscationModel> thisMonthTransactions = transactions.where((t) {
+      return t.date.month == DateTime.now().month &&
+          t.date.year == DateTime.now().year;
+    }).toList();
+    double thisMonthTotalBalance = thisMonthTransactions
+        .where((t) => t.type == 'Expense')
+        .fold(0, (sum, t) => sum + t.amount);
+    return thisMonthTotalBalance;
   }
 }

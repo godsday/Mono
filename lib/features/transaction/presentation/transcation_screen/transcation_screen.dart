@@ -7,6 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/features/edit_screen/edit_screen.dart';
+import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
@@ -140,9 +142,9 @@ class _TranscationScreenState extends State<TranscationScreen> {
     }
   }
 
-  Widget _buildGroupedTransactionList(List<TransactionEntity> transactions) {
+  Widget _buildGroupedTransactionList(List<TranscationModel> transactions) {
     // Group transactions by date
-    Map<String, List<TransactionEntity>> groupedTransactions = {};
+    Map<String, List<TranscationModel>> groupedTransactions = {};
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     DateFormat displayFormat = DateFormat('MMM d, yyyy');
 
@@ -243,7 +245,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   icon: Icons.delete,
                   label: 'Delete',
                   onPressed: ((context) {
-                    TranscationDB.instance.deletetranscation(transaction.id);
+                    TransactionLocalDataSourceImpl.instance
+                        .deleteTransaction(transaction.id);
                     Provider.of<TransactionProvider>(context, listen: false)
                         .refresh();
 
@@ -497,7 +500,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                             listen: true)
                                         .listingMethod(),
                                 builder: (BuildContext context,
-                                    List<TransactionEntity> newlist, _) {
+                                    List<TranscationModel> newlist, _) {
                                   return newlist.isEmpty
                                       ? Stack(children: [
                                           Lottie.asset(

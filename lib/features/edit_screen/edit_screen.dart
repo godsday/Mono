@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
-import 'package:mono/models/transcation_model/transcation_model.dart';
+import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
+import 'package:mono/features/transaction/domain/entities/transaction_entity.dart'
+    hide TranscationModel;
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:sizer/sizer.dart';
@@ -12,7 +14,7 @@ import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
 class EditScreen extends StatefulWidget {
-  final TransactionEntity value;
+  final TranscationModel value;
   const EditScreen({
     super.key,
     required this.value,
@@ -359,7 +361,7 @@ class _EditScreenState extends State<EditScreen> {
         purpose: purposeval,
         id: widget.value.id);
 
-    TranscationDB.instance.updatetranscation(model);
+    TransactionLocalDataSourceImpl.instance.updateTransaction(model);
 
     Navigator.of(context).pop(model);
   }

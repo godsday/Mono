@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mono/features/home/data/repositories/home_repository_imp.dart';
 import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
 import 'package:mono/features/home/domain/usecase/calculate_this_month.dart';
 import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
@@ -14,7 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
-import 'package:mono/models/transcation_model/transcation_model.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/routes/app_router.dart';
@@ -64,9 +63,8 @@ Future<void> main() async {
     Hive.registerAdapter(CategoryTypeAdapter());
   }
 
-  await TranscationDB.instance.getalltranscation();
+  await TransactionLocalDataSourceImpl.instance.getTransactions();
   await CategoryDB.instance.initializeCategories();
-  // await appState.loadCategories();
 
   // Clean Architecture Setup
   final localDataSource = TransactionLocalDataSourceImpl();
@@ -77,12 +75,14 @@ Future<void> main() async {
   final addTransaction = AddTransaction(repository);
   final deleteTransaction = DeleteTransaction(repository);
   final updateTransaction = UpdateTransaction(repository);
-  final homeRepository = HomeRepositoryImp();
-  final totalBalanceUseCase = TotalBalanceUseCase(homeRepository);
-  final totalIncomeUseCase = TotalIncomeUseCase(homeRepository);
-  final totalExpenseUseCase = TotalExpenseUseCase(homeRepository);
-  final calculateThisMonth = CalculateThisMonth(homeRepository);
-  final getTopCategoriesUseCase = GetTopCategories(homeRepository);
+  final totalIncomeUseCase = TotalIncomeUseCase();
+  final totalExpenseUseCase = TotalExpenseUseCase();
+  final totalBalanceUseCase =
+      TotalBalanceUseCase(totalIncomeUseCase, totalExpenseUseCase);
+
+  final calculateThisMonth = CalculateThisMonth();
+
+  final getTopCategoriesUseCase = GetTopCategories();
 
   // Assets Setup
   final assetRepository = AssetRepositoryImpl();

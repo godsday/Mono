@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +56,7 @@ class _GraphWidgetState extends State<GraphWidget> {
   }
 }
 
-List<Chartdata> getChart(List<TransactionEntity> model) {
+List<Chartdata> getChart(List<TranscationModel> model) {
   double value;
   String catagoryname;
   List visted = [];

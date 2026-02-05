@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
 import 'package:mono/models/category_model/category_model.dart';
-import '../../domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/usecases/add_transaction.dart';
 import '../../domain/usecases/delete_transaction.dart';
 import '../../domain/usecases/get_transactions.dart';
@@ -15,7 +15,7 @@ class TransactionProvider with ChangeNotifier {
   final DeleteTransaction deleteTransactionUseCase;
   final UpdateTransaction updateTransactionUseCase;
 
-  List<TransactionEntity> _transactions = [];
+  List<TranscationModel> _transactions = [];
   bool _isLoading = false;
   String? _error;
 
@@ -33,28 +33,25 @@ class TransactionProvider with ChangeNotifier {
 
   List<CategoryModel> get allCategories => _allCategories;
 
-  ValueNotifier<List<TransactionEntity>> transcationNotifier =
+  ValueNotifier<List<TranscationModel>> transcationNotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> incomelistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> expenselistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> todaylistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> yesterdaylistnotifier =
       ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> incomelistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> expenselistnotifier =
-      ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> todaylistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> yesterdaylistnotifier =
-      ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> customlistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> customlistnotifier = ValueNotifier([]);
 
-  ValueNotifier<List<TransactionEntity>> weeklylistnotifier = ValueNotifier([]);
-  ValueNotifier<List<TransactionEntity>> monthlylistnotifier =
-      ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> weeklylistnotifier = ValueNotifier([]);
+  ValueNotifier<List<TranscationModel>> monthlylistnotifier = ValueNotifier([]);
 
-  List<TransactionEntity> get transactions => _transactions;
+  List<TranscationModel> get transactions => _transactions;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
   // Previous Month Logic for Comparison
 
-  List<TransactionEntity> get recentTransactions {
-    final sorted = List<TransactionEntity>.from(_transactions)
+  List<TranscationModel> get recentTransactions {
+    final sorted = List<TranscationModel>.from(_transactions)
       ..sort((a, b) => b.date.compareTo(a.date));
     return sorted.take(5).toList();
   }
@@ -74,7 +71,7 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addTransaction(TransactionEntity transaction) async {
+  Future<void> addTransaction(TranscationModel transaction) async {
     try {
       await addTransactionUseCase(transaction);
       // Optimistic update or reload
@@ -95,7 +92,7 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateTransaction(TransactionEntity transaction) async {
+  Future<void> updateTransaction(TranscationModel transaction) async {
     try {
       await updateTransactionUseCase(transaction);
       await loadTransactions();
@@ -198,7 +195,7 @@ class TransactionProvider with ChangeNotifier {
     final startDate = DateTime(start.year, start.month, start.day);
     final endDate = DateTime(end.year, end.month, end.day);
 
-    for (TransactionEntity data in transcationNotifier.value) {
+    for (TranscationModel data in transcationNotifier.value) {
       // Normalize the transaction date
       final transactionDate =
           DateTime(data.date.year, data.date.month, data.date.day);
@@ -213,7 +210,7 @@ class TransactionProvider with ChangeNotifier {
     customlistnotifier.notifyListeners();
   }
 
-  ValueNotifier<List<TransactionEntity>> listingMethod() {
+  ValueNotifier<List<TranscationModel>> listingMethod() {
     switch (itemvalue) {
       case "Income":
         return incomelistnotifier;
@@ -266,7 +263,7 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  double calculateTotalForList(ValueNotifier<List<TransactionEntity>> list) {
+  double calculateTotalForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {
       if (transaction.type == 'Income') {
@@ -278,7 +275,7 @@ class TransactionProvider with ChangeNotifier {
     return total;
   }
 
-  double calculateIncomeForList(ValueNotifier<List<TransactionEntity>> list) {
+  double calculateIncomeForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {
       if (transaction.type == 'Income') {
@@ -288,7 +285,7 @@ class TransactionProvider with ChangeNotifier {
     return total;
   }
 
-  double calculateExpenseForList(ValueNotifier<List<TransactionEntity>> list) {
+  double calculateExpenseForList(ValueNotifier<List<TranscationModel>> list) {
     double total = 0;
     for (var transaction in list.value) {
       if (transaction.type == 'Expense') {
@@ -325,7 +322,7 @@ class TransactionProvider with ChangeNotifier {
         .add_yMMMMd()
         .format(DateTime.now().subtract(const Duration(days: 1)));
 
-    Future.forEach(_transactions, (TransactionEntity transcationlist) {
+    Future.forEach(_transactions, (TranscationModel transcationlist) {
       final dates = DateFormat().add_yMMMMd().format(transcationlist.date);
       if (transcationlist.type == 'Expense') {
         expenselistnotifier.value.add(transcationlist);

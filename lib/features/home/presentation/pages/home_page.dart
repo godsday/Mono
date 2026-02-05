@@ -32,13 +32,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      Provider.of<TransactionProvider>(context, listen: false)
-          .loadTransactions();
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.resumed) {
+  //     Provider.of<TransactionProvider>(context, listen: false)
+  //         .loadTransactions();
+  //   }
+  // }
 
   @override
   void dispose() {

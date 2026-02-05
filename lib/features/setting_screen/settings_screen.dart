@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/database/Transctions_DB/transcations_db.dart';
+import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/features/IntroPages/splash_screen.dart';
@@ -226,8 +227,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                   children: [
                                                     TextButton(
                                                         onPressed: () async {
-                                                          TranscationDB.instance
-                                                              .cleardatabase();
+                                                          TransactionLocalDataSourceImpl
+                                                              .instance
+                                                              .clearTransactions();
                                                           Navigator.pushAndRemoveUntil(
                                                               context,
                                                               MaterialPageRoute(

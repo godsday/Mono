@@ -1,10 +1,11 @@
-import 'package:mono/features/home/domain/repositories/home_repository.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 class TotalExpenseUseCase {
-  final HomeRepository homeRepository;
-  TotalExpenseUseCase(this.homeRepository);
-  double caclucateTotalExpense(List<TransactionEntity> transactions) {
-    return homeRepository.calculateTotalExpense(transactions);
+  double call(List<TranscationModel> transactions) {
+    double totalExpense = transactions
+        .where((element) => element.type == "Expense")
+        .fold(0, (sum, item) => sum + item.amount);
+    print("totalExpense _HomeRepositoryImp: $totalExpense");
+    return totalExpense;
   }
 }

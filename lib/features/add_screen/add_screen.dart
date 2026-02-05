@@ -6,6 +6,7 @@ import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
@@ -42,7 +43,7 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<TransactionProvider>(context, listen: false);
-      // provider.loadCategories();
+      provider.loadCategories();
       provider.categorySelected = null;
     });
   }
@@ -438,7 +439,7 @@ class _AddScreenState extends State<AddScreen> {
 
                                     final amount =
                                         double.parse(amountcontrol.text);
-                                    final entity = TransactionEntity(
+                                    final entity = TranscationModel(
                                       id: DateTime.now()
                                           .millisecondsSinceEpoch
                                           .toString(),

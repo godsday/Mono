@@ -1,5 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
 part 'transcation_model.g.dart';
+
 @HiveType(typeId: 3)
 class TranscationModel {
   @HiveField(1)
@@ -11,16 +12,15 @@ class TranscationModel {
   @HiveField(4)
   final String category;
   @HiveField(5)
-   String? purpose;
-   @HiveField(6)
-   String id;
+  String? purpose;
+  @HiveField(6)
+  String id;
 
   TranscationModel(
       {required this.type,
       required this.amount,
       required this.date,
       required this.category,
-     this.purpose,
-    required this.id });
-   
+      this.purpose,
+      required this.id});
 }

@@ -1,4 +1,5 @@
-import '../entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
+
 import '../repositories/transaction_repository.dart';
 
 class AddTransaction {
@@ -6,7 +7,7 @@ class AddTransaction {
 
   AddTransaction(this.repository);
 
-  Future<void> call(TransactionEntity transaction) async {
+  Future<void> call(TranscationModel transaction) async {
     print("adding transcation  AddTransaction: $transaction");
     return await repository.addTransaction(transaction);
   }
