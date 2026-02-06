@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
+import '../../../widgets/safe_background_image.dart';
 import '../pages/add_asset_screen.dart';
 
 class FirstTimeAssetCard extends StatelessWidget {
@@ -10,89 +12,124 @@ class FirstTimeAssetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: HexColor('#E6F5F4'),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [
-            Color(0xFFF9F5FF),
-            Colors.white,
+            HexColor('#E6F5F4'),
+            HexColor('#F0FDFB'),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColor.mainHexcolor.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons
-                  .account_balance_wallet_outlined, // Using similar icon as per generic asset request
-              color: AppColor.mainHexcolor,
-              size: 32,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Track Your Assets',
-            style: AppTextTheme.montserrart(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColor.mainHexcolor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Add what you own to understand your net worth',
-            style: AppTextTheme.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColor.textSecondary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AddAssetScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColor.mainHexcolor,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+          // Background Cityscape (Right side)
+          Positioned(
+            right: 0,
+            bottom: 0,
+            top: 20,
+            width: 150,
+            child: Opacity(
+              opacity: 0.8,
+              child: SafeBackgroundImage(
+                imagePath: 'assets/images/cityscape.png', // Placeholder
+                fit: BoxFit.contain,
+                fallback: Icon(Icons.location_city_rounded,
+                    size: 80, color: Colors.grey.withValues(alpha: 0.2)),
               ),
-              child: Text(
-                'Add Your First Asset',
-                style: AppTextTheme.poppins(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: Icon(
+                        Icons.account_balance_wallet,
+                        color: AppColor.textPrimary,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Track Your Assets',
+                      style: AppTextTheme.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.textPrimary,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: 200, // Limit width to avoid overlapping image
+                  child: Text(
+                    'Add what you own to understand your net worth',
+                    style: AppTextTheme.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.textGrey,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: 140,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddAssetScreen()),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                              color: HexColor('#21988C'), width: 1.5),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'Add Assets',
+                        style: AppTextTheme.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: HexColor('#21988C'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

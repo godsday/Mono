@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../../domain/entities/asset_entity.dart';
+
 import '../pages/add_asset_screen.dart';
 import '../providers/assets_provider.dart';
+import '../../../widgets/safe_background_image.dart';
 
 class AssetsOverviewCard extends StatelessWidget {
   const AssetsOverviewCard({super.key});
@@ -17,163 +19,191 @@ class AssetsOverviewCard extends StatelessWidget {
         final totalValue = provider.totalAssetValue;
 
         if (assets.isEmpty) {
-          // This should handle the edge case where loadAssets returns empty list,
-          // though ideally parent widget checks this first.
           return const SizedBox.shrink();
         }
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+        return Column(
+          children: [
+            // Summary Card
+            Container(
+              width: double.infinity,
+              height: 180, // Fixed height for visual consistency
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                gradient: LinearGradient(
+                  colors: [
+                    HexColor('#E6F5F4'),
+                    HexColor('#F0FDFB'),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-            ],
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFFF9F5FF),
-                Colors.white,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.account_balance_wallet_outlined,
-                      color: AppColor.mainHexcolor,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Assets',
-                      style: AppTextTheme.montserrart(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.mainHexcolor,
+              child: Stack(
+                children: [
+                  // Background Cityscape
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    top: 20,
+                    width: 200,
+                    child: Opacity(
+                      opacity: 0.8,
+                      child: SafeBackgroundImage(
+                        imagePath: 'assets/images/cityscape.png', // Placeholder
+                        fit: BoxFit.contain,
+                        fallback: Icon(Icons.location_city_rounded,
+                            size: 80,
+                            color: Colors.grey.withValues(alpha: 0.2)),
                       ),
                     ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddAssetScreen()),
-                        );
-                      },
-                      child: Text(
-                        'Add +',
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.account_balance_wallet,
+                                  color: AppColor.blackText,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Assets',
+                                  style: AppTextTheme.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColor.blackText,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddAssetScreen()),
+                                );
+                              },
+                              child: Text(
+                                'Add +',
+                                style: AppTextTheme.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Your total wealth so far',
+                          style: AppTextTheme.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '₹ ${totalValue.toStringAsFixed(0)}',
+                          style: AppTextTheme.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColor.blackText,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // List of Assets
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(16),
+                itemCount: assets.length > 5 ? 5 : assets.length, // Show max 5
+                separatorBuilder: (context, index) => const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12.0),
+                  child: Divider(height: 1, color: Color(0xFFEEEEEE)),
+                ),
+                itemBuilder: (context, index) {
+                  final asset = assets[index];
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            asset.name,
+                            style: AppTextTheme.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: HexColor('#525252'),
+                            ),
+                          ),
+                          Text(
+                            'Investments', // Or asset.type if mapped
+                            style: AppTextTheme.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '₹${asset.currentValue.toStringAsFixed(0)}',
                         style: AppTextTheme.poppins(
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.accentHexColor,
+                          fontWeight: FontWeight.w600,
+                          color: HexColor('#525252'),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Total Assets Value',
-                  style: AppTextTheme.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  '₹${totalValue.toStringAsFixed(0)}',
-                  style: AppTextTheme.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.mainHexcolor,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: assets.length > 3 ? 3 : assets.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    final asset = assets[index];
-                    return _AssetItem(asset: asset);
-                  },
-                ),
-                if (assets.length > 3) ...[
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      '+ ${assets.length - 3} more',
-                      style: AppTextTheme.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  )
-                ]
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _AssetItem extends StatelessWidget {
-  final AssetEntity asset;
-
-  const _AssetItem({required this.asset});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              asset.name,
-              style: AppTextTheme.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColor.mainHexcolor,
-              ),
-            ),
-            Text(
-              asset.type,
-              style: AppTextTheme.poppins(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Colors.grey,
+                    ],
+                  );
+                },
               ),
             ),
           ],
-        ),
-        Text(
-          '₹${asset.currentValue.toStringAsFixed(0)}',
-          style: AppTextTheme.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColor.mainHexcolor,
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
+import '../../../widgets/safe_background_image.dart';
 import '../pages/add_budget_screen.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../providers/financial_overview_provider.dart';
@@ -44,187 +46,221 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
 
   @override
   Widget build(BuildContext context) {
-    // Calculate progress
+    // Calculate progress (spending)
     double progress = widget.budget.totalBudget > 0
         ? (widget.budget.spentAmount / widget.budget.totalBudget)
             .clamp(0.0, 1.0)
         : 0.0;
 
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
-        gradient: const LinearGradient(
-          colors: [Color(0xFF521F66), Color(0xFF84509B)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        gradient: LinearGradient(
+          colors: [
+            HexColor('#B2AFE8').withValues(alpha: 0.9),
+            HexColor('#D3D0F7'),
+          ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
         ),
       ),
-      child: InkWell(
-        onTap: () {
-          // Handle tap
-        },
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
+      child: Stack(
+        children: [
+          // Background Pattern
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.1,
+              child: SafeBackgroundImage(
+                imagePath: 'assets/images/onboard_bacground.svg', // Placeholder
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Custom Header Row
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.account_balance_wallet_outlined,
-                    color: AppColor.mainHexcolor,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'Monthly Budget',
-                    style: AppTextTheme.montserrart(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: AppColor.mainHexcolor,
+                  // White Tab with Title
+                  Container(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 30, top: 12, bottom: 12),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        bottomRight: Radius.circular(300), // Slanted effect
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.account_balance_wallet,
+                          color: HexColor('#7D73C2'),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Monthly Budget',
+                          style: AppTextTheme.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColor.blackText,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () async {
-                      // Navigate to edit budget
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddBudgetScreen()),
-                      );
 
-                      // If saved/updated successfully, reload the overview
-                      if (result == true && context.mounted) {
-                        context.read<FinancialOverviewProvider>().loadBudget();
-                      }
-                    },
-                    child: Text(
-                      'Edit', // Changed to Edit since budget exists
+                  // Edit Button
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12, right: 20),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddBudgetScreen()),
+                        );
+                        if (result == true && context.mounted) {
+                          context
+                              .read<FinancialOverviewProvider>()
+                              .loadBudget();
+                        }
+                      },
+                      child: Text(
+                        'Edit',
+                        style: AppTextTheme.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: HexColor('#525252'),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Budget set for this month',
                       style: AppTextTheme.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: AppColor.accentHexColor,
+                        color: HexColor('#525252'),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return LinearProgressIndicator(
-                    value:
-                        _animation.value * progress, // Use calculated progress
-                    backgroundColor:
-                        AppColor.accentHexColor.withValues(alpha: 0.3),
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColor.mainHexcolor,
+                    const SizedBox(height: 12),
+                    // Progress Bar (Custom)
+                    Stack(
+                      children: [
+                        Container(
+                          height: 6,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            return FractionallySizedBox(
+                              widthFactor: _animation.value * progress > 0
+                                  ? _animation.value * progress
+                                  : 0.01,
+                              child: Container(
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildBudgetInfo('Budget',
-                      '₹${widget.budget.totalBudget.toStringAsFixed(0)}'),
-                  _buildBudgetInfo('Spent',
-                      '₹${widget.budget.spentAmount.toStringAsFixed(0)}'),
-                  _buildBudgetInfo('Remaining',
-                      '₹${widget.budget.remainingAmount.toStringAsFixed(0)}'),
-                ],
-              ),
-              if (widget.budget.categories.isNotEmpty) ...[
-                const SizedBox(height: 20),
-                Text(
-                  'Categories',
-                  style: AppTextTheme.montserrart(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColor.mainHexcolor,
-                  ),
+
+                    const SizedBox(height: 24),
+
+                    // 3 Columns: Budget, Spending, Remaining
+                    Row(
+                      children: [
+                        Expanded(
+                            child: _buildInfoColumn('Budget',
+                                '₹${widget.budget.totalBudget.toStringAsFixed(0)}')),
+                        Expanded(
+                            child: _buildInfoColumn('Spending',
+                                '₹${widget.budget.spentAmount.toStringAsFixed(0)}')),
+                        Expanded(
+                            child: _buildInfoColumn('Remaining',
+                                '₹${widget.budget.remainingAmount.toStringAsFixed(0)}')),
+                      ],
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    Text(
+                      widget.budget.categories.isNotEmpty
+                          ? '${widget.budget.categories.length} categories active'
+                          : 'No category selected',
+                      style: AppTextTheme.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.blackText,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: widget.budget.categories.map((cat) {
-                    return _CategoryChip(
-                      title: cat.name,
-                      amount: '₹${cat.amount.toStringAsFixed(0)}',
-                    );
-                  }).toList(),
-                ),
-              ],
+              )
             ],
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildBudgetInfo(String title, String amount) {
+  Widget _buildInfoColumn(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          label,
           style: AppTextTheme.poppins(
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: Colors.grey,
+            color: HexColor('#525252'),
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 4),
         Text(
-          amount,
+          value,
           style: AppTextTheme.poppins(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColor.mainHexcolor,
+            fontWeight: FontWeight.w700,
+            color: AppColor.blackText,
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CategoryChip extends StatelessWidget {
-  final String title;
-  final String amount;
-
-  const _CategoryChip({
-    required this.title,
-    required this.amount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColor.accentHexColor.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        '$title: $amount',
-        style: AppTextTheme.poppins(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColor.mainHexcolor,
-        ),
-      ),
     );
   }
 }
