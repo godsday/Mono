@@ -89,7 +89,13 @@ flutter:
     - assets/images/animation/paymentshero1.json
     - assets/images/onboard_bacground.svg
     - assets/images/rings.png
-    
+    - assets/images/wallet.svg
+    - assets/images/goals.svg
+    - assets/images/boat.svg
+    - assets/images/asssets.svg
+    - assets/images/arrow.svg
+    - assets/images/building_firsttime.svg
+    - assets/images/building_overview.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

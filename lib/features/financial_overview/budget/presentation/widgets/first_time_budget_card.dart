@@ -36,7 +36,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
       child: Stack(
         children: [
           // Background Pattern (Placeholder)
-          Positioned.fill(
+          const Positioned.fill(
             child: Opacity(
               opacity: 0.3,
               child: SafeBackgroundImage(
@@ -102,7 +102,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                       );
                       // Since we are back, let's try to reload the budget to check if it was added
                       if (context.mounted) {
-                        context.read<FinancialOverviewProvider>().loadBudget();
+                        context.read<BudgetProvider>().loadBudget();
                       }
                     },
                     child: Container(

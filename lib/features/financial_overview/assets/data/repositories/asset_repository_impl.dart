@@ -1,26 +1,31 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/entities/asset_entity.dart';
 import '../../domain/repositories/asset_repository.dart';
+import '../models/asset_model.dart';
 
 class AssetRepositoryImpl implements AssetRepository {
-  // Mock in-memory storage
-  final List<AssetEntity> _mockAssets = [];
+  static const String _boxName = 'assets_box';
+
+  Box<AssetModel> get _box => Hive.box<AssetModel>(_boxName);
 
   @override
   Future<List<AssetEntity>> getAssets() async {
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 300));
-    return List.from(_mockAssets);
+    return _box.values.map((e) => e.toEntity()).toList();
   }
 
   @override
   Future<void> addAsset(AssetEntity asset) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mockAssets.add(asset);
+    final model = AssetModel.fromEntity(asset);
+    await _box.put(asset.id, model);
   }
 
   @override
   Future<void> deleteAsset(String id) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mockAssets.removeWhere((element) => element.id == id);
+    await _box.delete(id);
+  }
+
+  @override
+  Future<void> clearAssets() async {
+    await _box.clear();
   }
 }

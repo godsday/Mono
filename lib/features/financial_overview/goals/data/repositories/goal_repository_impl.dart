@@ -1,67 +1,57 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/entities/goal_entity.dart';
 import '../../domain/repositories/goal_repository.dart';
+import '../models/goal_model.dart';
 
 class GoalRepositoryImpl implements GoalRepository {
-  final List<GoalEntity> _mockGoals = [];
+  static const String _boxName = 'goals_box';
+
+  Box<GoalModel> get _box => Hive.box<GoalModel>(_boxName);
 
   @override
   Future<List<GoalEntity>> getGoals() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    return List.from(_mockGoals);
+    return _box.values.map((e) => e.toEntity()).toList();
   }
 
   @override
   Future<void> addGoal(GoalEntity goal) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mockGoals.add(goal);
+    final model = GoalModel.fromEntity(goal);
+    await _box.put(goal.id, model);
   }
 
   @override
   Future<void> updateGoalProgress(String id, double amount,
       {bool isAddition = true}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    final index = _mockGoals.indexWhere((g) => g.id == id);
-    if (index != -1) {
-      final oldGoal = _mockGoals[index];
+    final model = _box.get(id);
 
+    if (model != null) {
       double newSavedAmount;
       if (isAddition) {
-        newSavedAmount = oldGoal.savedAmount + amount;
+        newSavedAmount = model.savedAmount + amount;
       } else {
-        newSavedAmount =
-            amount; // Set directly or subtract? Logic says "updateSavedAmount", implies set or add.
-        // If the use case signature is generic, implementing it as 'set' if addition is false is safer for now,
-        // unless I strictly defined it as subtract. The repository interface said 'updateGoalProgress'.
-        // Let's assume isAddition false means SUBTRACT for now to be symmetric,
-        // OR treating 'amount' as the NEW total if isAddition is false.
-
-        // Let's stick to the simpler interpreting: calling with isAddition=false is "subtract".
-        // HOWEVER, the provider requirement was `updateSavedAmount(String goalId, double amount)`.
-        // Usually this means "add this amount to savings".
-
-        // I'll implement simple addition/subtraction.
-        // Actually, let's just make it replace the goal with a new one with updated amount.
-        newSavedAmount = oldGoal.savedAmount; // placeholder
+        // Assuming subtraction if isAddition is false, based on previous logic attempt
+        newSavedAmount = model.savedAmount - amount;
       }
 
-      // Re-create entity (immutable)
-      // I need to implement the logic properly.
-      // Let's assume the usecase passes the DELTA amount.
+      if (newSavedAmount < 0) newSavedAmount = 0;
+      if (newSavedAmount > model.targetAmount) {
+        newSavedAmount = model.targetAmount;
+      }
 
-      double finalAmount = isAddition
-          ? (oldGoal.savedAmount + amount)
-          : (oldGoal.savedAmount - amount);
-      if (finalAmount < 0) finalAmount = 0;
-      if (finalAmount > oldGoal.targetAmount)
-        finalAmount = oldGoal.targetAmount;
-
-      _mockGoals[index] = GoalEntity(
-        id: oldGoal.id,
-        title: oldGoal.title,
-        targetAmount: oldGoal.targetAmount,
-        savedAmount: finalAmount,
-        deadline: oldGoal.deadline,
+      final updatedModel = GoalModel(
+        id: model.id,
+        title: model.title,
+        targetAmount: model.targetAmount,
+        savedAmount: newSavedAmount,
+        deadline: model.deadline,
       );
+
+      await _box.put(id, updatedModel);
     }
+  }
+
+  @override
+  Future<void> clearGoals() async {
+    await _box.clear();
   }
 }

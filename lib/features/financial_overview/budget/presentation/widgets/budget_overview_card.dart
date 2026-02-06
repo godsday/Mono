@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:intl/intl.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
@@ -75,7 +76,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       child: Stack(
         children: [
           // Background Pattern
-          Positioned.fill(
+          const Positioned.fill(
             child: Opacity(
               opacity: 0.1,
               child: SafeBackgroundImage(
@@ -136,9 +137,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               builder: (context) => const AddBudgetScreen()),
                         );
                         if (result == true && context.mounted) {
-                          context
-                              .read<FinancialOverviewProvider>()
-                              .loadBudget();
+                          context.read<BudgetProvider>().loadBudget();
                         }
                       },
                       child: Text(
@@ -161,7 +160,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Budget set for this month',
+                      'Budget set for ${DateFormat.MMMM().format(DateTime.now())}',
                       style: AppTextTheme.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -220,9 +219,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     const SizedBox(height: 30),
 
                     Text(
-                      widget.budget.categories.isNotEmpty
-                          ? '${widget.budget.categories.length} categories active'
-                          : 'No category selected',
+                      _buildCategoryText(),
                       style: AppTextTheme.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -262,5 +259,18 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
         ),
       ],
     );
+  }
+
+  String _buildCategoryText() {
+    final categories = widget.budget.categories;
+    if (categories.isEmpty) {
+      return 'No category selected';
+    } else if (categories.length <= 3) {
+      return categories.map((e) => e.name).join(', ');
+    } else {
+      final firstTwo = categories.take(2).map((e) => e.name).join(', ');
+      final remainingCount = categories.length - 2;
+      return '$firstTwo, +$remainingCount more';
+    }
   }
 }

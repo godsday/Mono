@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
+import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
+import 'package:mono/features/financial_overview/budget/presentation/providers/financial_overview_provider.dart';
 import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
 import 'package:mono/features/home/domain/usecase/calculate_this_month.dart';
 import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
@@ -35,9 +38,12 @@ import 'package:mono/features/financial_overview/assets/domain/usecases/get_asse
 import 'package:mono/features/financial_overview/assets/presentation/providers/assets_provider.dart';
 import 'package:mono/features/financial_overview/goals/data/repositories/goal_repository_impl.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_usecase.dart';
+import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
-import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
+import 'package:mono/features/financial_overview/assets/data/models/asset_model.dart';
+import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
+import 'package:mono/features/financial_overview/goals/data/models/goal_model.dart';
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
@@ -62,6 +68,25 @@ Future<void> main() async {
     Hive.registerAdapter(CategoryTypeAdapter());
   }
 
+  // Financial Overview Adapters
+  if (!Hive.isAdapterRegistered(BudgetModelAdapter().typeId)) {
+    Hive.registerAdapter(BudgetModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(BudgetCategoryModelAdapter().typeId)) {
+    Hive.registerAdapter(BudgetCategoryModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(AssetModelAdapter().typeId)) {
+    Hive.registerAdapter(AssetModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(GoalModelAdapter().typeId)) {
+    Hive.registerAdapter(GoalModelAdapter());
+  }
+
+  // Open Boxes
+  await Hive.openBox<BudgetModel>('budget_box');
+  await Hive.openBox<AssetModel>('assets_box');
+  await Hive.openBox<GoalModel>('goals_box');
+
   await TransactionLocalDataSourceImpl.instance.getTransactions();
   await CategoryDB.instance.initializeCategories();
 
@@ -69,6 +94,8 @@ Future<void> main() async {
   final localDataSource = TransactionLocalDataSourceImpl();
   final repository =
       TransactionRepositoryImpl(localDataSource: localDataSource);
+
+  final budgetRepository = BudgetRepositoryImpl();
 
   final getTransactions = GetTransactions(repository);
   final addTransaction = AddTransaction(repository);
@@ -78,6 +105,8 @@ Future<void> main() async {
   final totalExpenseUseCase = TotalExpenseUseCase();
   final totalBalanceUseCase =
       TotalBalanceUseCase(totalIncomeUseCase, totalExpenseUseCase);
+  final getCurrentMonthBudgetUseCase =
+      GetCurrentMonthBudgetUseCase(budgetRepository);
 
   final calculateThisMonth = CalculateThisMonth();
 
@@ -128,6 +157,12 @@ Future<void> main() async {
           return homeProvider;
         },
       ),
+      ChangeNotifierProvider(
+          create: (_) => BudgetProvider(
+                // getBudgetUseCase: getBudgetUseCase,
+                getTransactions: getTransactions,
+                getBudgetUseCase: getCurrentMonthBudgetUseCase,
+              )),
       ChangeNotifierProvider(
           create: (_) => AssetsProvider(
                 getAssetsUseCase: getAssets,

@@ -5,4 +5,5 @@ abstract class GoalRepository {
   Future<void> addGoal(GoalEntity goal);
   Future<void> updateGoalProgress(String id, double amount,
       {bool isAddition = true}); // Default adds, false subtracts or sets
+  Future<void> clearGoals();
 }

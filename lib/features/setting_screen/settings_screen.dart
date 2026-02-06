@@ -11,6 +11,9 @@ import 'package:mono/features/setting_screen/settings_widgets/notification.dart'
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../financial_overview/budget/data/repositories/budget_repository_impl.dart';
+import '../financial_overview/assets/data/repositories/asset_repository_impl.dart';
+import '../financial_overview/goals/data/repositories/goal_repository_impl.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -229,13 +232,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                           TransactionLocalDataSourceImpl
                                                               .instance
                                                               .clearTransactions();
-                                                          Navigator.pushAndRemoveUntil(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const SplashScreen()),
-                                                              (route) => false);
+                                                          // Clear Financial Overview Data
+                                                          await BudgetRepositoryImpl()
+                                                              .clearBudget();
+                                                          await AssetRepositoryImpl()
+                                                              .clearAssets();
+                                                          await GoalRepositoryImpl()
+                                                              .clearGoals();
+
+                                                          if (context.mounted) {
+                                                            Navigator.pushAndRemoveUntil(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            const SplashScreen()),
+                                                                (route) =>
+                                                                    false);
+                                                          }
                                                         },
                                                         child:
                                                             const Text('Yes')),

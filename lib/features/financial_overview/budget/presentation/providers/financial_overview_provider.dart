@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/usecases/get_current_month_budget_usecase.dart';
+import '../../../../transaction/domain/usecases/get_transactions.dart';
 
-class FinancialOverviewProvider extends ChangeNotifier {
+class BudgetProvider extends ChangeNotifier {
   final GetCurrentMonthBudgetUseCase getBudgetUseCase;
+  final GetTransactions getTransactions;
 
   BudgetEntity? _budget;
-  bool _isFirstTimeUser = true;
+  // bool _isFirstTimeUser = true;
   bool _isLoading = false;
 
-  FinancialOverviewProvider({
+  BudgetProvider({
     required this.getBudgetUseCase,
+    required this.getTransactions,
   });
 
   BudgetEntity? get budget => _budget;
-  bool get isFirstTimeUser => _isFirstTimeUser;
+  // bool get isFirstTimeUser => _isFirstTimeUser;
   bool get isLoading => _isLoading;
   bool get hasBudget => _budget != null;
 
@@ -25,15 +28,45 @@ class FinancialOverviewProvider extends ChangeNotifier {
     try {
       _budget = await getBudgetUseCase();
 
-      if (_budget == null) {
-        _isFirstTimeUser = true;
-      } else {
-        _isFirstTimeUser = false;
-      }
+      // if (_budget == null || _budget!.totalBudget == 0) {
+      //   _isFirstTimeUser = true;
+      // } else {
+      //   _isFirstTimeUser = false;
+
+      // Sync expenses
+      final transactions = await getTransactions();
+      final now = DateTime.now();
+
+      // Filter transactions for current month, Expense type, and matching categories
+      final currentMonthExpenses = transactions.where((t) {
+        final isSameMonth =
+            t.date.year == now.year && t.date.month == now.month;
+        final isExpense = t.type == 'Expense';
+
+        // Check if transaction category matches any budget category
+        // Matching by ID or Name to be robust
+        final isBudgetCategory = _budget!.categories.any((c) =>
+            c.id == t.category ||
+            c.name.toLowerCase() == t.category.toLowerCase());
+
+        return isSameMonth && isExpense && isBudgetCategory;
+      }).toList();
+
+      final totalSpent =
+          currentMonthExpenses.fold(0.0, (sum, t) => sum + t.amount);
+
+      // Update BudgetEntity with calculated spent amount
+      _budget = BudgetEntity(
+        totalBudget: _budget!.totalBudget,
+        spentAmount: totalSpent,
+        remainingAmount: _budget!.totalBudget - totalSpent,
+        categories: _budget!.categories,
+      );
+      // }
     } catch (e) {
       // Handle error, maybe log it
       _budget = null;
-      _isFirstTimeUser = true;
+      // _isFirstTimeUser = true;
     } finally {
       _isLoading = false;
       notifyListeners();
