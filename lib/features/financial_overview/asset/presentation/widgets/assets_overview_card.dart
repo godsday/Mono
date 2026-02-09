@@ -49,22 +49,6 @@ class AssetsOverviewCard extends StatelessWidget {
               child: Stack(
                 children: [
                   // Background Cityscape
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    top: 20,
-                    width: 200,
-                    child: Opacity(
-                      opacity: 0.8,
-                      child: SafeBackgroundImage(
-                        imagePath: 'assets/images/cityscape.png', // Placeholder
-                        fit: BoxFit.contain,
-                        fallback: Icon(Icons.location_city_rounded,
-                            size: 80,
-                            color: Colors.grey.withValues(alpha: 0.2)),
-                      ),
-                    ),
-                  ),
 
                   Padding(
                     padding: const EdgeInsets.all(24.0),
@@ -132,6 +116,17 @@ class AssetsOverviewCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                       ],
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    top: 0,
+                    child: SafeBackgroundImage(
+                      imagePath: 'assets/images/assetsBOverview.png',
+                      fit: BoxFit.contain,
+                      fallback: Icon(Icons.location_city_rounded,
+                          size: 80, color: Colors.grey.withValues(alpha: 0.2)),
                     ),
                   ),
                 ],

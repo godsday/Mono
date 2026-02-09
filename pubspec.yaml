@@ -79,6 +79,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
     - assets/images/OrginalIcon.png
     - assets/images/piggybank.png
     - assets/images/monotree.png
@@ -87,7 +88,6 @@ flutter:
     - assets/images/Appicon.png
     - assets/images/onboardbg.png
     - assets/images/animation/paymentshero1.json
-    - assets/images/onboard_bacground.svg
     - assets/images/rings.png
     - assets/images/wallet.svg
     - assets/images/goals.svg
@@ -96,6 +96,10 @@ flutter:
     - assets/images/arrow.svg
     - assets/images/building_firsttime.svg
     - assets/images/building_overview.svg
+    - assets/images/food.svg
+    - assets/images/shopping.svg
+    - assets/images/transport.svg
+    - assets/images/assetBOverview.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

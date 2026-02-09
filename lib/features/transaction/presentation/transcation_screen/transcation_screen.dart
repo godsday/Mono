@@ -418,7 +418,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                   Icons.calendar_month_outlined,
                                   size: 15.sp,
                                 ),
-                                color: Colors.blueGrey,
+                                color: HexColor('#EEEEEE'),
                                 onPressed: () {
                                   _showCustomDatePicker(context);
                                 },
@@ -441,7 +441,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                         }),
                         Expanded(
                           child: Container(
-                            color: const Color.fromARGB(255, 215, 215, 214),
+                            color: HexColor('#EEEEEE'),
                             child: ValueListenableBuilder(
                                 valueListenable:
                                     Provider.of<TransactionProvider>(context,

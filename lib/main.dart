@@ -31,17 +31,17 @@ import 'package:mono/features/transaction/domain/usecases/get_transactions.dart'
 import 'package:mono/features/transaction/domain/usecases/update_transaction.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'providers/notification_provider.dart';
-import 'package:mono/features/financial_overview/assets/data/repositories/asset_repository_impl.dart';
-import 'package:mono/features/financial_overview/assets/domain/usecases/add_asset_usecase.dart';
-import 'package:mono/features/financial_overview/assets/domain/usecases/delete_asset_usecase.dart';
-import 'package:mono/features/financial_overview/assets/domain/usecases/get_assets_usecase.dart';
-import 'package:mono/features/financial_overview/assets/presentation/providers/assets_provider.dart';
+import 'package:mono/features/financial_overview/asset/data/repositories/asset_repository_impl.dart';
+import 'package:mono/features/financial_overview/asset/domain/usecases/add_asset_usecase.dart';
+import 'package:mono/features/financial_overview/asset/domain/usecases/delete_asset_usecase.dart';
+import 'package:mono/features/financial_overview/asset/domain/usecases/get_assets_usecase.dart';
+import 'package:mono/features/financial_overview/asset/presentation/providers/assets_provider.dart';
 import 'package:mono/features/financial_overview/goals/data/repositories/goal_repository_impl.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_usecase.dart';
 import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
-import 'package:mono/features/financial_overview/assets/data/models/asset_model.dart';
+import 'package:mono/features/financial_overview/asset/data/models/asset_model.dart';
 import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
 import 'package:mono/features/financial_overview/goals/data/models/goal_model.dart';
 

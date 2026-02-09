@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../../../widgets/safe_background_image.dart';
 import '../pages/add_budget_screen.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../providers/financial_overview_provider.dart';
@@ -75,82 +75,72 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       ),
       child: Stack(
         children: [
-          // Background Pattern
-          const Positioned.fill(
-            child: Opacity(
-              opacity: 0.1,
-              child: SafeBackgroundImage(
-                imagePath: 'assets/images/onboard_bacground.svg', // Placeholder
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Custom Header Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // White Tab with Title
-                  Container(
-                    padding: const EdgeInsets.only(
-                        left: 20, right: 30, top: 12, bottom: 12),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        bottomRight: Radius.circular(300), // Slanted effect
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // White Tab with Title
+                    ClipPath(
+                      clipper: CutCornerClipper(),
+                      // clipBehavior: CustomRectClipper,
+                      child: Container(
+                        color: Colors.white,
+                        height: 5.h,
+                        width: 50.w,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.account_balance_wallet,
+                              color: HexColor('#7D73C2'),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Monthly Budget',
+                              style: AppTextTheme.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: AppColor.blackText,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.account_balance_wallet,
-                          color: HexColor('#7D73C2'),
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Monthly Budget',
+
+                    // Edit Button
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, right: 20),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddBudgetScreen()),
+                          );
+                          if (result == true && context.mounted) {
+                            context.read<BudgetProvider>().loadBudget();
+                          }
+                        },
+                        child: Text(
+                          'Edit',
                           style: AppTextTheme.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: AppColor.blackText,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: HexColor('#525252'),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // Edit Button
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12, right: 20),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddBudgetScreen()),
-                        );
-                        if (result == true && context.mounted) {
-                          context.read<BudgetProvider>().loadBudget();
-                        }
-                      },
-                      child: Text(
-                        'Edit',
-                        style: AppTextTheme.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: HexColor('#525252'),
-                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
 
               Padding(
@@ -273,4 +263,25 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       return '$firstTwo, +$remainingCount more';
     }
   }
+}
+
+class CutCornerClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    const double cutSize = 24; // control diagonal size
+
+    final path = Path();
+
+    path.moveTo(0, 0);
+    path.lineTo(size.width - cutSize, 0);
+    path.lineTo(size.width, cutSize);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

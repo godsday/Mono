@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../../../widgets/safe_background_image.dart';
 import '../pages/add_budget_screen.dart';
 import '../providers/financial_overview_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +18,9 @@ class FirstTimeBudgetCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 1,
+            offset: const Offset(0, 5),
           ),
         ],
         gradient: LinearGradient(
@@ -35,17 +34,6 @@ class FirstTimeBudgetCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Background Pattern (Placeholder)
-          const Positioned.fill(
-            child: Opacity(
-              opacity: 0.3,
-              child: SafeBackgroundImage(
-                imagePath: 'assets/images/onboard_bacground.svg', // Placeholder
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -59,7 +47,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 8,
+                        blurRadius: 3,
                         offset: const Offset(0, 2),
                       ),
                     ],
@@ -86,7 +74,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                   style: AppTextTheme.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: AppColor.textSecondary,
+                    color: AppColor.textGrey,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -110,11 +98,11 @@ class FirstTimeBudgetCard extends StatelessWidget {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [
-                                HexColor('#21988C'),
-                                HexColor('#21988C').withValues(alpha: 0.8),
+                                HexColor('#00B495'),
+                                HexColor('#438883')
                               ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight),
+                              end: Alignment.bottomCenter,
+                              begin: Alignment.topCenter),
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(

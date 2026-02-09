@@ -56,7 +56,7 @@ class GoalsOverviewCard extends StatelessWidget {
                     child: Opacity(
                       opacity: 0.6,
                       child: SafeBackgroundImage(
-                        imagePath: 'assets/images/dream_bg.png', // Placeholder
+                        imagePath: 'assets/images/boat.svg',
                         fit: BoxFit.cover,
                         fallback: Icon(Icons.kayaking,
                             size: 80,

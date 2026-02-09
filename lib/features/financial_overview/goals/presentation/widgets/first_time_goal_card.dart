@@ -42,7 +42,7 @@ class FirstTimeGoalCard extends StatelessWidget {
             child: Opacity(
               opacity: 0.8,
               child: SafeBackgroundImage(
-                imagePath: 'assets/images/dream_bg.png', // Placeholder
+                imagePath: 'assets/images/boat.svg',
                 fit: BoxFit.contain,
                 fallback: Icon(Icons.kayaking,
                     size: 80, color: Colors.grey.withValues(alpha: 0.2)),
@@ -56,7 +56,7 @@ class FirstTimeGoalCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'What You’re Working For',
+                  "What You're Working For",
                   style: AppTextTheme.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -75,20 +75,10 @@ class FirstTimeGoalCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Little sketch man at bottom left (Placeholder)
-                const SizedBox(height: 24), // Spacer
+                const SizedBox(height: 24),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Opacity(
-                      opacity: 0.6,
-                      child: SafeBackgroundImage(
-                          imagePath: 'assets/images/person_sketch.png',
-                          fit: BoxFit.contain,
-                          fallback: Icon(Icons.emoji_people,
-                              size: 40,
-                              color: Colors.grey.withValues(alpha: 0.2))),
-                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(

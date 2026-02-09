@@ -29,15 +29,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     return Scaffold(
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: TextStyle(
+            color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
         items: const [
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.arrow_2_squarepath), label: "More"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "More"),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grading_outlined), label: "Financial Hub"),
+              icon: Icon(Icons.bar_chart_outlined), label: "Finance"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
         ],

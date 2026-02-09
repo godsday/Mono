@@ -42,7 +42,8 @@ class FirstTimeAssetCard extends StatelessWidget {
             child: Opacity(
               opacity: 0.8,
               child: SafeBackgroundImage(
-                imagePath: 'assets/images/cityscape.png', // Placeholder
+                imagePath:
+                    'assets/images/building_firsttime.svg', // Placeholder
                 fit: BoxFit.contain,
                 fallback: Icon(Icons.location_city_rounded,
                     size: 80, color: Colors.grey.withValues(alpha: 0.2)),
@@ -60,7 +61,7 @@ class FirstTimeAssetCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: Icon(

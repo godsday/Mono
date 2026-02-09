@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../financial_overview/budget/data/repositories/budget_repository_impl.dart';
-import '../financial_overview/assets/data/repositories/asset_repository_impl.dart';
+import '../financial_overview/asset/data/repositories/asset_repository_impl.dart';
 import '../financial_overview/goals/data/repositories/goal_repository_impl.dart';
 
 class SettingsScreen extends StatefulWidget {
