@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 // import 'package:mono/screens/home_screen/home_screen.dart'; // Deprecated

@@ -59,23 +59,6 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Assets Section
-                  Consumer<AssetsProvider>(
-                    builder: (context, provider, _) {
-                      // if (provider.isLoading) {
-                      //   return const Center(
-                      //       child: CircularProgressIndicator());
-                      // }
-                      if (provider.assets.isEmpty) {
-                        return const FirstTimeAssetCard();
-                      } else {
-                        return const AssetsOverviewCard();
-                      }
-                    },
-                  ),
-
-                  const SizedBox(height: 20),
-
                   // Goals Section
                   Consumer<GoalsProvider>(
                     builder: (context, provider, _) {
@@ -87,6 +70,22 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                         return const FirstTimeGoalCard();
                       } else {
                         return const GoalsOverviewCard();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Assets Section
+                  Consumer<AssetsProvider>(
+                    builder: (context, provider, _) {
+                      // if (provider.isLoading) {
+                      //   return const Center(
+                      //       child: CircularProgressIndicator());
+                      // }
+                      if (provider.assets.isEmpty) {
+                        return const FirstTimeAssetCard();
+                      } else {
+                        return const AssetsOverviewCard();
                       }
                     },
                   ),

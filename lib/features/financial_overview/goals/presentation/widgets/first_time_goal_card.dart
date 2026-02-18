@@ -13,8 +13,9 @@ class FirstTimeGoalCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: HexColor('#EBF5FF'),
+        color: HexColor('#EFF7F9'),
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: HexColor('#A5C9FF'), width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -22,27 +23,33 @@ class FirstTimeGoalCard extends StatelessWidget {
             offset: const Offset(0, 4),
           ),
         ],
-        gradient: LinearGradient(
-          colors: [
-            HexColor('#EBF5FF'),
-            HexColor('#F5FAFF'),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
       ),
       child: Stack(
         children: [
           // Background Illustration (Right side)
           Positioned(
             right: 0,
-            bottom: 20,
-            top: 20,
-            width: 150,
+            top: 0,
+            width: 200,
             child: Opacity(
-              opacity: 0.8,
+              opacity: 1,
               child: SafeBackgroundImage(
-                imagePath: 'assets/images/boat.svg',
+                imagePath: 'assets/images/boat-first.png',
+                fit: BoxFit.contain,
+                fallback: Icon(Icons.kayaking,
+                    size: 80, color: Colors.grey.withValues(alpha: 0.2)),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: 0,
+            left: 10,
+            width: 170,
+            child: Opacity(
+              opacity: 1,
+              child: SafeBackgroundImage(
+                imagePath: 'assets/images/arrow-first.png',
                 fit: BoxFit.contain,
                 fallback: Icon(Icons.kayaking,
                     size: 80, color: Colors.grey.withValues(alpha: 0.2)),
@@ -63,7 +70,7 @@ class FirstTimeGoalCard extends StatelessWidget {
                     color: AppColor.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: 200,
                   child: Text(
@@ -75,7 +82,7 @@ class FirstTimeGoalCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 80),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -89,8 +96,15 @@ class FirstTimeGoalCard extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: HexColor('#3C7570'), // Dark teal
                             borderRadius: BorderRadius.circular(12),
+                            gradient: LinearGradient(
+                              end: Alignment.bottomRight,
+                              begin: Alignment.topLeft,
+                              colors: [
+                                HexColor('#429690'),
+                                HexColor('#1E4744').withValues(alpha: 0.8),
+                              ],
+                            ),
                             boxShadow: [
                               BoxShadow(
                                 color:
@@ -104,7 +118,7 @@ class FirstTimeGoalCard extends StatelessWidget {
                         child: Text(
                           'Start Dreaming',
                           style: AppTextTheme.poppins(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),

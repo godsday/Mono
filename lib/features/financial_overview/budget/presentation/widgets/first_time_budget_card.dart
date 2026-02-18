@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
@@ -18,9 +21,9 @@ class FirstTimeBudgetCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 1,
-            offset: const Offset(0, 5),
+            offset: const Offset(0, 1),
           ),
         ],
         gradient: LinearGradient(
@@ -34,6 +37,31 @@ class FirstTimeBudgetCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          const Positioned(
+              top: 130,
+              left: 170,
+              child: RotatedSquareDecoration(quarterTurns: .82)),
+          const Positioned(
+              top: 140,
+              left: 230,
+              child: RotatedSquareDecoration(
+                quarterTurns: .82,
+                size: 80,
+              )),
+          const Positioned(
+              bottom: 20,
+              left: 30,
+              child: RotatedSquareDecoration(
+                size: 35,
+                quarterTurns: 1,
+              )),
+          const Positioned(
+              top: 10,
+              right: 30,
+              child: RotatedSquareDecoration(
+                size: 36,
+                quarterTurns: 1.3,
+              )),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -79,54 +107,69 @@ class FirstTimeBudgetCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                SizedBox(
+                AppElevetedButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddBudgetScreen()),
+                    );
+                    // Since we are back, let's try to reload the budget to check if it was added
+                    if (context.mounted) {
+                      context.read<BudgetProvider>().loadBudget();
+                    }
+                  },
+                  appButtonText: 'Set Monthly Budget',
+                  // height: 42,
                   width: double.infinity,
-                  child: GestureDetector(
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddBudgetScreen()),
-                      );
-                      // Since we are back, let's try to reload the budget to check if it was added
-                      if (context.mounted) {
-                        context.read<BudgetProvider>().loadBudget();
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [
-                                HexColor('#00B495'),
-                                HexColor('#438883')
-                              ],
-                              end: Alignment.bottomCenter,
-                              begin: Alignment.topCenter),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: HexColor('#21988C').withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ]),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      child: Text(
-                        'Set Monthly Budget',
-                        style: AppTextTheme.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.white,
-                        ),
-                      ),
-                    ),
-                  ),
                 )
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class RotatedSquareDecoration extends StatelessWidget {
+  final double size;
+  final double borderRadius;
+  final Color color;
+  final double opacity;
+  final double quarterTurns;
+
+  const RotatedSquareDecoration({
+    super.key,
+    this.size = 100,
+    this.borderRadius = 0,
+    this.color = Colors.black,
+    this.opacity = 0.08,
+    this.quarterTurns = math.pi / 2, // 90°
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.rotate(
+      angle: quarterTurns,
+      child: Opacity(
+        opacity: opacity,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                HexColor('#69639B'),
+                HexColor('#9995AF'),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            color: color,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
       ),
     );
   }

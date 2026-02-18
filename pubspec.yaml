@@ -100,6 +100,9 @@ flutter:
     - assets/images/shopping.svg
     - assets/images/transport.svg
     - assets/images/assetBOverview.png
+    - assets/images/boat-first.png
+    - assets/images/arrow-first.png
+    - assets/images/building-big.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

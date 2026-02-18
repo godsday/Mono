@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
@@ -6,7 +7,6 @@ import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
 import '../pages/add_goal_screen.dart';
 import '../providers/goals_provider.dart';
-import '../../../widgets/safe_background_image.dart';
 
 class GoalsOverviewCard extends StatelessWidget {
   const GoalsOverviewCard({super.key});
@@ -55,13 +55,12 @@ class GoalsOverviewCard extends StatelessWidget {
                     width: 150,
                     child: Opacity(
                       opacity: 0.6,
-                      child: SafeBackgroundImage(
-                        imagePath: 'assets/images/boat.svg',
-                        fit: BoxFit.cover,
-                        fallback: Icon(Icons.kayaking,
-                            size: 80,
-                            color: Colors.grey.withValues(alpha: 0.2)),
-                      ),
+                      child: Image.asset('assets/images/boat-first.png'
+                          // fit: BoxFit.cover,
+                          //    Icon(Icons.kayaking,
+                          //       size: 80,
+                          //       color: Colors.grey.withValues(alpha: 0.2)),
+                          ),
                     ),
                   ),
 

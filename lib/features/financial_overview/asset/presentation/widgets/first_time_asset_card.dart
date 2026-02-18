@@ -35,15 +35,13 @@ class FirstTimeAssetCard extends StatelessWidget {
         children: [
           // Background Cityscape (Right side)
           Positioned(
-            right: 0,
-            bottom: 0,
+            right: 10,
             top: 20,
             width: 150,
             child: Opacity(
               opacity: 0.8,
               child: SafeBackgroundImage(
-                imagePath:
-                    'assets/images/building_firsttime.svg', // Placeholder
+                imagePath: 'assets/images/building-big.png', // Placeholder
                 fit: BoxFit.contain,
                 fallback: Icon(Icons.location_city_rounded,
                     size: 80, color: Colors.grey.withValues(alpha: 0.2)),
@@ -59,8 +57,7 @@ class FirstTimeAssetCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(),
                       decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
@@ -81,7 +78,7 @@ class FirstTimeAssetCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: 200, // Limit width to avoid overlapping image
                   child: Text(
@@ -93,7 +90,7 @@ class FirstTimeAssetCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 74),
                 SizedBox(
                   width: 140,
                   child: GestureDetector(
@@ -122,9 +119,9 @@ class FirstTimeAssetCard extends StatelessWidget {
                       child: Text(
                         'Add Assets',
                         style: AppTextTheme.poppins(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: HexColor('#21988C'),
+                          color: HexColor('#2D6763'),
                         ),
                       ),
                     ),
