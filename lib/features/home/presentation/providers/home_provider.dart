@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
-import 'package:mono/features/home/domain/usecase/calculate_this_month.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
+import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_this_month.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
 import 'package:mono/features/home/domain/usecase/get_top_categories.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/models/top_category_model.dart';

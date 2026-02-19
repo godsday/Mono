@@ -53,6 +53,13 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
   final TextEditingController _totalController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final provider = context.read<AddBudgetProvider>();
+    _totalController.text = provider.totalBudget.toStringAsFixed(0);
+  }
+
+  @override
   void dispose() {
     _totalController.dispose();
     super.dispose();

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
-import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
+import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
