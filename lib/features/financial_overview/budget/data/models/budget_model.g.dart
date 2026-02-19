@@ -21,13 +21,14 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
       spentAmount: fields[1] as double,
       remainingAmount: fields[2] as double,
       categories: (fields[3] as List).cast<BudgetCategoryModel>(),
+      month: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, BudgetModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.totalBudget)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
       ..writeByte(2)
       ..write(obj.remainingAmount)
       ..writeByte(3)
-      ..write(obj.categories);
+      ..write(obj.categories)
+      ..writeByte(4)
+      ..write(obj.month);
   }
 
   @override

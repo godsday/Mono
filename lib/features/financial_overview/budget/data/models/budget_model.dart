@@ -18,11 +18,15 @@ class BudgetModel extends HiveObject {
   @HiveField(3)
   final List<BudgetCategoryModel> categories;
 
+  @HiveField(4)
+  final String month;
+
   BudgetModel({
     required this.totalBudget,
     required this.spentAmount,
     required this.remainingAmount,
     required this.categories,
+    required this.month,
   });
 
   // Mapper to Entity
@@ -32,6 +36,7 @@ class BudgetModel extends HiveObject {
       spentAmount: spentAmount,
       remainingAmount: remainingAmount,
       categories: categories.map((e) => e.toEntity()).toList(),
+      month: month,
     );
   }
 
@@ -44,6 +49,7 @@ class BudgetModel extends HiveObject {
       categories: entity.categories
           .map((e) => BudgetCategoryModel.fromEntity(e))
           .toList(),
+      month: entity.month,
     );
   }
 }

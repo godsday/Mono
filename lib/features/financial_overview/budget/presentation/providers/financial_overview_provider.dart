@@ -28,11 +28,6 @@ class BudgetProvider extends ChangeNotifier {
     try {
       _budget = await getBudgetUseCase();
 
-      // if (_budget == null || _budget!.totalBudget == 0) {
-      //   _isFirstTimeUser = true;
-      // } else {
-      //   _isFirstTimeUser = false;
-
       // Sync expenses
       final transactions = await getTransactions();
       final now = DateTime.now();
@@ -57,6 +52,7 @@ class BudgetProvider extends ChangeNotifier {
 
       // Update BudgetEntity with calculated spent amount
       _budget = BudgetEntity(
+        month: DateTime.now().month.toString(),
         totalBudget: _budget!.totalBudget,
         spentAmount: totalSpent,
         remainingAmount: _budget!.totalBudget - totalSpent,

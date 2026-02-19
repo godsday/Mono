@@ -42,6 +42,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
     });
 
     final entity = BudgetEntity(
+      month: DateTime.now().month.toString(),
       totalBudget: totalBudget,
       spentAmount:
           0, // Reset spent amount for new budget? Or keep? usually new budget means 0 spent or tracked elsewhere
