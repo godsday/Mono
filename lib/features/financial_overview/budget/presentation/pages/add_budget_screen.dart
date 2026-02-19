@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
@@ -50,18 +51,17 @@ class _AddBudgetBody extends StatefulWidget {
 }
 
 class _AddBudgetBodyState extends State<_AddBudgetBody> {
-  final TextEditingController _totalController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     final provider = context.read<AddBudgetProvider>();
-    _totalController.text = provider.totalBudget.toStringAsFixed(0);
+    provider.totalController.text = provider.totalBudget.toStringAsFixed(0);
   }
 
   @override
   void dispose() {
-    _totalController.dispose();
+    final provider = context.read<AddBudgetProvider>();
+    provider.totalController.dispose();
     super.dispose();
   }
 
@@ -131,7 +131,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           ),
           const SizedBox(height: 12),
           TextField(
-            controller: _totalController,
+            controller: provider.totalController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: AppTextTheme.montserrart(
               fontSize: 32,
@@ -310,7 +310,7 @@ class _SaveBudgetButton extends StatelessWidget {
               ? () async {
                   final success = await provider.saveBudget();
                   if (success && context.mounted) {
-                    Navigator.pop(context, true);
+                    Navigator.of(context).pushNamed(RouteNames.budgetOverview);
                   }
                 }
               : null,

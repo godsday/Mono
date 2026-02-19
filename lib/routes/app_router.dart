@@ -24,6 +24,9 @@ class AppRouter {
       case RouteNames.settings:
         return _buildPageRoute(const SettingsScreen(), settings);
 
+      case RouteNames.budgetOverview:
+        return _buildPageRoute(const BottomNavigator(index: 2), settings);
+
       case RouteNames.transactionList:
         return _buildPageRoute(
             const BottomNavigator(

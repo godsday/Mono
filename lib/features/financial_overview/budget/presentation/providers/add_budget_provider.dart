@@ -5,8 +5,9 @@ import '../../domain/usecases/save_monthly_budget_usecase.dart';
 
 class AddBudgetProvider extends ChangeNotifier {
   final SaveMonthlyBudgetUseCase saveBudgetUseCase;
+  final TextEditingController totalController = TextEditingController();
 
-  double _totalBudget = 0;
+  double? _totalBudget;
   final Map<String, double> _categoryBudgets = {};
   List<CategoryModel> _availableCategories = [];
   bool _isLoading = false;
@@ -15,7 +16,7 @@ class AddBudgetProvider extends ChangeNotifier {
     _loadCategories();
   }
 
-  double get totalBudget => _totalBudget;
+  double get totalBudget => _totalBudget!;
   Map<String, double> get categoryBudgets => _categoryBudgets;
   List<CategoryModel> get availableCategories => _availableCategories;
   bool get isLoading => _isLoading;
@@ -24,10 +25,10 @@ class AddBudgetProvider extends ChangeNotifier {
     return _categoryBudgets.values.fold(0, (sum, amount) => sum + amount);
   }
 
-  double get remainingAmount => _totalBudget - allocatedAmount;
+  double get remainingAmount => _totalBudget! - allocatedAmount;
 
   bool get isValid {
-    return _totalBudget > 0 && remainingAmount >= 0;
+    return _totalBudget! > 0 && remainingAmount >= 0;
   }
 
   Future<void> _loadCategories() async {
@@ -45,6 +46,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
   void updateTotalBudget(double amount) {
     _totalBudget = amount;
+    print("object$_totalBudget");
     notifyListeners();
   }
 
@@ -64,7 +66,7 @@ class AddBudgetProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await saveBudgetUseCase(_totalBudget, _categoryBudgets);
+      await saveBudgetUseCase(_totalBudget!, _categoryBudgets);
       return true;
     } catch (e) {
       debugPrint("Error saving budget: $e");

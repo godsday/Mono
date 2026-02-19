@@ -4,7 +4,7 @@ import 'package:mono/models/top_category_model.dart';
 class GetTopCategories {
   List<TopCategory> getTopCategories(
       List<TranscationModel> transactions, String type) {
-    var categoryTotals = <String, double>{};
+    Map<String, double> categoryTotals = <String, double>{};
     double totalTypeAmount = 0;
 
     // Filter transactions by type and calculate totals
@@ -13,14 +13,14 @@ class GetTopCategories {
       categoryTotals[t.category] = (categoryTotals[t.category] ?? 0) + t.amount;
       totalTypeAmount += t.amount;
     }
-    print(totalTypeAmount);
+    // print("${categoryTotals.entries} ----  ${totalTypeAmount}");
     // Convert to TopCategory list
-    var topCategories = categoryTotals.entries.map((entry) {
+    List<TopCategory> topCategories = categoryTotals.entries.map((entry) {
       return TopCategory(
-        name: entry.key,
-        amount: entry.value,
-        percentage: totalTypeAmount > 0 ? (entry.value / totalTypeAmount) : 0,
-      );
+          name: entry.key,
+          amount: entry.value,
+          percentage:
+              totalTypeAmount > 0 ? (entry.value / totalTypeAmount) * 100 : 0);
     }).toList();
 
     // Sort by amount descending

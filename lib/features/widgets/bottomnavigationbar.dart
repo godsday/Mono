@@ -15,7 +15,7 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int _selectedIndex = 1;
+  int? _selectedIndex;
   List pages = [
     // const ProfileScreen(),
     const TranscationScreen(),
@@ -26,7 +26,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_selectedIndex],
+      body: pages[_selectedIndex ?? widget.index],
       bottomNavigationBar: BottomNavigationBar(
         selectedLabelStyle: TextStyle(
             color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
@@ -45,7 +45,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         iconSize: 30,
         showUnselectedLabels: false,
         showSelectedLabels: true,
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedIndex ?? widget.index,
         selectedItemColor: AppColor.mainHexcolor,
         unselectedItemColor: Colors.black45,
         onTap: _onitemtap,

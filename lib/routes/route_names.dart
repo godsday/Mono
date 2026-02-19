@@ -6,4 +6,5 @@ class RouteNames {
   static const String editTransaction = '/edit-transaction';
   static const String onboarding = '/onboarding';
   static const String transactionList = '/transactionList';
+  static const String budgetOverview = '/budget-overview';
 }
