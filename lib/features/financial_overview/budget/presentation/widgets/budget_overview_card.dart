@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/presentation/providers/add_budget_provider.dart';
+import 'package:mono/features/financial_overview/budget/presentation/providers/financial_overview_provider.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../pages/add_budget_screen.dart';
 import '../../domain/entities/budget_entity.dart';
-import '../providers/financial_overview_provider.dart';
 
 class BudgetOverviewCard extends StatefulWidget {
   final BudgetEntity budget;
@@ -120,13 +121,19 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       padding: const EdgeInsets.only(top: 12, right: 20),
                       child: GestureDetector(
                         onTap: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddBudgetScreen()),
-                          );
+                          // final provider = context.read<AddBudgetProvider>();
+                          // final provider = Provider.of<AddBudgetProvider>(
+                          //     context,
+                          //     listen: false);
+                          final result = await Navigator.pushNamed(
+                              context, RouteNames.addBudget,
+                              arguments: widget.budget);
+
                           if (result == true && context.mounted) {
-                            context.read<BudgetProvider>().loadBudget();
+                            // context.read<BudgetProvider>().loadBudget();
+                            // context
+                            //     .read<AddBudgetProvider>()
+                            //     .updateTotalBudget(widget.budget.totalBudget);
                           }
                         },
                         child: Text(
@@ -205,17 +212,38 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                                 '₹${widget.budget.remainingAmount.toStringAsFixed(0)}')),
                       ],
                     ),
-
-                    const SizedBox(height: 30),
-
-                    Text(
-                      _buildCategoryText(),
-                      style: AppTextTheme.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.blackText,
+                    if (widget.budget.categories.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        'Categories',
+                        style: AppTextTheme.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColor.textGrey,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: widget.budget.categories.map((cat) {
+                          return _CategoryChip(
+                            title: cat.name,
+                            amount: '₹${cat.amount.toStringAsFixed(0)}',
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                    // const SizedBox(height: 30),
+
+                    // Text(
+                    //   _buildCategoryText(),
+                    //   style: AppTextTheme.poppins(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w500,
+                    //     color: AppColor.blackText,
+                    //   ),
+                    // ),
                   ],
                 ),
               )
@@ -251,7 +279,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
     );
   }
 
-  String _buildCategoryText() {
+  /*String _buildCategoryText() {
     final categories = widget.budget.categories;
     if (categories.isEmpty) {
       return 'No category selected';
@@ -262,7 +290,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       final remainingCount = categories.length - 2;
       return '$firstTwo, +$remainingCount more';
     }
-  }
+  }*/
 }
 
 class CutCornerClipper extends CustomClipper<Path> {
@@ -284,4 +312,33 @@ class CutCornerClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class _CategoryChip extends StatelessWidget {
+  final String title;
+  final String amount;
+
+  const _CategoryChip({
+    required this.title,
+    required this.amount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColor.textGrey.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        '$title: $amount',
+        style: AppTextTheme.poppins(
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+          color: AppColor.white,
+        ),
+      ),
+    );
+  }
 }

@@ -18,7 +18,7 @@ class BudgetModel extends HiveObject {
   @HiveField(3)
   final List<BudgetCategoryModel> categories;
 
-  @HiveField(4)
+  @HiveField(4, defaultValue: '')
   final String month;
 
   BudgetModel({

@@ -2,21 +2,32 @@ import 'package:flutter/material.dart';
 import '../../../../../database/categories_DB/category_db.dart';
 import '../../../../../models/category_model/category_model.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
+import '../../domain/entities/budget_entity.dart';
 
 class AddBudgetProvider extends ChangeNotifier {
   final SaveMonthlyBudgetUseCase saveBudgetUseCase;
-  final TextEditingController totalController = TextEditingController();
 
-  double? _totalBudget;
+  double _totalBudget = 0;
   final Map<String, double> _categoryBudgets = {};
   List<CategoryModel> _availableCategories = [];
+  dynamic existingCategory = [];
   bool _isLoading = false;
+
+  double? isBudgetExist;
+  Map<String, double>? budgetdata;
 
   AddBudgetProvider({required this.saveBudgetUseCase}) {
     _loadCategories();
   }
 
-  double get totalBudget => _totalBudget!;
+  void initBudget(BudgetEntity budget) {
+    _totalBudget = budget.totalBudget;
+    for (var cat in budget.categories) {
+      _categoryBudgets[cat.id] = cat.amount;
+    }
+  }
+
+  double get totalBudget => _totalBudget;
   Map<String, double> get categoryBudgets => _categoryBudgets;
   List<CategoryModel> get availableCategories => _availableCategories;
   bool get isLoading => _isLoading;
@@ -25,10 +36,10 @@ class AddBudgetProvider extends ChangeNotifier {
     return _categoryBudgets.values.fold(0, (sum, amount) => sum + amount);
   }
 
-  double get remainingAmount => _totalBudget! - allocatedAmount;
+  double get remainingAmount => _totalBudget - allocatedAmount;
 
   bool get isValid {
-    return _totalBudget! > 0 && remainingAmount >= 0;
+    return _totalBudget > 0 && remainingAmount >= 0;
   }
 
   Future<void> _loadCategories() async {
@@ -66,7 +77,12 @@ class AddBudgetProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await saveBudgetUseCase(_totalBudget!, _categoryBudgets);
+      await saveBudgetUseCase(_totalBudget, _categoryBudgets);
+      print("add provider $_totalBudget");
+      if (_totalBudget != 0) {
+        isBudgetExist = _totalBudget;
+        existingCategory = _availableCategories;
+      }
       return true;
     } catch (e) {
       debugPrint("Error saving budget: $e");

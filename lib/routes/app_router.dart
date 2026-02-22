@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
+import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/add_screen.dart';
@@ -26,6 +28,15 @@ class AppRouter {
 
       case RouteNames.budgetOverview:
         return _buildPageRoute(const BottomNavigator(index: 2), settings);
+
+      case RouteNames.addBudget:
+        final args = settings.arguments;
+        final budget = args is BudgetEntity ? args : null;
+        return _buildPageRoute(
+            AddBudgetScreen(
+              budget: budget,
+            ),
+            settings);
 
       case RouteNames.transactionList:
         return _buildPageRoute(

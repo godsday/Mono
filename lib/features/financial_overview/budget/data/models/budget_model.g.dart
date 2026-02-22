@@ -21,7 +21,7 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
       spentAmount: fields[1] as double,
       remainingAmount: fields[2] as double,
       categories: (fields[3] as List).cast<BudgetCategoryModel>(),
-      month: fields[4] as String,
+      month: fields[4] == null ? '' : fields[4] as String,
     );
   }
 

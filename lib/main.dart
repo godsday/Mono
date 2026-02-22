@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
+import 'package:mono/features/financial_overview/budget/domain/usecases/save_monthly_budget_usecase.dart';
+import 'package:mono/features/financial_overview/budget/presentation/providers/add_budget_provider.dart';
 import 'package:mono/features/financial_overview/budget/presentation/providers/financial_overview_provider.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_this_month.dart';
@@ -96,6 +98,7 @@ Future<void> main() async {
       TransactionRepositoryImpl(localDataSource: localDataSource);
 
   final budgetRepository = BudgetRepositoryImpl();
+  final saveBudgetUseCase = SaveMonthlyBudgetUseCase(budgetRepository);
 
   final getTransactions = GetTransactions(repository);
   final addTransaction = AddTransaction(repository);
@@ -157,6 +160,10 @@ Future<void> main() async {
           return homeProvider;
         },
       ),
+      ChangeNotifierProvider(
+          create: (_) => AddBudgetProvider(
+                saveBudgetUseCase: saveBudgetUseCase,
+              )),
       ChangeNotifierProvider(
           create: (_) => BudgetProvider(
                 // getBudgetUseCase: getBudgetUseCase,
