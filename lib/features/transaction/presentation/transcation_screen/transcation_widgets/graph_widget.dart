@@ -40,7 +40,7 @@ class _GraphWidgetState extends State<GraphWidget> {
         legend: const Legend(isVisible: true),
         tooltipBehavior: widget._tooltipBehavior,
         series: <CircularSeries>[
-          DoughnutSeries<Chartdata, String>(
+          PieSeries<Chartdata, String>(
               dataSource: provider.itemvalue == 'All'
                   ? allData
                   : provider.itemvalue == 'Income'

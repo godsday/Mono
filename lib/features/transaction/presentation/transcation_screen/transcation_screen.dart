@@ -25,7 +25,7 @@ class TranscationScreen extends StatefulWidget {
 }
 
 class _TranscationScreenState extends State<TranscationScreen> {
-  late TooltipBehavior _tooltipBehavior;
+  // late TooltipBehavior _tooltipBehavior;
   //bool visible = false;
 
   var item = ['Income', 'All', 'Expense'];
@@ -36,7 +36,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
     // TranscationDB.instance.refresh();
     Provider.of<TransactionProvider>(context, listen: false).refresh();
 
-    _tooltipBehavior = TooltipBehavior(enable: true);
+    // _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
 
@@ -308,7 +308,6 @@ class _TranscationScreenState extends State<TranscationScreen> {
                     itemCount: item.length,
                     itemBuilder: (context, index) {
                       final isSelected = pro.itemvalue == item[index];
-
                       // Scroll to center the selected item
                       if (isSelected) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -382,87 +381,72 @@ class _TranscationScreenState extends State<TranscationScreen> {
                   topLeft: Radius.circular(24), topRight: Radius.circular(24)),
               color: AppColor.blueContainer,
             ),
-            child: Column(
-              children: [
-                Consumer<TransactionProvider>(builder: (context, pro, child) {
-                  return pro.itemvalue == "All"
-                      ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                      : pro.itemvalue == "Income"
-                          ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                          : pro.itemvalue == "Expense"
-                              ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                              : SizedBox(height: 2.h);
-                }),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).hoverColor,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          height: 4.h,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).hoverColor,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildFilterChip('Today', context),
-                              _buildFilterChip('Weekly', context),
-                              _buildFilterChip('Monthly', context),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.calendar_month_outlined,
-                                  size: 15.sp,
-                                ),
-                                color: HexColor('#EEEEEE'),
-                                onPressed: () {
-                                  _showCustomDatePicker(context);
-                                },
-                              ),
-                            ],
+                        _buildFilterChip('Today', context),
+                        _buildFilterChip('Weekly', context),
+                        _buildFilterChip('Monthly', context),
+                        IconButton(
+                          icon: Icon(
+                            Icons.calendar_month_outlined,
+                            size: 15.sp,
                           ),
-                        ),
-                        Consumer<TransactionProvider>(
-                            builder: (context, provider, child) {
-                          return Container(
-                              height: 4.h,
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 215, 215, 214),
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0,
-                                  ),
-                                  child: provider.headinginnermethod()));
-                        }),
-                        Expanded(
-                          child: Container(
-                            color: HexColor('#EEEEEE'),
-                            child: ValueListenableBuilder(
-                                valueListenable:
-                                    Provider.of<TransactionProvider>(context,
-                                            listen: true)
-                                        .listingMethod(),
-                                builder: (BuildContext context,
-                                    List<TranscationModel> newlist, _) {
-                                  return newlist.isEmpty
-                                      ? Stack(children: [
-                                          Lottie.asset(
-                                              'assets/images/animation/paymentshero1.json')
-                                        ])
-                                      : _buildGroupedTransactionList(newlist);
-                                }),
-                          ),
+                          color: HexColor('#EEEEEE'),
+                          onPressed: () {
+                            _showCustomDatePicker(context);
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Consumer<TransactionProvider>(
+                      builder: (context, provider, child) {
+                    return Container(
+                        height: 4.h,
+                        decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 215, 215, 214),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                            ),
+                            child: provider.headinginnermethod()));
+                  }),
+                  Expanded(
+                    child: Container(
+                      color: HexColor('#EEEEEE'),
+                      child: ValueListenableBuilder(
+                          valueListenable: Provider.of<TransactionProvider>(
+                                  context,
+                                  listen: true)
+                              .listingMethod(),
+                          builder: (BuildContext context,
+                              List<TranscationModel> newlist, _) {
+                            return newlist.isEmpty
+                                ? Stack(children: [
+                                    Lottie.asset(
+                                        'assets/images/animation/paymentshero1.json')
+                                  ])
+                                : _buildGroupedTransactionList(newlist);
+                          }),
+                    ),
+                  ),
+                ],
+              ),
             ),
           )),
         ],
@@ -490,3 +474,12 @@ class VisibleChart extends StatelessWidget {
     );
   }
 }
+ // Consumer<TransactionProvider>(builder: (context, pro, child) {
+                //   return pro.itemvalue == "All"
+                //       ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                //       : pro.itemvalue == "Income"
+                //           ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                //           : pro.itemvalue == "Expense"
+                //               ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                //               : SizedBox(height: 2.h);
+                // }),

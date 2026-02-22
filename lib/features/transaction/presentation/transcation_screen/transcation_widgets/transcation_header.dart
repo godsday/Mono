@@ -41,14 +41,6 @@ class TranscationHeader extends StatelessWidget {
                   color: AppColor.white,
                 ),
               ),
-
-              // Image(
-              //       width: 47.w,
-              //       image: const AssetImage(
-              //         'assets/images/rings.png',
-              //       ),
-              //     ),
-              //
             ),
           ),
         ),
