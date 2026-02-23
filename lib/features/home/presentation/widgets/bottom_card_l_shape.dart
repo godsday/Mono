@@ -177,7 +177,7 @@ class LShapeWidget extends StatelessWidget {
               right: 0,
               height: totalHeight * 0.04.h, // Adjust height of content area
               child: Text(
-                '₹ ${totalAmount.toStringAsFixed(1)}',
+                '₹ ${totalAmount.toStringAsFixed(0)}',
                 style: AppTextStyles.poppins18w500White(context)
                     ?.copyWith(color: HexColor('#030303')),
               ),

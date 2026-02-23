@@ -12,10 +12,10 @@ import 'package:sizer/sizer.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:mono/models/category_model/category_model.dart';
 import '../transaction/presentation/providers/transaction_provider.dart';
-import '../transaction/domain/entities/transaction_entity.dart';
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({super.key});
+  final TranscationModel? isDataExist;
+  const AddScreen({super.key, this.isDataExist});
 
   @override
   State<AddScreen> createState() => _AddScreenState();
@@ -43,8 +43,17 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<TransactionProvider>(context, listen: false);
+
+      if (widget.isDataExist != null) {
+        amountcontrol.text = widget.isDataExist!.amount.toStringAsFixed(0);
+        notescontrol.text = widget.isDataExist!.purpose.toString();
+        provider.selectedDate = widget.isDataExist!.date;
+        provider.categorySelected = widget.isDataExist!.category;
+        provider.selectedType = widget.isDataExist!.type;
+        notescontrol.text = widget.isDataExist!.purpose.toString();
+      }
+
       provider.loadCategories();
-      provider.categorySelected = null;
     });
   }
 
@@ -81,7 +90,9 @@ class _AddScreenState extends State<AddScreen> {
                 top: 5.h,
                 left: 26.w,
                 child: Text(
-                  "Add Transcations",
+                  widget.isDataExist == null
+                      ? "Add Transcation"
+                      : "Edit Transcation",
                   style: AppTextTheme.montserrart(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
@@ -440,9 +451,10 @@ class _AddScreenState extends State<AddScreen> {
                                     final amount =
                                         double.parse(amountcontrol.text);
                                     final entity = TranscationModel(
-                                      id: DateTime.now()
-                                          .millisecondsSinceEpoch
-                                          .toString(),
+                                      id: widget.isDataExist?.id ??
+                                          DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString(),
                                       type: provider.selectedType,
                                       amount: amount,
                                       date: provider.selectedDate,
@@ -450,10 +462,9 @@ class _AddScreenState extends State<AddScreen> {
                                       purpose: notescontrol.text,
                                     );
 
-                                    await Provider.of<TransactionProvider>(
-                                            context,
-                                            listen: false)
-                                        .addTransaction(entity);
+                                    widget.isDataExist != null
+                                        ? provider.updateTransaction(entity)
+                                        : provider.addTransaction(entity);
 
                                     if (context.mounted) {
                                       Navigator.of(context).pop();
@@ -470,7 +481,9 @@ class _AddScreenState extends State<AddScreen> {
                                   minimumSize: const Size(double.infinity, 55),
                                 ),
                                 child: Text(
-                                  'Record',
+                                  widget.isDataExist == null
+                                      ? 'Record'
+                                      : 'Update',
                                   style:
                                       AppTextStyles.poppins18w500White(context)
                                           ?.copyWith(fontSize: 17.sp),

@@ -58,7 +58,7 @@ class IncomeExpenseCard extends StatelessWidget {
               ],
             ),
             AutoSizeText(
-              '₹ ${value.toStringAsFixed(1)}',
+              '₹ ${value.toStringAsFixed(0)}',
               maxLines: 1,
               style: const TextStyle(
                 color: Colors.white,

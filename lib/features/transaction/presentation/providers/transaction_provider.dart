@@ -4,7 +4,7 @@ import 'package:mono/database/categories_DB/category_db.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
+
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/usecases/add_transaction.dart';
@@ -249,66 +249,31 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  headinginnermethod() {
+  ({String title, String amount}) getHeadingData() {
     if (itemvalue == "Income") {
-      return HeadingMethod(
-          headtext: 'My savings', amount: totalIncome.toStringAsFixed(1));
+      return (title: 'My Savings', amount: totalIncome.toStringAsFixed(0));
     } else if (itemvalue == 'Expense') {
-      return HeadingMethod(
-          headtext: ' My spendings', amount: totalExpense.toStringAsFixed(1));
+      return (title: ' My Spendings', amount: totalExpense.toStringAsFixed(0));
     } else if (itemvalue == 'Today') {
-      double todayTotal = calculateTotalForList(todaylistnotifier);
-      return HeadingMethod(
-          headtext: 'Today', amount: todayTotal.toStringAsFixed(1));
+      double todayTotal = totalBalanceUseCase.call(todaylistnotifier.value);
+      return (title: 'Today', amount: todayTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Yesterday') {
-      return HeadingMethod(headtext: 'Yesterday');
+      return (title: 'Yesterday', amount: '');
     } else if (itemvalue == 'Weekly') {
-      double weeklyTotal = calculateTotalForList(weeklylistnotifier);
-      return HeadingMethod(
-          headtext: 'This Week', amount: weeklyTotal.toStringAsFixed(1));
+      double weeklyTotal = totalBalanceUseCase.call(weeklylistnotifier.value);
+      return (title: 'This Week', amount: weeklyTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Monthly') {
-      double monthlyTotal = calculateTotalForList(monthlylistnotifier);
-      return HeadingMethod(
-          headtext: 'This Month', amount: monthlyTotal.toStringAsFixed(1));
+      double monthlyTotal = totalBalanceUseCase.call(monthlylistnotifier.value);
+      return (title: 'This Month', amount: monthlyTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Custom') {
-      return HeadingMethod(headtext: 'Custom');
+      double customTotal = totalBalanceUseCase.call(customlistnotifier.value);
+      return (title: 'Custom', amount: customTotal.toStringAsFixed(0));
     } else {
-      return HeadingMethod(
-          headtext: 'All Transcations',
-          amount: totalBalance.toStringAsFixed(1));
+      return (
+        title: 'All Transcations',
+        amount: totalBalance.toStringAsFixed(0)
+      );
     }
-  }
-
-  double calculateTotalForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Income') {
-        total += transaction.amount;
-      } else if (transaction.type == 'Expense') {
-        total -= transaction.amount;
-      }
-    }
-    return total;
-  }
-
-  double calculateIncomeForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Income') {
-        total += transaction.amount;
-      }
-    }
-    return total;
-  }
-
-  double calculateExpenseForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Expense') {
-        total += transaction.amount;
-      }
-    }
-    return total;
   }
 
   Future<void> loadCategories() async {

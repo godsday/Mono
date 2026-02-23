@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/add_screen.dart';
@@ -21,7 +22,14 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => OnboardScreen());
 
       case RouteNames.addTransaction:
-        return _buildPageRoute(const AddScreen(), settings, isVertical: true);
+        final args = settings.arguments;
+        final transaction = args is TranscationModel ? args : null;
+        return _buildPageRoute(
+          AddScreen(
+            isDataExist: transaction,
+          ),
+          settings,
+        );
 
       case RouteNames.settings:
         return _buildPageRoute(const SettingsScreen(), settings);
