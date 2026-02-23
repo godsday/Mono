@@ -11,6 +11,7 @@ import '../../domain/usecases/add_transaction.dart';
 import '../../domain/usecases/delete_transaction.dart';
 import '../../domain/usecases/get_transactions.dart';
 import '../../domain/usecases/update_transaction.dart';
+import '../../domain/usecases/group_transactions_by_date.dart';
 
 class TransactionProvider with ChangeNotifier {
   final GetTransactions getTransactionsUseCase;
@@ -20,6 +21,7 @@ class TransactionProvider with ChangeNotifier {
   final TotalBalanceUseCase totalBalanceUseCase;
   final TotalIncomeUseCase totalIncomeUseCase;
   final TotalExpenseUseCase totalExpenseUseCase;
+  final GroupTransactionsByDateUseCase groupTransactionsUseCase;
 
   List<TranscationModel> _transactions = [];
 
@@ -34,6 +36,7 @@ class TransactionProvider with ChangeNotifier {
     required this.totalBalanceUseCase,
     required this.totalIncomeUseCase,
     required this.totalExpenseUseCase,
+    required this.groupTransactionsUseCase,
   });
 
   // double get totalBalance => homeProvider.totalBalance;
@@ -249,11 +252,15 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
+  Map<String, List<TranscationModel>> get groupedTransactions {
+    return groupTransactionsUseCase(listingMethod().value);
+  }
+
   ({String title, String amount}) getHeadingData() {
     if (itemvalue == "Income") {
-      return (title: 'My Savings', amount: totalIncome.toStringAsFixed(0));
+      return (title: 'Savings', amount: totalIncome.toStringAsFixed(0));
     } else if (itemvalue == 'Expense') {
-      return (title: ' My Spendings', amount: totalExpense.toStringAsFixed(0));
+      return (title: 'Spendings', amount: totalExpense.toStringAsFixed(0));
     } else if (itemvalue == 'Today') {
       double todayTotal = totalBalanceUseCase.call(todaylistnotifier.value);
       return (title: 'Today', amount: todayTotal.toStringAsFixed(0));

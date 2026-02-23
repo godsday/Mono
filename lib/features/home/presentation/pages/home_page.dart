@@ -10,6 +10,7 @@ import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card
 import 'package:mono/features/home/presentation/widgets/shapes/curve_shape_u_card.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -160,17 +161,54 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ),
                 ],
               ),
-              const Spacer(),
-              Column(
-                children: [
-                  Text(
-                    "Cash",
-                    style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 2.h),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Smart Insights",
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: HexColor("EEF4F6"),
+                        border:
+                            Border.all(color: HexColor("000000").withAlpha(9)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10),
+                        child: Row(children: [
+                          SmartInsightElements(
+                            color: HexColor("D2EAF0"),
+                            text: "UPDATE GOALS",
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SmartInsightElements(
+                            text: "VIEW REPORTS",
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SmartInsightElements(
+                            color: HexColor("D9D9D9"),
+                            text: "VIEW BUDGETS",
+                          )
+                        ]),
+                      ),
+                    )
+                  ],
+                ),
               ),
+              const Spacer(),
               Stack(
                 children: [
                   Padding(
@@ -228,6 +266,34 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class SmartInsightElements extends StatelessWidget {
+  final String text;
+  final Color? color;
+  const SmartInsightElements({
+    super.key,
+    required this.text,
+    this.color = Colors.grey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: HexColor("000000").withAlpha(9)),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

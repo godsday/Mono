@@ -31,6 +31,7 @@ import 'package:mono/features/transaction/domain/usecases/add_transaction.dart';
 import 'package:mono/features/transaction/domain/usecases/delete_transaction.dart';
 import 'package:mono/features/transaction/domain/usecases/get_transactions.dart';
 import 'package:mono/features/transaction/domain/usecases/update_transaction.dart';
+import 'package:mono/features/transaction/domain/usecases/group_transactions_by_date.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'providers/notification_provider.dart';
 import 'package:mono/features/financial_overview/asset/data/repositories/asset_repository_impl.dart';
@@ -108,6 +109,7 @@ Future<void> main() async {
   final totalExpenseUseCase = TotalExpenseUseCase();
   final totalBalanceUseCase =
       TotalBalanceUseCase(totalIncomeUseCase, totalExpenseUseCase);
+  final groupTransactionsUseCase = GroupTransactionsByDateUseCase();
   final getCurrentMonthBudgetUseCase =
       GetCurrentMonthBudgetUseCase(budgetRepository);
 
@@ -147,6 +149,7 @@ Future<void> main() async {
                 addTransactionUseCase: addTransaction,
                 deleteTransactionUseCase: deleteTransaction,
                 updateTransactionUseCase: updateTransaction,
+                groupTransactionsUseCase: groupTransactionsUseCase,
               )),
       ChangeNotifierProxyProvider<TransactionProvider, HomeProvider>(
         create: (_) => HomeProvider(

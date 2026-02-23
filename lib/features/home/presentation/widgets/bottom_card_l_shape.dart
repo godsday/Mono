@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:sizer/sizer.dart';
@@ -213,16 +214,18 @@ class LShapeWidget extends StatelessWidget {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          color: orientation == LShapeOrientation.leftLegOnLeft
-                              ? HexColor('#42887C')
-                              : HexColor('#FF0000'),
+                          // color: orientation == LShapeOrientation.leftLegOnLeft
+                          //     ? HexColor('#42887C')
+                          //     : HexColor('#FF0000'),
                           borderRadius: BorderRadius.circular(10.sp)),
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Icon(
                           icons,
                           size: 17.sp,
-                          color: color,
+                          color: orientation == LShapeOrientation.leftLegOnLeft
+                              ? AppColor.mainHexcolor
+                              : HexColor('836F81'),
                         ),
                       ),
                     ),

@@ -22,7 +22,7 @@ class HeadingMethod extends StatelessWidget {
               fontWeight: FontWeight.w700),
         ),
         Text(
-          amount!,
+          '₹ $amount',
           style: AppTextStyles.poppins18w500White(context)!.copyWith(
               color: AppColor.blackText,
               fontSize: 16.sp,

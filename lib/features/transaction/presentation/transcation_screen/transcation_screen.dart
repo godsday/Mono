@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
@@ -203,7 +202,11 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                   Lottie.asset(
                                       'assets/images/animation/paymentshero1.json')
                                 ])
-                              : _buildGroupedTransactionList(newlist, context);
+                              : _buildGroupedTransactionList(
+                                  Provider.of<TransactionProvider>(context,
+                                          listen: false)
+                                      .groupedTransactions,
+                                  context);
                         }),
                   ),
                 ),
@@ -270,44 +273,16 @@ Widget _buildFilterChip(String filterName, BuildContext context) {
 }
 
 Widget _buildGroupedTransactionList(
-    List<TranscationModel> transactions, BuildContext context) {
-  // Group transactions by date
-  Map<String, List<TranscationModel>> groupedTransactions = {};
-  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-  DateFormat displayFormat = DateFormat('MMM d, yyyy');
-
-  for (var transaction in transactions) {
-    String dateKey = dateFormat.format(transaction.date);
-    if (!groupedTransactions.containsKey(dateKey)) {
-      groupedTransactions[dateKey] = [];
-    }
-    groupedTransactions[dateKey]!.add(transaction);
-  }
-
+    Map<String, List<TranscationModel>> groupedTransactions,
+    BuildContext context) {
   // Create a list of widgets with date headers and transactions
   List<Widget> widgets = [];
 
-  groupedTransactions.forEach((dateKey, transactionList) {
+  groupedTransactions.forEach((dateDisplay, transactionList) {
     // Add date header
-    DateTime date = dateFormat.parse(dateKey);
-    String dateDisplay = displayFormat.format(date);
-
-    // Check if it's today or yesterday
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-    final transactionDate = DateTime(date.year, date.month, date.day);
-
-    String dayLabel = '';
-    if (transactionDate.isAtSameMomentAs(today)) {
-      dayLabel = 'Today';
-    } else if (transactionDate.isAtSameMomentAs(yesterday)) {
-      dayLabel = 'Yesterday';
-    }
-
     widgets.add(
       Container(
-        key: ValueKey('header_$dateKey'),
+        key: ValueKey('header_$dateDisplay'),
         // alignment: Alignment.centerLeft,
         padding: const EdgeInsets.only(
           left: 15.0,
@@ -318,15 +293,6 @@ Widget _buildGroupedTransactionList(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (dayLabel.isNotEmpty)
-              Text(
-                '$dayLabel ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                  color: Colors.grey[700],
-                ),
-              ),
             Text(
               dateDisplay,
               style: TextStyle(
@@ -422,7 +388,7 @@ Widget _buildGroupedTransactionList(
                       ? SizedBox(
                           width: 34.w,
                           child: AutoSizeText(
-                            "- ₹${transaction.amount.toStringAsFixed(0)}",
+                            "- ${transaction.amount.toStringAsFixed(0)}",
                             style: TextStyle(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
@@ -435,7 +401,7 @@ Widget _buildGroupedTransactionList(
                       : SizedBox(
                           width: 35.w,
                           child: AutoSizeText(
-                            "+ ₹${transaction.amount.toStringAsFixed(0)}",
+                            "+ ${transaction.amount.toStringAsFixed(0)}",
                             style: TextStyle(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
