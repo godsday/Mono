@@ -77,19 +77,6 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
     }
   }
 
-  // @override
-  // void didUpdateWidget(covariant _AddBudgetBody oldWidget) {
-  //   if (oldWidget.isBudgetExist != widget.isBudgetExist) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       final provider = context.watch<AddBudgetProvider>();
-  //       if (widget.isBudgetExist != null) {
-  //         provider.updateTotalBudget(widget.isBudgetExist!.totalBudget);
-  //       }
-  //     });
-  //   }
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
   @override
   void dispose() {
     totalController.dispose();
@@ -131,9 +118,6 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
             const Center(child: CircularProgressIndicator())
           else if (provider.availableCategories.isEmpty)
             const Text("No expense categories found.")
-          // else if (widget.isBudgetExist?.categories != null)
-          //   ...widget.isBudgetExist!.categories
-          //       .map((category) => _CategoryBudgetInput(category: category))
           else
             ...provider.availableCategories.map(
               (category) => _CategoryBudgetInput(category: category),

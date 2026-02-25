@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
-import 'package:mono/features/home/presentation/widgets/smart_insight.dart';
+import 'package:mono/features/home/presentation/widgets/smart_insight_card.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
 import 'package:mono/features/home/presentation/widgets/total_balance_card.dart';
@@ -28,11 +25,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Initial data load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TransactionProvider>(context, listen: false)
           .loadTransactions();
-      Provider.of<HomeProvider>(context, listen: false).loadUserName();
+
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      homeProvider.loadUserName();
+      homeProvider.loadBudget();
     });
   }
 
@@ -151,12 +150,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             child: child,
                           );
                         },
-                        child: SmartInsightCard(
-                          title: "Smart Insights",
-                          message:
-                              "You are ₹${homeProvider.totalBalance} under budget this month. Keep it up!",
-                          icon: Icons.lightbulb_outline,
-                        ),
+                        child: homeProvider.currentInsight == null
+                            ? const SizedBox()
+                            : SmartInsightCard(
+                                key: ValueKey(homeProvider.currentInsight!.id),
+                                title: homeProvider.currentInsight!.title,
+                                message: homeProvider.currentInsight!.message,
+                                icon: Icons.lightbulb_outline,
+                                type: homeProvider.currentInsight!.type,
+                              ),
                       );
                     }),
                   ),

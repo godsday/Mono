@@ -3,17 +3,20 @@ import 'dart:ui';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/features/home/domain/entity/insight_model.dart';
 
 class SmartInsightCard extends StatefulWidget {
   final String title;
   final String message;
   final IconData icon;
+  final InsightType type;
 
   const SmartInsightCard({
     super.key,
     required this.title,
     required this.message,
     this.icon = Icons.lightbulb_outline,
+    required this.type,
   });
 
   @override
@@ -25,6 +28,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    final style = _getStyle(widget.type);
     return InkWell(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
@@ -71,7 +75,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.15),
+                        color: style.shadowColor.withValues(alpha: 0.15),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       )
@@ -86,8 +90,8 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                       children: [
                         AvatarGlow(
                           glowColor: isTapped
-                              ? Colors.amber.withValues(alpha: 0.3)
-                              : Colors.amber,
+                              ? style.backgroundColor.withValues(alpha: 0.3)
+                              : style.backgroundColor,
                           duration: const Duration(milliseconds: 3000),
                           repeat: true,
                           glowRadiusFactor: 4,
@@ -99,11 +103,11 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                             width: 44,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.amber.withValues(alpha: 0.3),
+                              color: style.backgroundColor,
                             ),
                             child: Icon(
-                              widget.icon,
-                              color: Colors.amber,
+                              style.icon,
+                              color: style.iconColor,
                             ),
                           ),
                         ),
@@ -144,4 +148,66 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
           ),
         ));
   }
+
+  _InsightStyle _getStyle(InsightType type) {
+    switch (type) {
+      case InsightType.positive:
+        return _InsightStyle(
+          backgroundColor: const Color(0xFFE8F5E9),
+          icon: Icons.trending_up,
+          iconColor: Colors.green,
+          titleColor: Colors.green.shade800,
+          messageColor: Colors.green.shade700,
+          shadowColor: Colors.green.withValues(alpha: 0.2),
+        );
+
+      case InsightType.warning:
+        return _InsightStyle(
+          backgroundColor: const Color(0xFFFFF8E1),
+          icon: Icons.warning_amber_rounded,
+          iconColor: Colors.orange,
+          titleColor: Colors.orange.shade800,
+          messageColor: Colors.orange.shade700,
+          shadowColor: Colors.orange.withValues(alpha: 0.2),
+        );
+
+      case InsightType.alert:
+        return _InsightStyle(
+          backgroundColor: const Color(0xFFFFEBEE),
+          icon: Icons.error_outline,
+          iconColor: Colors.red,
+          titleColor: Colors.red.shade800,
+          messageColor: Colors.red.shade700,
+          shadowColor: Colors.red.withValues(alpha: 0.2),
+        );
+
+      case InsightType.neutral:
+        return _InsightStyle(
+          backgroundColor: const Color(0xFFE3F2FD),
+          icon: Icons.info_outline,
+          iconColor: Colors.blue,
+          titleColor: Colors.blue.shade800,
+          messageColor: Colors.blue.shade700,
+          shadowColor: Colors.blue.withValues(alpha: 0.15),
+        );
+    }
+  }
+}
+
+class _InsightStyle {
+  final Color backgroundColor;
+  final IconData icon;
+  final Color iconColor;
+  final Color titleColor;
+  final Color messageColor;
+  final Color shadowColor;
+
+  _InsightStyle({
+    required this.backgroundColor,
+    required this.icon,
+    required this.iconColor,
+    required this.titleColor,
+    required this.messageColor,
+    required this.shadowColor,
+  });
 }

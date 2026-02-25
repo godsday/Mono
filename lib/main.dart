@@ -5,7 +5,7 @@ import 'package:mono/features/financial_overview/budget/domain/usecases/get_curr
 import 'package:mono/features/financial_overview/budget/domain/usecases/save_monthly_budget_usecase.dart';
 import 'package:mono/features/financial_overview/budget/presentation/providers/add_budget_provider.dart';
 import 'package:mono/features/financial_overview/budget/presentation/providers/financial_overview_provider.dart';
-import 'package:mono/features/home/domain/usecase/smart_insight.dart';
+import 'package:mono/features/home/domain/usecase/smart_insight_usecase.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_this_month.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
@@ -155,6 +155,7 @@ Future<void> main() async {
               )),
       ChangeNotifierProxyProvider<TransactionProvider, HomeProvider>(
         create: (_) => HomeProvider(
+            getCurrentMonthBudgetUseCase: getCurrentMonthBudgetUseCase,
             generateInsightsUseCase: generateInsightsUseCase,
             getTopCategoriesUseCase: getTopCategoriesUseCase,
             calculateThisMonth: calculateThisMonth,

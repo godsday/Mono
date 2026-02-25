@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
+import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
 import 'package:mono/features/home/domain/entity/insight_model.dart';
-import 'package:mono/features/home/domain/usecase/smart_insight.dart';
+import 'package:mono/features/home/domain/usecase/smart_insight_usecase.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_this_month.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
@@ -17,8 +19,10 @@ class HomeProvider with ChangeNotifier {
   final CalculateThisMonth calculateThisMonth;
   final GetTopCategories getTopCategoriesUseCase;
   final GenerateInsightsUseCase generateInsightsUseCase;
+  final GetCurrentMonthBudgetUseCase getCurrentMonthBudgetUseCase;
 
   HomeProvider({
+    required this.getCurrentMonthBudgetUseCase,
     required this.getTopCategoriesUseCase,
     required this.generateInsightsUseCase,
     required this.totalBalanceUseCase,
@@ -27,12 +31,19 @@ class HomeProvider with ChangeNotifier {
     required this.calculateThisMonth,
   });
 
-  InsightModel? insight;
   List<TranscationModel> _transactions = [];
   bool _isThisMonth = false;
   String _userName = '';
 
   // ---------------- GETTERS ----------------
+
+  InsightModel? _currentInsight;
+  String? _lastInsightId;
+
+  double _budget = 0.0;
+  double get budget => _budget;
+
+  InsightModel? get currentInsight => _currentInsight;
 
   bool get isThisMonth => _isThisMonth;
   String get userName => _userName;
@@ -43,6 +54,8 @@ class HomeProvider with ChangeNotifier {
   double get totalIncome => totalIncomeUseCase(_transactions);
 
   double get totalExpense => totalExpenseUseCase(_transactions);
+
+  Future<BudgetEntity?> get budgetEntity => getCurrentMonthBudgetUseCase.call();
 
   List<TopCategory> get topIncomeCategories =>
       getTopCategoriesUseCase.getTopCategories(
@@ -67,6 +80,7 @@ class HomeProvider with ChangeNotifier {
 
   void updateTransactions(List<TranscationModel> transactions) {
     _transactions = transactions;
+    _generateInsight();
     notifyListeners();
   }
 
@@ -90,10 +104,29 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadBudget() async {
+    final budgetData = await getCurrentMonthBudgetUseCase.call();
+    _budget = budgetData?.totalBudget ?? 0.0;
+    _generateInsight();
+    notifyListeners();
+  }
+
   String get greeting {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Good Morning';
     if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
+  }
+
+  void _generateInsight() {
+    _currentInsight = generateInsightsUseCase(
+      totalIncome: totalIncome,
+      totalExpense: thisMonthExpense,
+      budget: budget,
+      now: DateTime.now(),
+      lastInsightId: _lastInsightId,
+    );
+
+    _lastInsightId = _currentInsight?.id;
   }
 }
