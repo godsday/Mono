@@ -19,8 +19,6 @@ class TotalBalanceCard extends StatelessWidget {
       return Container(
         height: 25.5.h,
         decoration: BoxDecoration(
-            // boxShadow: ,
-            // backgroundBlendMode: BlendMode.s,
             color: AppColor.totalBalanceCardBg,
             boxShadow: [
               BoxShadow(

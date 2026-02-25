@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/home/domain/entity/insight_model.dart';
+import 'package:mono/features/home/domain/usecase/smart_insight.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_this_month.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
@@ -14,15 +16,18 @@ class HomeProvider with ChangeNotifier {
   final TotalExpenseUseCase totalExpenseUseCase;
   final CalculateThisMonth calculateThisMonth;
   final GetTopCategories getTopCategoriesUseCase;
+  final GenerateInsightsUseCase generateInsightsUseCase;
 
   HomeProvider({
     required this.getTopCategoriesUseCase,
+    required this.generateInsightsUseCase,
     required this.totalBalanceUseCase,
     required this.totalIncomeUseCase,
     required this.totalExpenseUseCase,
     required this.calculateThisMonth,
   });
 
+  InsightModel? insight;
   List<TranscationModel> _transactions = [];
   bool _isThisMonth = false;
   String _userName = '';

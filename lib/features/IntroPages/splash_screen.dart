@@ -120,13 +120,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> checkdata() async {
     final sharedprefer = await SharedPreferences.getInstance();
-    final nameisthere = sharedprefer.getString('namekey');
+    final nameIsThere = sharedprefer.getString('namekey');
 
     if (!mounted) return;
 
     Navigator.pushReplacementNamed(
       context,
-      nameisthere == null ? RouteNames.onboarding : RouteNames.home,
+      nameIsThere == null ? RouteNames.onboarding : RouteNames.home,
     );
   }
 }

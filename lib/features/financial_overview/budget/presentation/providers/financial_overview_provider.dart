@@ -27,6 +27,7 @@ class BudgetProvider extends ChangeNotifier {
 
     try {
       _budget = await getBudgetUseCase();
+      if (_budget == null) return;
 
       // Sync expenses
       final transactions = await getTransactions();

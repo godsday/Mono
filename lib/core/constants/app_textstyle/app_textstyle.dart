@@ -38,7 +38,7 @@ class AppTextStyles {
 
   static TextStyle? roboto18w600SemiBoldWhite(context) {
     return GoogleFonts.roboto(
-        fontSize: 20.sp, fontWeight: FontWeight.w600, color: AppColor.white);
+        fontSize: 18.sp, fontWeight: FontWeight.w600, color: AppColor.white);
   }
 
   static TextStyle roboto16w600Black = GoogleFonts.roboto(

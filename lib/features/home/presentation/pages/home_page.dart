@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
+import 'package:mono/features/home/presentation/widgets/smart_insight.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
 import 'package:mono/features/home/presentation/widgets/total_balance_card.dart';
@@ -10,7 +14,6 @@ import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card
 import 'package:mono/features/home/presentation/widgets/shapes/curve_shape_u_card.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,6 +32,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TransactionProvider>(context, listen: false)
           .loadTransactions();
+      Provider.of<HomeProvider>(context, listen: false).loadUserName();
     });
   }
 
@@ -122,91 +126,72 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
                   ),
                   Positioned(
-                    right: 5.w,
-                    bottom: 4.h,
-                    // child: ClipRect(
-                    //   child: Align(
-                    //     alignment: Alignment.topCenter,
-                    //     child: SizedBox(
-                    //       width: 14.0.h,
-                    //       height: 14.h,
-                    //       child: ShaderMask(
-                    //         shaderCallback: (Rect bounds) {
-                    //           return const LinearGradient(
-                    //             begin: Alignment.bottomCenter,
-                    //             end: Alignment.topCenter,
-                    //             colors: [Colors.transparent, Colors.black],
-                    //           ).createShader(bounds);
-                    //         },
-                    //         blendMode: BlendMode.dstIn,
-                    child: Image.asset(
-                      scale: 1.5,
-                      'assets/images/piggybank.png',
-                      fit: BoxFit.cover,
-                      //     ),
-                      //   ),
-                      // ),
-                      // ),
-                    ),
-                  ),
-
-                  Positioned(
                     left: -11.w,
-                    bottom: -10.h,
+                    bottom: 0.h,
                     child: Image(
                       image: const AssetImage("assets/images/monotree.png"),
                       width: 31.h,
                       height: 31.h,
                     ),
                   ),
+
+                  // Smart Insight
+
+                  Positioned(
+                    bottom: 2.h,
+                    left: 0,
+                    right: 0,
+                    child: Consumer<HomeProvider>(
+                        builder: (context, homeProvider, child) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 5000),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child: SmartInsightCard(
+                          title: "Smart Insights",
+                          message:
+                              "You are ₹${homeProvider.totalBalance} under budget this month. Keep it up!",
+                          icon: Icons.lightbulb_outline,
+                        ),
+                      );
+                    }),
+                  ),
+                  Positioned(
+                    right: 5.w,
+                    bottom: 6.h,
+                    child: ClipRect(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: 14.0.h,
+                          height: 14.h,
+                          child: ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.amberAccent
+                                ],
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: Image.asset(
+                              scale: 1.5,
+                              'assets/images/piggybank.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Smart Insights",
-                      style: TextStyle(
-                          fontSize: 18.sp, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: HexColor("EEF4F6"),
-                        border:
-                            Border.all(color: HexColor("000000").withAlpha(9)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 10),
-                        child: Row(children: [
-                          SmartInsightElements(
-                            color: HexColor("D2EAF0"),
-                            text: "UPDATE GOALS",
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SmartInsightElements(
-                            text: "VIEW REPORTS",
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SmartInsightElements(
-                            color: HexColor("D9D9D9"),
-                            text: "VIEW BUDGETS",
-                          )
-                        ]),
-                      ),
-                    )
-                  ],
-                ),
               ),
               const Spacer(),
               Stack(
@@ -271,34 +256,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 }
 
-class SmartInsightElements extends StatelessWidget {
-  final String text;
-  final Color? color;
-  const SmartInsightElements({
-    super.key,
-    required this.text,
-    this.color = Colors.grey,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        border: Border.all(color: HexColor("000000").withAlpha(9)),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
 class HomepageCurveShape extends StatelessWidget {
   const HomepageCurveShape({
     super.key,
@@ -323,7 +280,7 @@ class HomepageCurveShape extends StatelessWidget {
             ),
           ],
         ),
-        height: 55.h,
+        height: 69.h,
       ),
     );
   }

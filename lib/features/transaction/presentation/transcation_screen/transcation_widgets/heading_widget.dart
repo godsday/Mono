@@ -16,16 +16,16 @@ class HeadingMethod extends StatelessWidget {
       children: [
         Text(
           headtext,
-          style: AppTextStyles.poppins18w500White(context)!.copyWith(
+          style: AppTextStyles.roboto16w600Black.copyWith(
               color: AppColor.blackText,
               fontSize: 16.sp,
               fontWeight: FontWeight.w700),
         ),
         Text(
           '₹ $amount',
-          style: AppTextStyles.poppins18w500White(context)!.copyWith(
+          style: AppTextStyles.roboto16w600Black.copyWith(
               color: AppColor.blackText,
-              fontSize: 16.sp,
+              fontSize: 16.5.sp,
               fontWeight: FontWeight.w700),
         )
       ],
