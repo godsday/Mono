@@ -18,10 +18,12 @@ class CategoryEntity {
   final String id;
   final String name;
   final double amount;
+  final double spentAmount;
 
   CategoryEntity({
     required this.id,
     required this.name,
     required this.amount,
+    this.spentAmount = 0.0,
   });
 }

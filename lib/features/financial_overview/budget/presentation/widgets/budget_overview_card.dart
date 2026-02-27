@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/budget/presentation/widgets/budget_header_clipper.dart';
+import 'package:mono/features/financial_overview/budget/presentation/widgets/categories_spending.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -126,10 +127,6 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       padding: const EdgeInsets.only(top: 12, right: 20),
                       child: GestureDetector(
                         onTap: () async {
-                          // final provider = context.read<AddBudgetProvider>();
-                          // final provider = Provider.of<AddBudgetProvider>(
-                          //     context,
-                          //     listen: false);
                           final result = await Navigator.pushNamed(
                               context, RouteNames.addBudget,
                               arguments: widget.budget);
@@ -219,6 +216,12 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     ),
                     if (widget.budget.categories.isNotEmpty) ...[
                       const SizedBox(height: 20),
+                      widget.budget.categories.isEmpty
+                          ? const SizedBox()
+                          : CategoriesSpendingCard(
+                              title: 'Categories',
+                              categories: widget.budget.categories,
+                            )
                       /* Text(
                         'Categories',
                         style: AppTextTheme.poppins(
@@ -281,48 +284,6 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
           ),
         ),
       ],
-    );
-  }
-
-  /*String _buildCategoryText() {
-    final categories = widget.budget.categories;
-    if (categories.isEmpty) {
-      return 'No category selected';
-    } else if (categories.length <= 3) {
-      return categories.map((e) => e.name).join(', ');
-    } else {
-      final firstTwo = categories.take(2).map((e) => e.name).join(', ');
-      final remainingCount = categories.length - 2;
-      return '$firstTwo, +$remainingCount more';
-    }
-  }*/
-}
-
-class _CategoryChip extends StatelessWidget {
-  final String title;
-  final String amount;
-
-  const _CategoryChip({
-    required this.title,
-    required this.amount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColor.textGrey.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        '$title: $amount',
-        style: AppTextTheme.poppins(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColor.white,
-        ),
-      ),
     );
   }
 }

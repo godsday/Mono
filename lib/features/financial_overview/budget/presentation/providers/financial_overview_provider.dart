@@ -34,24 +34,55 @@ class BudgetProvider extends ChangeNotifier {
       final transactions = await getTransactions();
       final now = DateTime.now();
 
-      // Filter transactions for current month, Expense type, and matching categories
+      // Filter transactions for current month, Expense type
       final List<TranscationModel> currentMonthExpenses =
           transactions.where((t) {
         final bool isSameMonth =
             t.date.year == now.year && t.date.month == now.month;
         final bool isExpense = t.type == 'Expense';
-
-        // Check if transaction category matches any budget category
-        // Matching by ID or Name to be robust
-        // final bool isBudgetCategory = _budget!.categories.any((c) =>
-        //     c.id == t.category ||
-        //     c.name.toLowerCase() == t.category.toLowerCase());
-
         return isSameMonth && isExpense;
       }).toList();
 
-      final totalSpent =
-          currentMonthExpenses.fold(0.0, (sum, t) => sum + t.amount);
+      double totalSpent = 0.0;
+      double othersSpent = 0.0;
+      final Map<String, double> categorySpent = {};
+
+      for (var exp in currentMonthExpenses) {
+        totalSpent += exp.amount;
+        bool matched = false;
+
+        for (var cat in _budget!.categories) {
+          if (cat.id == exp.category ||
+              cat.name.toLowerCase() == exp.category.toLowerCase()) {
+            categorySpent[cat.id] = (categorySpent[cat.id] ?? 0.0) + exp.amount;
+            matched = true;
+            break;
+          }
+        }
+
+        if (!matched) {
+          othersSpent += exp.amount;
+        }
+      }
+
+      final List<CategoryEntity> updatedCategories =
+          _budget!.categories.map((c) {
+        return CategoryEntity(
+          id: c.id,
+          name: c.name,
+          amount: c.amount,
+          spentAmount: categorySpent[c.id] ?? 0.0,
+        );
+      }).toList();
+
+      if (othersSpent > 0) {
+        updatedCategories.add(CategoryEntity(
+          id: 'others',
+          name: 'Others',
+          amount: 0.0,
+          spentAmount: othersSpent,
+        ));
+      }
 
       // Update BudgetEntity with calculated spent amount
       _budget = BudgetEntity(
@@ -59,7 +90,7 @@ class BudgetProvider extends ChangeNotifier {
         totalBudget: _budget!.totalBudget,
         spentAmount: totalSpent,
         remainingAmount: _budget!.totalBudget - totalSpent,
-        categories: _budget!.categories,
+        categories: updatedCategories,
       );
       // }
     } catch (e) {

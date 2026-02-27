@@ -65,10 +65,14 @@ class BudgetCategoryModel extends HiveObject {
   @HiveField(2)
   final double amount;
 
+  @HiveField(3, defaultValue: 0.0)
+  final double spentAmount;
+
   BudgetCategoryModel({
     required this.id,
     required this.name,
     required this.amount,
+    this.spentAmount = 0.0,
   });
 
   CategoryEntity toEntity() {
@@ -76,6 +80,7 @@ class BudgetCategoryModel extends HiveObject {
       id: id,
       name: name,
       amount: amount,
+      spentAmount: spentAmount,
     );
   }
 
@@ -84,6 +89,7 @@ class BudgetCategoryModel extends HiveObject {
       id: entity.id,
       name: entity.name,
       amount: entity.amount,
+      spentAmount: entity.spentAmount,
     );
   }
 }

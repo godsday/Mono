@@ -66,19 +66,22 @@ class BudgetCategoryModelAdapter extends TypeAdapter<BudgetCategoryModel> {
       id: fields[0] as String,
       name: fields[1] as String,
       amount: fields[2] as double,
+      spentAmount: fields[3] == null ? 0.0 : fields[3] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, BudgetCategoryModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.amount);
+      ..write(obj.amount)
+      ..writeByte(3)
+      ..write(obj.spentAmount);
   }
 
   @override

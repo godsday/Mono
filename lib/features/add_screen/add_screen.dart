@@ -217,6 +217,7 @@ class _AddScreenState extends State<AddScreen> {
                                 }
                                 return null;
                               },
+                              style: AppTextStyles.poppins16w500,
                               controller: amountcontrol,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(6),
@@ -270,13 +271,8 @@ class _AddScreenState extends State<AddScreen> {
                                               const SizedBox(width: 8),
                                               Text(
                                                 '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
-                                                style: AppTextStyles
-                                                    .montserrat18w600
-                                                    .copyWith(
-                                                  color: AppColor.grey700,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
+                                                style:
+                                                    AppTextStyles.poppins16w500,
                                               ),
                                             ],
                                           ),
@@ -369,14 +365,7 @@ class _AddScreenState extends State<AddScreen> {
                                                   child: Text(
                                                     category.name,
                                                     style: AppTextStyles
-                                                        .poppins16w400
-                                                        .copyWith(
-                                                      color:
-                                                          AppColor.textPrimary,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 15.sp,
-                                                    ),
+                                                        .poppins16w500,
                                                   ),
                                                 ),
                                               );
@@ -419,6 +408,7 @@ class _AddScreenState extends State<AddScreen> {
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(50)
                               ],
+                              style: AppTextStyles.poppins16w500,
                               controller: notescontrol,
                               keyboardType: TextInputType.text,
                               decoration: textfielddecor('Enter Notes'),

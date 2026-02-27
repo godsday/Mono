@@ -56,7 +56,11 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                   duration: const Duration(milliseconds: 2000),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: double.infinity,
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.only(
+                      top: isTapped ? 8 : 16,
+                      bottom: isTapped ? 8 : 16,
+                      left: 8,
+                      right: 8),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
