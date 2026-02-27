@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/presentation/widgets/budget_header_clipper.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -85,30 +86,37 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                   children: [
                     // White Tab with Title
                     ClipPath(
-                      clipper: CutCornerClipper(),
+                      clipper: const CustomShapeClipper(
+                        topLeftRadius: 24.0,
+                        topRightRadius: 6.0,
+                        bottomSlant: 24.0,
+                      ),
                       // clipBehavior: CustomRectClipper,
                       child: Container(
                         color: Colors.white,
-                        height: 5.h,
+                        height: 4.h,
                         width: 50.w,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.account_balance_wallet,
-                              color: HexColor('#7D73C2'),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Monthly Budget',
-                              style: AppTextTheme.poppins(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColor.blackText,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.account_balance_wallet,
+                                color: HexColor('#7D73C2'),
+                                size: 20,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              Text(
+                                'Monthly Budget',
+                                style: AppTextTheme.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColor.blackText,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -211,7 +219,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     ),
                     if (widget.budget.categories.isNotEmpty) ...[
                       const SizedBox(height: 20),
-                      Text(
+                      /* Text(
                         'Categories',
                         style: AppTextTheme.poppins(
                           fontSize: 14,
@@ -229,7 +237,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                             amount: '₹${cat.amount.toStringAsFixed(0)}',
                           );
                         }).toList(),
-                      ),
+                      ),*/
                     ],
                     // const SizedBox(height: 30),
 
@@ -288,27 +296,6 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       return '$firstTwo, +$remainingCount more';
     }
   }*/
-}
-
-class CutCornerClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    const double cutSize = 24; // control diagonal size
-
-    final path = Path();
-
-    path.moveTo(0, 0);
-    path.lineTo(size.width - cutSize, 0);
-    path.lineTo(size.width, cutSize);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 class _CategoryChip extends StatelessWidget {

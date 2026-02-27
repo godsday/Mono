@@ -35,98 +35,149 @@ class FirstTimeBudgetCard extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
       ),
-      child: Stack(
-        children: [
-          const Positioned(
-              top: 130,
-              left: 170,
-              child: RotatedSquareDecoration(quarterTurns: .82)),
-          const Positioned(
-              top: 140,
-              left: 230,
-              child: RotatedSquareDecoration(
-                quarterTurns: .82,
-                size: 80,
-              )),
-          const Positioned(
-              bottom: 20,
-              left: 30,
-              child: RotatedSquareDecoration(
-                size: 35,
-                quarterTurns: 1,
-              )),
-          const Positioned(
-              top: 10,
-              right: 30,
-              child: RotatedSquareDecoration(
-                size: 36,
-                quarterTurns: 1.3,
-              )),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 3,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+      child: ClipRRect(
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            Positioned(
+                top: 20,
+                left: 80,
+                child: RotatedSquareDecoration(quarterTurns: .82, color: [
+                  HexColor('#FFFFFF'),
+                  HexColor('#9995AF'),
+                ])),
+            // medium
+            Positioned(
+                top: 30,
+                left: 40,
+                child: RotatedSquareDecoration(
+                  color: [
+                    HexColor('#FFFFFF'),
+                    HexColor('#9995AF'),
+                  ],
+                  quarterTurns: .82,
+                  size: 80,
+                )),
+            //small
+            Positioned(
+                top: 45,
+                left: 5,
+                child: RotatedSquareDecoration(
+                    size: 55,
+                    quarterTurns: 5.54,
+                    color: [
+                      HexColor('#FFFFFF'),
+                      HexColor('#9995AF'),
+                    ])),
+
+            ///////////////////////
+            Positioned(
+                top: 20,
+                left: 180,
+                child: RotatedSquareDecoration(quarterTurns: .82, color: [
+                  HexColor('#FFFFFF'),
+                  HexColor('#9995AF'),
+                ])),
+            Positioned(
+                top: 30,
+                left: 250,
+                child: RotatedSquareDecoration(
+                  opacity: .5,
+                  color: [
+                    HexColor('#FFFFFF'),
+                    HexColor('#9995AF'),
+                  ],
+                  quarterTurns: .82,
+                  size: 80,
+                )),
+            Positioned(
+                top: 45,
+                left: 160,
+                child: RotatedSquareDecoration(
+                    size: 55,
+                    quarterTurns: 5.54,
+                    color: [
+                      HexColor('#FFFFFF'),
+                      HexColor('#9995AF'),
+                    ])),
+
+            Positioned(
+                top: 45,
+                left: 310,
+                child: RotatedSquareDecoration(
+                    size: 55,
+                    quarterTurns: 5.54,
+                    color: [
+                      HexColor('#FFFFFF'),
+                      HexColor('#9995AF'),
+                    ])),
+
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 3,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.account_balance_wallet_rounded,
+                      color: HexColor('#6C63FF'),
+                      size: 28,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.account_balance_wallet_rounded,
-                    color: HexColor('#6C63FF'),
-                    size: 28,
+                  const SizedBox(height: 16),
+                  Text(
+                    'Plan Your Money Smarter',
+                    style: AppTextTheme.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: AppColor.blackText,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Plan Your Money Smarter',
-                  style: AppTextTheme.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.blackText,
+                  const SizedBox(height: 10),
+                  Text(
+                    'Create your first monthly budget to track expenses and stay in control.',
+                    style: AppTextTheme.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.textGrey,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Create your first monthly budget to track expenses and stay in control.',
-                  style: AppTextTheme.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.textGrey,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                AppElevetedButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddBudgetScreen()),
-                    );
-                    // Since we are back, let's try to reload the budget to check if it was added
-                    if (context.mounted) {
-                      context.read<BudgetProvider>().loadBudget();
-                    }
-                  },
-                  appButtonText: 'Set Monthly Budget',
-                  // height: 42,
-                  width: double.infinity,
-                )
-              ],
+                  const SizedBox(height: 24),
+                  AppElevetedButton(
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddBudgetScreen()),
+                      );
+                      // Since we are back, let's try to reload the budget to check if it was added
+                      if (context.mounted) {
+                        context.read<BudgetProvider>().loadBudget();
+                      }
+                    },
+                    appButtonText: 'Set Monthly Budget',
+                    // height: 42,
+                    width: double.infinity,
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -135,7 +186,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
 class RotatedSquareDecoration extends StatelessWidget {
   final double size;
   final double borderRadius;
-  final Color color;
+  final List<Color> color;
   final double opacity;
   final double quarterTurns;
 
@@ -143,8 +194,8 @@ class RotatedSquareDecoration extends StatelessWidget {
     super.key,
     this.size = 100,
     this.borderRadius = 0,
-    this.color = Colors.black,
-    this.opacity = 0.08,
+    required this.color,
+    this.opacity = 0.25,
     this.quarterTurns = math.pi / 2, // 90°
   });
 
@@ -159,14 +210,10 @@ class RotatedSquareDecoration extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                HexColor('#69639B'),
-                HexColor('#9995AF'),
-              ],
+              colors: color,
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            color: color,
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
