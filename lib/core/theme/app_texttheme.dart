@@ -107,8 +107,7 @@ class AppTextTheme {
     );
   }
 
-
-static TextStyle montserrart({
+  static TextStyle montserrart({
     double? fontSize,
     FontWeight? fontWeight,
     Color? color,

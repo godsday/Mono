@@ -52,7 +52,11 @@ class AppTextStyles {
     color: AppColor.textSecondary,
     fontWeight: FontWeight.w400,
   );
-
+  static TextStyle poppins16w500 = AppTextTheme.poppins(
+    fontSize: 16.sp,
+    color: AppColor.blackText,
+    fontWeight: FontWeight.w600,
+  );
   static TextStyle montserrat18w600 = AppTextTheme.montserrart(
     fontSize: 18.sp,
     color: AppColor.textSecondary,

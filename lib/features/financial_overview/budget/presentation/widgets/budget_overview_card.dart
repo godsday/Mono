@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/features/financial_overview/budget/presentation/widgets/budget_header_clipper.dart';
 import 'package:mono/features/financial_overview/budget/presentation/widgets/categories_spending.dart';
 import 'package:mono/routes/route_names.dart';
@@ -110,11 +111,8 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               const SizedBox(width: 8),
                               Text(
                                 'Monthly Budget',
-                                style: AppTextTheme.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.blackText,
-                                ),
+                                style: AppTextStyles.roboto16w600Black.copyWith(
+                                    fontWeight: FontWeight.w700, fontSize: 18),
                               ),
                             ],
                           ),

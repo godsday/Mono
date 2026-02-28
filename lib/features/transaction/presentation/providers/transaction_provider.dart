@@ -27,6 +27,7 @@ class TransactionProvider with ChangeNotifier {
 
   bool _isLoading = false;
   String? _error;
+  bool _visible = false;
 
   TransactionProvider({
     required this.getTransactionsUseCase,
@@ -71,6 +72,13 @@ class TransactionProvider with ChangeNotifier {
     final sorted = List<TranscationModel>.from(_transactions)
       ..sort((a, b) => b.date.compareTo(a.date));
     return sorted.take(5).toList();
+  }
+
+  bool get visible => _visible;
+
+  graphView() {
+    _visible = !_visible;
+    notifyListeners();
   }
 
   Future<void> loadTransactions() async {

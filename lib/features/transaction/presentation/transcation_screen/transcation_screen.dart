@@ -25,8 +25,7 @@ class TranscationScreen extends StatefulWidget {
 }
 
 class _TranscationScreenState extends State<TranscationScreen> {
-  // late TooltipBehavior _tooltipBehavior;
-  //bool visible = false;
+  late TooltipBehavior _tooltipBehavior;
 
   var item = ['Income', 'All', 'Expense'];
   final ScrollController _scrollController = ScrollController();
@@ -36,7 +35,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
     // TranscationDB.instance.refresh();
     Provider.of<TransactionProvider>(context, listen: false).refresh();
 
-    // _tooltipBehavior = TooltipBehavior(enable: true);
+    _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
 
@@ -54,6 +53,42 @@ class _TranscationScreenState extends State<TranscationScreen> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const TranscationHeader(),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Provider.of<TransactionProvider>(context, listen: false)
+                          .graphView();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.amberAccent,
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Text(Provider.of<TransactionProvider>(context,
+                                      listen: false)
+                                  .visible
+                              ? "Hide"
+                              : "Show"),
+                        ))),
+              ],
+            ),
+          ),
+          Provider.of<TransactionProvider>(context, listen: false).visible
+              ? Consumer<TransactionProvider>(builder: (context, pro, child) {
+                  return pro.itemvalue == "All"
+                      ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                      : pro.itemvalue == "Income"
+                          ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                          : pro.itemvalue == "Expense"
+                              ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                              : SizedBox(height: 2.h);
+                })
+              : const SizedBox.shrink(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: SizedBox(
@@ -238,15 +273,6 @@ class VisibleChart extends StatelessWidget {
     );
   }
 }
-// Consumer<TransactionProvider>(builder: (context, pro, child) {
-//   return pro.itemvalue == "All"
-//       ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-//       : pro.itemvalue == "Income"
-//           ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-//           : pro.itemvalue == "Expense"
-//               ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-//               : SizedBox(height: 2.h);
-// }),
 
 Widget _buildFilterChip(String filterName, BuildContext context) {
   return Consumer<TransactionProvider>(

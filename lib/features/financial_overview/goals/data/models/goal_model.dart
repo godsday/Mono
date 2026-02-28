@@ -1,4 +1,5 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+
 import '../../domain/entities/goal_entity.dart';
 
 part 'goal_model.g.dart';

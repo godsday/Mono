@@ -56,18 +56,6 @@ class _CategoriesSpendingCardState extends State<CategoriesSpendingCard> {
                     left: 12,
                     right: 12),
                 decoration: BoxDecoration(
-                  // gradient: const LinearGradient(
-                  //   begin: Alignment.topLeft,
-                  //   end: Alignment.bottomRight,
-                  //   colors: [
-                  //     Colors.black,
-                  //     Color.fromARGB(255, 30, 35, 35),
-                  //     Colors.amber,
-                  //     Color.fromARGB(255, 3, 19, 18)
-                  //   ],
-                  // ),
-                  // borderRadius: BorderRadius.circular(2),
-                  // color: Colors.white.withValues(alpha: 0.08),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.15),
                   ),
