@@ -65,7 +65,11 @@ class _TranscationScreenState extends State<TranscationScreen> {
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.amberAccent,
+                            color: Provider.of<TransactionProvider>(context,
+                                        listen: false)
+                                    .visible
+                                ? AppColor.blueContainer
+                                : Colors.amberAccent,
                             borderRadius: BorderRadius.circular(4)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -78,17 +82,31 @@ class _TranscationScreenState extends State<TranscationScreen> {
               ],
             ),
           ),
-          Provider.of<TransactionProvider>(context, listen: false).visible
-              ? Consumer<TransactionProvider>(builder: (context, pro, child) {
-                  return pro.itemvalue == "All"
+          AnimatedCrossFade(
+            firstCurve: Curves.easeOut,
+            crossFadeState:
+                Provider.of<TransactionProvider>(context, listen: false).visible
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+
+            sizeCurve: Curves.easeIn,
+
+            duration:
+                const Duration(milliseconds: 700), // Set the animation duration
+
+            firstChild:
+                Consumer<TransactionProvider>(builder: (context, pro, child) {
+              return pro.itemvalue == "All"
+                  ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                  : pro.itemvalue == "Income"
                       ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                      : pro.itemvalue == "Income"
+                      : pro.itemvalue == "Expense"
                           ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                          : pro.itemvalue == "Expense"
-                              ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                              : SizedBox(height: 2.h);
-                })
-              : const SizedBox.shrink(),
+                          : SizedBox(height: 2.h);
+            }),
+
+            secondChild: const SizedBox.shrink(),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: SizedBox(
