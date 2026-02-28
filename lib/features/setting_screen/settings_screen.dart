@@ -49,257 +49,239 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          ClipPath(
+            clipper: WaveClipper(),
             child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ClipPath(
-                      clipper: WaveClipper(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(15),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        // color: Theme.of(context).dividerColor,
-                        height: 17.0.h,
+                clipBehavior: Clip.hardEdge,
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF429690), Color(0xFF1E4744)],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 1.w, top: 3.h),
-                      child: Container(
-                        width: 90.w,
-                        height: 65.h,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            color: Theme.of(context).primaryColor,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 4,
-                              )
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SwitchListTile(
-                                  title: Text(
-                                    "Notification",
-                                    style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  secondary: const Icon(Icons.notifications),
-                                  activeThumbColor: AppColor.mainHexcolor,
-                                  value: notificationProvider.notifValue,
-                                  onChanged: (newvalue) {
-                                    setState(() {
-                                      notificationProvider.notifValue =
-                                          newvalue;
-                                    });
-                                    // notificationProvider.notifValue == true
-                                    //     ? NotificationApi.shownotification(
-                                    //         title: 'Mono',
-                                    //         body:
-                                    //             "Don't Forget To Add Your Transaction",
-                                    //         scheduleDate:
-                                    //             DateTime(10, 06, 00))
-                                    //     : const SizedBox();
-                                  }),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              SwitchListTile(
-                                activeThumbColor: AppColor.mainHexcolor,
-                                title: Text(
-                                  "Dark Mode",
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                secondary: Icon(themepovider.darkTheme
-                                    ? Icons.dark_mode_outlined
-                                    : Icons.light_mode_outlined),
-                                onChanged: (newvalue) {
-                                  setState(() {
-                                    themepovider.darkTheme = newvalue;
-                                  });
-                                },
-                                value: themepovider.darkTheme,
-                              ),
-                              const Divider(),
-                              // Text(
-                              //   "More",
-                              //   style: TextStyle(
-                              //       color: Colors.grey.shade400,
-                              //       fontSize: 14.sp),
-                              // ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: WidgetStateProperty.all(
-                                          Theme.of(context).primaryColorDark),
-                                      minimumSize: WidgetStateProperty.all(
-                                          Size(1.w, 5.5.h))),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const AboutScreen()));
-                                  },
-                                  child: Text(
-                                    "About",
-                                    style: AppTextTheme.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 1.5.h,
-                              ),
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: WidgetStateProperty.all(
-                                          Theme.of(context).primaryColorDark),
-                                      minimumSize: WidgetStateProperty.all(
-                                          Size(1.w, 5.5.h))),
-                                  onPressed: () async {
-                                    // ignore: deprecated_member_use
-                                    if (!await launch(
-                                        'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
-                                      throw 'Could not send massage';
-                                    }
-                                  },
-                                  child: Text(
-                                    "Send feedback",
-                                    style: AppTextTheme.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 1.5.h,
-                              ),
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: WidgetStateProperty.all(
-                                          Theme.of(context).primaryColorDark),
-                                      minimumSize: WidgetStateProperty.all(
-                                          Size(1.w, 5.5.h))),
-                                  onPressed: () async {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                              title: const Text(
-                                                'Alert!!!',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                              content: const Text(
-                                                ' All transaction details will be deleted.\n\nDo you like to continue ?',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              actions: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    TextButton(
-                                                        onPressed: () async {
-                                                          TransactionLocalDataSourceImpl
-                                                              .instance
-                                                              .clearTransactions();
-                                                          // Clear Financial Overview Data
-                                                          await BudgetRepositoryImpl()
-                                                              .clearBudget();
-                                                          await AssetRepositoryImpl()
-                                                              .clearAssets();
-                                                          await GoalRepositoryImpl()
-                                                              .clearGoals();
-
-                                                          if (context.mounted) {
-                                                            Navigator.pushAndRemoveUntil(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            const SplashScreen()),
-                                                                (route) =>
-                                                                    false);
-                                                          }
-                                                        },
-                                                        child:
-                                                            const Text('Yes')),
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text('No'))
-                                                  ],
-                                                )
-                                              ]);
-                                        });
-                                  },
-                                  child: Text(
-                                    "Reset App",
-                                    style: AppTextTheme.poppins(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                  ))
-                            ],
-                          ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-                Positioned(
-                  top: 5.h,
-                  child: Text(
-                    "Settings",
-                    style: AppTextTheme.montserrart(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColor.white,
+                    // color: Theme.of(context).dividerColor,
+                    height: 17.0.h,
+                  ),
+                  Positioned(
+                      top: 5.h,
+                      left: 33.w,
+                      child: Image(
+                        width: 57.w,
+                        image: const AssetImage(
+                          'assets/images/rings.png',
+                        ),
+                      )),
+                  Positioned(
+                    top: 5.h,
+                    child: Text(
+                      "Settings",
+                      style: AppTextTheme.montserrart(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.white,
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                    top: 5.h,
-                    left: 33.w,
-                    child: Image(
-                      width: 57.w,
-                      image: const AssetImage(
-                        'assets/images/rings.png',
+                ]),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 1.w, top: 3.h),
+            child: Container(
+              width: 90.w,
+              height: 65.h,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  color: Theme.of(context).primaryColor,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
+                    )
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SwitchListTile(
+                        title: Text(
+                          "Notification",
+                          style: TextStyle(
+                              fontSize: 15.sp, fontWeight: FontWeight.w400),
+                        ),
+                        secondary: const Icon(Icons.notifications),
+                        activeThumbColor: AppColor.mainHexcolor,
+                        value: notificationProvider.notifValue,
+                        onChanged: (newvalue) {
+                          setState(() {
+                            notificationProvider.notifValue = newvalue;
+                          });
+                          // notificationProvider.notifValue == true
+                          //     ? NotificationApi.shownotification(
+                          //         title: 'Mono',
+                          //         body:
+                          //             "Don't Forget To Add Your Transaction",
+                          //         scheduleDate:
+                          //             DateTime(10, 06, 00))
+                          //     : const SizedBox();
+                        }),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    SwitchListTile(
+                      activeThumbColor: AppColor.mainHexcolor,
+                      title: Text(
+                        "Dark Mode",
+                        style: TextStyle(
+                            fontSize: 15.sp, fontWeight: FontWeight.w400),
                       ),
-                    )),
-              ],
+                      secondary: Icon(themepovider.darkTheme
+                          ? Icons.dark_mode_outlined
+                          : Icons.light_mode_outlined),
+                      onChanged: (newvalue) {
+                        setState(() {
+                          themepovider.darkTheme = newvalue;
+                        });
+                      },
+                      value: themepovider.darkTheme,
+                    ),
+                    const Divider(),
+                    // Text(
+                    //   "More",
+                    //   style: TextStyle(
+                    //       color: Colors.grey.shade400,
+                    //       fontSize: 14.sp),
+                    // ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).primaryColorDark),
+                            minimumSize:
+                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AboutScreen()));
+                        },
+                        child: Text(
+                          "About",
+                          style: AppTextTheme.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        )),
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).primaryColorDark),
+                            minimumSize:
+                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
+                        onPressed: () async {
+                          // ignore: deprecated_member_use
+                          if (!await launch(
+                              'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
+                            throw 'Could not send massage';
+                          }
+                        },
+                        child: Text(
+                          "Send feedback",
+                          style: AppTextTheme.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        )),
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).primaryColorDark),
+                            minimumSize:
+                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
+                        onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    title: const Text(
+                                      'Alert!!!',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    content: const Text(
+                                      ' All transaction details will be deleted.\n\nDo you like to continue ?',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                TransactionLocalDataSourceImpl
+                                                    .instance
+                                                    .clearTransactions();
+                                                // Clear Financial Overview Data
+                                                await BudgetRepositoryImpl()
+                                                    .clearBudget();
+                                                await AssetRepositoryImpl()
+                                                    .clearAssets();
+                                                await GoalRepositoryImpl()
+                                                    .clearGoals();
+
+                                                if (context.mounted) {
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const SplashScreen()),
+                                                      (route) => false);
+                                                }
+                                              },
+                                              child: const Text('Yes')),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('No'))
+                                        ],
+                                      )
+                                    ]);
+                              });
+                        },
+                        child: Text(
+                          "Reset App",
+                          style: AppTextTheme.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ))
+                  ],
+                ),
+              ),
             ),
           ),
         ],
