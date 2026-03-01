@@ -125,16 +125,17 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       padding: const EdgeInsets.only(top: 12, right: 20),
                       child: GestureDetector(
                         onTap: () async {
-                          final result = await Navigator.pushNamed(
+                          // final result =
+                          await Navigator.pushNamed(
                               context, RouteNames.addBudget,
                               arguments: widget.budget);
 
-                          if (result == true && context.mounted) {
-                            // context.read<BudgetProvider>().loadBudget();
-                            // context
-                            //     .read<AddBudgetProvider>()
-                            //     .updateTotalBudget(widget.budget.totalBudget);
-                          }
+                          // if (result == true && context.mounted) {
+                          //   context.read<BudgetProvider>().loadBudget();
+                          //   context
+                          //       .read<AddBudgetProvider>()
+                          //       .updateTotalBudget(widget.budget.totalBudget);
+                          // }
                         },
                         child: Text(
                           'Edit',
@@ -169,7 +170,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     Stack(
                       children: [
                         Container(
-                          height: 6,
+                          height: 8,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.5),
@@ -179,14 +180,21 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                         AnimatedBuilder(
                           animation: _animation,
                           builder: (context, child) {
+                            Color progressColor = Colors.white;
+                            if (progress >= 1.0) {
+                              progressColor = Colors.redAccent;
+                            } else if (progress >= 0.8) {
+                              progressColor = Colors.orangeAccent;
+                            }
+
                             return FractionallySizedBox(
                               widthFactor: _animation.value * progress > 0
                                   ? _animation.value * progress
                                   : 0.01,
                               child: Container(
-                                height: 6,
+                                height: 8,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: progressColor,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
@@ -196,7 +204,41 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       ],
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
+                    if (progress >= 1.0)
+                      Row(
+                        children: [
+                          const Icon(Icons.warning_amber_rounded,
+                              color: Colors.redAccent, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            'You have exceeded your monthly budget!',
+                            style: AppTextTheme.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      )
+                    else if (progress >= 0.8)
+                      Row(
+                        children: [
+                          const Icon(Icons.info_outline,
+                              color: Colors.orangeAccent, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Warning: You are approaching your budget limit.',
+                            style: AppTextTheme.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.orangeAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    const SizedBox(height: 16),
 
                     // 3 Columns: Budget, Spending, Remaining
                     Row(
@@ -206,10 +248,12 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                                 '₹${widget.budget.totalBudget.toStringAsFixed(0)}')),
                         Expanded(
                             child: _buildInfoColumn('Spending',
-                                '₹${widget.budget.spentAmount.toStringAsFixed(0)}')),
+                                '₹${widget.budget.spentAmount.toStringAsFixed(0)}',
+                                isAlert: progress >= 1.0)),
                         Expanded(
                             child: _buildInfoColumn('Remaining',
-                                '₹${widget.budget.remainingAmount.toStringAsFixed(0)}')),
+                                '₹${widget.budget.remainingAmount.toStringAsFixed(0)}',
+                                isAlert: progress >= 1.0)),
                       ],
                     ),
                     if (widget.budget.categories.isNotEmpty) ...[
@@ -260,7 +304,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
     );
   }
 
-  Widget _buildInfoColumn(String label, String value) {
+  Widget _buildInfoColumn(String label, String value, {bool isAlert = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -278,7 +322,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
           style: AppTextTheme.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: AppColor.blackText,
+            color: isAlert ? Colors.redAccent : AppColor.blackText,
           ),
         ),
       ],

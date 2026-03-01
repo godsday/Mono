@@ -6,7 +6,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../pages/add_budget_screen.dart';
-import '../providers/financial_overview_provider.dart';
+import '../providers/budget_provider.dart';
 import 'package:provider/provider.dart';
 
 class FirstTimeBudgetCard extends StatelessWidget {
