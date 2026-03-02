@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "614716894382",
+    "project_id": "mono-b47e2",
+    "storage_bucket": "mono-b47e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614716894382:android:d5352712fe946bd415513f",
+        "android_client_info": {
+          "package_name": "com.ror.mono"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQ34h1YdtaWPdwlwq3fpTE9qYW-XvFjkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
