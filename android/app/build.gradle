@@ -51,13 +51,13 @@ android {
     }
 
     signingConfigs {
-        debug {
-        storeFile file("$rootDir/debug.keystore")
-        storePassword "android"
-        keyAlias "androiddebugkey"
-        keyPassword "android"
-    }
-    release {
+    //     debug {
+    //     storeFile file("$rootDir/debug.keystore")
+    //     storePassword "android"
+    //     keyAlias "androiddebugkey"
+    //     keyPassword "android"
+    // }
+   
         
         /* 
         comment out the real keystore
@@ -69,8 +69,8 @@ android {
         */
 
  
-     
-    }
+
+    // }
         release {
                 // use debug signing temporarily
             storeFile file("$rootDir/debug.keystore")
