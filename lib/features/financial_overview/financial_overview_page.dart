@@ -3,10 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/features/financial_overview/budget/presentation/providers/budget_provider.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-import 'budget/presentation/providers/financial_overview_provider.dart';
 
 import 'budget/presentation/widgets/budget_overview_card.dart';
 import 'budget/presentation/widgets/first_time_budget_card.dart';
