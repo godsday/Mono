@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
@@ -8,14 +10,22 @@ import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../providers/add_budget_provider.dart';
 
 class AddBudgetScreen extends StatelessWidget {
-  const AddBudgetScreen({super.key});
+  final BudgetEntity? budget;
+
+  const AddBudgetScreen({super.key, this.budget});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AddBudgetProvider(
-        saveBudgetUseCase: SaveMonthlyBudgetUseCase(BudgetRepositoryImpl()),
-      ),
+      create: (_) {
+        final provider = AddBudgetProvider(
+          saveBudgetUseCase: SaveMonthlyBudgetUseCase(BudgetRepositoryImpl()),
+        );
+        if (budget != null) {
+          provider.initBudget(budget!);
+        }
+        return provider;
+      },
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -26,7 +36,9 @@ class AddBudgetScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            'Set Monthly Budget',
+            budget?.totalBudget != null
+                ? 'Edit Monthly Budget'
+                : 'Set Monthly Budget',
             style: AppTextTheme.montserrart(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -35,26 +47,39 @@ class AddBudgetScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: const _AddBudgetBody(),
-        bottomNavigationBar: const _SaveBudgetButton(),
+        body: _AddBudgetBody(isBudgetExist: budget),
+        bottomNavigationBar: _SaveBudgetButton(budget: budget),
       ),
     );
   }
 }
 
 class _AddBudgetBody extends StatefulWidget {
-  const _AddBudgetBody();
+  final BudgetEntity? isBudgetExist;
+  const _AddBudgetBody({this.isBudgetExist});
 
   @override
   State<_AddBudgetBody> createState() => _AddBudgetBodyState();
 }
 
 class _AddBudgetBodyState extends State<_AddBudgetBody> {
-  final TextEditingController _totalController = TextEditingController();
+  final TextEditingController totalController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isBudgetExist != null) {
+      final amount = widget.isBudgetExist!.totalBudget;
+      totalController.text = amount == amount.toInt()
+          ? amount.toInt().toString()
+          : amount.toString();
+    }
+  }
 
   @override
   void dispose() {
-    _totalController.dispose();
+    totalController.dispose();
     super.dispose();
   }
 
@@ -78,7 +103,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           const SizedBox(height: 24),
           _buildTotalBudgetInput(context, provider),
           const SizedBox(height: 32),
-          _buildRemainingIndicator(context, provider),
+          _buildRemainingIndicator(context, provider, widget.isBudgetExist),
           const SizedBox(height: 32),
           Text(
             'Allocate by Category',
@@ -123,8 +148,8 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: _totalController,
+          TextFormField(
+            controller: totalController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: AppTextTheme.montserrart(
               fontSize: 32,
@@ -169,40 +194,46 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
   }
 
   Widget _buildRemainingIndicator(
-      BuildContext context, AddBudgetProvider provider) {
-    final remaining = provider.remainingAmount;
-    final isOverBudget = remaining < 0;
+      BuildContext context, AddBudgetProvider provider, BudgetEntity? budget) {
+    // final remaining = budget?.totalBudget ?? provider.remainingAmount;
+    // final isOverBudget = remaining < 0;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isOverBudget
-            ? AppColor.expenseRed.withValues(alpha: 0.1)
-            : AppColor.incomeGreen.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            isOverBudget ? 'Over Budget' : 'Remaining to Allocate',
-            style: AppTextTheme.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isOverBudget ? AppColor.expenseRed : AppColor.incomeGreen,
+    return Consumer<AddBudgetProvider>(builder: (context, provider, child) {
+      final remaining = provider.remainingAmount;
+      final isOverBudget = remaining < 0;
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isOverBudget
+              ? AppColor.expenseRed.withValues(alpha: 0.1)
+              : AppColor.incomeGreen.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isOverBudget ? 'Over Budget' : 'Remaining to Allocate',
+              style: AppTextTheme.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color:
+                    isOverBudget ? AppColor.expenseRed : AppColor.incomeGreen,
+              ),
             ),
-          ),
-          Text(
-            '₹${remaining.abs().toStringAsFixed(0)}',
-            style: AppTextTheme.montserrart(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: isOverBudget ? AppColor.expenseRed : AppColor.incomeGreen,
+            Text(
+              '₹${remaining.abs().toStringAsFixed(0)}',
+              style: AppTextTheme.montserrart(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color:
+                    isOverBudget ? AppColor.expenseRed : AppColor.incomeGreen,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -218,6 +249,24 @@ class _CategoryBudgetInput extends StatefulWidget {
 class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
   // Use a controller to keep state
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = context.read<AddBudgetProvider>();
+    final amount = provider.categoryBudgets[widget.category.id];
+    if (amount != null && amount > 0) {
+      _controller.text = amount == amount.toInt()
+          ? amount.toInt().toString()
+          : amount.toString();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +306,7 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColor.grey.withValues(alpha: 0.3)),
             ),
-            child: TextField(
+            child: TextFormField(
               controller: _controller,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
@@ -288,7 +337,8 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
 }
 
 class _SaveBudgetButton extends StatelessWidget {
-  const _SaveBudgetButton();
+  final BudgetEntity? budget;
+  const _SaveBudgetButton({this.budget});
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +353,7 @@ class _SaveBudgetButton extends StatelessWidget {
               ? () async {
                   final success = await provider.saveBudget();
                   if (success && context.mounted) {
-                    Navigator.pop(context, true);
+                    Navigator.of(context).pushNamed(RouteNames.budgetOverview);
                   }
                 }
               : null,
@@ -324,7 +374,7 @@ class _SaveBudgetButton extends StatelessWidget {
                       color: Colors.white, strokeWidth: 2),
                 )
               : Text(
-                  'Save Budget',
+                  budget?.totalBudget != null ? 'Update Budget' : 'Save Budget',
                   style: AppTextTheme.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

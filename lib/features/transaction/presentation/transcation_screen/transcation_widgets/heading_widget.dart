@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
 class HeadingMethod extends StatelessWidget {
@@ -14,11 +16,17 @@ class HeadingMethod extends StatelessWidget {
       children: [
         Text(
           headtext,
-          style: AppTextStyles.roboto16w600Black,
+          style: AppTextStyles.roboto16w600Black.copyWith(
+              color: AppColor.blackText,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w700),
         ),
         Text(
-          amount!,
-          style: AppTextStyles.roboto16w600Black,
+          '₹ $amount',
+          style: AppTextStyles.roboto16w600Black.copyWith(
+              color: AppColor.blackText,
+              fontSize: 16.5.sp,
+              fontWeight: FontWeight.w700),
         )
       ],
     );

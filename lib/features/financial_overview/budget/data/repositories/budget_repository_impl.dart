@@ -1,37 +1,29 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/repositories/budget_repository.dart';
+import '../models/budget_model.dart';
 
 class BudgetRepositoryImpl implements BudgetRepository {
-  // Mock storage to simulate persistence during app session
-  // In a real app, this would use SharedPreferences or Hive
-  static BudgetEntity? _mockBudget;
+  // Hive box name must match what we opened in main.dart
+  static const String _boxName = 'budget_box';
+  static const String _key = 'current_budget';
 
   @override
   Future<BudgetEntity?> getCurrentMonthBudget() async {
-    // Simulate network/db delay
-    await Future.delayed(const Duration(milliseconds: 300));
-    return _mockBudget;
+    final box = Hive.box<BudgetModel>(_boxName);
+    final model = box.get(_key);
+    return model?.toEntity();
   }
 
   @override
   Future<void> saveBudget(
       double totalBudget, Map<String, double> categoryAllocations) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // In a real implementation, we would calculate spentAmount from transactions
-    // and verify category IDs against the DB.
-    // For this mock, we'll construct the entity directly.
-
     // Fetch category names for the IDs (mocking the join)
     final allCategories = await CategoryDB.instance.getCategories();
     final categoriesList = <CategoryEntity>[];
 
     categoryAllocations.forEach((id, amount) {
-      // Find name or use ID as fallback
-      // We only need to check if ID exists for rigorous validation,
-      // but for now we trust the ID or use it as name if not found.
-
       String name = "Unknown";
       try {
         final match = allCategories.firstWhere((e) => e.id == id);
@@ -49,11 +41,24 @@ class BudgetRepositoryImpl implements BudgetRepository {
       }
     });
 
-    _mockBudget = BudgetEntity(
+    final entity = BudgetEntity(
+      month: DateTime.now().month.toString(),
       totalBudget: totalBudget,
-      spentAmount: 0, // Mock: 0 spent initially
-      remainingAmount: totalBudget, // Mock: all remaining initially
+      spentAmount:
+          0, // Reset spent amount for new budget? Or keep? usually new budget means 0 spent or tracked elsewhere
+      // Ideally spentAmount comes from transactions.
+      remainingAmount: totalBudget,
       categories: categoriesList,
     );
+
+    final model = BudgetModel.fromEntity(entity);
+    final box = Hive.box<BudgetModel>(_boxName);
+    await box.put(_key, model);
+  }
+
+  @override
+  Future<void> clearBudget() async {
+    final box = Hive.box<BudgetModel>(_boxName);
+    await box.delete(_key);
   }
 }

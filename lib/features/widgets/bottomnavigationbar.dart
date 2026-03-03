@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 // import 'package:mono/screens/home_screen/home_screen.dart'; // Deprecated
@@ -16,7 +15,7 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int _selectedIndex = 1;
+  int? _selectedIndex;
   List pages = [
     // const ProfileScreen(),
     const TranscationScreen(),
@@ -27,17 +26,18 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_selectedIndex],
+      body: pages[_selectedIndex ?? widget.index],
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: TextStyle(
+            color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
         items: const [
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.arrow_2_squarepath), label: "More"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "More"),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grading_outlined), label: "Financial Hub"),
+              icon: Icon(Icons.bar_chart_outlined), label: "Finance"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
         ],
@@ -45,7 +45,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         iconSize: 30,
         showUnselectedLabels: false,
         showSelectedLabels: true,
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedIndex ?? widget.index,
         selectedItemColor: AppColor.mainHexcolor,
         unselectedItemColor: Colors.black45,
         onTap: _onitemtap,

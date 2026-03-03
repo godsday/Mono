@@ -45,13 +45,9 @@ class CalculateThisMonth {
   }
 
   double getThisMonthBalance(List<TranscationModel> transactions) {
-    List<TranscationModel> thisMonthTransactions = transactions.where((t) {
-      return t.date.month == DateTime.now().month &&
-          t.date.year == DateTime.now().year;
-    }).toList();
-    double thisMonthTotalBalance = thisMonthTransactions
-        .where((t) => t.type == 'Expense')
-        .fold(0, (sum, t) => sum + t.amount);
+    double thisMonthTotalBalance =
+        getThisMonthIncome(transactions) - getThisMonthExpense(transactions);
+
     return thisMonthTotalBalance;
   }
 }

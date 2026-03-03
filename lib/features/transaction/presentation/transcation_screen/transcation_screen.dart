@@ -2,16 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/features/edit_screen/edit_screen.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
+import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
 
 import 'package:mono/core/widgets/snackbar.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'transcation_widgets/graph_widget.dart';
@@ -26,7 +26,6 @@ class TranscationScreen extends StatefulWidget {
 
 class _TranscationScreenState extends State<TranscationScreen> {
   late TooltipBehavior _tooltipBehavior;
-  //bool visible = false;
 
   var item = ['Income', 'All', 'Expense'];
   final ScrollController _scrollController = ScrollController();
@@ -46,246 +45,6 @@ class _TranscationScreenState extends State<TranscationScreen> {
     super.dispose();
   }
 
-  Widget _buildFilterChip(String filterName, BuildContext context) {
-    return Consumer<TransactionProvider>(
-      builder: (context, provider, child) {
-        final isSelected = provider.itemvalue == filterName;
-        return GestureDetector(
-          onTap: () {
-            provider.itemvalue = filterName;
-            // Refresh the data when filter changes
-            provider.refresh();
-          },
-          child: Text(
-            filterName,
-            style: TextStyle(
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              fontSize: isSelected ? 14.sp : 12.sp,
-              color: isSelected ? Colors.blue : Colors.grey,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showCustomDatePicker(BuildContext context) async {
-    final dateRange = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-      initialDateRange: DateTimeRange(
-        start: DateTime.now().subtract(const Duration(days: 7)),
-        end: DateTime.now(),
-      ),
-    );
-
-    if (dateRange != null) {
-      if (!context.mounted) return;
-      // Update the provider with the selected date range
-      final provider = Provider.of<TransactionProvider>(context, listen: false);
-      provider.itemvalue = 'Custom';
-      provider.custompick(dateRange.start, dateRange.end);
-      provider.refresh();
-    }
-  }
-
-  Widget _buildGroupedTransactionList(List<TranscationModel> transactions) {
-    // Group transactions by date
-    Map<String, List<TranscationModel>> groupedTransactions = {};
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-    DateFormat displayFormat = DateFormat('MMM d, yyyy');
-
-    for (var transaction in transactions) {
-      String dateKey = dateFormat.format(transaction.date);
-      if (!groupedTransactions.containsKey(dateKey)) {
-        groupedTransactions[dateKey] = [];
-      }
-      groupedTransactions[dateKey]!.add(transaction);
-    }
-
-    // Create a list of widgets with date headers and transactions
-    List<Widget> widgets = [];
-
-    groupedTransactions.forEach((dateKey, transactionList) {
-      // Add date header
-      DateTime date = dateFormat.parse(dateKey);
-      String dateDisplay = displayFormat.format(date);
-
-      // Check if it's today or yesterday
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final yesterday = DateTime(now.year, now.month, now.day - 1);
-      final transactionDate = DateTime(date.year, date.month, date.day);
-
-      String dayLabel = '';
-      if (transactionDate.isAtSameMomentAs(today)) {
-        dayLabel = 'Today';
-      } else if (transactionDate.isAtSameMomentAs(yesterday)) {
-        dayLabel = 'Yesterday';
-      }
-
-      widgets.add(
-        Container(
-          // alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.only(
-            left: 15.0,
-            top: 10.0,
-            bottom: 5.0,
-            right: 15.0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (dayLabel.isNotEmpty)
-                Text(
-                  '$dayLabel ',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                    color: Colors.grey[700],
-                  ),
-                ),
-              Text(
-                dateDisplay,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                  color: Colors.grey[700],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-      // Add transactions for this date
-      for (var transaction in transactionList) {
-        widgets.add(
-          Slidable(
-            key: ValueKey(transaction.id),
-            startActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  backgroundColor: Theme.of(context).hoverColor,
-                  foregroundColor: HexColor('#1976D2'),
-                  icon: Icons.edit,
-                  label: 'Edit',
-                  onPressed: ((context) async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                EditScreen(value: transaction)));
-
-                    // Update transaction if needed
-                  }),
-                ),
-              ],
-            ),
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  backgroundColor: Theme.of(context).hoverColor,
-                  foregroundColor: HexColor('#B00020'),
-                  icon: Icons.delete,
-                  label: 'Delete',
-                  onPressed: ((context) {
-                    Provider.of<TransactionProvider>(context, listen: false)
-                        .deleteTransaction(transaction.id);
-
-                    final snack = customSnak(context, message: "Deleted");
-                    ScaffoldMessenger.of(context).showSnackBar(snack);
-                  }),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: InkWell(
-                  onTap: (() {}),
-                  focusColor: Colors.black38,
-                  child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: HexColor('#efefef'),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: GetCategoryIcon(
-                            category: transaction.category,
-                            type: transaction.type),
-                      ),
-                    ),
-                    title: Text(
-                      transaction.category,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    subtitle: Text(
-                      Provider.of<TransactionProvider>(context, listen: false)
-                          .parsedate(transaction.date),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    trailing: transaction.type == 'Expense'
-                        ? SizedBox(
-                            width: 34.w,
-                            child: AutoSizeText(
-                              "- ₹${transaction.amount}",
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.red,
-                              ),
-                              maxLines: 1,
-                              textAlign: TextAlign.end,
-                            ),
-                          )
-                        : SizedBox(
-                            width: 35.w,
-                            child: AutoSizeText(
-                              "+ ₹${transaction.amount}",
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                              ),
-                              maxLines: 1,
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-    });
-
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 3),
-      physics: const BouncingScrollPhysics(),
-      itemCount: widgets.length,
-      itemBuilder: (context, index) {
-        return widgets[index];
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // TranscationDB.instance.refresh();
@@ -294,21 +53,74 @@ class _TranscationScreenState extends State<TranscationScreen> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const TranscationHeader(),
-          Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            child: Consumer<TransactionProvider>(
-              builder: (context, pro, child) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0.w),
-                  child: ListView.builder(
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Provider.of<TransactionProvider>(context, listen: false)
+                          .graphView();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Provider.of<TransactionProvider>(context,
+                                        listen: false)
+                                    .visible
+                                ? AppColor.blueContainer
+                                : Colors.amberAccent,
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Text(Provider.of<TransactionProvider>(context,
+                                      listen: false)
+                                  .visible
+                              ? "Hide"
+                              : "Show"),
+                        ))),
+              ],
+            ),
+          ),
+          AnimatedCrossFade(
+            firstCurve: Curves.easeOut,
+            crossFadeState:
+                Provider.of<TransactionProvider>(context, listen: false).visible
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+
+            sizeCurve: Curves.easeIn,
+
+            duration:
+                const Duration(milliseconds: 700), // Set the animation duration
+
+            firstChild:
+                Consumer<TransactionProvider>(builder: (context, pro, child) {
+              return pro.itemvalue == "All"
+                  ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                  : pro.itemvalue == "Income"
+                      ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                      : pro.itemvalue == "Expense"
+                          ? VisibleChart(tooltipBehavior: _tooltipBehavior)
+                          : SizedBox(height: 2.h);
+            }),
+
+            secondChild: const SizedBox.shrink(),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: SizedBox(
+              width: double.infinity,
+              height: 40,
+              // alignment: Alignment.topCenter,
+              child: Consumer<TransactionProvider>(
+                builder: (context, pro, child) {
+                  return ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     itemCount: item.length,
                     itemBuilder: (context, index) {
                       final isSelected = pro.itemvalue == item[index];
-
                       // Scroll to center the selected item
                       if (isSelected) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -330,16 +142,18 @@ class _TranscationScreenState extends State<TranscationScreen> {
                       }
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        key: ValueKey(item[index]),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5),
                         child: InkWell(
                           onTap: () {
                             pro.itemvalue = item[index];
                           },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 500),
-                            transform: isSelected
-                                ? Matrix4.identity()
-                                : Matrix4.rotationZ(index.isEven ? 0.1 : -0.1),
+                            // transform: isSelected
+                            //     ? Matrix4.identity()
+                            //     : Matrix4.rotationZ(index.isEven ? 0 : 0),
                             alignment: Alignment.center,
                             child: RotationTransition(
                               turns: AlwaysStoppedAnimation(
@@ -357,10 +171,11 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                   style: TextStyle(
                                     fontWeight: isSelected
                                         ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    fontSize: isSelected ? 16.sp : 12.sp,
-                                    color:
-                                        isSelected ? Colors.blue : Colors.grey,
+                                        : FontWeight.w500,
+                                    fontSize: isSelected ? 17.sp : 14.sp,
+                                    color: isSelected
+                                        ? AppColor.mainHexcolor
+                                        : AppColor.textGrey,
                                   ),
                                 ),
                               ),
@@ -369,97 +184,83 @@ class _TranscationScreenState extends State<TranscationScreen> {
                         ),
                       );
                     },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
           Expanded(
-              child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24), topRight: Radius.circular(24)),
-              color: AppColor.blueContainer,
-            ),
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Consumer<TransactionProvider>(builder: (context, pro, child) {
-                  return pro.itemvalue == "All"
-                      ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                      : pro.itemvalue == "Income"
-                          ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                          : pro.itemvalue == "Expense"
-                              ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                              : SizedBox(height: 2.h);
+                Container(
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                      color: HexColor('#EEEEEE'),
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildFilterChip('Today', context),
+                      _buildFilterChip('Weekly', context),
+                      _buildFilterChip('Monthly', context),
+                      IconButton(
+                        icon: Icon(
+                          Icons.calendar_month_outlined,
+                          size: 15.sp,
+                        ),
+                        color: AppColor.textGrey,
+                        onPressed: () {
+                          _showCustomDatePicker(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Consumer<TransactionProvider>(
+                    builder: (context, provider, child) {
+                  return Container(
+                      height: 4.h,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 215, 215, 214),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                          ),
+                          child: Builder(builder: (context) {
+                            final headingData = provider.getHeadingData();
+                            return HeadingMethod(
+                              headtext: headingData.title,
+                              amount: headingData.amount,
+                            );
+                          })));
                 }),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          height: 4.h,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).hoverColor,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildFilterChip('Today', context),
-                              _buildFilterChip('Weekly', context),
-                              _buildFilterChip('Monthly', context),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.calendar_month_outlined,
-                                  size: 15.sp,
-                                ),
-                                color: Colors.blueGrey,
-                                onPressed: () {
-                                  _showCustomDatePicker(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        Consumer<TransactionProvider>(
-                            builder: (context, provider, child) {
-                          return Container(
-                              height: 4.h,
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 215, 215, 214),
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0,
-                                  ),
-                                  child: provider.headinginnermethod()));
+                  child: Container(
+                    color: HexColor('#EEEEEE'),
+                    child: ValueListenableBuilder(
+                        valueListenable: Provider.of<TransactionProvider>(
+                                context,
+                                listen: true)
+                            .listingMethod(),
+                        builder: (BuildContext context,
+                            List<TranscationModel> newlist, _) {
+                          return newlist.isEmpty
+                              ? Stack(children: [
+                                  Lottie.asset(
+                                      'assets/images/animation/paymentshero1.json')
+                                ])
+                              : _buildGroupedTransactionList(
+                                  Provider.of<TransactionProvider>(context,
+                                          listen: false)
+                                      .groupedTransactions,
+                                  context);
                         }),
-                        Expanded(
-                          child: Container(
-                            color: const Color.fromARGB(255, 215, 215, 214),
-                            child: ValueListenableBuilder(
-                                valueListenable:
-                                    Provider.of<TransactionProvider>(context,
-                                            listen: true)
-                                        .listingMethod(),
-                                builder: (BuildContext context,
-                                    List<TranscationModel> newlist, _) {
-                                  return newlist.isEmpty
-                                      ? Stack(children: [
-                                          Lottie.asset(
-                                              'assets/images/animation/paymentshero1.json')
-                                        ])
-                                      : _buildGroupedTransactionList(newlist);
-                                }),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ],
@@ -488,5 +289,208 @@ class VisibleChart extends StatelessWidget {
         tooltipBehavior: _tooltipBehavior,
       ),
     );
+  }
+}
+
+Widget _buildFilterChip(String filterName, BuildContext context) {
+  return Consumer<TransactionProvider>(
+    key: ValueKey('filter_$filterName'),
+    builder: (context, provider, child) {
+      final isSelected = provider.itemvalue == filterName;
+      return GestureDetector(
+        onTap: () {
+          provider.itemvalue = filterName;
+          // Refresh the data when filter changes
+          provider.refresh();
+        },
+        child: Text(
+          filterName,
+          style: TextStyle(
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontSize: isSelected ? 15.sp : 13.sp,
+            color: isSelected ? AppColor.mainHexcolor : Colors.grey,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildGroupedTransactionList(
+    Map<String, List<TranscationModel>> groupedTransactions,
+    BuildContext context) {
+  // Create a list of widgets with date headers and transactions
+  List<Widget> widgets = [];
+
+  groupedTransactions.forEach((dateDisplay, transactionList) {
+    // Add date header
+    widgets.add(
+      Container(
+        key: ValueKey('header_$dateDisplay'),
+        // alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(
+          left: 15.0,
+          top: 10.0,
+          bottom: 5.0,
+          right: 15.0,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              dateDisplay,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14.sp,
+                color: Colors.grey[700],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // Add transactions for this date
+    for (var transaction in transactionList) {
+      widgets.add(
+        Slidable(
+          key: ValueKey(transaction.id),
+          startActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                backgroundColor: HexColor('#EEEEEE'),
+                foregroundColor: HexColor('#1976D2'),
+                icon: Icons.edit,
+                label: 'Edit',
+                onPressed: ((context) {
+                  Navigator.pushNamed(context, RouteNames.addTransaction,
+                      arguments: transaction);
+
+                  // Update transaction if needed
+                }),
+              ),
+            ],
+          ),
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                backgroundColor: HexColor('#EEEEEE'),
+                foregroundColor: HexColor('#B00020'),
+                icon: Icons.delete,
+                label: 'Delete',
+                onPressed: ((context) {
+                  Provider.of<TransactionProvider>(context, listen: false)
+                      .deleteTransaction(transaction.id);
+
+                  final snack = customSnak(context, message: "Deleted");
+                  ScaffoldMessenger.of(context).showSnackBar(snack);
+                }),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: InkWell(
+                onTap: (() {}),
+                focusColor: Colors.black38,
+                child: ListTile(
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      color: HexColor('#EEEEEE'),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GetCategoryIcon(
+                          category: transaction.category,
+                          type: transaction.type),
+                    ),
+                  ),
+                  title: Text(
+                    transaction.category,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                  subtitle: Text(
+                    Provider.of<TransactionProvider>(context, listen: false)
+                        .parsedate(transaction.date),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  trailing: transaction.type == 'Expense'
+                      ? SizedBox(
+                          width: 34.w,
+                          child: AutoSizeText(
+                            "- ${transaction.amount.toStringAsFixed(0)}",
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                            maxLines: 1,
+                            textAlign: TextAlign.end,
+                          ),
+                        )
+                      : SizedBox(
+                          width: 35.w,
+                          child: AutoSizeText(
+                            "+ ${transaction.amount.toStringAsFixed(0)}",
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                            maxLines: 1,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  });
+
+  return ListView.builder(
+    padding: const EdgeInsets.only(top: 3),
+    physics: const BouncingScrollPhysics(),
+    itemCount: widgets.length,
+    itemBuilder: (context, index) {
+      return widgets[index];
+    },
+  );
+}
+
+void _showCustomDatePicker(BuildContext context) async {
+  final dateRange = await showDateRangePicker(
+    context: context,
+    firstDate: DateTime(2020),
+    lastDate: DateTime.now(),
+    initialDateRange: DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 7)),
+      end: DateTime.now(),
+    ),
+  );
+
+  if (dateRange != null) {
+    if (!context.mounted) return;
+    // Update the provider with the selected date range
+    final provider = Provider.of<TransactionProvider>(context, listen: false);
+    provider.itemvalue = 'Custom';
+    provider.custompick(dateRange.start, dateRange.end);
+    provider.refresh();
   }
 }

@@ -1,0 +1,338 @@
+import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:sizer/sizer.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
+import '../../../../../core/constants/colors/app_colors.dart';
+import '../../../../../core/theme/app_texttheme.dart';
+import '../../../widgets/safe_background_image.dart';
+
+class FirstTimeAssetCard extends StatefulWidget {
+  const FirstTimeAssetCard({super.key});
+
+  @override
+  State<FirstTimeAssetCard> createState() => _FirstTimeAssetCardState();
+}
+
+class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
+  bool _showCard = true;
+  @override
+  Widget build(BuildContext context) {
+    return PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 300),
+        reverse: !_showCard,
+        transitionBuilder: (Widget child, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child);
+        },
+        child: _showCard
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showCard = !_showCard;
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: HexColor('#E6F5F4'),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                    gradient: LinearGradient(
+                      colors: [
+                        HexColor('#E6F5F4'),
+                        HexColor('#F0FDFB'),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Background Cityscape (Right side)
+                      Positioned(
+                        right: 10,
+                        top: 20,
+                        width: 150,
+                        child: Opacity(
+                          opacity: 0.8,
+                          child: SafeBackgroundImage(
+                            imagePath:
+                                'assets/images/building-big.png', // Placeholder
+                            fit: BoxFit.contain,
+                            fallback: Icon(Icons.location_city_rounded,
+                                size: 80,
+                                color: Colors.grey.withValues(alpha: 0.2)),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                  ),
+                                  child: Icon(
+                                    Icons.account_balance_wallet,
+                                    color: AppColor.textPrimary,
+                                    size: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Track Your Assets',
+                                  style: AppTextTheme.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColor.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width:
+                                  200, // Limit width to avoid overlapping image
+                              child: Text(
+                                'Add what you own to understand your net worth',
+                                style: AppTextTheme.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.textGrey,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 74),
+                            SizedBox(
+                              width: 140,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _showCard = !_showCard;
+                                  });
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) => const AddAssetScreen()),
+                                  // );
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.blueGrey.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          color: Colors.blueGrey.shade100,
+                                          width: 2
+                                          // color: HexColor('#21988C'),
+                                          ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    'Add Assets',
+                                    style: AppTextTheme.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      // color: HexColor('#2D6763'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : InkWell(
+                onTap: () {
+                  setState(() {
+                    _showCard = !_showCard;
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: HexColor('#E6F5F4'),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                    gradient: LinearGradient(
+                      colors: [
+                        HexColor('#E6F5F4'),
+                        HexColor('#F0FDFB'),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      //   Background Cityscape (Right side)
+                      Positioned(
+                        right: 10,
+                        top: 20,
+                        width: 150,
+                        child: Opacity(
+                          opacity: 0.8,
+                          child: SafeBackgroundImage(
+                            imagePath:
+                                'assets/images/building-big.png', // Placeholder
+                            fit: BoxFit.contain,
+                            fallback: Icon(Icons.location_city_rounded,
+                                size: 80,
+                                color: Colors.grey.withValues(alpha: 0.2)),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Asset & Net Worth Tracking',
+                              style: AppTextTheme.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: AppColor.textPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width:
+                                  200, // Limit width to avoid overlapping image
+                              child: Text(
+                                '\u2022 Net worth growth chart',
+                                style: AppTextTheme.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.textGrey,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              '\u2022 Asset allocation breakdown',
+                              style: AppTextTheme.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColor.textGrey,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              '\u2022 Monthly growth insights',
+                              style: AppTextTheme.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColor.textGrey,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              '\u2022 Long-term wealth tracking',
+                              style: AppTextTheme.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColor.textGrey,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            /*   GestureDetector(
+                              onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddAssetScreen()),
+                            );
+                            },
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 16.w),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          color: HexColor('#21988C'),
+                                          width: 1.5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    'Join early access',
+                                    style: AppTextTheme.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: HexColor('#2D6763'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),*/
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '🔔 Notify Me When It Launches',
+                                style: AppTextStyles.roboto18w600SemiBoldWhite(
+                                        context)!
+                                    .copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: HexColor('#2D6763'),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+  }
+}

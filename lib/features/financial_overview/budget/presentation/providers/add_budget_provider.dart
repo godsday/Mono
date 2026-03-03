@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../database/categories_DB/category_db.dart';
 import '../../../../../models/category_model/category_model.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
+import '../../domain/entities/budget_entity.dart';
 
 class AddBudgetProvider extends ChangeNotifier {
   final SaveMonthlyBudgetUseCase saveBudgetUseCase;
@@ -9,10 +10,21 @@ class AddBudgetProvider extends ChangeNotifier {
   double _totalBudget = 0;
   final Map<String, double> _categoryBudgets = {};
   List<CategoryModel> _availableCategories = [];
+  dynamic existingCategory = [];
   bool _isLoading = false;
+
+  double? isBudgetExist;
+  Map<String, double>? budgetdata;
 
   AddBudgetProvider({required this.saveBudgetUseCase}) {
     _loadCategories();
+  }
+
+  void initBudget(BudgetEntity budget) {
+    _totalBudget = budget.totalBudget;
+    for (var cat in budget.categories) {
+      _categoryBudgets[cat.id] = cat.amount;
+    }
   }
 
   double get totalBudget => _totalBudget;
@@ -45,6 +57,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
   void updateTotalBudget(double amount) {
     _totalBudget = amount;
+    print("object$_totalBudget");
     notifyListeners();
   }
 
@@ -65,6 +78,11 @@ class AddBudgetProvider extends ChangeNotifier {
 
     try {
       await saveBudgetUseCase(_totalBudget, _categoryBudgets);
+      print("add provider $_totalBudget");
+      if (_totalBudget != 0) {
+        isBudgetExist = _totalBudget;
+        existingCategory = _availableCategories;
+      }
       return true;
     } catch (e) {
       debugPrint("Error saving budget: $e");

@@ -53,6 +53,7 @@ dependencies:
   animations: ^2.0.8
   flutter_svg: ^2.1.0
   cached_network_image: ^3.4.1
+  avatar_glow: ^3.0.1
   
 
 dependency_overrides:
@@ -79,6 +80,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
     - assets/images/OrginalIcon.png
     - assets/images/piggybank.png
     - assets/images/monotree.png
@@ -87,9 +89,21 @@ flutter:
     - assets/images/Appicon.png
     - assets/images/onboardbg.png
     - assets/images/animation/paymentshero1.json
-    - assets/images/onboard_bacground.svg
     - assets/images/rings.png
-    
+    - assets/images/wallet.svg
+    - assets/images/goals.svg
+    - assets/images/boat.svg
+    - assets/images/asssets.svg
+    - assets/images/arrow.svg
+    - assets/images/building_firsttime.svg
+    - assets/images/building_overview.svg
+    - assets/images/food.svg
+    - assets/images/shopping.svg
+    - assets/images/transport.svg
+    - assets/images/assetBOverview.png
+    - assets/images/boat-first.png
+    - assets/images/arrow-first.png
+    - assets/images/building-big.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

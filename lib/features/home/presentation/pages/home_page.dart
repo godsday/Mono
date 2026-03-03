@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
+import 'package:mono/features/home/presentation/widgets/smart_insight_card.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/features/home/presentation/widgets/home_header.dart';
 import 'package:mono/features/home/presentation/widgets/total_balance_card.dart';
@@ -24,10 +25,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Initial data load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TransactionProvider>(context, listen: false)
           .loadTransactions();
+
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      homeProvider.loadUserName();
+      homeProvider.loadBudget();
     });
   }
 
@@ -121,56 +125,77 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
                   ),
                   Positioned(
-                    right: 5.w,
-                    bottom: 4.h,
-                    // child: ClipRect(
-                    //   child: Align(
-                    //     alignment: Alignment.topCenter,
-                    //     child: SizedBox(
-                    //       width: 14.0.h,
-                    //       height: 14.h,
-                    //       child: ShaderMask(
-                    //         shaderCallback: (Rect bounds) {
-                    //           return const LinearGradient(
-                    //             begin: Alignment.bottomCenter,
-                    //             end: Alignment.topCenter,
-                    //             colors: [Colors.transparent, Colors.black],
-                    //           ).createShader(bounds);
-                    //         },
-                    //         blendMode: BlendMode.dstIn,
-                    child: Image.asset(
-                      scale: 1.5,
-                      'assets/images/piggybank.png',
-                      fit: BoxFit.cover,
-                      //     ),
-                      //   ),
-                      // ),
-                      // ),
-                    ),
-                  ),
-
-                  Positioned(
                     left: -11.w,
-                    bottom: -10.h,
+                    bottom: 0.h,
                     child: Image(
                       image: const AssetImage("assets/images/monotree.png"),
                       width: 31.h,
                       height: 31.h,
                     ),
                   ),
+
+                  // Smart Insight
+
+                  Positioned(
+                    bottom: 2.h,
+                    left: 0,
+                    right: 0,
+                    child: Consumer<HomeProvider>(
+                        builder: (context, homeProvider, child) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 5000),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child: homeProvider.currentInsight == null
+                            ? const SizedBox()
+                            : SmartInsightCard(
+                                key: ValueKey(homeProvider.currentInsight!.id),
+                                title: homeProvider.currentInsight!.title,
+                                message: homeProvider.currentInsight!.message,
+                                icon: Icons.lightbulb_outline,
+                                type: homeProvider.currentInsight!.type,
+                              ),
+                      );
+                    }),
+                  ),
+                  Positioned(
+                    right: 5.w,
+                    bottom: 6.h,
+                    child: ClipRect(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: 14.0.h,
+                          height: 14.h,
+                          child: ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.amberAccent
+                                ],
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: Image.asset(
+                              scale: 1.5,
+                              'assets/images/piggybank.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const Spacer(),
-              Column(
-                children: [
-                  Text(
-                    "Cash",
-                    style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 2.h),
-                ],
-              ),
               Stack(
                 children: [
                   Padding(
@@ -257,7 +282,7 @@ class HomepageCurveShape extends StatelessWidget {
             ),
           ],
         ),
-        height: 55.h,
+        height: 69.h,
       ),
     );
   }

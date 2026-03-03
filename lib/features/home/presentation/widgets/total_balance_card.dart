@@ -19,8 +19,6 @@ class TotalBalanceCard extends StatelessWidget {
       return Container(
         height: 25.5.h,
         decoration: BoxDecoration(
-            // boxShadow: ,
-            // backgroundBlendMode: BlendMode.s,
             color: AppColor.totalBalanceCardBg,
             boxShadow: [
               BoxShadow(
@@ -43,7 +41,10 @@ class TotalBalanceCard extends StatelessWidget {
                     children: [
                       Text(
                         "Total balance",
-                        style: AppTextStyles.poppins18w500White(context),
+                        style:
+                            AppTextStyles.poppins18w500White(context)!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       SizedBox(
                         height: .5.h,
@@ -59,6 +60,7 @@ class TotalBalanceCard extends StatelessWidget {
                         maxLines: 1,
                         style: AppTextStyles.roboto18w600SemiBoldWhite(context)!
                             .copyWith(
+                                fontWeight: FontWeight.w700,
                                 fontSize: homeProvider.totalBalance < 0
                                     ? 19.sp
                                     : 19.sp),

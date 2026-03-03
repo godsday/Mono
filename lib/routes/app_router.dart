@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/analytics/presentation/pages/analytics_screen.dart';
+import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
+import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/add_screen.dart';
@@ -19,10 +23,29 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => OnboardScreen());
 
       case RouteNames.addTransaction:
-        return _buildPageRoute(const AddScreen(), settings, isVertical: true);
+        final args = settings.arguments;
+        final transaction = args is TranscationModel ? args : null;
+        return _buildPageRoute(
+          AddScreen(
+            isDataExist: transaction,
+          ),
+          settings,
+        );
 
       case RouteNames.settings:
         return _buildPageRoute(const SettingsScreen(), settings);
+
+      case RouteNames.budgetOverview:
+        return _buildPageRoute(const BottomNavigator(index: 2), settings);
+
+      case RouteNames.addBudget:
+        final args = settings.arguments;
+        final budget = args is BudgetEntity ? args : null;
+        return _buildPageRoute(
+            AddBudgetScreen(
+              budget: budget,
+            ),
+            settings);
 
       case RouteNames.transactionList:
         return _buildPageRoute(
@@ -30,6 +53,8 @@ class AppRouter {
               index: 0,
             ),
             settings);
+      case RouteNames.analytics:
+        return _buildPageRoute(const AnalyticsScreen(), settings);
 
       default:
         return MaterialPageRoute(
@@ -41,7 +66,7 @@ class AppRouter {
   }
 
   static PageRouteBuilder _buildPageRoute(Widget page, RouteSettings settings,
-      {bool isVertical = false}) {
+      {bool isVertical = false, bool isFade = true}) {
     return PageRouteBuilder(
       settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => page,
@@ -54,10 +79,15 @@ class AppRouter {
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return isFade
+            ? FadeTransition(
+                opacity: animation,
+                child: page,
+              )
+            : SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
       },
       transitionDuration: const Duration(milliseconds: 300),
     );

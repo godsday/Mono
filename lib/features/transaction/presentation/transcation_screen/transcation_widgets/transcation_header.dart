@@ -11,13 +11,13 @@ class TranscationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ClipPath(
-          clipper: CurveClipper(),
-          child: Container(
-            height: 15.0.h,
+    return ClipPath(
+      clipper: CurveClipper(),
+      child: Stack(
+        children: [
+          Container(
             width: double.infinity,
+            height: 15.h,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
@@ -33,33 +33,28 @@ class TranscationHeader extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: Text(
-                "Recent Transactions",
-                style: AppTextTheme.montserrart(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: AppColor.white,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.h),
+                child: Text(
+                  "Recent Transactions",
+                  style: AppTextTheme.montserrart(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.white,
+                  ),
                 ),
               ),
-
-              // Image(
-              //       width: 47.w,
-              //       image: const AssetImage(
-              //         'assets/images/rings.png',
-              //       ),
-              //     ),
-              //
             ),
           ),
-        ),
-        const Positioned(
-            top: 2,
-            child: Image(
-              image: AssetImage(
-                'assets/images/rings.png',
-              ),
-            )),
-      ],
+          const Positioned(
+              top: 2,
+              child: Image(
+                image: AssetImage(
+                  'assets/images/rings.png',
+                ),
+              )),
+        ],
+      ),
     );
   }
 }

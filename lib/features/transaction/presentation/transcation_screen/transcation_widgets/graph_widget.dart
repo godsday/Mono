@@ -37,19 +37,24 @@ class _GraphWidgetState extends State<GraphWidget> {
 
     return Consumer<TransactionProvider>(builder: (context, provider, child) {
       return SfCircularChart(
-        legend: const Legend(isVisible: true),
+        legend: const Legend(
+            orientation: LegendItemOrientation.horizontal,
+            isVisible: true,
+            toggleSeriesVisibility: true,
+            isResponsive: true),
         tooltipBehavior: widget._tooltipBehavior,
         series: <CircularSeries>[
           DoughnutSeries<Chartdata, String>(
-              dataSource: provider.itemvalue == 'All'
-                  ? allData
-                  : provider.itemvalue == 'Income'
-                      ? incomeData
-                      : expenseData,
-              xValueMapper: (Chartdata data, _) => data.categories,
-              yValueMapper: (Chartdata data, _) => data.amount,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              enableTooltip: true)
+            dataSource: provider.itemvalue == 'All'
+                ? allData
+                : provider.itemvalue == 'Income'
+                    ? incomeData
+                    : expenseData,
+            xValueMapper: (Chartdata data, _) => data.categories,
+            yValueMapper: (Chartdata data, _) => data.amount,
+            dataLabelSettings: const DataLabelSettings(isVisible: true),
+            enableTooltip: true,
+          )
         ],
       );
     });

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
-import 'package:mono/features/home/domain/usecase/calcuate_total_income.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_balance.dart';
-import 'package:mono/features/home/domain/usecase/calculate_total_expense.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
+import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
+import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
+
 import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/usecases/add_transaction.dart';
 import '../../domain/usecases/delete_transaction.dart';
 import '../../domain/usecases/get_transactions.dart';
 import '../../domain/usecases/update_transaction.dart';
+import '../../domain/usecases/group_transactions_by_date.dart';
 
 class TransactionProvider with ChangeNotifier {
   final GetTransactions getTransactionsUseCase;
@@ -20,11 +21,13 @@ class TransactionProvider with ChangeNotifier {
   final TotalBalanceUseCase totalBalanceUseCase;
   final TotalIncomeUseCase totalIncomeUseCase;
   final TotalExpenseUseCase totalExpenseUseCase;
+  final GroupTransactionsByDateUseCase groupTransactionsUseCase;
 
   List<TranscationModel> _transactions = [];
 
   bool _isLoading = false;
   String? _error;
+  bool _visible = false;
 
   TransactionProvider({
     required this.getTransactionsUseCase,
@@ -34,6 +37,7 @@ class TransactionProvider with ChangeNotifier {
     required this.totalBalanceUseCase,
     required this.totalIncomeUseCase,
     required this.totalExpenseUseCase,
+    required this.groupTransactionsUseCase,
   });
 
   // double get totalBalance => homeProvider.totalBalance;
@@ -68,6 +72,13 @@ class TransactionProvider with ChangeNotifier {
     final sorted = List<TranscationModel>.from(_transactions)
       ..sort((a, b) => b.date.compareTo(a.date));
     return sorted.take(5).toList();
+  }
+
+  bool get visible => _visible;
+
+  graphView() {
+    _visible = !_visible;
+    notifyListeners();
   }
 
   Future<void> loadTransactions() async {
@@ -249,66 +260,35 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  headinginnermethod() {
+  Map<String, List<TranscationModel>> get groupedTransactions {
+    return groupTransactionsUseCase(listingMethod().value);
+  }
+
+  ({String title, String amount}) getHeadingData() {
     if (itemvalue == "Income") {
-      return HeadingMethod(
-          headtext: 'My savings', amount: totalIncome.toStringAsFixed(1));
+      return (title: 'Savings', amount: totalIncome.toStringAsFixed(0));
     } else if (itemvalue == 'Expense') {
-      return HeadingMethod(
-          headtext: ' My spendings', amount: totalExpense.toStringAsFixed(1));
+      return (title: 'Spendings', amount: totalExpense.toStringAsFixed(0));
     } else if (itemvalue == 'Today') {
-      double todayTotal = calculateTotalForList(todaylistnotifier);
-      return HeadingMethod(
-          headtext: 'Today', amount: todayTotal.toStringAsFixed(1));
+      double todayTotal = totalBalanceUseCase.call(todaylistnotifier.value);
+      return (title: 'Today', amount: todayTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Yesterday') {
-      return HeadingMethod(headtext: 'Yesterday');
+      return (title: 'Yesterday', amount: '');
     } else if (itemvalue == 'Weekly') {
-      double weeklyTotal = calculateTotalForList(weeklylistnotifier);
-      return HeadingMethod(
-          headtext: 'This Week', amount: weeklyTotal.toStringAsFixed(1));
+      double weeklyTotal = totalBalanceUseCase.call(weeklylistnotifier.value);
+      return (title: 'This Week', amount: weeklyTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Monthly') {
-      double monthlyTotal = calculateTotalForList(monthlylistnotifier);
-      return HeadingMethod(
-          headtext: 'This Month', amount: monthlyTotal.toStringAsFixed(1));
+      double monthlyTotal = totalBalanceUseCase.call(monthlylistnotifier.value);
+      return (title: 'This Month', amount: monthlyTotal.toStringAsFixed(0));
     } else if (itemvalue == 'Custom') {
-      return HeadingMethod(headtext: 'Custom');
+      double customTotal = totalBalanceUseCase.call(customlistnotifier.value);
+      return (title: 'Custom', amount: customTotal.toStringAsFixed(0));
     } else {
-      return HeadingMethod(
-          headtext: 'All Transcations',
-          amount: totalBalance.toStringAsFixed(1));
+      return (
+        title: 'All Transcations',
+        amount: totalBalance.toStringAsFixed(0)
+      );
     }
-  }
-
-  double calculateTotalForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Income') {
-        total += transaction.amount;
-      } else if (transaction.type == 'Expense') {
-        total -= transaction.amount;
-      }
-    }
-    return total;
-  }
-
-  double calculateIncomeForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Income') {
-        total += transaction.amount;
-      }
-    }
-    return total;
-  }
-
-  double calculateExpenseForList(ValueNotifier<List<TranscationModel>> list) {
-    double total = 0;
-    for (var transaction in list.value) {
-      if (transaction.type == 'Expense') {
-        total += transaction.amount;
-      }
-    }
-    return total;
   }
 
   Future<void> loadCategories() async {
