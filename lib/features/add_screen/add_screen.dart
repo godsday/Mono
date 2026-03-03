@@ -217,7 +217,7 @@ class _AddScreenState extends State<AddScreen> {
                                 }
                                 return null;
                               },
-                              style: AppTextStyles.poppins16w500,
+                              style: AppTextStyles.poppins16w600,
                               controller: amountcontrol,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(6),
@@ -272,7 +272,7 @@ class _AddScreenState extends State<AddScreen> {
                                               Text(
                                                 '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
                                                 style:
-                                                    AppTextStyles.poppins16w500,
+                                                    AppTextStyles.poppins16w600,
                                               ),
                                             ],
                                           ),
@@ -365,7 +365,7 @@ class _AddScreenState extends State<AddScreen> {
                                                   child: Text(
                                                     category.name,
                                                     style: AppTextStyles
-                                                        .poppins16w500,
+                                                        .poppins16w600,
                                                   ),
                                                 ),
                                               );
@@ -386,7 +386,9 @@ class _AddScreenState extends State<AddScreen> {
                                         ),
                                         onPressed: () {
                                           showAddCategoryDialog(
-                                              context, provider);
+                                            context,
+                                            provider: provider,
+                                          );
                                         },
                                       ),
                                     ],
@@ -408,7 +410,7 @@ class _AddScreenState extends State<AddScreen> {
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(50)
                               ],
-                              style: AppTextStyles.poppins16w500,
+                              style: AppTextStyles.poppins16w600,
                               controller: notescontrol,
                               keyboardType: TextInputType.text,
                               decoration: textfielddecor('Enter Notes'),

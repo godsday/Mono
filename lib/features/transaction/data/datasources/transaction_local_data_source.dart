@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mono/core/constants/app_string/app_strings.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 abstract class TransactionLocalDataSource {
@@ -10,8 +11,6 @@ abstract class TransactionLocalDataSource {
 }
 
 class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
-  static const String boxName = 'transcation-db';
-
   TransactionLocalDataSourceImpl._internal();
   static TransactionLocalDataSourceImpl instance =
       TransactionLocalDataSourceImpl._internal();
@@ -19,40 +18,31 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
     return instance;
   }
 
-  Future<Box<TranscationModel>> _openBox() async {
-    if (Hive.isBoxOpen(boxName)) {
-      return Hive.box<TranscationModel>(boxName);
-    }
-    return await Hive.openBox<TranscationModel>(boxName);
-  }
+  final transactionBox =
+      Hive.box<TranscationModel>(AppStrings.transactionBoxName);
 
   @override
   Future<void> updateTransaction(TranscationModel obj) async {
-    final box = await _openBox();
-    await box.put(obj.id, obj);
+    await transactionBox.put(obj.id, obj);
   }
 
   @override
   Future<void> addTransaction(TranscationModel obj) async {
-    final db = await _openBox();
-    await db.put(obj.id, obj);
+    await transactionBox.put(obj.id, obj);
   }
 
   @override
   Future<List<TranscationModel>> getTransactions() async {
-    final box = await _openBox();
-    return box.values.toList();
+    return transactionBox.values.toList();
   }
 
   @override
   Future<void> deleteTransaction(String id) async {
-    final box = await _openBox();
-    await box.delete(id);
+    await transactionBox.delete(id);
   }
 
   @override
   Future<void> clearTransactions() async {
-    final box = await _openBox();
-    await box.clear();
+    await transactionBox.clear();
   }
 }
