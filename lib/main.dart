@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
@@ -53,11 +55,22 @@ DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 
 LocaleProvider localeProvider = LocaleProvider();
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, initialize Firebase
+  await Firebase.initializeApp();
+  print('Handling a background message: ${message.messageId}');
+  print('Message data: ${message.data}');
+  // You could also show a local notification here using flutter_local_notifications
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+
   await Hive.initFlutter();
 
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
@@ -189,6 +202,7 @@ Future<void> main() async {
                 addGoalUseCase: addGoal,
                 updateGoalProgressUseCase: updateGoalProgress,
               )),
+      // ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
     ], child: const MyApp()),
   );
 }

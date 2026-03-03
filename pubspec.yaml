@@ -50,10 +50,14 @@ dependencies:
   syncfusion_flutter_charts: ^31.2.16
   timezone: ^0.10.1
   url_launcher: ^6.1.2
-  animations: ^2.0.8
+  animations: ^2.1.1
   flutter_svg: ^2.1.0
   cached_network_image: ^3.4.1
   avatar_glow: ^3.0.1
+  fl_chart: ^1.1.1
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  
   
 
 dependency_overrides:
