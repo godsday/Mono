@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mono/core/constants/app_string/app_strings.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/repositories/budget_repository.dart';
@@ -6,12 +7,11 @@ import '../models/budget_model.dart';
 
 class BudgetRepositoryImpl implements BudgetRepository {
   // Hive box name must match what we opened in main.dart
-  static const String _boxName = 'budget_box';
   static const String _key = 'current_budget';
 
   @override
   Future<BudgetEntity?> getCurrentMonthBudget() async {
-    final box = Hive.box<BudgetModel>(_boxName);
+    final box = Hive.box<BudgetModel>(AppStrings.budgetBoxName);
     final model = box.get(_key);
     return model?.toEntity();
   }
@@ -52,13 +52,13 @@ class BudgetRepositoryImpl implements BudgetRepository {
     );
 
     final model = BudgetModel.fromEntity(entity);
-    final box = Hive.box<BudgetModel>(_boxName);
+    final box = Hive.box<BudgetModel>(AppStrings.budgetBoxName);
     await box.put(_key, model);
   }
 
   @override
   Future<void> clearBudget() async {
-    final box = Hive.box<BudgetModel>(_boxName);
+    final box = Hive.box<BudgetModel>(AppStrings.budgetBoxName);
     await box.delete(_key);
   }
 }

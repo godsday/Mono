@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/features/financial_overview/budget/presentation/providers/budget_provider.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +118,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                             ),
                           ),
                         ),
-                        ClipRRect(
+                        /*  ClipRRect(
                           borderRadius: BorderRadius.circular(22),
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
@@ -149,7 +146,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                               ),
                             ),
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   ),

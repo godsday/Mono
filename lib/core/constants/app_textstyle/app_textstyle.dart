@@ -48,11 +48,11 @@ class AppTextStyles {
   );
 
   static TextStyle poppins16w400 = AppTextTheme.poppins(
-    fontSize: 14.sp,
+    fontSize: 16.sp,
     color: AppColor.textSecondary,
     fontWeight: FontWeight.w400,
   );
-  static TextStyle poppins16w500 = AppTextTheme.poppins(
+  static TextStyle poppins16w600 = AppTextTheme.poppins(
     fontSize: 16.sp,
     color: AppColor.blackText,
     fontWeight: FontWeight.w600,
@@ -62,9 +62,9 @@ class AppTextStyles {
     color: AppColor.textSecondary,
     fontWeight: FontWeight.w600,
   );
-//   fontFamily: 'poppins',
-//       fontSize: 15.0.sp,
-//         fontWeight: FontWeight.normal, color: AppColor.textSecondary);
-
-// }
+  static TextStyle poppins18w600 = AppTextTheme.poppins(
+    fontSize: 18.sp,
+    color: AppColor.textSecondary,
+    fontWeight: FontWeight.w600,
+  );
 }

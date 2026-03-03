@@ -11,7 +11,13 @@ import 'package:mono/models/category_model/category_model.dart';
 import 'package:sizer/sizer.dart';
 
 void showAddCategoryDialog(
-    BuildContext context, TransactionProvider provider) async {
+  BuildContext context, {
+  TransactionProvider? provider,
+  bool isAlert = false,
+  String? title,
+  String? subtitle,
+  VoidCallback? onYesPressed,
+}) async {
   final categoryNameController = TextEditingController();
 
   showDialog(
@@ -19,37 +25,55 @@ void showAddCategoryDialog(
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(
-          'Add Custom Category',
-          style: AppTextStyles.montserrat18w600.copyWith(
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-          ),
+          title ?? 'Add Custom Category',
+          style: isAlert
+              ? AppTextStyles.poppins18w600.copyWith(color: AppColor.expenseRed)
+              : AppTextStyles.poppins18w600.copyWith(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Enter a name for your new category',
-              style: AppTextStyles.poppins16w400.copyWith(
-                color: AppColor.grey600,
-                fontSize: 14.sp,
+        content: isAlert
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    subtitle!,
+                    style: AppTextStyles.poppins16w400.copyWith(
+                      color: AppColor.textGrey,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Enter a name for your new category',
+                    style: AppTextStyles.poppins16w400.copyWith(
+                      color: AppColor.textGrey,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  SizedBox(height: 1.h),
+                  TextField(
+                    controller: categoryNameController,
+                    decoration: textfielddecor("Category name"),
+                    autofocus: true,
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 1.h),
-            TextField(
-              controller: categoryNameController,
-              decoration: textfielddecor("Category name"),
-              autofocus: true,
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             child: Text(
-              'Cancel',
+              isAlert ? 'No' : 'Cancel',
               style: AppTextStyles.poppins16w400.copyWith(
                 color: AppColor.grey600,
               ),
@@ -57,6 +81,10 @@ void showAddCategoryDialog(
           ),
           ElevatedButton(
             onPressed: () async {
+              if (onYesPressed != null) {
+                onYesPressed();
+                return;
+              }
               String categoryName = categoryNameController.text.trim();
               final data = categoryName.capitalizeFirstLetter().toString();
               print(data);
@@ -74,9 +102,9 @@ void showAddCategoryDialog(
 
               bool categoryExists = allCategories.any((category) =>
                   category.name.toLowerCase() == categoryName.toLowerCase() &&
-                  ((provider.selectedType == "Income" &&
+                  ((provider?.selectedType == "Income" &&
                           category.type == CategoryType.income) ||
-                      (provider.selectedType == "Expense" &&
+                      (provider?.selectedType == "Expense" &&
                           category.type == CategoryType.expense)));
 
               if (categoryExists) {
@@ -89,7 +117,7 @@ void showAddCategoryDialog(
               // Add to database
               final newCategory = CategoryModel(
                   id: DateTime.now().millisecondsSinceEpoch.toString(),
-                  type: provider.selectedType == "Income"
+                  type: provider?.selectedType == "Income"
                       ? CategoryType.income
                       : CategoryType.expense,
                   name: categoryName.capitalizeFirstLetter());
@@ -99,8 +127,8 @@ void showAddCategoryDialog(
               if (!context.mounted) return;
 
               // Select the newly added category
-              provider.categorySelected = categoryName.capitalizeFirstLetter();
-              await provider.loadCategories();
+              provider?.categorySelected = categoryName.capitalizeFirstLetter();
+              await provider?.loadCategories();
               if (!context.mounted) return;
               Navigator.of(context).pop();
             },
@@ -111,8 +139,8 @@ void showAddCategoryDialog(
               ),
             ),
             child: Text(
-              'Save',
-              style: AppTextStyles.poppins16w400.copyWith(
+              isAlert ? 'Yes' : 'Save',
+              style: AppTextStyles.poppins16w600.copyWith(
                 color: AppColor.white,
               ),
             ),

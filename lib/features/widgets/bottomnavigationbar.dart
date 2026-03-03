@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-// import 'package:mono/screens/home_screen/home_screen.dart'; // Deprecated
+import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
 import 'package:mono/features/setting_screen/settings_screen.dart';
@@ -28,12 +28,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     return Scaffold(
       body: pages[_selectedIndex ?? widget.index],
       bottomNavigationBar: BottomNavigationBar(
-        selectedLabelStyle: TextStyle(
+        elevation: 1,
+        selectedLabelStyle: AppTextTheme.montserrart().copyWith(
             color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
         items: const [
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "More"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: "More",
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
           BottomNavigationBarItem(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:mono/core/constants/app_string/app_strings.dart';
 import 'package:mono/models/category_model/category_model.dart';
 
 // ignore: constant_identifier_names
@@ -21,23 +22,22 @@ class CategoryDB extends CategoryDbFunctions {
   ValueNotifier<List<CategoryModel>> incomeCategoriesList = ValueNotifier([]);
   ValueNotifier<List<CategoryModel>> expenseCategoriesList = ValueNotifier([]);
 
+  final categoryBox = Hive.box<CategoryModel>(AppStrings.categoryBoxName);
+
   @override
   Future<List<CategoryModel>> getCategories() async {
-    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    return categoryDB.values.toList();
+    return categoryBox.values.toList();
   }
 
   @override
   Future<void> insertCategory(CategoryModel value) async {
-    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    await categoryDB.put(value.id, value);
+    await categoryBox.put(value.id, value);
     refreshUI();
   }
 
   @override
   Future<void> deleteCategory(String id) async {
-    final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    await categoryDB.delete(id);
+    await categoryBox.delete(id);
     refreshUI();
   }
 

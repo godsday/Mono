@@ -245,14 +245,14 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       children: [
                         Expanded(
                             child: _buildInfoColumn('Budget',
-                                '₹${widget.budget.totalBudget.toStringAsFixed(0)}')),
+                                '₹ ${widget.budget.totalBudget.toStringAsFixed(0)}')),
                         Expanded(
                             child: _buildInfoColumn('Spending',
-                                '₹${widget.budget.spentAmount.toStringAsFixed(0)}',
+                                '₹ ${widget.budget.spentAmount.toStringAsFixed(0)}',
                                 isAlert: progress >= 1.0)),
                         Expanded(
                             child: _buildInfoColumn('Remaining',
-                                '₹${widget.budget.remainingAmount.toStringAsFixed(0)}',
+                                '₹ ${widget.budget.remainingAmount.toStringAsFixed(0)}',
                                 isAlert: progress >= 1.0)),
                       ],
                     ),
@@ -319,8 +319,8 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
         const SizedBox(height: 4),
         Text(
           value,
-          style: AppTextTheme.poppins(
-            fontSize: 16,
+          style: AppTextStyles.roboto18w600SemiBoldWhite(context)!.copyWith(
+            fontSize: 18,
             fontWeight: FontWeight.w700,
             color: isAlert ? Colors.redAccent : AppColor.blackText,
           ),
