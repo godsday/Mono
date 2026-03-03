@@ -1,12 +1,11 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mono/core/constants/app_string/app_strings.dart';
 import '../../domain/entities/goal_entity.dart';
 import '../../domain/repositories/goal_repository.dart';
 import '../models/goal_model.dart';
 
 class GoalRepositoryImpl implements GoalRepository {
-  static const String _boxName = 'goals_box';
-
-  Box<GoalModel> get _box => Hive.box<GoalModel>(_boxName);
+  Box<GoalModel> get _box => Hive.box<GoalModel>(AppStrings.goalsBoxName);
 
   @override
   Future<List<GoalEntity>> getGoals() async {

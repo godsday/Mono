@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/core/storage/hive_encryption_service.dart';
 import 'package:mono/features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/save_monthly_budget_usecase.dart';
@@ -73,7 +74,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
-  await Hive.initFlutter();
+  await HiveService.init();
 
   if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
     Hive.registerAdapter(TranscationModelAdapter());
@@ -100,11 +101,6 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(GoalModelAdapter().typeId)) {
     Hive.registerAdapter(GoalModelAdapter());
   }
-
-  // Open Boxes
-  await Hive.openBox<BudgetModel>('budget_box');
-  await Hive.openBox<AssetModel>('assets_box');
-  await Hive.openBox<GoalModel>('goals_box');
 
   await TransactionLocalDataSourceImpl.instance.getTransactions();
   await CategoryDB.instance.initializeCategories();
