@@ -42,15 +42,14 @@ android {
     }
 
     defaultConfig {
-        applicationId "in.ror.mono"
+        applicationId "com.ror.mono"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
     }
-
-    signingConfigs {
+      signingConfigs {
         debug {
         storeFile file("$rootDir/debug.keystore")
         storePassword "android"
@@ -83,6 +82,8 @@ android {
     //         signingConfig signingConfigs.release
     //     }
     // }
+
+   
 }
 
 flutter {

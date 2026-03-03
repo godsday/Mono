@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../screens/IntroPages/splash_screen.dart';
-import '../screens/widgets/bottomnavigationbar.dart';
-import '../screens/add_screen/add_screen.dart';
-import '../screens/setting_screen/settings_screen.dart';
-import '../screens/IntroPages/onbording_screen.dart';
+import '../features/IntroPages/splash_screen.dart';
+import '../features/widgets/bottomnavigationbar.dart';
+import '../features/add_screen/add_screen.dart';
+import '../features/setting_screen/settings_screen.dart';
+import '../features/IntroPages/onbording_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {

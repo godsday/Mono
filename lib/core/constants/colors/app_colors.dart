@@ -25,4 +25,10 @@ class AppColor {
   static Color transparent = Colors.transparent;
   static Color totalBalanceCardBg = HexColor("#37474F");
   static Color lightGrey = Colors.grey.shade200;
+
+  static LinearGradient mainGradient = const LinearGradient(
+    colors: [Color(0xFF429690), Color(0xFF1E4744)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

@@ -1,36 +1,47 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../models/transaction_model.dart';
-// Will create this later or now
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 abstract class TransactionLocalDataSource {
-  Future<List<TransactionModel>> getTransactions();
-  Future<void> addTransaction(TransactionModel transaction);
-  Future<void> updateTransaction(TransactionModel transaction);
+  Future<void> addTransaction(TranscationModel obj);
+  Future<List<TranscationModel>> getTransactions();
   Future<void> deleteTransaction(String id);
+  Future<void> updateTransaction(TranscationModel obj);
   Future<void> clearTransactions();
 }
 
 class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
-  static const String boxName =
-      'transcation-db'; // Keeping legacy name for data persistence
+  static const String boxName = 'transcation-db';
 
-  Future<Box<TransactionModel>> _openBox() async {
+  TransactionLocalDataSourceImpl._internal();
+  static TransactionLocalDataSourceImpl instance =
+      TransactionLocalDataSourceImpl._internal();
+  factory TransactionLocalDataSourceImpl() {
+    return instance;
+  }
+
+  Future<Box<TranscationModel>> _openBox() async {
     if (Hive.isBoxOpen(boxName)) {
-      return Hive.box<TransactionModel>(boxName);
+      return Hive.box<TranscationModel>(boxName);
     }
-    return await Hive.openBox<TransactionModel>(boxName);
+    return await Hive.openBox<TranscationModel>(boxName);
   }
 
   @override
-  Future<void> addTransaction(TransactionModel transaction) async {
+  Future<void> updateTransaction(TranscationModel obj) async {
     final box = await _openBox();
-    await box.put(transaction.id, transaction);
+    await box.put(obj.id, obj);
   }
 
   @override
-  Future<void> clearTransactions() async {
+  Future<void> addTransaction(TranscationModel obj) async {
+    final db = await _openBox();
+    await db.put(obj.id, obj);
+  }
+
+  @override
+  Future<List<TranscationModel>> getTransactions() async {
     final box = await _openBox();
-    await box.clear();
+    return box.values.toList();
   }
 
   @override
@@ -40,14 +51,8 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
   }
 
   @override
-  Future<List<TransactionModel>> getTransactions() async {
+  Future<void> clearTransactions() async {
     final box = await _openBox();
-    return box.values.toList();
-  }
-
-  @override
-  Future<void> updateTransaction(TransactionModel transaction) async {
-    final box = await _openBox();
-    await box.put(transaction.id, transaction);
+    await box.clear();
   }
 }

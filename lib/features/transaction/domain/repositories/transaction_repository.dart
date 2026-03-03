@@ -1,9 +1,9 @@
-import '../entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 abstract class TransactionRepository {
-  Future<List<TransactionEntity>> getTransactions();
-  Future<void> addTransaction(TransactionEntity transaction);
-  Future<void> updateTransaction(TransactionEntity transaction);
+  Future<List<TranscationModel>> getTransactions();
+  Future<void> addTransaction(TranscationModel transaction);
+  Future<void> updateTransaction(TranscationModel transaction);
   Future<void> deleteTransaction(String id);
   Future<void> clearTransactions();
 }

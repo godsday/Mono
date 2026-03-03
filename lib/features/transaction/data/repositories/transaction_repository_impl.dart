@@ -1,7 +1,7 @@
-import '../../domain/entities/transaction_entity.dart';
+import 'package:mono/features/transaction/data/models/transcation_model.dart';
+
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_local_data_source.dart';
-import '../models/transaction_model.dart';
 
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionLocalDataSource localDataSource;
@@ -9,8 +9,15 @@ class TransactionRepositoryImpl implements TransactionRepository {
   TransactionRepositoryImpl({required this.localDataSource});
 
   @override
-  Future<void> addTransaction(TransactionEntity transaction) async {
-    final model = TransactionModel.fromEntity(transaction);
+  Future<void> addTransaction(TranscationModel transaction) async {
+    final model = TranscationModel(
+      id: transaction.id,
+      type: transaction.type,
+      amount: transaction.amount,
+      date: transaction.date,
+      category: transaction.category,
+      purpose: transaction.purpose,
+    );
     await localDataSource.addTransaction(model);
   }
 
@@ -25,14 +32,34 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<List<TransactionEntity>> getTransactions() async {
-    final models = await localDataSource.getTransactions();
-    return models.map((model) => model.toEntity()).toList();
+  Future<List<TranscationModel>> getTransactions() async {
+    try {
+      final models = await localDataSource.getTransactions();
+      return models
+          .map((model) => TranscationModel(
+                id: model.id,
+                type: model.type,
+                amount: model.amount,
+                date: model.date,
+                category: model.category,
+                purpose: model.purpose,
+              ))
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> updateTransaction(TransactionEntity transaction) async {
-    final model = TransactionModel.fromEntity(transaction);
+  Future<void> updateTransaction(TranscationModel transaction) async {
+    final model = TranscationModel(
+      id: transaction.id,
+      type: transaction.type,
+      amount: transaction.amount,
+      date: transaction.date,
+      category: transaction.category,
+      purpose: transaction.purpose,
+    );
     await localDataSource.updateTransaction(model);
   }
 }

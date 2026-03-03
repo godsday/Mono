@@ -16,4 +16,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currency_symbol => '₹';
+
+  @override
+  String get onboarding_title => 'Spend Smarter Save More';
+
+  @override
+  String get onboarding_subtitle =>
+      'Take control of your money with powerful tracking and planning tools';
+
+  @override
+  String get enter_name_hint => 'Nickname';
+
+  @override
+  String get get_started => 'Get Started';
+
+  @override
+  String get select_language => 'Select Language';
 }
