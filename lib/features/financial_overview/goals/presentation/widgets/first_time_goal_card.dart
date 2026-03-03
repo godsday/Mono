@@ -5,7 +5,6 @@ import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
-import '../pages/add_goal_screen.dart';
 
 class FirstTimeGoalCard extends StatefulWidget {
   const FirstTimeGoalCard({super.key});
@@ -326,7 +325,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           )
                         ],
