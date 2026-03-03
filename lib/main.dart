@@ -51,8 +51,6 @@ import 'package:mono/features/financial_overview/asset/data/models/asset_model.d
 import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
 import 'package:mono/features/financial_overview/goals/data/models/goal_model.dart';
 
-import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
-
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
 
@@ -204,7 +202,7 @@ Future<void> main() async {
                 addGoalUseCase: addGoal,
                 updateGoalProgressUseCase: updateGoalProgress,
               )),
-      ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
+      // ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
     ], child: const MyApp()),
   );
 }
