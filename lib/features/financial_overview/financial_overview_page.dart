@@ -3,7 +3,6 @@ import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'budget/presentation/providers/budget_provider.dart';
-
 import 'budget/presentation/widgets/budget_overview_card.dart';
 import 'budget/presentation/widgets/first_time_budget_card.dart';
 import 'header_section.dart';
@@ -171,10 +170,6 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                   // Goals Section
                   Consumer<GoalsProvider>(
                     builder: (context, provider, _) {
-                      // if (provider.isLoading) {
-                      //   return const Center(
-                      //       child: CircularProgressIndicator());
-                      // }
                       if (provider.goals.isEmpty) {
                         return const FirstTimeGoalCard();
                       } else {
@@ -187,10 +182,6 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                   // Assets Section
                   Consumer<AssetsProvider>(
                     builder: (context, provider, _) {
-                      // if (provider.isLoading) {
-                      //   return const Center(
-                      //       child: CircularProgressIndicator());
-                      // }
                       if (provider.assets.isEmpty) {
                         return const FirstTimeAssetCard();
                       } else {

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
+import 'package:mono/features/financial_overview/analytics/presentation/widgets/budget_discipline_chart.dart';
+import 'package:mono/features/financial_overview/analytics/presentation/widgets/expense_trend_chart.dart';
 import 'package:provider/provider.dart';
 import '../../../../transaction/presentation/providers/transaction_provider.dart';
-
 import '../../../budget/presentation/providers/budget_provider.dart';
-
-import '../providers/wealth_analytics_provider.dart';
-
-import '../widgets/budget_discipline_chart.dart';
-import '../widgets/expense_trend_chart.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
