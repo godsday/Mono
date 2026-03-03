@@ -26,18 +26,11 @@ class AppElevetedButton extends StatelessWidget {
       ),
       child: Ink(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            end: Alignment.bottomRight,
-            begin: Alignment.topLeft,
-            colors: [
-              HexColor('#429690'),
-              HexColor('#1E4744').withValues(alpha: 0.8),
-            ],
-          ),
+          gradient: AppColor.mainGradient,
           boxShadow: [
             BoxShadow(
               color: HexColor('#3C7570').withValues(alpha: 0.3),
-              blurRadius: 12,
+              blurRadius: 20,
               offset: const Offset(0, 6),
             ),
           ],
@@ -58,7 +51,6 @@ class AppElevetedButton extends StatelessWidget {
               ),
             ),
           ),
-          // Text(appButtonText, style: const TextStyle(color: Colors.white)),
         ),
       ),
     );

@@ -26,7 +26,7 @@ class TotalBalanceCard extends StatelessWidget {
                   blurRadius: 2.sp,
                   color: AppColor.transparent)
             ],
-            borderRadius: BorderRadius.circular(20.0)),
+            borderRadius: BorderRadius.circular(16.0.sp)),
         child: Padding(
           padding: EdgeInsets.only(left: 4.w, top: 1.6.h, right: 4.w),
           child: Column(
@@ -94,16 +94,16 @@ class TotalBalanceCard extends StatelessWidget {
                               style: AppTextStyles.poppins12w300White(context)!
                                   .copyWith(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 14.sp),
+                                      fontSize: 15.sp),
                             ),
                             SizedBox(
-                              width: 1.5.w,
+                              width: 3.5.w,
                             ),
                             SizedBox(
                                 width: 5.w,
                                 height: 2.h,
                                 child: Transform.scale(
-                                  scale: .47,
+                                  scale: .67,
                                   child: Switch.adaptive(
                                       activeThumbColor: AppColor.mainHexcolor,
                                       value: homeProvider.isThisMonth,
@@ -123,6 +123,7 @@ class TotalBalanceCard extends StatelessWidget {
                           style: AppTextStyles.poppins12w300White(context)!
                               .copyWith(
                             fontWeight: FontWeight.w400,
+                            fontSize: 13.sp,
                           ),
                         ),
                     ],
@@ -147,7 +148,8 @@ class TotalBalanceCard extends StatelessWidget {
                             homeProvider.totalExpense > homeProvider.totalIncome
                                 ? "${((homeProvider.totalExpense - homeProvider.totalIncome) / homeProvider.totalIncome * 100).toStringAsFixed(0)} % "
                                 : "You saved ${(homeProvider.totalIncome - homeProvider.totalExpense).toStringAsFixed(0)} % extra ",
-                            style: AppTextStyles.poppins12w300White(context),
+                            style: AppTextStyles.poppins12w300White(context)!
+                                .copyWith(fontSize: 13.sp),
                           ),
                           Text(
                             homeProvider.totalExpense > homeProvider.totalIncome
@@ -163,7 +165,7 @@ class TotalBalanceCard extends StatelessWidget {
                       height: 6.5.h,
                     ),
               Padding(
-                padding: EdgeInsets.only(top: 1.h, left: 5.w, right: 4.w),
+                padding: EdgeInsets.only(top: .5.h, left: 5.w, right: 4.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

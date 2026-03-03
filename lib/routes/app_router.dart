@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/pages/analytics_screen.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
+import 'package:mono/features/setting_screen/settings_widgets/about_screen.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
@@ -14,7 +15,9 @@ class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        return MaterialPageRoute(
+          builder: (_) => const SplashScreen(),
+        );
 
       case RouteNames.home:
         return _buildPageRoute(const BottomNavigator(index: 1), settings);
@@ -55,6 +58,9 @@ class AppRouter {
             settings);
       case RouteNames.analytics:
         return _buildPageRoute(const AnalyticsScreen(), settings);
+
+      case RouteNames.about:
+        return _buildPageRoute(const AboutScreen(), settings);
 
       default:
         return MaterialPageRoute(

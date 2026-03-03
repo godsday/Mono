@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
-import 'package:mono/features/IntroPages/splash_screen.dart';
 import 'package:mono/features/add_screen/add_screen.dart';
-import 'package:mono/features/setting_screen/settings_widgets/about_screen.dart';
 import 'package:mono/features/setting_screen/settings_widgets/notification.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,246 +47,284 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final themepovider = Provider.of<DarkThemeProvider>(context);
     final notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
-      body: Column(
-        children: [
-          ClipPath(
-            clipper: WaveClipper(),
-            child: Stack(
-                clipBehavior: Clip.hardEdge,
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+        body: Column(children: [
+      ClipPath(
+        clipper: WaveClipper(),
+        child: Stack(
+            clipBehavior: Clip.hardEdge,
+            alignment: Alignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF429690), Color(0xFF1E4744)],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                // color: Theme.of(context).dividerColor,
+                height: 17.0.h,
+              ),
+              Positioned(
+                  top: 5.h,
+                  left: 33.w,
+                  child: Image(
+                    width: 57.w,
+                    image: const AssetImage(
+                      'assets/images/rings.png',
+                    ),
+                  )),
+              Positioned(
+                top: 6.h,
+                child: Text(
+                  "Settings",
+                  style: AppTextTheme.montserrart(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.white,
+                  ),
+                ),
+              ),
+            ]),
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.h),
+        child: Container(
+          width: 90.w,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.sp),
+              color: Theme.of(context).primaryColor,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 4,
+                )
+              ]),
+          child: Padding(
+            padding: EdgeInsets.all(16.sp),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                            notificationProvider.notifValue
+                                ? Icons.notifications
+                                : Icons.notifications_off,
+                            color: themepovider.darkTheme
+                                ? AppColor.white
+                                : Colors.black),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Notification',
+                          style: AppTextTheme.poppins(
+                              fontSize: 17.sp, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
-                    // color: Theme.of(context).dividerColor,
-                    height: 17.0.h,
-                  ),
-                  Positioned(
-                      top: 5.h,
-                      left: 33.w,
-                      child: Image(
-                        width: 57.w,
-                        image: const AssetImage(
-                          'assets/images/rings.png',
-                        ),
-                      )),
-                  Positioned(
-                    top: 5.h,
-                    child: Text(
-                      "Settings",
-                      style: AppTextTheme.montserrart(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.white,
-                      ),
+                    Transform.scale(
+                      scale: .77,
+                      child: Switch.adaptive(
+                          activeThumbColor: AppColor.mainHexcolor,
+                          value: notificationProvider.notifValue,
+                          onChanged: (value) {
+                            setState(() {
+                              notificationProvider.notifValue = value;
+                            });
+                          }),
                     ),
-                  ),
-                ]),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 1.w, top: 3.h),
-            child: Container(
-              width: 90.w,
-              height: 65.h,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  color: Theme.of(context).primaryColor,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 4,
-                    )
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SwitchListTile(
-                        title: Text(
-                          "Notification",
-                          style: TextStyle(
-                              fontSize: 15.sp, fontWeight: FontWeight.w400),
+                    Row(
+                      children: [
+                        Icon(themepovider.darkTheme
+                            ? Icons.dark_mode_outlined
+                            : Icons.light_mode_outlined),
+                        SizedBox(
+                          width: 10,
                         ),
-                        secondary: const Icon(Icons.notifications),
-                        activeThumbColor: AppColor.mainHexcolor,
-                        value: notificationProvider.notifValue,
-                        onChanged: (newvalue) {
-                          setState(() {
-                            notificationProvider.notifValue = newvalue;
-                          });
-                          // notificationProvider.notifValue == true
-                          //     ? NotificationApi.shownotification(
-                          //         title: 'Mono',
-                          //         body:
-                          //             "Don't Forget To Add Your Transaction",
-                          //         scheduleDate:
-                          //             DateTime(10, 06, 00))
-                          //     : const SizedBox();
-                        }),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    SwitchListTile(
-                      activeThumbColor: AppColor.mainHexcolor,
-                      title: Text(
-                        "Dark Mode",
-                        style: TextStyle(
-                            fontSize: 15.sp, fontWeight: FontWeight.w400),
-                      ),
-                      secondary: Icon(themepovider.darkTheme
-                          ? Icons.dark_mode_outlined
-                          : Icons.light_mode_outlined),
-                      onChanged: (newvalue) {
-                        setState(() {
-                          themepovider.darkTheme = newvalue;
-                        });
-                      },
-                      value: themepovider.darkTheme,
-                    ),
-                    const Divider(),
-                    // Text(
-                    //   "More",
-                    //   style: TextStyle(
-                    //       color: Colors.grey.shade400,
-                    //       fontSize: 14.sp),
-                    // ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).primaryColorDark),
-                            minimumSize:
-                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AboutScreen()));
-                        },
-                        child: Text(
-                          "About",
+                        Text(
+                          'Dark Mode',
                           style: AppTextTheme.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        )),
-                    SizedBox(
-                      height: 1.5.h,
+                              fontSize: 17.sp, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).primaryColorDark),
-                            minimumSize:
-                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
-                        onPressed: () async {
+                    Transform.scale(
+                      scale: .77,
+                      child: Switch.adaptive(
+                          activeThumbColor: AppColor.mainHexcolor,
+                          value: themepovider.darkTheme,
+                          onChanged: (value) {
+                            setState(() {
+                              themepovider.darkTheme = value;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // SwitchListTile(
+                //   activeThumbColor: AppColor.mainHexcolor,
+                //   title: Text(
+                //     "Dark Mode",
+                //     style: AppTextTheme.poppins(
+                //         fontSize: 17.sp, fontWeight: FontWeight.w600),
+                //   ),
+                //   secondary: Icon(themepovider.darkTheme
+                //       ? Icons.dark_mode_outlined
+                //       : Icons.light_mode_outlined),
+                //   onChanged: (newvalue) {
+                //     setState(() {
+                //       themepovider.darkTheme = newvalue;
+                //     });
+                //   },
+                //   value: themepovider.darkTheme,
+                // ),
+                const Divider(),
+                // Text(
+                //   "More",
+                //   style: TextStyle(
+                //       color: Colors.grey.shade400,
+                //       fontSize: 14.sp),
+                // ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 12),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'More',
+                            style: AppTextTheme.poppins(
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.grey),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.about);
+                        },
+                        child: SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("About",
+                                  style: AppTextTheme.poppins(
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.w500)),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 17.sp,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                        onTap: () async {
                           // ignore: deprecated_member_use
                           if (!await launch(
                               'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
                             throw 'Could not send massage';
                           }
                         },
-                        child: Text(
-                          "Send feedback",
-                          style: AppTextTheme.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        )),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).primaryColorDark),
-                            minimumSize:
-                                WidgetStateProperty.all(Size(1.w, 5.5.h))),
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    title: const Text(
-                                      'Alert!!!',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    content: const Text(
-                                      ' All transaction details will be deleted.\n\nDo you like to continue ?',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () async {
-                                                TransactionLocalDataSourceImpl
-                                                    .instance
-                                                    .clearTransactions();
-                                                // Clear Financial Overview Data
-                                                await BudgetRepositoryImpl()
-                                                    .clearBudget();
-                                                await AssetRepositoryImpl()
-                                                    .clearAssets();
-                                                await GoalRepositoryImpl()
-                                                    .clearGoals();
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Send feedback",
+                              style: AppTextTheme.poppins(
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 17.sp,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                          onTap: () async {
+                            showAddCategoryDialog(
+                              context,
+                              isAlert: true,
+                              title: "Alert!!!",
+                              subtitle:
+                                  "All transaction details will be deleted.\n\nDo you like to continue ?",
+                              onYesPressed: () async {
+                                print("delete all data");
+                                await TransactionLocalDataSourceImpl.instance
+                                    .clearTransactions();
+                                await BudgetRepositoryImpl().clearBudget();
+                                await AssetRepositoryImpl().clearAssets();
+                                await GoalRepositoryImpl().clearGoals();
 
-                                                if (context.mounted) {
-                                                  Navigator.pushAndRemoveUntil(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const SplashScreen()),
-                                                      (route) => false);
-                                                }
-                                              },
-                                              child: const Text('Yes')),
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'))
-                                        ],
-                                      )
-                                    ]);
-                              });
-                        },
-                        child: Text(
-                          "Reset App",
-                          style: AppTextTheme.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        ))
-                  ],
+                                if (context.mounted) {
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      RouteNames.splash, (route) => false);
+                                }
+                              },
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Reset App",
+                                style: AppTextTheme.poppins(
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      )
+    ]));
   }
 }
 

@@ -56,12 +56,10 @@ class LShapeWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            type == 'Income' ? 'Top Earning' : 'Top Spending',
+                            'Top Earning',
                             style: AppTextStyles.poppins12w300White(context)
                                 ?.copyWith(
-                              color: type == 'Income'
-                                  ? HexColor('#49ABF2')
-                                  : HexColor('#FF0000'),
+                              color: HexColor('#49ABF2'),
                               fontSize: 14.sp,
                             ),
                           ),
@@ -110,12 +108,10 @@ class LShapeWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            type == 'Income' ? 'Top Earning' : 'Top Spending',
+                            'Top Spending',
                             style: AppTextStyles.poppins12w300White(context)
                                 ?.copyWith(
-                              color: type == 'Income'
-                                  ? HexColor('#49ABF2')
-                                  : HexColor('#FF0000'),
+                              color: HexColor('#FF0000'),
                               fontSize: 14.sp,
                             ),
                           ),
@@ -172,7 +168,7 @@ class LShapeWidget extends StatelessWidget {
             ),
 
             Positioned(
-              bottom: -24.sp,
+              bottom: -20.sp,
               left:
                   orientation == LShapeOrientation.leftLegOnLeft ? 3.5.w : 14.w,
               right: 0,
@@ -186,7 +182,8 @@ class LShapeWidget extends StatelessWidget {
             /// Top Header - White with Border
             Positioned(
               top: 0,
-              left: orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 6.w,
+              left:
+                  orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 5.5.w,
               right: 0,
               height: totalHeight * 0.20, // Adjust height of header
               child: Container(
@@ -209,7 +206,7 @@ class LShapeWidget extends StatelessWidget {
                     SizedBox(
                       width: orientation == LShapeOrientation.leftLegOnLeft
                           ? 14.w
-                          : 11.w,
+                          : 10.6.w,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -227,9 +224,6 @@ class LShapeWidget extends StatelessWidget {
                               : HexColor('836F81'),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
                     ),
                   ],
                 ),
