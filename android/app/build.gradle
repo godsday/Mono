@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "in.ror.mono"
+        applicationId "com.ror.mono"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -73,10 +73,10 @@ android {
     // }
         release {
                 // use debug signing temporarily
-            storeFile file("$rootDir/debug.keystore")
-        storePassword "android"
-        keyAlias "androiddebugkey"
-        keyPassword "android"
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
             
          // use debug signing temporarily
                 
