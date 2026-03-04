@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/pages/analytics_screen.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
-import 'package:mono/features/setting_screen/settings_widgets/about_screen.dart';
+import 'package:mono/features/setting_screen/presentation/pages/about_screen.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/add_screen.dart';
-import '../features/setting_screen/settings_screen.dart';
+import '../features/setting_screen/presentation/pages/settings_screen.dart';
 import '../features/IntroPages/onbording_screen.dart';
 import 'route_names.dart';
 

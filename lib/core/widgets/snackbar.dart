@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 
 SnackBar customSnak(BuildContext context, {required message}) {
@@ -7,6 +8,7 @@ SnackBar customSnak(BuildContext context, {required message}) {
       duration: const Duration(milliseconds: 1500),
       content: Text(
         message,
-        style: TextStyle(color: Theme.of(context).focusColor),
+        style: AppTextStyles.poppins15w400(context)!.copyWith(
+            color: Theme.of(context).cardColor, fontWeight: FontWeight.w600),
       ));
 }

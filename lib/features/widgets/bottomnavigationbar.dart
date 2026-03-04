@@ -3,7 +3,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
-import 'package:mono/features/setting_screen/settings_screen.dart';
+import 'package:mono/features/setting_screen/presentation/pages/settings_screen.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
 
 class BottomNavigator extends StatefulWidget {

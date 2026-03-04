@@ -21,6 +21,32 @@ class HiveService {
     // Obtain the encryption key (create if not exists)
     final encryptionKey = await _getEncryptionKey();
 
+    if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
+      Hive.registerAdapter(TranscationModelAdapter());
+    }
+
+    if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
+      Hive.registerAdapter(CategoryModelAdapter());
+    }
+
+    if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
+      Hive.registerAdapter(CategoryTypeAdapter());
+    }
+
+    // Financial Overview Adapters
+    if (!Hive.isAdapterRegistered(BudgetModelAdapter().typeId)) {
+      Hive.registerAdapter(BudgetModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(BudgetCategoryModelAdapter().typeId)) {
+      Hive.registerAdapter(BudgetCategoryModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(AssetModelAdapter().typeId)) {
+      Hive.registerAdapter(AssetModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(GoalModelAdapter().typeId)) {
+      Hive.registerAdapter(GoalModelAdapter());
+    }
+
     Future<Box<T>> isOpenBox<T>(String boxName) async {
       if (Hive.isBoxOpen(boxName)) {
         return Hive.box<T>(boxName);

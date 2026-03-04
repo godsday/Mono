@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/widgets/app_bottomsheet.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
+import 'package:mono/features/setting_screen/presentation/widgets/curve_shape.dart';
 import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/features/add_screen/add_screen.dart';
-import 'package:mono/features/setting_screen/settings_widgets/notification.dart';
+import 'package:mono/features/setting_screen/presentation/widgets/notification.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../financial_overview/budget/data/repositories/budget_repository_impl.dart';
-import '../financial_overview/asset/data/repositories/asset_repository_impl.dart';
-import '../financial_overview/goals/data/repositories/goal_repository_impl.dart';
+import '../../../financial_overview/budget/data/repositories/budget_repository_impl.dart';
+import '../../../financial_overview/asset/data/repositories/asset_repository_impl.dart';
+import '../../../financial_overview/goals/data/repositories/goal_repository_impl.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -158,7 +160,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Icon(themepovider.darkTheme
                             ? Icons.dark_mode_outlined
                             : Icons.light_mode_outlined),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
@@ -182,31 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-
-                // SwitchListTile(
-                //   activeThumbColor: AppColor.mainHexcolor,
-                //   title: Text(
-                //     "Dark Mode",
-                //     style: AppTextTheme.poppins(
-                //         fontSize: 17.sp, fontWeight: FontWeight.w600),
-                //   ),
-                //   secondary: Icon(themepovider.darkTheme
-                //       ? Icons.dark_mode_outlined
-                //       : Icons.light_mode_outlined),
-                //   onChanged: (newvalue) {
-                //     setState(() {
-                //       themepovider.darkTheme = newvalue;
-                //     });
-                //   },
-                //   value: themepovider.darkTheme,
-                // ),
                 const Divider(),
-                // Text(
-                //   "More",
-                //   style: TextStyle(
-                //       color: Colors.grey.shade400,
-                //       fontSize: 14.sp),
-                // ),
                 SizedBox(
                   height: 2.h,
                 ),
@@ -221,7 +199,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Text(
                             'More',
                             style: AppTextTheme.poppins(
-                                fontSize: 17.sp,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.grey),
                           ),
@@ -240,6 +218,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               Text("About",
                                   style: AppTextTheme.poppins(
+                                      color: AppColor.textGrey,
                                       fontSize: 17.sp,
                                       fontWeight: FontWeight.w500)),
                               Icon(
@@ -267,6 +246,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Text(
                               "Send feedback",
                               style: AppTextTheme.poppins(
+                                color: AppColor.textGrey,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 17.sp,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showAppBottomSheet(
+                            context: context,
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Secure Data",
+                              style: AppTextTheme.poppins(
+                                color: AppColor.textGrey,
                                 fontSize: 17.sp,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -310,6 +317,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Text(
                                 "Reset App",
                                 style: AppTextTheme.poppins(
+                                  color: AppColor.textGrey,
                                   fontSize: 17.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -325,31 +333,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       )
     ]));
-  }
-}
-
-class WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, size.height);
-    var firststart = Offset(size.width / 6.29, size.height);
-    var firstend = Offset(size.width / 1.65, size.height - 35.0);
-    path.quadraticBezierTo(
-        firststart.dx, firststart.dy, firstend.dx, firstend.dy);
-    //path.lineTo(size.width/2.25, size.height);
-    var secondstart =
-        Offset(size.width - (size.width / 6.29), size.height - 50.0);
-    var secondend = Offset(size.width, size.height - 4);
-    path.quadraticBezierTo(
-        secondstart.dx, secondstart.dy, secondend.dx, secondend.dy);
-    path.lineTo(size.width, 0);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return true;
   }
 }

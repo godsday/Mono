@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/features/add_screen/add_screen.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:sizer/sizer.dart';
@@ -111,11 +113,11 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
                   ],
                 ).createShader(bounds);
               },
-              child: const Text(
+              child: Text(
                 "Start Your Financial Journey",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
+                style: AppTextStyles.poppins16w400.copyWith(
+                  fontSize: 19.sp,
+                  fontWeight: FontWeight.w700,
                   color: Colors
                       .white, // This color will be ignored due to ShaderMask
                 ),
@@ -128,15 +130,17 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
           // Subtitle with animation
           FadeTransition(
             opacity: _textAnimation,
-            child: const Text(
-              "Add your first transaction to begin tracking your money.",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.normal,
-                color: Colors.black54, // 70% opacity
+            child: SizedBox(
+              width: 80.w,
+              child: Text(
+                "Add your first transaction to begin tracking your money.",
+                style: AppTextStyles.poppins15w400(context)!.copyWith(
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black54, // 70% opacity
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
             ),
           ),
           const SizedBox(height: 32),
@@ -147,28 +151,14 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             child: SizedBox(
               width: double.infinity,
               height: 56,
-              child: ElevatedButton(
+              child: AppElevetedButton(
+                appButtonText: "Add Transaction",
                 onPressed: () {
                   Navigator.push(
                     context,
                     CustomPageRoute(child: const AddScreen()),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.mainHexcolor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  elevation: 4,
-                ),
-                child: const Text(
-                  "Add Transaction",
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
               ),
             ),
           ),

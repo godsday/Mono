@@ -6,4 +6,5 @@ class AppStrings {
   static const String budgetBoxName = 'budget_box';
   static const String assetsBoxName = 'assets_box';
   static const String goalsBoxName = 'goals_box';
+  static const String keyKey = 'hive_encryption_key';
 }

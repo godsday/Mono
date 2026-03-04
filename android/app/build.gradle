@@ -52,39 +52,39 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
     }
+    
       signingConfigs {
-        debug {
+        
+      /*  RUN PIPELINE - RELEASE BUILD IN FILES
+       debug {
         storeFile file("$rootDir/debug.keystore")
         storePassword "android"
         keyAlias "androiddebugkey"
         keyPassword "android"
     }
     release {
-        // comment out the real keystore
-        // storeFile file("key.jks")
-        // storePassword "your_password"
-        // keyAlias "key_alias"
-        // keyPassword "your_key_password"
-
-        // use debug signing temporarily
         storeFile file("$rootDir/debug.keystore")
         storePassword "android"
         keyAlias "androiddebugkey"
         keyPassword "android"
-    }
-        // release {
-        //     keyAlias keystoreProperties['keyAlias']
-        //     keyPassword keystoreProperties['keyPassword']
-        //     storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-        //     storePassword keystoreProperties['storePassword']
-        // }
+    }*/
+       
+   
+
+    // run without failiure
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
-    // buildTypes {
-    //     release {
-    //         signingConfig signingConfigs.release
-    //     }
-    // }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 
    
 }

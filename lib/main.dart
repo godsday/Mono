@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:mono/core/storage/hive_encryption_service.dart';
+import 'package:mono/core/storage/encrption/hive_encryption_service.dart';
 import 'package:mono/features/financial_overview/budget/data/repositories/budget_repository_impl.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/get_current_month_budget_usecase.dart';
 import 'package:mono/features/financial_overview/budget/domain/usecases/save_monthly_budget_usecase.dart';
@@ -19,10 +19,7 @@ import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:mono/database/categories_DB/category_db.dart';
-import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/routes/app_router.dart';
 import 'package:mono/routes/route_names.dart';
@@ -48,9 +45,6 @@ import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_
 import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
-import 'package:mono/features/financial_overview/asset/data/models/asset_model.dart';
-import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
-import 'package:mono/features/financial_overview/goals/data/models/goal_model.dart';
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
@@ -73,32 +67,6 @@ Future<void> main() async {
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
   await HiveService.init();
-
-  if (!Hive.isAdapterRegistered(TranscationModelAdapter().typeId)) {
-    Hive.registerAdapter(TranscationModelAdapter());
-  }
-
-  if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
-    Hive.registerAdapter(CategoryModelAdapter());
-  }
-
-  if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
-    Hive.registerAdapter(CategoryTypeAdapter());
-  }
-
-  // Financial Overview Adapters
-  if (!Hive.isAdapterRegistered(BudgetModelAdapter().typeId)) {
-    Hive.registerAdapter(BudgetModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(BudgetCategoryModelAdapter().typeId)) {
-    Hive.registerAdapter(BudgetCategoryModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(AssetModelAdapter().typeId)) {
-    Hive.registerAdapter(AssetModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(GoalModelAdapter().typeId)) {
-    Hive.registerAdapter(GoalModelAdapter());
-  }
 
   await TransactionLocalDataSourceImpl.instance.getTransactions();
   await CategoryDB.instance.initializeCategories();

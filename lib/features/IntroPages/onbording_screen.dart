@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:mono/features/widgets/bottomnavigationbar.dart';
@@ -19,14 +21,14 @@ class OnboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: SafeArea(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SafeArea(
           child: Stack(
             children: [
               SingleChildScrollView(
@@ -60,12 +62,14 @@ class OnboardScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 2.h),
                                 SizedBox(
-                                  width: 80.w,
+                                  width: 65.w,
                                   child: Text(
                                     l10n.onboarding_subtitle,
                                     textAlign: TextAlign.center,
-                                    style:
-                                        AppTextStyles.roboto15w400grey(context),
+                                    style: AppTextStyles.poppins15w400(context)!
+                                        .copyWith(
+                                            color: AppColor.textGrey,
+                                            fontSize: 15.sp),
                                   ),
                                 ),
                               ],
@@ -73,7 +77,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: 22.h,
+                          top: 25.h,
                           child: SizedBox(
                             height: 44.h,
                             width: 80.w,
@@ -85,23 +89,9 @@ class OnboardScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(28),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 20),
+                    Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
+                          horizontal: 20, vertical: 40),
                       child: Column(
                         children: [
                           NameTextfieldWidget(
@@ -174,11 +164,7 @@ class _OnboardButtonState extends State<_OnboardButton> {
           width: double.infinity,
           height: 6.h,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [HexColor('#69AEA9'), HexColor('#3F8782')],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            gradient: AppColor.mainGradient,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -189,14 +175,9 @@ class _OnboardButtonState extends State<_OnboardButton> {
             ],
           ),
           alignment: Alignment.center,
-          child: Text(
-            widget.text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(widget.text,
+              style: AppTextStyles.poppins16w600
+                  .copyWith(color: Colors.white, fontSize: 17.sp)),
         ),
       ),
     );
@@ -294,12 +275,18 @@ class _NameTextfieldWidgetState extends State<NameTextfieldWidget> {
       child: TextFormField(
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-          LengthLimitingTextInputFormatter(7),
+          LengthLimitingTextInputFormatter(5),
         ],
         textAlign: TextAlign.center,
         keyboardType: TextInputType.text,
         controller: widget.namecontroller,
         focusNode: _focusNode,
+        onChanged: (value) {
+          if (value.length == 5) {
+            FocusScope.of(context).unfocus();
+          }
+          widget.namecontroller.text = value.capitalizeFirstLetter();
+        },
         decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -310,8 +297,8 @@ class _NameTextfieldWidgetState extends State<NameTextfieldWidget> {
                 borderRadius: BorderRadius.circular(12)),
             fillColor: HexColor('#FBF3F3'),
             hintText: _isFocused ? null : widget.hintText,
-            hintStyle: TextStyle(
-                fontSize: 16.sp, color: const Color.fromARGB(255, 59, 59, 58)),
+            hintStyle: AppTextStyles.poppins16w400
+                .copyWith(fontSize: 15.sp, color: AppColor.grey),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: HexColor("#DADADA")),
                 borderRadius: BorderRadius.circular(12))),
