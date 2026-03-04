@@ -4,18 +4,14 @@ import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mono/core/constants/app_string/app_strings.dart';
 import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
-import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/features/transaction/domain/entities/transaction_entity.dart';
-import 'package:mono/models/category_model/category_model.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class BackupService {
   static final BackupService instance = BackupService._();
   BackupService._();
-
-  get import => null;
 
   Future<Map<String, dynamic>> collectAppData() async {
     final transactionsBox =

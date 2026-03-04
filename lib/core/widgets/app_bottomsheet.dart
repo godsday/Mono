@@ -17,8 +17,9 @@ void showAppBottomSheet({
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () {
-                BackupService.instance.exportData();
+              onTap: () async {
+                await BackupService.instance.exportData();
+                if (!context.mounted) return;
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
