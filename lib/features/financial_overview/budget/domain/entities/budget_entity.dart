@@ -2,7 +2,7 @@ class BudgetEntity {
   final double totalBudget;
   final double spentAmount;
   final double remainingAmount;
-  final List<CategoryEntity> categories;
+  final List<BudgetCategoryEntity> categories;
   final String month;
 
   BudgetEntity({
@@ -19,7 +19,7 @@ class BudgetEntity {
       spentAmount: map['spentAmount'],
       remainingAmount: map['remainingAmount'],
       categories: (map['categories'] as List)
-          .map((e) => CategoryEntity.fromMap(e))
+          .map((e) => BudgetCategoryEntity.fromMap(e))
           .toList(),
       month: map['month'],
     );
@@ -36,21 +36,21 @@ class BudgetEntity {
   }
 }
 
-class CategoryEntity {
+class BudgetCategoryEntity {
   final String id;
   final String name;
   final double amount;
   final double spentAmount;
 
-  CategoryEntity({
+  BudgetCategoryEntity({
     required this.id,
     required this.name,
     required this.amount,
     this.spentAmount = 0.0,
   });
 
-  factory CategoryEntity.fromMap(Map<String, dynamic> map) {
-    return CategoryEntity(
+  factory BudgetCategoryEntity.fromMap(Map<String, dynamic> map) {
+    return BudgetCategoryEntity(
       id: map['id'],
       name: map['name'],
       amount: map['amount'],

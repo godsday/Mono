@@ -7,7 +7,7 @@ import 'package:mono/features/setting_screen/presentation/widgets/curve_shape.da
 import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/theme_provider.dart';
-import 'package:mono/features/add_screen/add_screen.dart';
+import 'package:mono/features/add_screen/presentation/add_screen.dart';
 import 'package:mono/features/setting_screen/presentation/widgets/notification.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
@@ -102,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 90.w,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.sp),
-              color: Theme.of(context).primaryColor,
+              color: Colors.white,
               boxShadow: const [
                 BoxShadow(
                   color: Colors.grey,

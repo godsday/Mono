@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
 
-import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/usecases/add_transaction.dart';
 import '../../domain/usecases/delete_transaction.dart';

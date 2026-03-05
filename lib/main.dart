@@ -19,7 +19,7 @@ import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/routes/app_router.dart';
 import 'package:mono/routes/route_names.dart';
@@ -45,6 +45,7 @@ import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_
 import 'package:mono/features/financial_overview/goals/presentation/providers/goals_provider.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
+import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
@@ -166,7 +167,7 @@ Future<void> main() async {
                 addGoalUseCase: addGoal,
                 updateGoalProgressUseCase: updateGoalProgress,
               )),
-      // ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
+      ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
     ], child: const MyApp()),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/add_screen/domain/entities/category_entity.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/usecases/get_current_month_budget_usecase.dart';
@@ -65,9 +66,9 @@ class BudgetProvider extends ChangeNotifier {
         }
       }
 
-      final List<CategoryEntity> updatedCategories =
+      final List<BudgetCategoryEntity> updatedCategories =
           _budget!.categories.map((c) {
-        return CategoryEntity(
+        return BudgetCategoryEntity(
           id: c.id,
           name: c.name,
           amount: c.amount,
@@ -76,7 +77,7 @@ class BudgetProvider extends ChangeNotifier {
       }).toList();
 
       if (othersSpent > 0) {
-        updatedCategories.add(CategoryEntity(
+        updatedCategories.add(BudgetCategoryEntity(
           id: 'others',
           name: 'Others',
           amount: 0.0,

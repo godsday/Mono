@@ -6,7 +6,7 @@ import 'package:mono/features/financial_overview/budget/domain/entities/budget_e
 
 class CategoriesSpendingCard extends StatefulWidget {
   final String title;
-  final List<CategoryEntity> categories;
+  final List<BudgetCategoryEntity> categories;
   final IconData icon;
 
   const CategoriesSpendingCard({

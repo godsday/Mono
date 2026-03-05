@@ -224,15 +224,21 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     else if (progress >= 0.8)
                       Row(
                         children: [
-                          const Icon(Icons.info_outline,
-                              color: Colors.orangeAccent, size: 16),
+                          Icon(Icons.info_outline,
+                              color: Colors.orange.shade700, size: 16),
                           const SizedBox(width: 4),
-                          Text(
-                            'Warning: You are approaching your budget limit.',
-                            style: AppTextTheme.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.orangeAccent,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.74,
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                'Warning: You are approaching your budget limit.',
+                                style: AppTextTheme.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.orange.shade700,
+                                ),
+                              ),
                             ),
                           ),
                         ],

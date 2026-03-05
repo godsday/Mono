@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../database/categories_DB/category_db.dart';
-import '../../../../../models/category_model/category_model.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
+import '../../../../add_screen/data/repositories/category_db.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../../domain/entities/budget_entity.dart';
 

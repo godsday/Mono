@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mono/core/constants/app_string/app_strings.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/financial_overview/asset/data/models/asset_model.dart';
 import 'package:mono/features/financial_overview/budget/data/models/budget_model.dart';
 import 'package:mono/features/financial_overview/goals/data/models/goal_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/models/category_model/category_model.dart';
 
 class HiveService {
   static const String _keyKey = 'hive_encryption_key';
@@ -60,6 +60,7 @@ class HiveService {
     await isOpenBox<TranscationModel>(AppStrings.transactionBoxName);
 
     await isOpenBox<CategoryModel>(AppStrings.categoryBoxName);
+    await isOpenBox<BudgetCategoryModel>(AppStrings.budgetCategoryBoxName);
     await isOpenBox<BudgetModel>(
       AppStrings.budgetBoxName,
     );

@@ -6,7 +6,7 @@ import 'package:mono/features/setting_screen/presentation/pages/about_screen.dar
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
-import '../features/add_screen/add_screen.dart';
+import '../features/add_screen/presentation/add_screen.dart';
 import '../features/setting_screen/presentation/pages/settings_screen.dart';
 import '../features/IntroPages/onbording_screen.dart';
 import 'route_names.dart';

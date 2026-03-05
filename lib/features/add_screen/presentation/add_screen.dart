@@ -7,12 +7,12 @@ import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
-import 'package:mono/models/category_model/category_model.dart';
-import '../transaction/presentation/providers/transaction_provider.dart';
+import '../../transaction/presentation/providers/transaction_provider.dart';
 
 class AddScreen extends StatefulWidget {
   final TranscationModel? isDataExist;

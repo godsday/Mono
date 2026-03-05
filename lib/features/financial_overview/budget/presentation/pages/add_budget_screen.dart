@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../../../../../models/category_model/category_model.dart';
 import '../../data/repositories/budget_repository_impl.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../providers/add_budget_provider.dart';
@@ -353,7 +353,8 @@ class _SaveBudgetButton extends StatelessWidget {
               ? () async {
                   final success = await provider.saveBudget();
                   if (success && context.mounted) {
-                    Navigator.of(context).pushNamed(RouteNames.budgetOverview);
+                    Navigator.of(context)
+                        .pushReplacementNamed(RouteNames.budgetOverview);
                   }
                 }
               : null,

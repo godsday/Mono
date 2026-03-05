@@ -1,4 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
+import 'package:mono/features/add_screen/domain/entities/category_entity.dart';
 part 'category_model.g.dart';
 
 @HiveType(typeId: 2)
@@ -25,4 +26,22 @@ class CategoryModel {
       required this.type,
       required this.name,
       this.isdeleted = false});
+
+  CategoryEntity toEntity() {
+    return CategoryEntity(
+      id: id,
+      type: type,
+      name: name,
+      isdeleted: isdeleted,
+    );
+  }
+
+  static CategoryModel fromEntity(CategoryEntity entity) {
+    return CategoryModel(
+      id: entity.id,
+      type: entity.type,
+      name: entity.name,
+      isdeleted: entity.isdeleted,
+    );
+  }
 }

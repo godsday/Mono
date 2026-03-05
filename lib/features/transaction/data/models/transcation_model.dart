@@ -36,14 +36,14 @@ class TranscationModel {
     );
   }
 
-  TranscationModel fromEntity(TransactionEntity entity) {
+  static TranscationModel fromMap(Map<String, dynamic> map) {
     return TranscationModel(
-      id: entity.id,
-      type: entity.type,
-      amount: entity.amount,
-      date: entity.date,
-      category: entity.category,
-      purpose: entity.purpose,
+      id: map['id'],
+      type: map['type'],
+      amount: map['amount'],
+      date: DateTime.parse(map['date']),
+      category: map['category'],
+      purpose: map['purpose'],
     );
   }
 }

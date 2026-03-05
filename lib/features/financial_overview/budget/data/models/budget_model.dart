@@ -75,8 +75,8 @@ class BudgetCategoryModel extends HiveObject {
     this.spentAmount = 0.0,
   });
 
-  CategoryEntity toEntity() {
-    return CategoryEntity(
+  BudgetCategoryEntity toEntity() {
+    return BudgetCategoryEntity(
       id: id,
       name: name,
       amount: amount,
@@ -84,7 +84,7 @@ class BudgetCategoryModel extends HiveObject {
     );
   }
 
-  static BudgetCategoryModel fromEntity(CategoryEntity entity) {
+  static BudgetCategoryModel fromEntity(BudgetCategoryEntity entity) {
     return BudgetCategoryModel(
       id: entity.id,
       name: entity.name,

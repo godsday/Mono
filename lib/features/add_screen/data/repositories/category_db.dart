@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mono/core/constants/app_string/app_strings.dart';
-import 'package:mono/models/category_model/category_model.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 
 // ignore: constant_identifier_names
-const CATEGORY_DB_NAME = 'category_database';
 
 abstract class CategoryDbFunctions {
   Future<List<CategoryModel>> getCategories();

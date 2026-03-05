@@ -5,9 +5,9 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
-import 'package:mono/models/category_model/category_model.dart';
 import 'package:sizer/sizer.dart';
 
 void showAddCategoryDialog(
