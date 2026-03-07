@@ -46,6 +46,13 @@ import 'package:mono/features/financial_overview/goals/presentation/providers/go
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mono/features/app_settings/data/datasources/app_settings_local_data_source.dart';
+import 'package:mono/features/app_settings/data/repositories/app_settings_repository_impl.dart';
+import 'package:mono/features/app_settings/domain/usecases/get_app_settings_usecase.dart';
+import 'package:mono/features/app_settings/domain/usecases/update_language_usecase.dart';
+import 'package:mono/features/app_settings/domain/usecases/update_currency_usecase.dart';
+import 'package:mono/features/app_settings/presentation/providers/app_settings_provider.dart';
 
 DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 NotificationProvider notificationProvider = NotificationProvider();
@@ -109,6 +116,16 @@ Future<void> main() async {
   final addGoal = AddGoalUseCase(goalRepository);
   final updateGoalProgress = UpdateGoalProgressUseCase(goalRepository);
 
+  // App Settings Setup
+  final sharedPreferences = await SharedPreferences.getInstance();
+  final appSettingsLocalDataSource =
+      AppSettingsLocalDataSourceImpl(sharedPreferences: sharedPreferences);
+  final appSettingsRepository =
+      AppSettingsRepositoryImpl(localDataSource: appSettingsLocalDataSource);
+  final getAppSettingsUseCase = GetAppSettingsUseCase(appSettingsRepository);
+  final updateLanguageUseCase = UpdateLanguageUseCase(appSettingsRepository);
+  final updateCurrencyUseCase = UpdateCurrencyUseCase(appSettingsRepository);
+
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) {
@@ -120,6 +137,13 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) {
         return localeProvider;
       }),
+      ChangeNotifierProvider(
+        create: (_) => AppSettingsProvider(
+          getAppSettingsUseCase: getAppSettingsUseCase,
+          updateLanguageUseCase: updateLanguageUseCase,
+          updateCurrencyUseCase: updateCurrencyUseCase,
+        ),
+      ),
       ChangeNotifierProvider(
           create: (_) => TransactionProvider(
                 totalBalanceUseCase: totalBalanceUseCase,

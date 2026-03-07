@@ -157,19 +157,21 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
             style: AppTextTheme.montserrart(
               fontSize: 32,
               fontWeight: FontWeight.w700,
-              color: AppColor.blackText,
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
             decoration: InputDecoration(
               prefixText: '₹ ',
               prefixStyle: AppTextTheme.montserrart(
                 fontSize: 32,
                 fontWeight: FontWeight.w700,
-                color: AppColor.textSecondary,
+                color: Theme.of(context).disabledColor,
               ),
               border: InputBorder.none,
               hintText: '0',
               hintStyle: TextStyle(
-                  color: AppColor.textSecondary.withValues(alpha: 0.3)),
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColor.lightGrey
+                      : AppColor.textSecondary.withValues(alpha: 0.3)),
             ),
             onChanged: (value) {
               if (value.isEmpty) {
@@ -298,7 +300,7 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
               style: AppTextTheme.poppins(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: AppColor.blackText,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
             ),
           ),

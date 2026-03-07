@@ -26,7 +26,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_selectedIndex ?? widget.index],
+      body: SafeArea(
+        child: pages[_selectedIndex ?? widget.index],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
         selectedLabelStyle: AppTextTheme.poppins().copyWith(

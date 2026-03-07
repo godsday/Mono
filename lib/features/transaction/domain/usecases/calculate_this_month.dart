@@ -50,4 +50,38 @@ class CalculateThisMonth {
 
     return thisMonthTotalBalance;
   }
+
+  double getPreviousMonthIncome(List<TranscationModel> transactions) {
+    DateTime today = DateTime.now();
+    DateTime currentCycleStart = today.subtract(const Duration(days: 30));
+    DateTime previousCycleStart =
+        currentCycleStart.subtract(const Duration(days: 30));
+
+    List<TranscationModel> prevMonthTransactions = transactions.where((t) {
+      return t.date
+              .isAfter(previousCycleStart.subtract(const Duration(days: 1))) &&
+          t.date.isBefore(currentCycleStart);
+    }).toList();
+
+    return prevMonthTransactions
+        .where((t) => t.type == 'Income')
+        .fold(0, (sum, t) => sum + t.amount);
+  }
+
+  double getPreviousMonthExpense(List<TranscationModel> transactions) {
+    DateTime today = DateTime.now();
+    DateTime currentCycleStart = today.subtract(const Duration(days: 30));
+    DateTime previousCycleStart =
+        currentCycleStart.subtract(const Duration(days: 30));
+
+    List<TranscationModel> prevMonthTransactions = transactions.where((t) {
+      return t.date
+              .isAfter(previousCycleStart.subtract(const Duration(days: 1))) &&
+          t.date.isBefore(currentCycleStart);
+    }).toList();
+
+    return prevMonthTransactions
+        .where((t) => t.type == 'Expense')
+        .fold(0, (sum, t) => sum + t.amount);
+  }
 }

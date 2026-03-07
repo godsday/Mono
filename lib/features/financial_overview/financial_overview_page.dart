@@ -40,11 +40,14 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: const PreferredSize(
+        preferredSize: Size(double.infinity, 110),
+        child: HeaderSection(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HeaderSection(),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

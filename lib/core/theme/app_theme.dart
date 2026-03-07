@@ -10,6 +10,16 @@ class Styles {
       ),
       extensions: [
         AppGradients(
+// home switch color
+          switchColor: isDarkTheme ? Colors.blueAccent : AppColor.mainHexcolor,
+
+          budgetLinearGradient: isDarkTheme
+              ? AppColor.blackCardGradient
+              : AppColor.budgetCardGradient,
+          // disable card color
+
+          disableCardColor:
+              isDarkTheme ? const Color(0xFF1F1821) : Colors.blueGrey.shade100,
           assetCardTheme:
               isDarkTheme ? AppColor.blackColor : AppColor.assetCardFirstbg,
           goalCardTheme:
@@ -38,8 +48,8 @@ class Styles {
           transactionListBg: isDarkTheme
               ? AppColor.blackColor
               : AppColor.transactionListBgLight,
-          // main gradient for app
 
+          // main gradient for app
           primaryGradient:
               isDarkTheme ? AppColor.darkThemeGradient : AppColor.mainGradient,
 
@@ -85,6 +95,7 @@ class Styles {
       cardTheme: CardThemeData(
         color: isDarkTheme ? AppColor.blackColor : AppColor.whiteColor,
       ),
+
       primaryColorLight: isDarkTheme ? Colors.black54 : Colors.grey[200],
 
       //Text grey
@@ -105,6 +116,7 @@ class Styles {
 class AppGradients extends ThemeExtension<AppGradients> {
   final LinearGradient primaryGradient;
   final LinearGradient cardGradient;
+  final LinearGradient budgetLinearGradient;
   final Color incomeHeader;
   final Color expenseHeader;
   final Color incomeContainer;
@@ -116,9 +128,15 @@ class AppGradients extends ThemeExtension<AppGradients> {
   final Color budgetCardTheme;
   final Color goalCardTheme;
   final Color assetCardTheme;
+  final Color switchColor;
+
+  final Color disableCardColor;
   // final LinearGradient goalCardGradient;
 // final LinearGradient assetCardGradient;
   const AppGradients({
+    required this.switchColor,
+    required this.budgetLinearGradient,
+    required this.disableCardColor,
     required this.primaryGradient,
     required this.cardGradient,
     required this.incomeHeader, // Changed to required for consistency
@@ -139,6 +157,7 @@ class AppGradients extends ThemeExtension<AppGradients> {
   AppGradients copyWith({
     LinearGradient? primaryGradient,
     LinearGradient? cardGradient,
+    LinearGradient? budgetLinearGradient,
     Color? incomeHeader,
     Color? expenseHeader,
     Color? incomeContainer,
@@ -151,8 +170,13 @@ class AppGradients extends ThemeExtension<AppGradients> {
     Color? goalCardTheme,
     LinearGradient? goalCardGradient,
     Color? assetCardTheme,
+    Color? disableCardColor,
+    Color? switchColor,
   }) {
     return AppGradients(
+      switchColor: switchColor ?? this.switchColor,
+      budgetLinearGradient: budgetLinearGradient ?? this.budgetLinearGradient,
+      disableCardColor: disableCardColor ?? this.disableCardColor,
       primaryGradient: primaryGradient ?? this.primaryGradient,
       cardGradient: cardGradient ?? this.cardGradient,
       incomeHeader: incomeHeader ?? this.incomeHeader,
@@ -176,6 +200,11 @@ class AppGradients extends ThemeExtension<AppGradients> {
     if (other is! AppGradients) return this;
 
     return AppGradients(
+      switchColor: Color.lerp(switchColor, other.switchColor, t)!,
+      budgetLinearGradient: LinearGradient.lerp(
+          budgetLinearGradient, other.budgetLinearGradient, t)!,
+      disableCardColor:
+          Color.lerp(disableCardColor, other.disableCardColor, t)!,
       primaryGradient:
           LinearGradient.lerp(primaryGradient, other.primaryGradient, t)!,
       cardGradient: LinearGradient.lerp(cardGradient, other.cardGradient, t)!,

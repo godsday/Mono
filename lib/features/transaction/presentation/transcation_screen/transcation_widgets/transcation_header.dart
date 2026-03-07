@@ -18,7 +18,7 @@ class TranscationHeader extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            height: 15.h,
+            // height: 20.h,
             decoration: BoxDecoration(
               gradient:
                   Theme.of(context).extension<AppGradients>()!.primaryGradient,
@@ -30,17 +30,19 @@ class TranscationHeader extends StatelessWidget {
                 ),
               ],
             ),
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h),
-                child: Text(
-                  "Recent Transactions",
-                  style: AppTextTheme.montserrart(
-                    fontSize: 18.5.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.whiteColor,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 24),
+              child: Column(
+                children: [
+                  Text(
+                    "Recent Transactions",
+                    style: AppTextTheme.montserrart(
+                      fontSize: 18.5.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColor.whiteColor,
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

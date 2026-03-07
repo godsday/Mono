@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_theme.dart' show AppGradients;
 import 'package:mono/features/financial_overview/budget/presentation/widgets/budget_header_clipper.dart';
 import 'package:mono/features/financial_overview/budget/presentation/widgets/categories_spending.dart';
 import 'package:mono/routes/route_names.dart';
@@ -58,6 +59,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColor.borderGreyWhite),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -65,14 +67,8 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
             offset: const Offset(0, 4),
           ),
         ],
-        gradient: LinearGradient(
-          colors: [
-            HexColor('#B2AFE8').withValues(alpha: 0.9),
-            HexColor('#D3D0F7'),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        gradient:
+            Theme.of(context).extension<AppGradients>()!.budgetLinearGradient,
       ),
       child: Stack(
         children: [
@@ -95,7 +91,9 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       ),
                       // clipBehavior: CustomRectClipper,
                       child: Container(
-                        color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
                         height: 4.h,
                         width: 50.w,
                         child: Padding(
@@ -112,7 +110,11 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               Text(
                                 'Monthly Budget',
                                 style: AppTextStyles.roboto16w600Black.copyWith(
-                                    fontWeight: FontWeight.w700, fontSize: 18),
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18),
                               ),
                             ],
                           ),
@@ -270,36 +272,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               title: 'Categories',
                               categories: widget.budget.categories,
                             )
-                      /* Text(
-                        'Categories',
-                        style: AppTextTheme.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.textGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: widget.budget.categories.map((cat) {
-                          return _CategoryChip(
-                            title: cat.name,
-                            amount: '₹${cat.amount.toStringAsFixed(0)}',
-                          );
-                        }).toList(),
-                      ),*/
                     ],
-                    // const SizedBox(height: 30),
-
-                    // Text(
-                    //   _buildCategoryText(),
-                    //   style: AppTextTheme.poppins(
-                    //     fontSize: 14,
-                    //     fontWeight: FontWeight.w500,
-                    //     color: AppColor.blackText,
-                    //   ),
-                    // ),
                   ],
                 ),
               )
@@ -319,7 +292,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
           style: AppTextTheme.poppins(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: HexColor('#525252'),
+            color: Theme.of(context).disabledColor,
           ),
         ),
         const SizedBox(height: 4),
@@ -328,7 +301,9 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
           style: AppTextStyles.roboto18w600SemiBoldWhite(context)!.copyWith(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: isAlert ? Colors.redAccent : AppColor.blackText,
+            color: isAlert
+                ? Colors.redAccent
+                : Theme.of(context).extension<AppGradients>()!.textTheme,
           ),
         ),
       ],

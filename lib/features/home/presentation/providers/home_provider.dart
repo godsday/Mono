@@ -98,6 +98,12 @@ class HomeProvider with ChangeNotifier {
   double get thisMonthExpense =>
       calculateThisMonth.getThisMonthExpense(_transactions);
 
+  double get previousMonthIncome =>
+      calculateThisMonth.getPreviousMonthIncome(_transactions);
+
+  double get previousMonthExpense =>
+      calculateThisMonth.getPreviousMonthExpense(_transactions);
+
   Future<void> loadUserName() async {
     final prefs = await SharedPreferences.getInstance();
     _userName = prefs.getString('namekey') ?? 'User';

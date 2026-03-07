@@ -14,6 +14,8 @@ import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mono/features/app_settings/presentation/providers/app_settings_provider.dart';
+import 'package:mono/providers/locale_provider.dart';
 import '../../../financial_overview/budget/data/repositories/budget_repository_impl.dart';
 import '../../../financial_overview/asset/data/repositories/asset_repository_impl.dart';
 import '../../../financial_overview/goals/data/repositories/goal_repository_impl.dart';
@@ -50,287 +52,414 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final themepovider = Provider.of<DarkThemeProvider>(context);
     final notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
-        body: Column(children: [
-      ClipPath(
-        clipper: WaveClipper(),
-        child: Stack(
-            clipBehavior: Clip.hardEdge,
-            alignment: Alignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  gradient: Theme.of(context)
-                      .extension<AppGradients>()!
-                      .primaryGradient,
-                  boxShadow: [
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(115), child: SettingsHeader()),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 38.0, left: 24, right: 24),
+          child: Column(children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.sp),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  boxShadow: const [
                     BoxShadow(
-                      color: Colors.black.withAlpha(15),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                // color: Theme.of(context).dividerColor,
-                height: 17.0.h,
-              ),
-              Positioned(
-                  top: 5.h,
-                  left: 33.w,
-                  child: Image(
-                    width: 57.w,
-                    image: const AssetImage(
-                      'assets/images/rings.png',
-                    ),
-                  )),
-              Positioned(
-                top: 6.h,
-                child: Text(
-                  "Settings",
-                  style: AppTextTheme.montserrart(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w800,
-                    color: AppColor.whiteColor,
-                  ),
-                ),
-              ),
-            ]),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: 5.h),
-        child: Container(
-          width: 90.w,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.sp),
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 4,
-                )
-              ]),
-          child: Padding(
-            padding: EdgeInsets.all(16.sp),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      color: Colors.grey,
+                      blurRadius: 4,
+                    )
+                  ]),
+              child: Padding(
+                padding: EdgeInsets.all(16.sp),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(height: 12),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                            notificationProvider.notifValue
-                                ? Icons.notifications
-                                : Icons.notifications_off,
-                            color: themepovider.darkTheme
-                                ? AppColor.whiteColor
-                                : AppColor.blackColor),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Notification',
-                          style: AppTextTheme.poppins(
-                              fontSize: 17.sp, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    Transform.scale(
-                      scale: .77,
-                      child: Switch.adaptive(
-                          activeThumbColor: AppColor.mainHexcolor,
-                          value: notificationProvider.notifValue,
-                          onChanged: (value) {
-                            setState(() {
-                              notificationProvider.notifValue = value;
-                            });
-                          }),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(themepovider.darkTheme
-                            ? Icons.dark_mode_outlined
-                            : Icons.light_mode_outlined),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Dark Mode',
-                          style: AppTextTheme.poppins(
-                              fontSize: 17.sp, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    Transform.scale(
-                      scale: .77,
-                      child: Switch.adaptive(
-                          activeThumbColor: AppColor.mainHexcolor,
-                          value: themepovider.darkTheme,
-                          onChanged: (value) {
-                            setState(() {
-                              themepovider.darkTheme = value;
-                            });
-                          }),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const Divider(),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 12),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'More',
-                            style: AppTextTheme.poppins(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.grey),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, RouteNames.about);
-                        },
-                        child: SizedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("About",
-                                  style: AppTextTheme.poppins(
-                                      color: AppColor.textGrey,
-                                      fontSize: 17.sp,
-                                      fontWeight: FontWeight.w500)),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 17.sp,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          // ignore: deprecated_member_use
-                          if (!await launch(
-                              'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
-                            throw 'Could not send massage';
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
                           children: [
-                            Text(
-                              "Send feedback",
-                              style: AppTextTheme.poppins(
-                                color: AppColor.textGrey,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
                             Icon(
-                              Icons.arrow_forward_ios,
-                              size: 17.sp,
+                                notificationProvider.notifValue
+                                    ? Icons.notifications
+                                    : Icons.notifications_off,
+                                color: themepovider.darkTheme
+                                    ? AppColor.whiteColor
+                                    : AppColor.blackColor),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Notification',
+                              style: AppTextTheme.poppins(
+                                  fontSize: 17.sp, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          showAppBottomSheet(
-                            context: context,
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Transform.scale(
+                          scale: .77,
+                          child: Switch.adaptive(
+                              activeThumbColor: Theme.of(context)
+                                  .extension<AppGradients>()!
+                                  .switchColor,
+                              value: notificationProvider.notifValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  notificationProvider.notifValue = value;
+                                });
+                              }),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Text(
-                              "Secure Data",
-                              style: AppTextTheme.poppins(
-                                color: AppColor.textGrey,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            Icon(themepovider.darkTheme
+                                ? Icons.dark_mode_outlined
+                                : Icons.light_mode_outlined),
+                            const SizedBox(
+                              width: 10,
                             ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 17.sp,
+                            Text(
+                              'Dark Mode',
+                              style: AppTextTheme.poppins(
+                                  fontSize: 17.sp, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      InkWell(
-                          onTap: () async {
-                            showAddCategoryDialog(
-                              context,
-                              isAlert: true,
-                              title: "Alert!!!",
-                              subtitle:
-                                  "All transaction details will be deleted.\n\nDo you like to continue ?",
-                              onYesPressed: () async {
-                                print("delete all data");
-                                await TransactionLocalDataSourceImpl.instance
-                                    .clearTransactions();
-                                await BudgetRepositoryImpl().clearBudget();
-                                await AssetRepositoryImpl().clearAssets();
-                                await GoalRepositoryImpl().clearGoals();
-
-                                if (context.mounted) {
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      RouteNames.splash, (route) => false);
+                        Transform.scale(
+                          scale: .77,
+                          child: Switch.adaptive(
+                              activeThumbColor: Theme.of(context)
+                                  .extension<AppGradients>()!
+                                  .switchColor,
+                              value: themepovider.darkTheme,
+                              onChanged: (value) {
+                                setState(() {
+                                  themepovider.darkTheme = value;
+                                });
+                              }),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.language,
+                                color: themepovider.darkTheme
+                                    ? AppColor.whiteColor
+                                    : AppColor.blackColor),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Language',
+                              style: AppTextTheme.poppins(
+                                  fontSize: 17.sp, fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                        Consumer2<AppSettingsProvider, LocaleProvider>(
+                          builder:
+                              (context, appSettings, localeProvider, child) {
+                            return DropdownButton<String>(
+                              value: appSettings.languageCode,
+                              underline: const SizedBox(),
+                              icon: const Icon(Icons.arrow_drop_down),
+                              items: L10n.all.map((locale) {
+                                final code = locale.languageCode;
+                                return DropdownMenuItem<String>(
+                                  value: code,
+                                  child: Text(
+                                    '${L10n.getFlag(code)} ${L10n.getLanguageName(code)}',
+                                    style:
+                                        AppTextTheme.poppins(fontSize: 14.sp),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  appSettings.updateLanguage(newValue);
+                                  localeProvider.setLocale(Locale(newValue));
                                 }
                               },
                             );
                           },
-                          child: Row(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.attach_money,
+                                color: themepovider.darkTheme
+                                    ? AppColor.whiteColor
+                                    : AppColor.blackColor),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Currency',
+                              style: AppTextTheme.poppins(
+                                  fontSize: 17.sp, fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                        Consumer<AppSettingsProvider>(
+                          builder: (context, appSettings, child) {
+                            final currencies = [
+                              'USD',
+                              'EUR',
+                              'INR',
+                              'GBP',
+                              'JPY'
+                            ];
+                            return DropdownButton<String>(
+                              value:
+                                  currencies.contains(appSettings.currencyCode)
+                                      ? appSettings.currencyCode
+                                      : 'USD',
+                              underline: const SizedBox(),
+                              icon: const Icon(Icons.arrow_drop_down),
+                              items: currencies.map((String currency) {
+                                return DropdownMenuItem<String>(
+                                  value: currency,
+                                  child: Text(
+                                    currency,
+                                    style:
+                                        AppTextTheme.poppins(fontSize: 14.sp),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  appSettings.updateCurrency(newValue);
+                                }
+                              },
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    const Divider(),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 12),
+                      child: Column(
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Reset App",
+                                'More',
                                 style: AppTextTheme.poppins(
-                                  color: AppColor.textGrey,
-                                  fontSize: 17.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.grey),
                               ),
                             ],
-                          ))
-                    ],
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, RouteNames.about);
+                            },
+                            child: SizedBox(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("About",
+                                      style: AppTextTheme.poppins(
+                                          color:
+                                              Theme.of(context).disabledColor,
+                                          fontSize: 17.sp,
+                                          fontWeight: FontWeight.w500)),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 17.sp,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              // ignore: deprecated_member_use
+                              if (!await launch(
+                                  'mailto:rafikkvavoor@gmail.com?subject=Mono-App&body=write your own...')) {
+                                throw 'Could not send massage';
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Send feedback",
+                                  style: AppTextTheme.poppins(
+                                    color: Theme.of(context).disabledColor,
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 17.sp,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showAppBottomSheet(
+                                context: context,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Secure Data",
+                                  style: AppTextTheme.poppins(
+                                    color: Theme.of(context).disabledColor,
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 17.sp,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          InkWell(
+                              onTap: () async {
+                                showAddCategoryDialog(
+                                  context,
+                                  isAlert: true,
+                                  title: "Alert!!!",
+                                  subtitle:
+                                      "All transaction details will be deleted.\n\nDo you like to continue ?",
+                                  onYesPressed: () async {
+                                    print("delete all data");
+                                    await TransactionLocalDataSourceImpl
+                                        .instance
+                                        .clearTransactions();
+                                    await BudgetRepositoryImpl().clearBudget();
+                                    await AssetRepositoryImpl().clearAssets();
+                                    await GoalRepositoryImpl().clearGoals();
+
+                                    if (context.mounted) {
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          RouteNames.splash, (route) => false);
+                                    }
+                                  },
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Reset App",
+                                    style: AppTextTheme.poppins(
+                                      color: Theme.of(context).disabledColor,
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ]),
+        ));
+  }
+}
+
+class SettingsHeader extends StatelessWidget {
+  const SettingsHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: WaveClipper(),
+      child: Stack(clipBehavior: Clip.hardEdge, children: [
+        Container(
+          width: double.infinity,
+
+          decoration: BoxDecoration(
+            gradient:
+                Theme.of(context).extension<AppGradients>()!.primaryGradient,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(15),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          // color: Theme.of(context).dividerColor,
+
+          child: Padding(
+            padding: const EdgeInsets.only(top: 24),
+            child: Column(
+              children: [
+                Text(
+                  "Settings",
+                  style: AppTextTheme.montserrart(
+                    fontSize: 18.5.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColor.whiteColor,
                   ),
                 ),
               ],
             ),
           ),
         ),
-      )
-    ]));
+        Positioned(
+            top: 3.h,
+            left: 33.w,
+            child: Image(
+              width: 77.w,
+              image: const AssetImage(
+                'assets/images/rings.png',
+              ),
+            )),
+      ]),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/domain/entity/insight_model.dart';
 
 class SmartInsightCard extends StatefulWidget {
@@ -97,7 +98,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                               ? style.backgroundColor.withValues(alpha: 0.3)
                               : style.backgroundColor,
                           duration: const Duration(milliseconds: 3000),
-                          repeat: true,
+                          repeat: false,
                           glowRadiusFactor: 4,
                           curve: isTapped
                               ? Curves.easeOutQuad
@@ -126,7 +127,9 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w900,
-                                    color: AppColor.totalBalanceCardBg),
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textThemeBlueHeader),
                               ),
                               if (!isTapped) ...[
                                 const SizedBox(height: 6),
@@ -135,7 +138,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: AppColor.textGrey,
+                                    color: Theme.of(context).disabledColor,
                                     height: 1.4,
                                   ),
                                 ),

@@ -98,8 +98,8 @@ class _AddScreenState extends State<AddScreen> {
                         ? "Add Transcation"
                         : "Edit Transcation",
                     style: AppTextTheme.montserrart(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 18.5.sp,
+                      fontWeight: FontWeight.w700,
                       color: AppColor.whiteColor,
                     ),
                   ),
@@ -168,8 +168,11 @@ class _AddScreenState extends State<AddScreen> {
                                                   style: AppTextStyles
                                                       .poppins16w400
                                                       .copyWith(
-                                                          color: AppColor
-                                                              .blueGrey700,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .extension<
+                                                                  AppGradients>()!
+                                                              .textThemeBlueHeader,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontSize: 16.sp),
@@ -187,8 +190,11 @@ class _AddScreenState extends State<AddScreen> {
                                                   style: AppTextStyles
                                                       .poppins16w400
                                                       .copyWith(
-                                                          color: AppColor
-                                                              .blueGrey700,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .extension<
+                                                                  AppGradients>()!
+                                                              .textThemeBlueHeader,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontSize: 16.sp),
@@ -221,7 +227,11 @@ class _AddScreenState extends State<AddScreen> {
                                   }
                                   return null;
                                 },
-                                style: AppTextStyles.poppins16w600,
+                                style: AppTextStyles.poppins16w600.copyWith(
+                                  color: Theme.of(context)
+                                      .extension<AppGradients>()!
+                                      .textTheme,
+                                ),
                                 controller: amountController,
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(8),
@@ -276,7 +286,13 @@ class _AddScreenState extends State<AddScreen> {
                                                 Text(
                                                   '${provider.selectedDate.day} / ${provider.selectedDate.month} / ${provider.selectedDate.year}',
                                                   style: AppTextStyles
-                                                      .poppins16w600,
+                                                      .poppins16w600
+                                                      .copyWith(
+                                                    color: Theme.of(context)
+                                                        .extension<
+                                                            AppGradients>()!
+                                                        .textTheme,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -326,7 +342,6 @@ class _AddScreenState extends State<AddScreen> {
                                               highlightColor:
                                                   AppColor.lightGrey,
                                               hoverColor: AppColor.lightGrey,
-                                              focusColor: AppColor.lightGrey,
                                             ),
                                             child: DropdownButton<String>(
                                               value:
@@ -337,8 +352,8 @@ class _AddScreenState extends State<AddScreen> {
                                                 size: 24.sp,
                                               ),
                                               elevation: 2,
-                                              dropdownColor:
-                                                  AppColor.whiteColor,
+                                              dropdownColor: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
                                               borderRadius:
                                                   BorderRadius.circular(15),
                                               underline: const SizedBox(),
@@ -379,7 +394,11 @@ class _AddScreenState extends State<AddScreen> {
                                                     child: Text(
                                                       category.name,
                                                       style: AppTextStyles
-                                                          .poppins16w600,
+                                                          .poppins16w600
+                                                          .copyWith(
+                                                        color: Theme.of(context)
+                                                            .disabledColor,
+                                                      ),
                                                     ),
                                                   ),
                                                 );
@@ -426,7 +445,11 @@ class _AddScreenState extends State<AddScreen> {
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(10)
                                 ],
-                                style: AppTextStyles.poppins16w600,
+                                style: AppTextStyles.poppins16w600.copyWith(
+                                  color: Theme.of(context)
+                                      .extension<AppGradients>()!
+                                      .textTheme,
+                                ),
                                 controller: notesController,
                                 keyboardType: TextInputType.text,
                                 decoration:

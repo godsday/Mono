@@ -94,7 +94,9 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   ),
                                   child: Icon(
                                     Icons.account_balance_wallet,
-                                    color: Theme.of(context).disabledColor,
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
                                     size: 20,
                                   ),
                                 ),
@@ -104,7 +106,9 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   style: AppTextTheme.poppins(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).disabledColor,
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
                                   ),
                                 ),
                               ],
@@ -118,7 +122,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColor.textGrey,
+                                  color: Theme.of(context).disabledColor,
                                 ),
                               ),
                             ),
@@ -139,10 +143,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      color: Colors.blueGrey.shade100,
+                                      color: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                          color: Colors.blueGrey.shade100,
+                                          color: Theme.of(context)
+                                              .extension<AppGradients>()!
+                                              .disableCardColor,
                                           width: 2
                                           // color: HexColor('#21988C'),
                                           ),
@@ -237,7 +245,9 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                color: Theme.of(context).disabledColor,
+                                color: Theme.of(context)
+                                    .extension<AppGradients>()!
+                                    .textTheme,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -249,7 +259,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColor.textGrey,
+                                  color: Theme.of(context).disabledColor,
                                 ),
                               ),
                             ),
@@ -259,7 +269,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -268,7 +278,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -277,7 +287,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -330,7 +340,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                     .copyWith(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
-                                  color: HexColor('#2D6763'),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             )

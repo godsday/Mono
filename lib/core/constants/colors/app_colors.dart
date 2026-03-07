@@ -21,7 +21,9 @@ class AppColor {
   static Color budgetCardFirstBg = HexColor('#EBEEFF');
   static Color assetCardFirstbg = HexColor('#E6F5F4');
 
+  // border
   static Color borderGreyWhite = Colors.white30;
+  static Color borderBlueColor = HexColor('#A5C9FF');
 
   //Text COLOR
   static Color lightGrey = Colors.grey.shade200;
@@ -84,5 +86,23 @@ class AppColor {
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
+  );
+
+  static LinearGradient budgetCardGradient = LinearGradient(
+    colors: [
+      HexColor('#B2AFE8').withValues(alpha: 0.9),
+      HexColor('#D3D0F7'),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  static LinearGradient blackCardGradient = LinearGradient(
+    colors: [
+      AppColor.blackColor,
+      AppColor.blackColor,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
   );
 }

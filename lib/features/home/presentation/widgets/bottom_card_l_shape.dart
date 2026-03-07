@@ -81,7 +81,7 @@ class LShapeWidget extends StatelessWidget {
                                   style:
                                       AppTextStyles.poppins12w300White(context)
                                           ?.copyWith(
-                                    color: Colors.black,
+                                    color: Theme.of(context).disabledColor,
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -133,7 +133,7 @@ class LShapeWidget extends StatelessWidget {
                                   style:
                                       AppTextStyles.poppins12w300White(context)
                                           ?.copyWith(
-                                    color: Colors.black,
+                                    color: Theme.of(context).disabledColor,
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -176,7 +176,10 @@ class LShapeWidget extends StatelessWidget {
               height: totalHeight * 0.04.h, // Adjust height of content area
               child: Text(
                 '₹ ${totalAmount.toStringAsFixed(0)}',
-                style: AppTextStyles.roboto16w600Black.copyWith(fontSize: 18),
+                style: AppTextStyles.roboto16w600Black.copyWith(
+                    fontSize: 18,
+                    color:
+                        Theme.of(context).extension<AppGradients>()?.textTheme),
               ),
             ),
 
@@ -207,7 +210,9 @@ class LShapeWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: HexColor('#525252'),
+                        color: Theme.of(context)
+                            .extension<AppGradients>()
+                            ?.textThemeBlueHeader,
                       ),
                     ),
                     SizedBox(

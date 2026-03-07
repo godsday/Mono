@@ -43,7 +43,11 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       .extension<AppGradients>()!
                       .goalCardTheme,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: HexColor('#A5C9FF'), width: 2),
+                  border: Border.all(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColor.borderGreyWhite
+                          : AppColor.borderBlueColor,
+                      width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -132,7 +136,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.blueGrey.shade100,
+                                      color: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
                                       // gradient: LinearGradient(
                                       //   end: Alignment.bottomRight,
@@ -144,10 +150,14 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                       // ),
                                       border: Border.all(
                                           width: 2,
-                                          color: Colors.blueGrey.shade100),
+                                          color: Theme.of(context)
+                                              .extension<AppGradients>()!
+                                              .disableCardColor),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.blueGrey.shade100,
+                                          color: Theme.of(context)
+                                              .extension<AppGradients>()!
+                                              .disableCardColor,
                                           // color: HexColor('#3C7570')
                                           //     .withValues(alpha: 0.3),
                                           blurRadius: 6,
@@ -188,7 +198,11 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       .extension<AppGradients>()!
                       .goalCardTheme,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: HexColor('#A5C9FF'), width: 2),
+                  border: Border.all(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColor.borderGreyWhite
+                          : AppColor.borderBlueColor,
+                      width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),

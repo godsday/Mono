@@ -18,7 +18,7 @@ class HomeHeader extends StatelessWidget {
             Text(
               "Hi ${homeProvider.userName.capitalizeFirstLetter()}",
               style: AppTextTheme.montserrart(
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Colors.white54,
               ),
@@ -26,7 +26,7 @@ class HomeHeader extends StatelessWidget {
             Text(
               homeProvider.greeting,
               style: AppTextTheme.montserrart(
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Colors.white54,
               ),
