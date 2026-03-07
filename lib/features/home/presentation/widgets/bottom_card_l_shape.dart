@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:sizer/sizer.dart';
@@ -187,8 +188,14 @@ class LShapeWidget extends StatelessWidget {
               right: 0,
               height: totalHeight * 0.20, // Adjust height of header
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 247, 246, 246),
+                decoration: BoxDecoration(
+                  color: orientation == LShapeOrientation.leftLegOnLeft
+                      ? Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.incomeHeader
+                      : Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.expenseHeader,
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

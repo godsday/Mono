@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/features/add_screen/presentation/add_screen.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
@@ -77,12 +79,13 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               child: Container(
                 width: 200,
                 height: 200,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color.fromARGB(64, 138, 234, 226), // 25% opacity glow
+                  color: Theme.of(context)
+                      .secondaryHeaderColor, // 25% opacity glow
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(64, 22, 162, 232),
+                      color: Theme.of(context).secondaryHeaderColor,
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),
@@ -105,12 +108,10 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             opacity: _textAnimation,
             child: ShaderMask(
               shaderCallback: (bounds) {
-                return const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 7, 70, 91),
-                    Color.fromARGB(255, 45, 105, 113),
-                  ],
-                ).createShader(bounds);
+                return Theme.of(context)
+                    .extension<AppGradients>()!
+                    .cardGradient
+                    .createShader(bounds);
               },
               child: Text(
                 "Start Your Financial Journey",

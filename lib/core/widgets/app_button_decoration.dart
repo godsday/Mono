@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class AppElevetedButton extends StatelessWidget {
@@ -22,11 +23,12 @@ class AppElevetedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.zero, // Important: remove default padding
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       child: Ink(
         decoration: BoxDecoration(
-          gradient: AppColor.mainGradient,
+          gradient:
+              Theme.of(context).extension<AppGradients>()!.primaryGradient,
           boxShadow: [
             BoxShadow(
               color: HexColor('#3C7570').withValues(alpha: 0.3),
@@ -47,7 +49,7 @@ class AppElevetedButton extends StatelessWidget {
               style: AppTextTheme.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppColor.white,
+                color: AppColor.whiteColor,
               ),
             ),
           ),

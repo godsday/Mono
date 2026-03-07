@@ -13,7 +13,7 @@ InputDecoration dropdowndecor() {
           borderRadius: BorderRadius.circular(12)));
 }
 
-InputDecoration textfielddecor(String text) {
+InputDecoration textfielddecor(BuildContext context, String text) {
   return InputDecoration(
     contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
     errorBorder: const OutlineInputBorder(
@@ -21,7 +21,8 @@ InputDecoration textfielddecor(String text) {
     ),
     focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: BorderSide(color: AppColor.mainHexcolor, width: 1.0)),
+        borderSide:
+            BorderSide(color: Theme.of(context).primaryColor, width: 1.0)),
     hintText: text,
     hintStyle: AppTextStyles.montserrat18w600.copyWith(
         color: AppColor.textGrey, fontSize: 14, fontWeight: FontWeight.normal),

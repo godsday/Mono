@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_bottomsheet.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/features/setting_screen/presentation/widgets/curve_shape.dart';
@@ -58,11 +59,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                  ),
+                  gradient: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .primaryGradient,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withAlpha(15),
@@ -90,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: AppTextTheme.montserrart(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w800,
-                    color: AppColor.white,
+                    color: AppColor.whiteColor,
                   ),
                 ),
               ),
@@ -102,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 90.w,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.sp),
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               boxShadow: const [
                 BoxShadow(
                   color: Colors.grey,
@@ -126,8 +125,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ? Icons.notifications
                                 : Icons.notifications_off,
                             color: themepovider.darkTheme
-                                ? AppColor.white
-                                : Colors.black),
+                                ? AppColor.whiteColor
+                                : AppColor.blackColor),
                         const SizedBox(
                           width: 10,
                         ),

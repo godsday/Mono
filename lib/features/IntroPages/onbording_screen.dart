@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
@@ -164,7 +165,8 @@ class _OnboardButtonState extends State<_OnboardButton> {
           width: double.infinity,
           height: 6.h,
           decoration: BoxDecoration(
-            gradient: AppColor.mainGradient,
+            gradient:
+                Theme.of(context).extension<AppGradients>()!.primaryGradient,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
@@ -75,11 +76,9 @@ class _AddScreenState extends State<AddScreen> {
                   clipper: CurveClipper(),
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                      ),
+                      gradient: Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.primaryGradient,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withAlpha(15),
@@ -101,7 +100,7 @@ class _AddScreenState extends State<AddScreen> {
                     style: AppTextTheme.montserrart(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColor.white,
+                      color: AppColor.whiteColor,
                     ),
                   ),
                 ),
@@ -121,8 +120,7 @@ class _AddScreenState extends State<AddScreen> {
                     width: 90.0.w,
                     height: 75.h,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).dialogTheme.backgroundColor ??
-                            Theme.of(context).cardColor,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -162,8 +160,8 @@ class _AddScreenState extends State<AddScreen> {
                                               children: [
                                                 Radio.adaptive(
                                                   value: "Expense",
-                                                  activeColor:
-                                                      AppColor.mainHexcolor,
+                                                  activeColor: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                                 Text(
                                                   "Expense",
@@ -181,8 +179,8 @@ class _AddScreenState extends State<AddScreen> {
                                                 ),
                                                 Radio.adaptive(
                                                   value: "Income",
-                                                  activeColor:
-                                                      AppColor.mainHexcolor,
+                                                  activeColor: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                                 Text(
                                                   "Income",
@@ -231,7 +229,8 @@ class _AddScreenState extends State<AddScreen> {
                                       RegExp(r'[0-9.]')),
                                 ],
                                 keyboardType: TextInputType.number,
-                                decoration: textfielddecor("Enter Amount"),
+                                decoration:
+                                    textfielddecor(context, "Enter Amount"),
                               ),
                               SizedBox(
                                 height: 1.5.h,
@@ -258,9 +257,7 @@ class _AddScreenState extends State<AddScreen> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: Theme.of(context)
-                                                    .dialogTheme
-                                                    .backgroundColor ??
-                                                Theme.of(context).cardColor,
+                                                .scaffoldBackgroundColor,
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             border: Border.all(
@@ -340,13 +337,15 @@ class _AddScreenState extends State<AddScreen> {
                                                 size: 24.sp,
                                               ),
                                               elevation: 2,
-                                              dropdownColor: AppColor.white,
+                                              dropdownColor:
+                                                  AppColor.whiteColor,
                                               borderRadius:
                                                   BorderRadius.circular(15),
                                               underline: const SizedBox(),
                                               menuMaxHeight: 300.sp,
                                               iconEnabledColor:
-                                                  AppColor.mainHexcolor,
+                                                  Theme.of(context)
+                                                      .primaryColor,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 12.0),
@@ -394,11 +393,12 @@ class _AddScreenState extends State<AddScreen> {
                                                 WidgetStateProperty.all(3),
                                             backgroundColor:
                                                 WidgetStateProperty.all(
-                                                    AppColor.mainHexcolor),
+                                                    Theme.of(context)
+                                                        .secondaryHeaderColor),
                                           ),
                                           icon: Icon(
                                             Icons.add,
-                                            color: AppColor.white,
+                                            color: AppColor.whiteColor,
                                           ),
                                           onPressed: () {
                                             showAddCategoryDialog(
@@ -429,7 +429,8 @@ class _AddScreenState extends State<AddScreen> {
                                 style: AppTextStyles.poppins16w600,
                                 controller: notesController,
                                 keyboardType: TextInputType.text,
-                                decoration: textfielddecor('Enter Notes'),
+                                decoration:
+                                    textfielddecor(context, 'Enter Notes'),
                                 maxLines: 2,
                               ),
                               SizedBox(height: 3.5.h),

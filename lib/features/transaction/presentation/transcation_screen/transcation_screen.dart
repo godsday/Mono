@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
@@ -47,10 +48,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TranscationDB.instance.refresh();
     return Scaffold(
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const TranscationHeader(),
           Padding(
@@ -174,7 +173,7 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                         : FontWeight.w500,
                                     fontSize: isSelected ? 17.sp : 14.sp,
                                     color: isSelected
-                                        ? AppColor.mainHexcolor
+                                        ? Theme.of(context).primaryColor
                                         : AppColor.textGrey,
                                   ),
                                 ),
@@ -198,7 +197,18 @@ class _TranscationScreenState extends State<TranscationScreen> {
                 Container(
                   height: 4.h,
                   decoration: BoxDecoration(
-                      color: HexColor('#EEEEEE'),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade500,
+                          blurRadius: 4,
+                          offset: const Offset(0, 0),
+                        ),
+                      ],
+                      //top bar color
+
+                      color: Theme.of(context)
+                          .extension<AppGradients>()!
+                          .transactionListBg,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(12),
                           topRight: Radius.circular(12))),
@@ -225,9 +235,15 @@ class _TranscationScreenState extends State<TranscationScreen> {
                     builder: (context, provider, child) {
                   return Container(
                       height: 4.h,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 215, 215, 214),
-                      ),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 15.0,
@@ -242,7 +258,17 @@ class _TranscationScreenState extends State<TranscationScreen> {
                 }),
                 Expanded(
                   child: Container(
-                    color: HexColor('#EEEEEE'),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .extension<AppGradients>()!
+                            .transactionListBg,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]),
                     child: ValueListenableBuilder(
                         valueListenable: Provider.of<TransactionProvider>(
                                 context,
@@ -307,8 +333,8 @@ Widget _buildFilterChip(String filterName, BuildContext context) {
           filterName,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            fontSize: isSelected ? 15.sp : 13.sp,
-            color: isSelected ? AppColor.mainHexcolor : Colors.grey,
+            fontSize: isSelected ? 15.sp : 14.sp,
+            color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
           ),
         ),
       );
@@ -359,7 +385,9 @@ Widget _buildGroupedTransactionList(
             motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                backgroundColor: HexColor('#EEEEEE'),
+                backgroundColor: Theme.of(context)
+                    .extension<AppGradients>()!
+                    .transactionListBg,
                 foregroundColor: HexColor('#1976D2'),
                 icon: Icons.edit,
                 label: 'Edit',
@@ -376,7 +404,9 @@ Widget _buildGroupedTransactionList(
             motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                backgroundColor: HexColor('#EEEEEE'),
+                backgroundColor: Theme.of(context)
+                    .extension<AppGradients>()!
+                    .transactionListBg,
                 foregroundColor: HexColor('#B00020'),
                 icon: Icons.delete,
                 label: 'Delete',
@@ -393,17 +423,27 @@ Widget _buildGroupedTransactionList(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Card(
+              shadowColor: AppColor.borderGreyWhite,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(
+                  color: Colors.white24,
+                  width: 1,
+                ),
               ),
-              child: InkWell(
-                onTap: (() {}),
-                focusColor: Colors.black38,
+              child: GestureDetector(
+                onTap: () {},
                 child: ListTile(
                   leading: Container(
                     decoration: BoxDecoration(
-                      color: HexColor('#EEEEEE'),
+                      color: Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.transactionListBg,
                       borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColor.borderGreyWhite,
+                        width: 1,
+                      ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -424,7 +464,6 @@ Widget _buildGroupedTransactionList(
                     Provider.of<TransactionProvider>(context, listen: false)
                         .parsedate(transaction.date),
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 14.sp,
                     ),
                   ),
@@ -434,7 +473,7 @@ Widget _buildGroupedTransactionList(
                           child: AutoSizeText(
                             "- ${transaction.amount.toStringAsFixed(0)}",
                             style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                               color: Colors.red,
                             ),
@@ -447,7 +486,7 @@ Widget _buildGroupedTransactionList(
                           child: AutoSizeText(
                             "+ ${transaction.amount.toStringAsFixed(0)}",
                             style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.green,
                             ),

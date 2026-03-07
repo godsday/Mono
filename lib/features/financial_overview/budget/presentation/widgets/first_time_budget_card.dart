@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
@@ -17,8 +18,10 @@ class FirstTimeBudgetCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: HexColor('#EBEEFF'),
+        // color: HexColor('#EBEEFF'),
+        color: Theme.of(context).extension<AppGradients>()!.budgetCardTheme,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColor.borderGreyWhite),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -26,91 +29,72 @@ class FirstTimeBudgetCard extends StatelessWidget {
             offset: const Offset(0, 1),
           ),
         ],
-        gradient: LinearGradient(
-          colors: [
-            HexColor('#E3E6FF'),
-            HexColor('#F2F4FF'),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        // gradient: LinearGradient(
+        //   colors: [
+        //     HexColor('#E3E6FF'),
+        //     HexColor('#F2F4FF'),
+        //   ],
+        //   begin: Alignment.topLeft,
+        //   end: Alignment.bottomRight,
+        // ),
       ),
       child: ClipRRect(
         child: Stack(
           clipBehavior: Clip.hardEdge,
           children: [
-            Positioned(
+            const Positioned(
                 top: 20,
                 left: 80,
-                child: RotatedSquareDecoration(quarterTurns: .82, color: [
-                  HexColor('#FFFFFF'),
-                  HexColor('#9995AF'),
-                ])),
+                child: RotatedSquareDecoration(
+                  quarterTurns: .82,
+                )),
             // medium
-            Positioned(
+            const Positioned(
                 top: 30,
                 left: 40,
                 child: RotatedSquareDecoration(
-                  color: [
-                    HexColor('#FFFFFF'),
-                    HexColor('#9995AF'),
-                  ],
                   quarterTurns: .82,
                   size: 80,
                 )),
             //small
-            Positioned(
+            const Positioned(
                 top: 45,
                 left: 5,
                 child: RotatedSquareDecoration(
-                    size: 55,
-                    quarterTurns: 5.54,
-                    color: [
-                      HexColor('#FFFFFF'),
-                      HexColor('#9995AF'),
-                    ])),
+                  size: 55,
+                  quarterTurns: 5.54,
+                )),
 
             ///////////////////////
-            Positioned(
+            const Positioned(
                 top: 20,
                 left: 180,
-                child: RotatedSquareDecoration(quarterTurns: .82, color: [
-                  HexColor('#FFFFFF'),
-                  HexColor('#9995AF'),
-                ])),
-            Positioned(
+                child: RotatedSquareDecoration(
+                  quarterTurns: .82,
+                )),
+            const Positioned(
                 top: 30,
                 left: 250,
                 child: RotatedSquareDecoration(
                   opacity: .5,
-                  color: [
-                    HexColor('#FFFFFF'),
-                    HexColor('#9995AF'),
-                  ],
                   quarterTurns: .82,
                   size: 80,
                 )),
-            Positioned(
+            const Positioned(
                 top: 45,
                 left: 160,
                 child: RotatedSquareDecoration(
-                    size: 55,
-                    quarterTurns: 5.54,
-                    color: [
-                      HexColor('#FFFFFF'),
-                      HexColor('#9995AF'),
-                    ])),
+                  size: 55,
+                  quarterTurns: 5.54,
+                )),
 
-            Positioned(
+            const Positioned(
                 top: 45,
                 left: 310,
                 child: RotatedSquareDecoration(
-                    size: 55,
-                    quarterTurns: 5.54,
-                    color: [
-                      HexColor('#FFFFFF'),
-                      HexColor('#9995AF'),
-                    ])),
+                  size: 55,
+                  quarterTurns: 5.54,
+                )),
 
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -120,8 +104,9 @@ class FirstTimeBudgetCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       shape: BoxShape.circle,
+                      border: Border.all(color: AppColor.borderGreyWhite),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.05),
@@ -142,7 +127,9 @@ class FirstTimeBudgetCard extends StatelessWidget {
                     style: AppTextTheme.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: AppColor.blackText,
+                      color: Theme.of(context)
+                          .extension<AppGradients>()!
+                          .textTheme,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -152,7 +139,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                     style: AppTextTheme.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -194,7 +181,10 @@ class RotatedSquareDecoration extends StatelessWidget {
     super.key,
     this.size = 100,
     this.borderRadius = 0,
-    required this.color,
+    this.color = const [
+      Color(0xffFFFFFF),
+      Color(0xff9995AF),
+    ],
     this.opacity = 0.25,
     this.quarterTurns = math.pi / 2, // 90°
   });
@@ -210,7 +200,9 @@ class RotatedSquareDecoration extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: color,
+              colors: Theme.of(context).brightness == Brightness.dark
+                  ? [Colors.transparent, Colors.black]
+                  : color,
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

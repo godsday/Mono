@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:sizer/sizer.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
@@ -39,8 +39,11 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: HexColor('#E6F5F4'),
+                    color: Theme.of(context)
+                        .extension<AppGradients>()!
+                        .assetCardTheme,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColor.borderGreyWhite),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -48,14 +51,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                         offset: const Offset(0, 4),
                       ),
                     ],
-                    gradient: LinearGradient(
-                      colors: [
-                        HexColor('#E6F5F4'),
-                        HexColor('#F0FDFB'),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    // gradient: LinearGradient(
+                    //   colors: [
+                    //     HexColor('#E6F5F4'),
+                    //     HexColor('#F0FDFB'),
+                    //   ],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   child: Stack(
                     children: [
@@ -91,7 +94,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   ),
                                   child: Icon(
                                     Icons.account_balance_wallet,
-                                    color: AppColor.textPrimary,
+                                    color: Theme.of(context).disabledColor,
                                     size: 20,
                                   ),
                                 ),
@@ -101,7 +104,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   style: AppTextTheme.poppins(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    color: AppColor.textPrimary,
+                                    color: Theme.of(context).disabledColor,
                                   ),
                                 ),
                               ],
@@ -181,8 +184,12 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: HexColor('#E6F5F4'),
+                    color: Theme.of(context)
+                        .extension<AppGradients>()!
+                        .assetCardTheme,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColor.borderGreyWhite),
+
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -190,14 +197,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                         offset: const Offset(0, 4),
                       ),
                     ],
-                    gradient: LinearGradient(
-                      colors: [
-                        HexColor('#E6F5F4'),
-                        HexColor('#F0FDFB'),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    // gradient: LinearGradient(
+                    //   colors: [
+                    //     HexColor('#E6F5F4'),
+                    //     HexColor('#F0FDFB'),
+                    //   ],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   child: Stack(
                     children: [
@@ -230,7 +237,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                color: AppColor.textPrimary,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 16),

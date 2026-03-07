@@ -19,7 +19,7 @@ class TotalBalanceCard extends StatelessWidget {
       return Container(
         height: 25.5.h,
         decoration: BoxDecoration(
-            color: AppColor.totalBalanceCardBg,
+            color: Theme.of(context).cardColor,
             boxShadow: [
               BoxShadow(
                   spreadRadius: 1.sp,
@@ -105,7 +105,8 @@ class TotalBalanceCard extends StatelessWidget {
                                 child: Transform.scale(
                                   scale: .67,
                                   child: Switch.adaptive(
-                                      activeThumbColor: AppColor.mainHexcolor,
+                                      activeThumbColor:
+                                          Theme.of(context).primaryColor,
                                       value: homeProvider.isThisMonth,
                                       onChanged: (value) {
                                         homeProvider.toggleThisMonth(value);

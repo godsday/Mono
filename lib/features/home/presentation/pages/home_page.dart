@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/notifications/firebase_notification_service.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/features/home/presentation/widgets/smart_insight_card.dart';
 import 'package:mono/routes/route_names.dart';
@@ -105,8 +106,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         height: 12.h,
                         width: 76.w,
                         decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF37474F), // HexColor("#37474F")
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(24.0)),
                       )),
 
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           LShapeWidget(
                             type: "Income",
                             orientation: LShapeOrientation.leftLegOnLeft,
-                            color: AppColor.greenContainer,
+                            color: Theme.of(context).dividerColor,
                             icons: Icons.account_balance,
                             categories: homeProvider.topIncomeCategories,
                             totalAmount: homeProvider.totalIncome,
@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           LShapeWidget(
                             type: "Expense",
                             orientation: LShapeOrientation.leftLegOnRight,
-                            color: AppColor.redContainer,
+                            color: Theme.of(context).hoverColor,
                             icons: Icons.account_balance_wallet,
                             categories: homeProvider.topExpenseCategories,
                             totalAmount: homeProvider.totalExpense,
@@ -271,11 +271,8 @@ class HomepageCurveShape extends StatelessWidget {
       clipper: CurveClipper2(),
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF429690), Color(0xFF1E4744)],
-          ),
+          gradient:
+              Theme.of(context).extension<AppGradients>()?.primaryGradient,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(15),

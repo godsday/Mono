@@ -225,6 +225,7 @@ class _MyAppState extends State<MyApp> {
           theme: Styles.themeData(darkThemeValue.darkTheme, context),
           initialRoute: RouteNames.splash,
           onGenerateRoute: AppRouter.onGenerateRoute,
+          themeMode: ThemeMode.system,
         );
       });
     });

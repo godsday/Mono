@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 
@@ -15,13 +16,14 @@ class IncomeExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final gradients = theme.extension<AppGradients>()!;
     bool isIncome = transactionType == "Earnings";
 
     return Container(
       decoration: BoxDecoration(
-        color: isIncome
-            ? AppColor.mainHexcolor
-            : const Color.fromARGB(255, 105, 55, 55),
+        color:
+            isIncome ? gradients.incomeContainer : gradients.expenseContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(

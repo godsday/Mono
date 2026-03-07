@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
@@ -38,7 +39,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: HexColor('#EFF7F9'),
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .goalCardTheme,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: HexColor('#A5C9FF'), width: 2),
                   boxShadow: [
@@ -94,7 +97,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: AppColor.textPrimary,
+                              color: Theme.of(context)
+                                  .extension<AppGradients>()!
+                                  .textTheme,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -105,7 +110,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                           ),
@@ -179,7 +184,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: HexColor('#EFF7F9'),
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .goalCardTheme,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: HexColor('#A5C9FF'), width: 2),
                   boxShadow: [
@@ -235,7 +242,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: AppColor.textPrimary,
+                              color: Theme.of(context)
+                                  .extension<AppGradients>()!
+                                  .textTheme,
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -244,7 +253,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: AppColor.textGrey,
+                              color: Theme.of(context).disabledColor,
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -253,7 +262,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: AppColor.textGrey,
+                              color: Theme.of(context).disabledColor,
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -262,7 +271,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: AppColor.textGrey,
+                              color: Theme.of(context).disabledColor,
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -271,7 +280,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: AppColor.textGrey,
+                              color: Theme.of(context).disabledColor,
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -285,7 +294,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                     .copyWith(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
-                                  color: HexColor('#2D6763'),
+                                  color: Theme.of(context).primaryColor,
                                 ),
 
                                 //  Container(

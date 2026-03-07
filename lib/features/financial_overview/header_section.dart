@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -17,11 +18,9 @@ class HeaderSection extends StatelessWidget {
               width: double.infinity,
               height: 15.h,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                ),
+                gradient: Theme.of(context)
+                    .extension<AppGradients>()!
+                    .primaryGradient,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withAlpha(15),
@@ -46,7 +45,7 @@ class HeaderSection extends StatelessWidget {
                       style: AppTextTheme.montserrart(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: AppColor.white,
+                        color: AppColor.whiteColor,
                       ),
                     ),
                     SizedBox(height: 2.h),

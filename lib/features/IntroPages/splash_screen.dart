@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -67,11 +68,12 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColorDark,
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(gradient: AppColor.mainGradient),
+        decoration: BoxDecoration(
+            gradient:
+                Theme.of(context).extension<AppGradients>()?.primaryGradient),
         child: Stack(
           children: [
             Column(

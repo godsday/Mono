@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,11 +20,8 @@ class TranscationHeader extends StatelessWidget {
             width: double.infinity,
             height: 15.h,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF429690), Color(0xFF1E4744)],
-              ),
+              gradient:
+                  Theme.of(context).extension<AppGradients>()!.primaryGradient,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withAlpha(15),
@@ -38,9 +36,9 @@ class TranscationHeader extends StatelessWidget {
                 child: Text(
                   "Recent Transactions",
                   style: AppTextTheme.montserrart(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColor.white,
+                    fontSize: 18.5.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColor.whiteColor,
                   ),
                 ),
               ),

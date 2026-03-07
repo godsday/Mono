@@ -28,17 +28,23 @@ class AppTextStyles {
 
   static TextStyle? poppins12w300White(context) {
     return GoogleFonts.poppins(
-        fontSize: 12.sp, fontWeight: FontWeight.w300, color: AppColor.white);
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w300,
+        color: AppColor.whiteColor);
   }
 
   static TextStyle? poppins18w500White(context) {
     return GoogleFonts.poppins(
-        fontSize: 18.sp, fontWeight: FontWeight.w500, color: AppColor.white);
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColor.whiteColor);
   }
 
   static TextStyle? roboto18w600SemiBoldWhite(context) {
     return GoogleFonts.roboto(
-        fontSize: 18.sp, fontWeight: FontWeight.w600, color: AppColor.white);
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w600,
+        color: AppColor.whiteColor);
   }
 
   static TextStyle roboto16w600Black = GoogleFonts.roboto(

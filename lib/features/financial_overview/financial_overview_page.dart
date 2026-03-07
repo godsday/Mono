@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'budget/presentation/providers/budget_provider.dart';
@@ -38,7 +39,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,9 +78,9 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                               end: Alignment.bottomRight,
                               colors: [
                                 Colors.black,
-                                Color.fromARGB(255, 30, 35, 35),
+                                Color(0xFF1E2323),
                                 Colors.amber,
-                                Color.fromARGB(255, 3, 19, 18)
+                                Color(0xFF031312)
                               ],
                             ),
                             borderRadius: BorderRadius.circular(22),
@@ -106,12 +107,16 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                                   style: AppTextStyles.poppins16w400.copyWith(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 18,
-                                      color: const Color(0xFF21435D)),
+                                      color: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .textThemeBlueHeader),
                                 ),
-                                const Icon(
+                                Icon(
                                   Icons.arrow_forward_ios,
                                   size: 23,
-                                  color: Color(0xFF21435D),
+                                  color: Theme.of(context)
+                                      .extension<AppGradients>()!
+                                      .textThemeBlueHeader,
                                 )
                               ],
                             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/routes/route_names.dart';
@@ -27,12 +28,15 @@ class AddBudgetScreen extends StatelessWidget {
         return provider;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColor.blackText),
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
@@ -42,7 +46,7 @@ class AddBudgetScreen extends StatelessWidget {
             style: AppTextTheme.montserrart(
               fontSize: 20,
               fontWeight: FontWeight.w700,
-              color: AppColor.blackText,
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
           ),
           centerTitle: true,
@@ -108,10 +112,9 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           Text(
             'Allocate by Category',
             style: AppTextTheme.montserrart(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColor.mainHexcolor,
-            ),
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor),
           ),
           const SizedBox(height: 16),
           if (provider.availableCategories.isEmpty && provider.isLoading)
@@ -132,7 +135,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColor.blueContainer.withValues(alpha: 0.3),
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColor.blueContainer),
       ),
@@ -144,7 +147,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColor.mainHexcolor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           const SizedBox(height: 12),
@@ -281,8 +284,9 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColor.lightGrey,
+              color: Theme.of(context).primaryColorLight,
               shape: BoxShape.circle,
+              border: Border.all(color: AppColor.borderGreyWhite),
             ),
             child: Icon(Icons.category_outlined,
                 color: AppColor.grey700, size: 20),
@@ -302,7 +306,7 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
             width: 100,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColor.grey.withValues(alpha: 0.3)),
             ),
@@ -346,7 +350,7 @@ class _SaveBudgetButton extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ElevatedButton(
           onPressed: provider.isValid && !provider.isLoading
@@ -359,7 +363,7 @@ class _SaveBudgetButton extends StatelessWidget {
                 }
               : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.mainHexcolor,
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
             disabledBackgroundColor: AppColor.grey.withValues(alpha: 0.3),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),

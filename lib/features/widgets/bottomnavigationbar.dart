@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
 import 'package:mono/features/setting_screen/presentation/pages/settings_screen.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
+import 'package:sizer/sizer.dart';
 
 class BottomNavigator extends StatefulWidget {
   final int index;
@@ -29,8 +29,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       body: pages[_selectedIndex ?? widget.index],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
-        selectedLabelStyle: AppTextTheme.montserrart().copyWith(
-            color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
+        selectedLabelStyle: AppTextTheme.poppins().copyWith(
+            fontSize: 14.sp,
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w700),
         items: const [
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
@@ -45,13 +47,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
         ],
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         iconSize: 30,
         showUnselectedLabels: false,
         showSelectedLabels: true,
         currentIndex: _selectedIndex ?? widget.index,
-        selectedItemColor: AppColor.mainHexcolor,
-        unselectedItemColor: Colors.black45,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Theme.of(context).primaryColorDark,
         onTap: _onitemtap,
       ),
     );

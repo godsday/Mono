@@ -62,7 +62,7 @@ void showAddCategoryDialog(
                   SizedBox(height: 1.h),
                   TextField(
                     controller: categoryNameController,
-                    decoration: textfielddecor("Category name"),
+                    decoration: textfielddecor(context, "Category name"),
                     autofocus: true,
                   ),
                 ],
@@ -141,7 +141,7 @@ void showAddCategoryDialog(
             child: Text(
               isAlert ? 'Yes' : 'Save',
               style: AppTextStyles.poppins16w600.copyWith(
-                color: AppColor.white,
+                color: AppColor.whiteColor,
               ),
             ),
           ),
