@@ -243,7 +243,16 @@ class _AddScreenState extends State<AddScreen> {
                                 ],
                                 keyboardType: TextInputType.number,
                                 decoration: textfielddecor(context,
-                                    context.l10n.transaction_amount_hint),
+                                        context.l10n.transaction_amount_hint)
+                                    .copyWith(
+                                  prefixText: '${context.currencySymbol} ',
+                                  prefixStyle:
+                                      AppTextStyles.poppins16w600.copyWith(
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 height: 1.5.h,

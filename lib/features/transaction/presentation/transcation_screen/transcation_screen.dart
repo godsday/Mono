@@ -500,7 +500,7 @@ Widget _buildGroupedTransactionList(
                       ? SizedBox(
                           width: 34.w,
                           child: AutoSizeText(
-                            "- ${transaction.amount.toStringAsFixed(0)}",
+                            "- ${context.formatCurrency(transaction.amount)}",
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
@@ -513,7 +513,7 @@ Widget _buildGroupedTransactionList(
                       : SizedBox(
                           width: 35.w,
                           child: AutoSizeText(
-                            "+ ${transaction.amount.toStringAsFixed(0)}",
+                            "+ ${context.formatCurrency(transaction.amount)}",
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,

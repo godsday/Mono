@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class IncomeExpenseCard extends StatelessWidget {
   final String transactionType;
@@ -60,7 +61,7 @@ class IncomeExpenseCard extends StatelessWidget {
               ],
             ),
             AutoSizeText(
-              '₹ ${value.toStringAsFixed(0)}',
+              context.formatCurrency(value),
               maxLines: 1,
               style: const TextStyle(
                 color: Colors.white,

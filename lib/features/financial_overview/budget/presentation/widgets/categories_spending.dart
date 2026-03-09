@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class CategoriesSpendingCard extends StatefulWidget {
   final String title;
@@ -131,8 +132,8 @@ class _CategoriesSpendingCardState extends State<CategoriesSpendingCard> {
                                       ),
                                       Text(
                                         allocated > 0
-                                            ? '₹${spent.toStringAsFixed(0)} / ₹${allocated.toStringAsFixed(0)}'
-                                            : '₹${spent.toStringAsFixed(0)}',
+                                            ? '${context.formatCurrency(spent)} / ${context.formatCurrency(allocated)}'
+                                            : context.formatCurrency(spent),
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w500,

@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import '../../domain/entities/budget_discipline_data.dart';
 
 class BudgetDisciplineChart extends StatelessWidget {
@@ -64,7 +65,7 @@ class BudgetDisciplineChart extends StatelessWidget {
               final isBudget = rodIndex == 0;
               final l10n = AppLocalizations.of(context)!;
               return BarTooltipItem(
-                '${isBudget ? l10n.budget_tooltip : l10n.spent_tooltip}₹${rod.toY.toStringAsFixed(0)}',
+                '${isBudget ? l10n.budget_tooltip : l10n.spent_tooltip}${context.formatCurrency(rod.toY)}',
                 const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
               );

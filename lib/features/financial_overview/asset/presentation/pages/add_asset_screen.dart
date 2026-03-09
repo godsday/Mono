@@ -5,6 +5,7 @@ import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/asset_entity.dart';
 import '../providers/assets_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddAssetScreen extends StatefulWidget {
   const AddAssetScreen({super.key});
@@ -143,7 +144,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 keyboardType: TextInputType.number,
                 style: AppTextTheme.poppins(color: Colors.black),
                 decoration: InputDecoration(
-                  labelText: 'Current Value (₹)',
+                  labelText: 'Current Value (${context.currencySymbol})',
                   hintText: '0.00',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),

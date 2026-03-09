@@ -179,25 +179,23 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
   }
 
   String _getLocalizedMessage(BuildContext context) {
-    // Extract amount from message if it exists (e.g., "₹100" or just numbers)
-    // The previous implementation used widget.message which contains something like "You have only ₹100 left..."
-    final amountRegex = RegExp(r'[₹\$]\d+');
-    final match = amountRegex.firstMatch(widget.message);
-    final amount = match?.group(0) ?? "";
+    final rawAmount = double.tryParse(widget.message);
+    final formattedAmount =
+        rawAmount != null ? context.formatCurrency(rawAmount) : "";
 
     switch (widget.id) {
       case "budget_warning":
-        return context.l10n.insight_budget_warning_message(amount);
+        return context.l10n.insight_budget_warning_message(formattedAmount);
       case "budget_safe":
-        return context.l10n.insight_budget_safe_message(amount);
+        return context.l10n.insight_budget_safe_message(formattedAmount);
       case "budget_exceeded":
-        return context.l10n.insight_budget_exceeded_message(amount);
+        return context.l10n.insight_budget_exceeded_message(formattedAmount);
       case "no_budget":
         return context.l10n.insight_no_budget_message;
       case "daily_safe":
-        return context.l10n.insight_smart_tip_message(amount);
+        return context.l10n.insight_smart_tip_message(formattedAmount);
       case "savings":
-        return context.l10n.insight_savings_message(amount);
+        return context.l10n.insight_savings_message(formattedAmount);
       default:
         return context.l10n.insight_default_message;
     }

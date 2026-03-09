@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 import '../pages/add_asset_screen.dart';
 import '../providers/assets_provider.dart';
@@ -107,7 +108,7 @@ class AssetsOverviewCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '₹ ${totalValue.toStringAsFixed(0)}',
+                          context.formatCurrency(totalValue),
                           style: AppTextTheme.poppins(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -184,7 +185,7 @@ class AssetsOverviewCard extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        '₹${asset.currentValue.toStringAsFixed(0)}',
+                        context.formatCurrency(asset.currentValue),
                         style: AppTextTheme.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

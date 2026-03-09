@@ -56,11 +56,8 @@ class TotalBalanceCard extends StatelessWidget {
                             ? context.l10n.balance_is_zero
                             : homeProvider.totalBalance < 0
                                 ? context.l10n.balance_overspent
-                                :
-                                // homeProvider.isThisMonth
-                                //     ? '₹ ${homeProvider.thisMonthBalance.toStringAsFixed(0)}'
-                                //     :
-                                '₹ ${homeProvider.totalBalance.toStringAsFixed(0)}',
+                                : context
+                                    .formatCurrency(homeProvider.totalBalance),
                         maxLines: 1,
                         style: AppTextStyles.roboto18w600SemiBoldWhite(context)!
                             .copyWith(

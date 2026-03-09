@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/theme/app_theme.dart';
@@ -256,9 +257,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   return DropdownMenuItem<String>(
                                     value: currency,
                                     child: Text(
-                                      currency,
-                                      style:
-                                          AppTextTheme.poppins(fontSize: 14.sp),
+                                      '${AppSettingsProvider.getCurrencySymbol(currency)} $currency',
+                                      style: AppTextStyles.roboto16w600Black
+                                          .copyWith(fontSize: 14.sp),
                                     ),
                                   );
                                 }).toList(),

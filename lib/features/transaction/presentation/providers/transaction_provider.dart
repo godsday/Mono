@@ -264,30 +264,27 @@ class TransactionProvider with ChangeNotifier {
     return groupTransactionsUseCase(listingMethod().value);
   }
 
-  ({String title, String amount}) getHeadingData() {
+  ({String title, double amount}) getHeadingData() {
     if (itemvalue == "Income") {
-      return (title: 'Savings', amount: totalIncome.toStringAsFixed(0));
+      return (title: 'Savings', amount: totalIncome);
     } else if (itemvalue == 'Expense') {
-      return (title: 'Spendings', amount: totalExpense.toStringAsFixed(0));
+      return (title: 'Spendings', amount: totalExpense);
     } else if (itemvalue == 'Today') {
       double todayTotal = totalBalanceUseCase.call(todaylistnotifier.value);
-      return (title: 'Today', amount: todayTotal.toStringAsFixed(0));
+      return (title: 'Today', amount: todayTotal);
     } else if (itemvalue == 'Yesterday') {
-      return (title: 'Yesterday', amount: '');
+      return (title: 'Yesterday', amount: 0.0);
     } else if (itemvalue == 'Weekly') {
       double weeklyTotal = totalBalanceUseCase.call(weeklylistnotifier.value);
-      return (title: 'This Week', amount: weeklyTotal.toStringAsFixed(0));
+      return (title: 'This Week', amount: weeklyTotal);
     } else if (itemvalue == 'Monthly') {
       double monthlyTotal = totalBalanceUseCase.call(monthlylistnotifier.value);
-      return (title: 'This Month', amount: monthlyTotal.toStringAsFixed(0));
+      return (title: 'This Month', amount: monthlyTotal);
     } else if (itemvalue == 'Custom') {
       double customTotal = totalBalanceUseCase.call(customlistnotifier.value);
-      return (title: 'Custom', amount: customTotal.toStringAsFixed(0));
+      return (title: 'Custom', amount: customTotal);
     } else {
-      return (
-        title: 'All Transcations',
-        amount: totalBalance.toStringAsFixed(0)
-      );
+      return (title: 'All Transcations', amount: totalBalance);
     }
   }
 

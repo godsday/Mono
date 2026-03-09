@@ -26,6 +26,24 @@ class AppSettingsProvider extends ChangeNotifier {
   String get currencyCode => _appSettings?.currencyCode ?? 'USD';
   String get languageCode => _appSettings?.languageCode ?? 'en';
 
+  String get currencySymbol => getCurrencySymbol(currencyCode);
+
+  static String getCurrencySymbol(String code) {
+    switch (code) {
+      case 'INR':
+        return '₹';
+      case 'EUR':
+        return '€';
+      case 'GBP':
+        return '£';
+      case 'JPY':
+        return '¥';
+      case 'USD':
+      default:
+        return '\$';
+    }
+  }
+
   Future<void> _loadSettings() async {
     _isLoading = true;
     notifyListeners();

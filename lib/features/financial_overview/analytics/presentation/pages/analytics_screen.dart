@@ -97,8 +97,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   const SizedBox(height: 16),*/
                   /*  _buildSectionCard(
                     title: 'Net Worth Growth',
-                    subtitle:
-                        '₹${provider.netWorthData!.currentNetWorth.toStringAsFixed(0)}',
+                    subtitle: context.formatCurrency(
+                        provider.netWorthData!.currentNetWorth),
                     child: NetWorthChart(data: provider.netWorthData!),
                   ),*/
                   // const SizedBox(height: 16),
@@ -168,7 +168,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   //     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   //     child: Center(
                   //       child: Text(
-                  //         '₹${provider.futureProjection!.toStringAsFixed(0)}',
+                  //         context.formatCurrency(provider.futureProjection!),
                   //         style: const TextStyle(
                   //             fontSize: 32,
                   //             fontWeight: FontWeight.bold,

@@ -6,6 +6,7 @@ import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
 import '../providers/goals_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddGoalScreen extends StatefulWidget {
   const AddGoalScreen({super.key});
@@ -150,7 +151,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 keyboardType: TextInputType.number,
                 style: AppTextTheme.poppins(color: Colors.black),
                 decoration: InputDecoration(
-                  labelText: 'Target Amount (₹)',
+                  labelText: 'Target Amount (${context.currencySymbol})',
                   hintText: '0.00',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
@@ -175,7 +176,7 @@ class LShapeWidget extends StatelessWidget {
               right: 0,
               height: totalHeight * 0.04.h, // Adjust height of content area
               child: Text(
-                '₹ ${totalAmount.toStringAsFixed(0)}',
+                context.formatCurrency(totalAmount),
                 style: AppTextStyles.roboto16w600Black.copyWith(
                     fontSize: 18,
                     color:

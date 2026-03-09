@@ -161,7 +161,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
               color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
             decoration: InputDecoration(
-              prefixText: '₹ ',
+              prefixText: '${context.currencySymbol} ',
               prefixStyle: AppTextTheme.montserrart(
                 fontSize: 32,
                 fontWeight: FontWeight.w700,
@@ -230,7 +230,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
               ),
             ),
             Text(
-              '₹${remaining.abs().toStringAsFixed(0)}',
+              context.formatCurrency(remaining.abs()),
               style: AppTextTheme.montserrart(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -325,12 +325,12 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
                 fontWeight: FontWeight.w600,
                 color: AppColor.blackText,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
                 border: InputBorder.none,
-                prefixText: '₹',
-                prefixStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                prefixText: context.currencySymbol,
+                prefixStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                 hintText: '0',
               ),
               onChanged: (value) {

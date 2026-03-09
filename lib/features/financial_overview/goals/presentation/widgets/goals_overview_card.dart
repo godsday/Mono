@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/financial_overview/widgets/safe_background_image.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -218,7 +219,7 @@ class _GoalItem extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          '₹${goal.savedAmount.toStringAsFixed(0)}/₹${goal.targetAmount.toStringAsFixed(0)}',
+          '${context.formatCurrency(goal.savedAmount)} / ${context.formatCurrency(goal.targetAmount)}',
           style: AppTextTheme.poppins(
             fontSize: 12,
             fontWeight: FontWeight.w500,

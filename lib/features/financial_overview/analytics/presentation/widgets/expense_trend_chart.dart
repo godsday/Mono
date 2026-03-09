@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class ExpenseTrendChart extends StatelessWidget {
   final Map<String, double> data;
@@ -100,7 +101,7 @@ class ExpenseTrendChart extends StatelessWidget {
                   LineTouchTooltipData(getTooltipItems: (touchedSpots) {
                 return touchedSpots.map((spot) {
                   return LineTooltipItem(
-                    '₹${spot.y.toStringAsFixed(0)}',
+                    context.formatCurrency(spot.y),
                     const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   );

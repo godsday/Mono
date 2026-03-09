@@ -257,16 +257,19 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                         Expanded(
                             child: _buildInfoColumn(
                                 context.l10n.budget_label_budget,
-                                '₹ ${widget.budget.totalBudget.toStringAsFixed(0)}')),
+                                context.formatCurrency(
+                                    widget.budget.totalBudget))),
                         Expanded(
                             child: _buildInfoColumn(
                                 context.l10n.budget_label_spending,
-                                '₹ ${widget.budget.spentAmount.toStringAsFixed(0)}',
+                                context
+                                    .formatCurrency(widget.budget.spentAmount),
                                 isAlert: progress >= 1.0)),
                         Expanded(
                             child: _buildInfoColumn(
                                 context.l10n.budget_label_remaining,
-                                '₹ ${widget.budget.remainingAmount.toStringAsFixed(0)}',
+                                context.formatCurrency(
+                                    widget.budget.remainingAmount),
                                 isAlert: progress >= 1.0)),
                       ],
                     ),

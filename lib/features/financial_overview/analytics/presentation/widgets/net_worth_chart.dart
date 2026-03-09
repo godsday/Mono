@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import '../../domain/entities/net_worth_data.dart';
 
 class NetWorthChart extends StatelessWidget {
@@ -103,7 +104,7 @@ class NetWorthChart extends StatelessWidget {
                   LineTouchTooltipData(getTooltipItems: (touchedSpots) {
                 return touchedSpots.map((spot) {
                   return LineTooltipItem(
-                    '₹${spot.y.toStringAsFixed(0)}',
+                    context.formatCurrency(spot.y),
                     const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   );
