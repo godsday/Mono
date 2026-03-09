@@ -27,7 +27,6 @@ class CalculateNetWorthUseCase {
     // Last month's net worth = Current - (Current Month Income - Current Month Expense)
     Map<DateTime, double> history = {};
     DateTime now = DateTime.now();
-    DateTime currentMonth = DateTime(now.year, now.month);
 
     double runningNetWorth = currentNetWorth;
 

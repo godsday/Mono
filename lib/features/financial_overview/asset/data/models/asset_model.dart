@@ -1,4 +1,5 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 import '../../domain/entities/asset_entity.dart';
 
 part 'asset_model.g.dart';
