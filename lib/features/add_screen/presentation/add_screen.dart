@@ -484,7 +484,7 @@ class _AddScreenState extends State<AddScreen> {
                                       if (provider.categorySelected == null ||
                                           provider.categorySelected!.isEmpty) {
                                         ScaffoldMessenger.of(context)
-                                            .showSnackBar(customSnak(context,
+                                            .showSnackBar(customSnack(context,
                                                 message: context.l10n
                                                     .error_select_category));
                                         return;

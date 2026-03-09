@@ -11,6 +11,7 @@ import 'package:mono/features/home/domain/usecase/get_top_categories.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/models/top_category_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mono/providers/notification_provider.dart';
 
 class HomeProvider with ChangeNotifier {
   final TotalBalanceUseCase totalBalanceUseCase;
@@ -34,6 +35,7 @@ class HomeProvider with ChangeNotifier {
   List<TranscationModel> _transactions = [];
   bool _isThisMonth = false;
   String _userName = '';
+  NotificationProvider? _notificationProvider;
 
   // ---------------- GETTERS ----------------
 
@@ -82,7 +84,18 @@ class HomeProvider with ChangeNotifier {
   void updateTransactions(List<TranscationModel> transactions) {
     _transactions = transactions;
     _generateInsight();
+    _checkBudgetAlerts();
     notifyListeners();
+  }
+
+  void updateNotificationProvider(NotificationProvider notificationProvider) {
+    _notificationProvider = notificationProvider;
+  }
+
+  void _checkBudgetAlerts() {
+    if (_notificationProvider != null && _budget > 0) {
+      _notificationProvider!.triggerBudgetAlert(thisMonthExpense, _budget);
+    }
   }
 
   void toggleThisMonth(bool value) {

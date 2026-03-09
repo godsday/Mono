@@ -155,17 +155,21 @@ Future<void> main() async {
                 updateTransactionUseCase: updateTransaction,
                 groupTransactionsUseCase: groupTransactionsUseCase,
               )),
-      ChangeNotifierProxyProvider<TransactionProvider, HomeProvider>(
+      ChangeNotifierProxyProvider2<TransactionProvider, NotificationProvider,
+          HomeProvider>(
         create: (_) => HomeProvider(
-            getCurrentMonthBudgetUseCase: getCurrentMonthBudgetUseCase,
-            generateInsightsUseCase: generateInsightsUseCase,
-            getTopCategoriesUseCase: getTopCategoriesUseCase,
-            calculateThisMonth: calculateThisMonth,
-            totalBalanceUseCase: totalBalanceUseCase,
-            totalIncomeUseCase: totalIncomeUseCase,
-            totalExpenseUseCase: totalExpenseUseCase),
-        update: (context, transactionProvider, homeProvider) {
-          homeProvider!.updateTransactions(transactionProvider.transactions);
+          getCurrentMonthBudgetUseCase: getCurrentMonthBudgetUseCase,
+          generateInsightsUseCase: generateInsightsUseCase,
+          getTopCategoriesUseCase: getTopCategoriesUseCase,
+          calculateThisMonth: calculateThisMonth,
+          totalBalanceUseCase: totalBalanceUseCase,
+          totalIncomeUseCase: totalIncomeUseCase,
+          totalExpenseUseCase: totalExpenseUseCase,
+        ),
+        update:
+            (context, transactionProvider, notificationProvider, homeProvider) {
+          homeProvider!.updateNotificationProvider(notificationProvider);
+          homeProvider.updateTransactions(transactionProvider.transactions);
           return homeProvider;
         },
       ),
@@ -185,12 +189,17 @@ Future<void> main() async {
                 addAssetUseCase: addAsset,
                 deleteAssetUseCase: deleteAsset,
               )),
-      ChangeNotifierProvider(
-          create: (_) => GoalsProvider(
-                getGoalsUseCase: getGoals,
-                addGoalUseCase: addGoal,
-                updateGoalProgressUseCase: updateGoalProgress,
-              )),
+      ChangeNotifierProxyProvider<NotificationProvider, GoalsProvider>(
+        create: (_) => GoalsProvider(
+          getGoalsUseCase: getGoals,
+          addGoalUseCase: addGoal,
+          updateGoalProgressUseCase: updateGoalProgress,
+        ),
+        update: (context, notificationProvider, goalsProvider) {
+          goalsProvider!.updateNotificationProvider(notificationProvider);
+          return goalsProvider;
+        },
+      ),
       ChangeNotifierProvider(create: (_) => WealthAnalyticsProvider()),
     ], child: const MyApp()),
   );

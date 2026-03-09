@@ -91,7 +91,7 @@ void showAddCategoryDialog(
               print(data);
               if (categoryName.isEmpty) {
                 // Show error if category name is empty
-                ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
+                ScaffoldMessenger.of(context).showSnackBar(customSnack(context,
                     message: "Category name cannot be empty"));
                 return;
               }
@@ -110,7 +110,7 @@ void showAddCategoryDialog(
 
               if (categoryExists) {
                 // Show error if category already exists
-                ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
+                ScaffoldMessenger.of(context).showSnackBar(customSnack(context,
                     message: "Category '$categoryName' already exists"));
                 return;
               }

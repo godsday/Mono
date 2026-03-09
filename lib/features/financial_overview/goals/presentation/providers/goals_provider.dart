@@ -3,6 +3,7 @@ import '../../domain/entities/goal_entity.dart';
 import '../../domain/usecases/add_goal_usecase.dart';
 import '../../domain/usecases/get_goals_usecase.dart';
 import '../../domain/usecases/update_goal_progress_usecase.dart';
+import 'package:mono/providers/notification_provider.dart';
 
 class GoalsProvider extends ChangeNotifier {
   final GetGoalsUseCase getGoalsUseCase;
@@ -11,6 +12,7 @@ class GoalsProvider extends ChangeNotifier {
 
   List<GoalEntity> _goals = [];
   bool _isLoading = false;
+  NotificationProvider? _notificationProvider;
 
   GoalsProvider({
     required this.getGoalsUseCase,
@@ -42,11 +44,24 @@ class GoalsProvider extends ChangeNotifier {
 
     try {
       _goals = await getGoalsUseCase();
+      _checkGoalMilestones();
     } catch (e) {
       debugPrint("Error loading goals: $e");
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  void updateNotificationProvider(NotificationProvider notificationProvider) {
+    _notificationProvider = notificationProvider;
+  }
+
+  void _checkGoalMilestones() {
+    if (_notificationProvider == null) return;
+    for (var goal in _goals) {
+      final progress = (goal.savedAmount / goal.targetAmount).clamp(0.0, 1.0);
+      _notificationProvider!.triggerGoalMilestone(goal.title, progress);
     }
   }
 

@@ -442,7 +442,7 @@ Widget _buildGroupedTransactionList(
                   Provider.of<TransactionProvider>(context, listen: false)
                       .deleteTransaction(transaction.id);
 
-                  final snack = customSnak(context,
+                  final snack = customSnack(context,
                       message: context.l10n.message_deleted);
                   ScaffoldMessenger.of(context).showSnackBar(snack);
                 }),

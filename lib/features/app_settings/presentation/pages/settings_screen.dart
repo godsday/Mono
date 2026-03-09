@@ -259,7 +259,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     child: Text(
                                       '${AppSettingsProvider.getCurrencySymbol(currency)} $currency',
                                       style: AppTextStyles.roboto16w600Black
-                                          .copyWith(fontSize: 14.sp),
+                                          .copyWith(
+                                              fontSize: 14.sp,
+                                              color: Theme.of(context)
+                                                  .extension<AppGradients>()!
+                                                  .textTheme),
                                     ),
                                   );
                                 }).toList(),

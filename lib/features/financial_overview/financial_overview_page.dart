@@ -44,7 +44,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 14.5.h),
-        child: HeaderSection(),
+        child: const HeaderSection(),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mono/core/notifications/firebase_notification_service.dart';
+import 'package:mono/core/notifications/notification_service.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/features/home/presentation/widgets/smart_insight_card.dart';
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      FirebaseNotificationService().init();
+      NotificationService().init();
       Provider.of<TransactionProvider>(context, listen: false)
           .loadTransactions();
 
