@@ -71,7 +71,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           opacity: 0.8,
                           child: SafeBackgroundImage(
                             imagePath:
-                                'assets/images/building-big.png', // Placeholder
+                                'assets/images/building4x.png', // Placeholder
                             fit: BoxFit.contain,
                             fallback: Icon(Icons.location_city_rounded,
                                 size: 80,
@@ -225,7 +225,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           opacity: 0.8,
                           child: SafeBackgroundImage(
                             imagePath:
-                                'assets/images/building-big.png', // Placeholder
+                                'assets/images/building4x.png', // Placeholder
                             fit: BoxFit.contain,
                             fallback: Icon(Icons.location_city_rounded,
                                 size: 80,

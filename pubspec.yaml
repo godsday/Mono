@@ -96,25 +96,20 @@ flutter:
     - assets/images/piggybank.png
     - assets/images/monotree.png
     - assets/images/OO.png
-    - assets/images/singhboy.png
     - assets/images/Appicon.png
     - assets/images/onboardbg.png
     - assets/images/animation/paymentshero1.json
     - assets/images/rings.png
     - assets/images/wallet.svg
     - assets/images/goals.svg
-    - assets/images/boat.svg
     - assets/images/asssets.svg
-    - assets/images/arrow.svg
-    - assets/images/building_firsttime.svg
     - assets/images/building_overview.svg
-    - assets/images/food.svg
     - assets/images/shopping.svg
     - assets/images/transport.svg
-    - assets/images/assetBOverview.png
-    - assets/images/boat-first.png
-    - assets/images/arrow-first.png
-    - assets/images/building-big.png
+    - assets/images/boat4x.png
+    - assets/images/arrow4x.png
+    - assets/images/building4x.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -81,8 +81,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
 
                     // lightbulb icon
-                    Positioned(
-                      top: 1.5.h,
+                    /*  Positioned(
+                      top: 1.5.h, 
                       right: 7.w,
                       child: Container(
                         width: 7.w,
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           size: 18,
                         ),
                       ),
-                    ),
+                    ),*/
 
                     // Detail card (Dark background card)
                     Positioned(

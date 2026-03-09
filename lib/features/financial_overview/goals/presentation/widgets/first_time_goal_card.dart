@@ -66,7 +66,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       child: Opacity(
                         opacity: 1,
                         child: SafeBackgroundImage(
-                          imagePath: 'assets/images/boat-first.png',
+                          imagePath: 'assets/images/boat4x.png',
                           fit: BoxFit.contain,
                           fallback: Icon(Icons.kayaking,
                               size: 80,
@@ -75,21 +75,23 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       ),
                     ),
 
-                    Positioned(
-                      bottom: 0,
-                      left: 10,
-                      width: 170,
-                      child: Opacity(
-                        opacity: 1,
-                        child: SafeBackgroundImage(
-                          imagePath: 'assets/images/arrow-first.png',
-                          fit: BoxFit.contain,
-                          fallback: Icon(Icons.kayaking,
-                              size: 80,
-                              color: Colors.grey.withValues(alpha: 0.2)),
-                        ),
-                      ),
-                    ),
+                    Theme.of(context).brightness == Brightness.light
+                        ? Positioned(
+                            bottom: 0,
+                            left: 10,
+                            width: 170,
+                            child: Opacity(
+                              opacity: 1,
+                              child: SafeBackgroundImage(
+                                imagePath: 'assets/images/arrow4x.png',
+                                fit: BoxFit.contain,
+                                fallback: Icon(Icons.kayaking,
+                                    size: 80,
+                                    color: Colors.grey.withValues(alpha: 0.2)),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
 
                     Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -221,7 +223,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       child: Opacity(
                         opacity: 1,
                         child: SafeBackgroundImage(
-                          imagePath: 'assets/images/boat-first.png',
+                          imagePath: 'assets/images/boat4x.png',
                           fit: BoxFit.contain,
                           fallback: Icon(Icons.kayaking,
                               size: 80,
@@ -237,7 +239,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                       child: Opacity(
                         opacity: 1,
                         child: SafeBackgroundImage(
-                          imagePath: 'assets/images/arrow-first.png',
+                          imagePath: 'assets/images/arrow4x.png',
                           fit: BoxFit.contain,
                           fallback: Icon(Icons.kayaking,
                               size: 80,

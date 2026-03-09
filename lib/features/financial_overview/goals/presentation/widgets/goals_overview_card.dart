@@ -82,7 +82,7 @@ class GoalsOverviewCard extends StatelessWidget {
                       child: Opacity(
                         opacity: 0.9,
                         child: SafeBackgroundImage(
-                          imagePath: 'assets/images/boat-first.png',
+                          imagePath: 'assets/images/boat4x.png',
                           fit: BoxFit.contain,
                           fallback: Icon(Icons.kayaking,
                               size: 50,

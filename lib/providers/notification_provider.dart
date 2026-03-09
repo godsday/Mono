@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/features/app_settings/presentation/widgets/sharedprefernce.dart';
 import 'package:mono/core/notifications/notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationProvider with ChangeNotifier {
   NotificationPreference notificationPreference = NotificationPreference();
@@ -29,22 +30,37 @@ class NotificationProvider with ChangeNotifier {
     );
   }
 
-  void triggerBudgetAlert(double totalSpent, double budgetLimit) {
+  Future<void> triggerBudgetAlert(double totalSpent, double budgetLimit) async {
     if (!_notifValue) return;
 
+    final prefs = await SharedPreferences.getInstance();
+    final lastNotifDate = prefs.getString('last_budget_notif_date');
+    final today = DateTime.now().toIso8601String().split('T')[0];
+
+    if (lastNotifDate == today) return;
+
+    String? title;
+    String? body;
+    int? id;
+
     if (totalSpent > budgetLimit) {
-      NotificationService().showInstantNotification(
-        id: 200,
-        title: 'Budget Exceeded! ⚠️',
-        body:
-            'You have spent \$${totalSpent.toStringAsFixed(2)}, which is over your budget of \$${budgetLimit.toStringAsFixed(2)}.',
-      );
+      title = 'Budget Exceeded! ⚠️';
+      body =
+          'You have spent \$${totalSpent.toStringAsFixed(2)}, which is over your budget of \$${budgetLimit.toStringAsFixed(2)}.';
+      id = 200;
     } else if (totalSpent > budgetLimit * 0.9) {
-      NotificationService().showInstantNotification(
-        id: 201,
-        title: 'Budget Warning 🔔',
-        body: 'You have reached 90% of your monthly budget.',
+      title = 'Budget Warning 🔔';
+      body = 'You have reached 90% of your monthly budget.';
+      id = 201;
+    }
+
+    if (title != null && body != null && id != null) {
+      await NotificationService().showInstantNotification(
+        id: id,
+        title: title,
+        body: body,
       );
+      await prefs.setString('last_budget_notif_date', today);
     }
   }
 
