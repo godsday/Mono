@@ -13,6 +13,7 @@ import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card
 import 'package:mono/features/home/presentation/widgets/shapes/curve_shape_u_card.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -157,6 +158,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               : SmartInsightCard(
                                   key:
                                       ValueKey(homeProvider.currentInsight!.id),
+                                  id: homeProvider.currentInsight!.id,
                                   title: homeProvider.currentInsight!.title,
                                   message: homeProvider.currentInsight!.message,
                                   icon: Icons.lightbulb_outline,
@@ -209,7 +211,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             LShapeWidget(
-                              type: "Income",
+                              type: context.l10n.transaction_type_income,
                               orientation: LShapeOrientation.leftLegOnLeft,
                               color: Theme.of(context).dividerColor,
                               icons: Icons.account_balance,
@@ -218,7 +220,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             ),
                             SizedBox(width: 4.w),
                             LShapeWidget(
-                              type: "Expense",
+                              type: context.l10n.transaction_type_expense,
                               orientation: LShapeOrientation.leftLegOnRight,
                               color: Theme.of(context).hoverColor,
                               icons: Icons.account_balance_wallet,

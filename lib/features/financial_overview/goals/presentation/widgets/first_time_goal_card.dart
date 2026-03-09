@@ -2,10 +2,10 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class FirstTimeGoalCard extends StatefulWidget {
   const FirstTimeGoalCard({super.key});
@@ -97,7 +97,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "What You're Working For",
+                            context.l10n.first_time_goal_title,
                             style: AppTextTheme.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -110,7 +110,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                           SizedBox(
                             width: 200,
                             child: Text(
-                              'Turn your dreams into achievable goals',
+                              context.l10n.first_time_goal_subtitle,
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -167,7 +167,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 24),
                                   child: Text(
-                                    'Start Dreaming',
+                                    context.l10n.first_time_goal_button,
                                     style: AppTextTheme.poppins(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -252,7 +252,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "🎯 Smart Goal Tracking",
+                            "🎯 ${context.l10n.first_time_goal_title_expanded}",
                             style: AppTextTheme.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -263,7 +263,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            '\u2022 Monthly savings recommendations.',
+                            '\u2022 ${context.l10n.first_time_goal_feature_1}',
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -272,7 +272,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '\u2022 Projected completion dates.',
+                            '\u2022 ${context.l10n.first_time_goal_feature_2}',
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -281,7 +281,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '\u2022 Milestone celebrations.',
+                            '\u2022 ${context.l10n.first_time_goal_feature_3}',
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -290,7 +290,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '\u2022 Real-time progress tracking.',
+                            '\u2022 ${context.l10n.first_time_goal_feature_4}',
                             style: AppTextTheme.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -302,7 +302,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "Wealth Features Are Coming Soon",
+                                context.l10n.first_time_goal_coming_soon,
                                 style: AppTextStyles.roboto18w600SemiBoldWhite(
                                         context)!
                                     .copyWith(

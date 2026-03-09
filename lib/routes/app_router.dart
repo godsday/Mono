@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/app_settings/presentation/pages/support_screen.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/pages/analytics_screen.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
-import 'package:mono/features/setting_screen/presentation/pages/about_screen.dart';
+import 'package:mono/features/app_settings/presentation/pages/about_screen.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';
-import '../features/setting_screen/presentation/pages/settings_screen.dart';
+import '../features/app_settings/presentation/pages/settings_screen.dart';
 import '../features/IntroPages/onbording_screen.dart';
 import 'route_names.dart';
 
@@ -61,6 +62,9 @@ class AppRouter {
 
       case RouteNames.about:
         return _buildPageRoute(const AboutScreen(), settings);
+
+      case RouteNames.support:
+        return _buildPageRoute(const SupportScreen(), settings);
 
       default:
         return MaterialPageRoute(

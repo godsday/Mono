@@ -3,6 +3,8 @@ import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
+import 'package:sizer/sizer.dart';
 import 'budget/presentation/providers/budget_provider.dart';
 import 'budget/presentation/widgets/budget_overview_card.dart';
 import 'budget/presentation/widgets/first_time_budget_card.dart';
@@ -40,8 +42,8 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: const PreferredSize(
-        preferredSize: Size(double.infinity, 110),
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 14.5.h),
         child: HeaderSection(),
       ),
       body: SingleChildScrollView(
@@ -106,7 +108,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Analytics",
+                                  context.l10n.analytics_title,
                                   style: AppTextStyles.poppins16w400.copyWith(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 18,

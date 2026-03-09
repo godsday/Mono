@@ -14,11 +14,11 @@ class CalculateThisMonth {
     return filtered;
   }
 
-  String getSpendingCycleLabel() {
+  String getSpendingCycleLabel(String label) {
     final today = DateTime.now();
     final start = today.subtract(const Duration(days: 30));
     final formatter = DateFormat('MMM dd'); // Example: Jun 12
-    return 'Spending Cycle: ${formatter.format(start)} – ${formatter.format(today)}';
+    return '$label: ${formatter.format(start)} – ${formatter.format(today)}';
   }
 
   double getThisMonthIncome(List<TranscationModel> transactions) {

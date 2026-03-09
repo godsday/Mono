@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:sizer/sizer.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -38,11 +39,10 @@ class HeaderSection extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 24, bottom: 24),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Financial Hub',
+                      context.l10n.financial_hub_title,
                       style: AppTextTheme.montserrart(
                         fontSize: 18.5.sp,
                         fontWeight: FontWeight.w700,
@@ -50,12 +50,14 @@ class HeaderSection extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 1.5.h),
-                    Text(
-                      'Your Budget, Assets & Dreams — all in one place',
-                      style: AppTextTheme.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).disabledColor,
+                    FittedBox(
+                      child: Text(
+                        context.l10n.financial_hub_subtitle,
+                        style: AppTextTheme.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.lightGrey,
+                        ),
                       ),
                     ),
                   ],

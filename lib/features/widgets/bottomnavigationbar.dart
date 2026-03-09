@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
-import 'package:mono/features/setting_screen/presentation/pages/settings_screen.dart';
+import 'package:mono/features/app_settings/presentation/pages/settings_screen.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class BottomNavigator extends StatefulWidget {
   final int index;
@@ -35,19 +36,21 @@ class _BottomNavigatorState extends State<BottomNavigator> {
             fontSize: 14.sp,
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w700),
-        items: const [
+        items: [
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            label: "More",
+            label: context.l10n.transactions_title,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
+              icon: Icon(Icons.auto_awesome_mosaic_outlined),
+              label: context.l10n.home_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined), label: "Finance"),
+              icon: Icon(Icons.bar_chart_outlined),
+              label: context.l10n.budget_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
+              icon: Icon(Icons.settings), label: context.l10n.settings_title),
         ],
         backgroundColor:
             Theme.of(context).bottomNavigationBarTheme.backgroundColor,

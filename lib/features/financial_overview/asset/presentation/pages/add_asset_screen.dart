@@ -116,7 +116,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
               // Type Dropdown directly
               DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(
@@ -152,8 +152,9 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter value';
+                  }
                   if (double.tryParse(value) == null) return 'Invalid number';
                   return null;
                 },

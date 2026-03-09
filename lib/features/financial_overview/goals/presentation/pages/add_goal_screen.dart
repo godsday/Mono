@@ -159,8 +159,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter target amount';
+                  }
                   if (double.tryParse(value) == null) return 'Invalid number';
                   return null;
                 },

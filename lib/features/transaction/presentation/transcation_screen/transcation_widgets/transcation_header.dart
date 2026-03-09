@@ -3,6 +3,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:sizer/sizer.dart';
 
 class TranscationHeader extends StatelessWidget {
@@ -35,7 +36,7 @@ class TranscationHeader extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Recent Transactions",
+                    context.l10n.recent_transactions,
                     style: AppTextTheme.montserrart(
                       fontSize: 18.5.sp,
                       fontWeight: FontWeight.w700,

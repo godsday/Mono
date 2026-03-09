@@ -8,6 +8,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
@@ -80,8 +81,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                               Provider.of<TransactionProvider>(context,
                                           listen: false)
                                       .visible
-                                  ? "Hide"
-                                  : "Show",
+                                  ? context.l10n.hide_button
+                                  : context.l10n.show_button,
                               style: AppTextStyles.poppins16w400.copyWith(
                                   fontSize: 13, color: AppColor.blackColor),
                             ),
@@ -177,7 +178,8 @@ class _TranscationScreenState extends State<TranscationScreen> {
                                         curve: Curves.elasticOut),
                                   ),
                                   child: Text(
-                                    item[index],
+                                    _getTranslatedFilterName(
+                                        context, item[index]),
                                     style: TextStyle(
                                       fontWeight: isSelected
                                           ? FontWeight.bold
@@ -227,9 +229,9 @@ class _TranscationScreenState extends State<TranscationScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildFilterChip('Today', context),
-                        _buildFilterChip('Weekly', context),
-                        _buildFilterChip('Monthly', context),
+                        _buildFilterChip(context.l10n.filter_today, context),
+                        _buildFilterChip(context.l10n.filter_weekly, context),
+                        _buildFilterChip(context.l10n.filter_monthly, context),
                         IconButton(
                           icon: Icon(
                             Icons.calendar_month_outlined,
@@ -309,6 +311,19 @@ class _TranscationScreenState extends State<TranscationScreen> {
       ),
     );
   }
+
+  String _getTranslatedFilterName(BuildContext context, String filter) {
+    switch (filter) {
+      case 'Income':
+        return context.l10n.transaction_type_income;
+      case 'Expense':
+        return context.l10n.transaction_type_expense;
+      case 'All':
+        return context.l10n.filter_all;
+      default:
+        return filter;
+    }
+  }
 }
 
 class VisibleChart extends StatelessWidget {
@@ -331,19 +346,19 @@ class VisibleChart extends StatelessWidget {
   }
 }
 
-Widget _buildFilterChip(String filterName, BuildContext context) {
+Widget _buildFilterChip(String displayTitle, BuildContext context) {
   return Consumer<TransactionProvider>(
-    key: ValueKey('filter_$filterName'),
+    key: ValueKey('filter_$displayTitle'),
     builder: (context, provider, child) {
-      final isSelected = provider.itemvalue == filterName;
+      final isSelected = provider.itemvalue == displayTitle;
       return GestureDetector(
         onTap: () {
-          provider.itemvalue = filterName;
+          provider.itemvalue = displayTitle;
           // Refresh the data when filter changes
           provider.refresh();
         },
         child: Text(
-          filterName,
+          displayTitle,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             fontSize: isSelected ? 15.sp : 14.sp,
@@ -403,7 +418,7 @@ Widget _buildGroupedTransactionList(
                     .transactionListBg,
                 foregroundColor: HexColor('#1976D2'),
                 icon: Icons.edit,
-                label: 'Edit',
+                label: context.l10n.action_edit,
                 onPressed: ((context) {
                   Navigator.pushNamed(context, RouteNames.addTransaction,
                       arguments: transaction);
@@ -422,12 +437,13 @@ Widget _buildGroupedTransactionList(
                     .transactionListBg,
                 foregroundColor: HexColor('#B00020'),
                 icon: Icons.delete,
-                label: 'Delete',
+                label: context.l10n.action_delete,
                 onPressed: ((context) {
                   Provider.of<TransactionProvider>(context, listen: false)
                       .deleteTransaction(transaction.id);
 
-                  final snack = customSnak(context, message: "Deleted");
+                  final snack = customSnak(context,
+                      message: context.l10n.message_deleted);
                   ScaffoldMessenger.of(context).showSnackBar(snack);
                 }),
               ),

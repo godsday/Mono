@@ -13,7 +13,7 @@ void showAppBottomSheet({
     builder: (context) {
       return Container(
         height: 190,
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -38,7 +38,7 @@ void showAppBottomSheet({
                   Text(
                     "Export",
                     style: AppTextStyles.poppins16w600.copyWith(
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                       fontSize: 18.sp,
                     ),
                   ),
@@ -67,7 +67,7 @@ void showAppBottomSheet({
                     "Import",
                     style: AppTextStyles.poppins16w600.copyWith(
                       fontSize: 18.sp,
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                     ),
                   ),
                 ],

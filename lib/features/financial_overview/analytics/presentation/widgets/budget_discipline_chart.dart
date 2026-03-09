@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/l10n/app_localizations.dart';
 import '../../domain/entities/budget_discipline_data.dart';
 
 class BudgetDisciplineChart extends StatelessWidget {
@@ -10,7 +11,7 @@ class BudgetDisciplineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.last6MonthsData.isEmpty) {
-      return const Center(child: Text("No budget data"));
+      return Center(child: Text(AppLocalizations.of(context)!.no_budget_data));
     }
 
     List<BarChartGroupData> groups = [];
@@ -61,8 +62,9 @@ class BudgetDisciplineChart extends StatelessWidget {
             touchTooltipData: BarTouchTooltipData(
                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final isBudget = rodIndex == 0;
+              final l10n = AppLocalizations.of(context)!;
               return BarTooltipItem(
-                '${isBudget ? 'Budget: ' : 'Spent: '}₹${rod.toY.toStringAsFixed(0)}',
+                '${isBudget ? l10n.budget_tooltip : l10n.spent_tooltip}₹${rod.toY.toStringAsFixed(0)}',
                 const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
               );

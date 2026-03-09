@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/features/widgets/add_clipper.dart';
 import '../../transaction/presentation/providers/transaction_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddScreen extends StatefulWidget {
   final TranscationModel? isDataExist;
@@ -95,8 +96,8 @@ class _AddScreenState extends State<AddScreen> {
                   left: 26.w,
                   child: Text(
                     widget.isDataExist == null
-                        ? "Add Transcation"
-                        : "Edit Transcation",
+                        ? context.l10n.add_transaction_title
+                        : context.l10n.edit_transaction_title,
                     style: AppTextTheme.montserrart(
                       fontSize: 18.5.sp,
                       fontWeight: FontWeight.w700,
@@ -136,7 +137,7 @@ class _AddScreenState extends State<AddScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Transcation type',
+                                context.l10n.transaction_type,
                                 style: AppTextStyles.poppins16w400,
                               ),
                               SizedBox(
@@ -164,7 +165,8 @@ class _AddScreenState extends State<AddScreen> {
                                                       .primaryColor,
                                                 ),
                                                 Text(
-                                                  "Expense",
+                                                  context.l10n
+                                                      .transaction_type_expense,
                                                   style: AppTextStyles
                                                       .poppins16w400
                                                       .copyWith(
@@ -186,7 +188,8 @@ class _AddScreenState extends State<AddScreen> {
                                                       .primaryColor,
                                                 ),
                                                 Text(
-                                                  "Income",
+                                                  context.l10n
+                                                      .transaction_type_income,
                                                   style: AppTextStyles
                                                       .poppins16w400
                                                       .copyWith(
@@ -208,7 +211,7 @@ class _AddScreenState extends State<AddScreen> {
                                 height: 1.h,
                               ),
                               Text(
-                                'Amount',
+                                context.l10n.transaction_amount,
                                 style: AppTextStyles.poppins16w400,
                               ),
                               SizedBox(
@@ -219,11 +222,11 @@ class _AddScreenState extends State<AddScreen> {
                                 autofocus: true,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter an amount';
+                                    return context.l10n.error_enter_amount;
                                   }
                                   final amount = double.tryParse(value);
                                   if (amount == null || amount <= 0) {
-                                    return ' Enter a valid number';
+                                    return context.l10n.error_valid_number;
                                   }
                                   return null;
                                 },
@@ -239,14 +242,14 @@ class _AddScreenState extends State<AddScreen> {
                                       RegExp(r'[0-9.]')),
                                 ],
                                 keyboardType: TextInputType.number,
-                                decoration:
-                                    textfielddecor(context, "Enter Amount"),
+                                decoration: textfielddecor(context,
+                                    context.l10n.transaction_amount_hint),
                               ),
                               SizedBox(
                                 height: 1.5.h,
                               ),
                               Text(
-                                'Date',
+                                context.l10n.transaction_date,
                                 style: AppTextStyles.poppins16w400,
                               ),
                               SizedBox(
@@ -303,7 +306,7 @@ class _AddScreenState extends State<AddScreen> {
                                 height: 1.5.h,
                               ),
                               Text(
-                                'Categories',
+                                context.l10n.transaction_categories,
                                 style: AppTextStyles.poppins16w400,
                               ),
                               SizedBox(
@@ -323,8 +326,8 @@ class _AddScreenState extends State<AddScreen> {
                                       .toList();
 
                                   if (categories.isEmpty) {
-                                    return const Text(
-                                        'No categories available');
+                                    return Text(
+                                        context.l10n.transaction_no_categories);
                                   }
 
                                   return Container(
@@ -366,7 +369,8 @@ class _AddScreenState extends State<AddScreen> {
                                                       horizontal: 12.0),
                                               isExpanded: true,
                                               hint: Text(
-                                                'Select Category',
+                                                context.l10n
+                                                    .transaction_category_hint,
                                                 style: AppTextStyles
                                                     .montserrat18w600
                                                     .copyWith(
@@ -435,7 +439,7 @@ class _AddScreenState extends State<AddScreen> {
                                 height: 1.5.h,
                               ),
                               Text(
-                                'Notes',
+                                context.l10n.transaction_notes,
                                 style: AppTextStyles.poppins16w400,
                               ),
                               SizedBox(
@@ -452,8 +456,8 @@ class _AddScreenState extends State<AddScreen> {
                                 ),
                                 controller: notesController,
                                 keyboardType: TextInputType.text,
-                                decoration:
-                                    textfielddecor(context, 'Enter Notes'),
+                                decoration: textfielddecor(context,
+                                    context.l10n.transaction_notes_hint),
                                 maxLines: 2,
                               ),
                               SizedBox(height: 3.5.h),
@@ -472,8 +476,8 @@ class _AddScreenState extends State<AddScreen> {
                                           provider.categorySelected!.isEmpty) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(customSnak(context,
-                                                message:
-                                                    "Please select a category"));
+                                                message: context.l10n
+                                                    .error_select_category));
                                         return;
                                       }
 
@@ -505,8 +509,8 @@ class _AddScreenState extends State<AddScreen> {
                                   },
                                   height: 56,
                                   appButtonText: widget.isDataExist == null
-                                      ? 'Record'
-                                      : 'Update',
+                                      ? context.l10n.transaction_record_button
+                                      : context.l10n.transaction_update_button,
                                 ),
                               ),
                               SizedBox(height: 1.h)

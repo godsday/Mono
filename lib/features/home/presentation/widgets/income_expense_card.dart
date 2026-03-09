@@ -2,23 +2,23 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../core/constants/colors/app_colors.dart';
 
 class IncomeExpenseCard extends StatelessWidget {
   final String transactionType;
   final double value;
+  final bool isIncome;
 
   const IncomeExpenseCard({
     super.key,
     required this.transactionType,
     required this.value,
+    required this.isIncome,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final gradients = theme.extension<AppGradients>()!;
-    bool isIncome = transactionType == "Earnings";
 
     return Container(
       decoration: BoxDecoration(

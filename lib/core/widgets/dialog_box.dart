@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
@@ -42,7 +43,7 @@ void showAddCategoryDialog(
                   Text(
                     subtitle!,
                     style: AppTextStyles.poppins16w400.copyWith(
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                       fontSize: 16.sp,
                     ),
                   ),
@@ -55,7 +56,7 @@ void showAddCategoryDialog(
                   Text(
                     'Enter a name for your new category',
                     style: AppTextStyles.poppins16w400.copyWith(
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                       fontSize: 14.sp,
                     ),
                   ),
@@ -75,7 +76,7 @@ void showAddCategoryDialog(
             child: Text(
               isAlert ? 'No' : 'Cancel',
               style: AppTextStyles.poppins16w400.copyWith(
-                color: AppColor.grey600,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
             ),
           ),

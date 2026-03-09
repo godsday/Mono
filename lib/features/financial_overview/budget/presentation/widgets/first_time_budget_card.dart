@@ -9,6 +9,7 @@ import '../../../../../core/theme/app_texttheme.dart';
 import '../pages/add_budget_screen.dart';
 import '../providers/budget_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class FirstTimeBudgetCard extends StatelessWidget {
   const FirstTimeBudgetCard({super.key});
@@ -123,7 +124,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Plan Your Money Smarter',
+                    context.l10n.first_time_budget_title,
                     style: AppTextTheme.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -135,7 +136,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Create your first monthly budget to track expenses and stay in control.',
+                    context.l10n.first_time_budget_subtitle,
                     style: AppTextTheme.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -156,7 +157,7 @@ class FirstTimeBudgetCard extends StatelessWidget {
                         context.read<BudgetProvider>().loadBudget();
                       }
                     },
-                    appButtonText: 'Set Monthly Budget',
+                    appButtonText: context.l10n.first_time_budget_button,
                     // height: 42,
                     width: double.infinity,
                   )

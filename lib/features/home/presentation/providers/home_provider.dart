@@ -74,7 +74,8 @@ class HomeProvider with ChangeNotifier {
     return calculateThisMonth.filterLast31Days(_transactions);
   }
 
-  String get spendingCycleLabel => calculateThisMonth.getSpendingCycleLabel();
+  String spendingCycleLabel(String label) =>
+      calculateThisMonth.getSpendingCycleLabel(label);
 
   // ---------------- ACTIONS ----------------
 

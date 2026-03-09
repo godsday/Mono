@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/home/domain/entity/insight_model.dart';
 
 class SmartInsightCard extends StatefulWidget {
+  final String id;
   final String title;
   final String message;
   final IconData icon;
@@ -14,6 +15,7 @@ class SmartInsightCard extends StatefulWidget {
 
   const SmartInsightCard({
     super.key,
+    required this.id,
     required this.title,
     required this.message,
     this.icon = Icons.lightbulb_outline,
@@ -27,6 +29,7 @@ class SmartInsightCard extends StatefulWidget {
 class _SmartInsightCardState extends State<SmartInsightCard> {
   bool isTapped = true;
   bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final style = _getStyle(widget.type);
@@ -123,7 +126,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.title,
+                                _getLocalizedTitle(context),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w900,
@@ -134,7 +137,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
                               if (!isTapped) ...[
                                 const SizedBox(height: 6),
                                 Text(
-                                  widget.message,
+                                  _getLocalizedMessage(context),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -154,6 +157,50 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
             ),
           ),
         ));
+  }
+
+  String _getLocalizedTitle(BuildContext context) {
+    switch (widget.id) {
+      case "budget_warning":
+        return context.l10n.insight_budget_warning_title;
+      case "budget_safe":
+        return context.l10n.insight_budget_safe_title;
+      case "budget_exceeded":
+        return context.l10n.insight_budget_exceeded_title;
+      case "no_budget":
+        return context.l10n.insight_no_budget_title;
+      case "daily_safe":
+        return context.l10n.insight_smart_tip_title;
+      case "savings":
+        return context.l10n.insight_savings_title;
+      default:
+        return context.l10n.insight_default_title;
+    }
+  }
+
+  String _getLocalizedMessage(BuildContext context) {
+    // Extract amount from message if it exists (e.g., "₹100" or just numbers)
+    // The previous implementation used widget.message which contains something like "You have only ₹100 left..."
+    final amountRegex = RegExp(r'[₹\$]\d+');
+    final match = amountRegex.firstMatch(widget.message);
+    final amount = match?.group(0) ?? "";
+
+    switch (widget.id) {
+      case "budget_warning":
+        return context.l10n.insight_budget_warning_message(amount);
+      case "budget_safe":
+        return context.l10n.insight_budget_safe_message(amount);
+      case "budget_exceeded":
+        return context.l10n.insight_budget_exceeded_message(amount);
+      case "no_budget":
+        return context.l10n.insight_no_budget_message;
+      case "daily_safe":
+        return context.l10n.insight_smart_tip_message(amount);
+      case "savings":
+        return context.l10n.insight_savings_message(amount);
+      default:
+        return context.l10n.insight_default_message;
+    }
   }
 
   _InsightStyle _getStyle(InsightType type) {

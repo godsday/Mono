@@ -2,10 +2,10 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class FirstTimeAssetCard extends StatefulWidget {
   const FirstTimeAssetCard({super.key});
@@ -102,7 +102,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Track Your Assets',
+                                  context.l10n.first_time_asset_title,
                                   style: AppTextTheme.poppins(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
@@ -118,7 +118,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               width:
                                   200, // Limit width to avoid overlapping image
                               child: Text(
-                                'Add what you own to understand your net worth',
+                                context.l10n.first_time_asset_subtitle,
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -165,7 +165,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
-                                    'Add Assets',
+                                    context.l10n.first_time_asset_button,
                                     style: AppTextTheme.poppins(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -241,7 +241,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Asset & Net Worth Tracking',
+                              context.l10n.first_time_asset_title_expanded,
                               style: AppTextTheme.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
@@ -255,7 +255,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               width:
                                   200, // Limit width to avoid overlapping image
                               child: Text(
-                                '\u2022 Net worth growth chart',
+                                '\u2022 ${context.l10n.first_time_asset_feature_1}',
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -265,7 +265,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Asset allocation breakdown',
+                              '\u2022 ${context.l10n.first_time_asset_feature_2}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -274,7 +274,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Monthly growth insights',
+                              '\u2022 ${context.l10n.first_time_asset_feature_3}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -283,7 +283,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Long-term wealth tracking',
+                              '\u2022 ${context.l10n.first_time_asset_feature_4}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -334,7 +334,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                '🔔 Notify Me When It Launches',
+                                "🔔 ${context.l10n.first_time_asset_notification}",
                                 style: AppTextStyles.roboto18w600SemiBoldWhite(
                                         context)!
                                     .copyWith(

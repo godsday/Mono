@@ -3,6 +3,7 @@ import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart' show AppGradients;
 import 'package:mono/features/financial_overview/budget/presentation/widgets/budget_header_clipper.dart';
 import 'package:mono/features/financial_overview/budget/presentation/widgets/categories_spending.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -94,8 +95,8 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                         decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
                         ),
-                        height: 4.h,
-                        width: 50.w,
+                        height: 4.5.h,
+                        constraints: BoxConstraints(minWidth: 50.w),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Row(
@@ -108,7 +109,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Monthly Budget',
+                                context.l10n.budget_overview_title,
                                 style: AppTextStyles.roboto16w600Black.copyWith(
                                     color: Theme.of(context)
                                         .extension<AppGradients>()!
@@ -140,7 +141,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                           // }
                         },
                         child: Text(
-                          'Edit',
+                          context.l10n.action_edit,
                           style: AppTextTheme.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -160,7 +161,9 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Budget set for ${DateFormat.MMMM().format(DateTime.now())}',
+                      context.l10n.budget_set_for(DateFormat.MMMM(
+                              Localizations.localeOf(context).languageCode)
+                          .format(DateTime.now())),
                       style: AppTextTheme.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -214,7 +217,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                               color: Colors.redAccent, size: 16),
                           const SizedBox(width: 4),
                           Text(
-                            'You have exceeded your monthly budget!',
+                            context.l10n.budget_limit_exceeded,
                             style: AppTextTheme.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -234,7 +237,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
-                                'Warning: You are approaching your budget limit.',
+                                context.l10n.budget_limit_warning,
                                 style: AppTextTheme.poppins(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -252,14 +255,17 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                     Row(
                       children: [
                         Expanded(
-                            child: _buildInfoColumn('Budget',
+                            child: _buildInfoColumn(
+                                context.l10n.budget_label_budget,
                                 '₹ ${widget.budget.totalBudget.toStringAsFixed(0)}')),
                         Expanded(
-                            child: _buildInfoColumn('Spending',
+                            child: _buildInfoColumn(
+                                context.l10n.budget_label_spending,
                                 '₹ ${widget.budget.spentAmount.toStringAsFixed(0)}',
                                 isAlert: progress >= 1.0)),
                         Expanded(
-                            child: _buildInfoColumn('Remaining',
+                            child: _buildInfoColumn(
+                                context.l10n.budget_label_remaining,
                                 '₹ ${widget.budget.remainingAmount.toStringAsFixed(0)}',
                                 isAlert: progress >= 1.0)),
                       ],
@@ -269,7 +275,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                       widget.budget.categories.isEmpty
                           ? const SizedBox()
                           : CategoriesSpendingCard(
-                              title: 'Categories',
+                              title: context.l10n.categories_title,
                               categories: widget.budget.categories,
                             )
                     ],

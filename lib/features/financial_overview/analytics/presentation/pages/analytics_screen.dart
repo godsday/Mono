@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/widgets/budget_discipline_chart.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/widgets/expense_trend_chart.dart';
@@ -52,8 +54,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Analytics',
-          style: TextStyle(
+          context.l10n.analytics_title,
+          style: AppTextStyles.montserrat18w600.copyWith(
             color: Theme.of(context).extension<AppGradients>()!.textTheme,
             fontWeight: FontWeight.bold,
           ),

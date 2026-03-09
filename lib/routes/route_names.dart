@@ -9,4 +9,5 @@ class RouteNames {
   static const String addBudget = '/add-budget';
   static const String analytics = '/analytics';
   static const String about = '/about';
+  static const String support = '/support';
 }

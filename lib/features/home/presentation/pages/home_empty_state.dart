@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/add_screen/presentation/add_screen.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:sizer/sizer.dart';
@@ -114,7 +114,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
                     .createShader(bounds);
               },
               child: Text(
-                "Start Your Financial Journey",
+                context.l10n.home_empty_state_title,
                 style: AppTextStyles.poppins16w400.copyWith(
                   fontSize: 19.sp,
                   fontWeight: FontWeight.w700,
@@ -133,7 +133,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             child: SizedBox(
               width: 80.w,
               child: Text(
-                "Add your first transaction to begin tracking your money.",
+                context.l10n.home_empty_state_subtitle,
                 style: AppTextStyles.poppins15w400(context)!.copyWith(
                   fontWeight: FontWeight.normal,
                   color: Colors.black54, // 70% opacity
@@ -152,7 +152,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               width: double.infinity,
               height: 56,
               child: AppElevetedButton(
-                appButtonText: "Add Transaction",
+                appButtonText: context.l10n.add_transaction_title,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -165,9 +165,9 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
           const SizedBox(height: 28),
 
           // Footer text
-          const Text(
-            "Your data is safely encrypted.",
-            style: TextStyle(
+          Text(
+            context.l10n.home_empty_state_footer,
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.black26, // 40% opacity
             ),

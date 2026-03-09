@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/l10n/app_localizations.dart';
 
 class ExpenseTrendChart extends StatelessWidget {
   final Map<String, double> data;
@@ -9,7 +10,7 @@ class ExpenseTrendChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) {
-      return const Center(child: Text("No expense data"));
+      return Center(child: Text(AppLocalizations.of(context)!.no_expense_data));
     }
 
     List<FlSpot> spots = [];
@@ -69,8 +70,9 @@ class ExpenseTrendChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
-                    if (value < 0 || value >= xLabels.length)
+                    if (value < 0 || value >= xLabels.length) {
                       return const SizedBox();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(

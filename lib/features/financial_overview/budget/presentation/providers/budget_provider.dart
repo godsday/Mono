@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mono/features/add_screen/domain/entities/category_entity.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/usecases/get_current_month_budget_usecase.dart';

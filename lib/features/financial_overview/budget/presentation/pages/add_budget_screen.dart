@@ -9,6 +9,7 @@ import '../../../../../core/theme/app_texttheme.dart';
 import '../../data/repositories/budget_repository_impl.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../providers/add_budget_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddBudgetScreen extends StatelessWidget {
   final BudgetEntity? budget;
@@ -41,8 +42,8 @@ class AddBudgetScreen extends StatelessWidget {
           ),
           title: Text(
             budget?.totalBudget != null
-                ? 'Edit Monthly Budget'
-                : 'Set Monthly Budget',
+                ? context.l10n.edit_budget_title
+                : context.l10n.set_budget_title,
             style: AppTextTheme.montserrart(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -97,7 +98,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Plan your spending for this month',
+            context.l10n.plan_spending_subtitle,
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -110,7 +111,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           _buildRemainingIndicator(context, provider, widget.isBudgetExist),
           const SizedBox(height: 32),
           Text(
-            'Allocate by Category',
+            context.l10n.allocate_by_category,
             style: AppTextTheme.montserrart(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -120,7 +121,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           if (provider.availableCategories.isEmpty && provider.isLoading)
             const Center(child: CircularProgressIndicator())
           else if (provider.availableCategories.isEmpty)
-            const Text("No expense categories found.")
+            Text(context.l10n.no_expense_categories)
           else
             ...provider.availableCategories.map(
               (category) => _CategoryBudgetInput(category: category),
@@ -143,7 +144,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Monthly Budget',
+            context.l10n.total_monthly_budget_label,
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -186,7 +187,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Recommended: 70–80% of income',
+            context.l10n.recommended_budget_hint,
             style: AppTextTheme.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w400,
@@ -218,7 +219,9 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isOverBudget ? 'Over Budget' : 'Remaining to Allocate',
+              isOverBudget
+                  ? context.l10n.over_budget_label
+                  : context.l10n.remaining_to_allocate_label,
               style: AppTextTheme.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -381,7 +384,9 @@ class _SaveBudgetButton extends StatelessWidget {
                       color: Colors.white, strokeWidth: 2),
                 )
               : Text(
-                  budget?.totalBudget != null ? 'Update Budget' : 'Save Budget',
+                  budget?.totalBudget != null
+                      ? context.l10n.update_budget_button
+                      : context.l10n.save_budget_button,
                   style: AppTextTheme.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
