@@ -35,17 +35,19 @@ class BudgetDisciplineChart extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: budget,
-            color: Colors.blue.withValues(alpha: 0.5),
-            width: 12,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+            color: Colors.blue.withValues(alpha: 0.3),
+            width: 14,
+            borderRadius: BorderRadius.circular(4),
+            borderSide:
+                BorderSide(color: Colors.blue.withValues(alpha: 0.5), width: 1),
           ),
           BarChartRodData(
             toY: actual,
-            color: actual > budget ? Colors.red : Colors.green,
-            width: 12,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+            color: actual > budget
+                ? Colors.redAccent.withValues(alpha: 0.8)
+                : Colors.greenAccent.withValues(alpha: 0.8),
+            width: 14,
+            borderRadius: BorderRadius.circular(4),
           ),
         ],
       ));

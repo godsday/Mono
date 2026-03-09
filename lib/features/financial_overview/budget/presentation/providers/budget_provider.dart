@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/usecases/get_current_month_budget_usecase.dart';
@@ -85,8 +86,9 @@ class BudgetProvider extends ChangeNotifier {
       }
 
       // Update BudgetEntity with calculated spent amount
+      final monthKey = DateFormat('MMM yyyy').format(DateTime.now());
       _budget = BudgetEntity(
-        month: DateTime.now().month.toString(),
+        month: monthKey,
         totalBudget: _budget!.totalBudget,
         spentAmount: totalSpent,
         remainingAmount: _budget!.totalBudget - totalSpent,
