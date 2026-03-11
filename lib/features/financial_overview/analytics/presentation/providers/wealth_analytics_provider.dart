@@ -30,8 +30,8 @@ class WealthAnalyticsProvider extends ChangeNotifier {
 
   // Raw data dependencies (you'd typically listen to these from other providers or repositories)
   List<TranscationModel> _transactions = [];
-  List<AssetEntity> _assets = [];
-  List<GoalEntity> _goals = [];
+  final List<AssetEntity> _assets = [];
+  final List<GoalEntity> _goals = [];
   List<BudgetEntity> _budgets = [];
 
   // Computed state

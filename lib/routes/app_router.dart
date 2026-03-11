@@ -4,7 +4,10 @@ import 'package:mono/features/financial_overview/analytics/presentation/pages/an
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
 import 'package:mono/features/app_settings/presentation/pages/about_screen.dart';
+import 'package:mono/features/financial_overview/financial_overview_page.dart';
+import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
+import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';
@@ -21,7 +24,7 @@ class AppRouter {
         );
 
       case RouteNames.home:
-        return _buildPageRoute(const BottomNavigator(index: 1), settings);
+        return _buildPageRoute(const HomePage(), settings);
 
       case RouteNames.onboarding:
         return MaterialPageRoute(builder: (_) => OnboardScreen());
@@ -40,7 +43,7 @@ class AppRouter {
         return _buildPageRoute(const SettingsScreen(), settings);
 
       case RouteNames.budgetOverview:
-        return _buildPageRoute(const BottomNavigator(index: 2), settings);
+        return _buildPageRoute(const FinancialOverviewPage(), settings);
 
       case RouteNames.addBudget:
         final args = settings.arguments;
@@ -52,11 +55,7 @@ class AppRouter {
             settings);
 
       case RouteNames.transactionList:
-        return _buildPageRoute(
-            const BottomNavigator(
-              index: 0,
-            ),
-            settings);
+        return _buildPageRoute(const TranscationScreen(), settings);
       case RouteNames.analytics:
         return _buildPageRoute(const AnalyticsScreen(), settings);
 
@@ -65,6 +64,13 @@ class AppRouter {
 
       case RouteNames.support:
         return _buildPageRoute(const SupportScreen(), settings);
+
+      case RouteNames.bottomNav:
+        return _buildPageRoute(
+            const BottomNavigator(
+              index: 1,
+            ),
+            settings);
 
       default:
         return MaterialPageRoute(

@@ -4,6 +4,7 @@ import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
@@ -62,6 +63,7 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -69,6 +71,8 @@ class _AddScreenState extends State<AddScreen> {
         },
         child: SafeArea(
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -247,7 +251,7 @@ class _AddScreenState extends State<AddScreen> {
                                     .copyWith(
                                   prefixText: '${context.currencySymbol} ',
                                   prefixStyle:
-                                      AppTextStyles.poppins16w600.copyWith(
+                                      AppTextStyles.roboto16w600Black.copyWith(
                                     color: Theme.of(context)
                                         .extension<AppGradients>()!
                                         .textTheme,
@@ -468,19 +472,31 @@ class _AddScreenState extends State<AddScreen> {
                                 decoration: textfielddecor(context,
                                     context.l10n.transaction_notes_hint),
                                 maxLines: 2,
+                                onChanged: (value) {
+                                  if (value.isNotEmpty) {
+                                    notesController.text =
+                                        value.capitalizeFirstLetter();
+                                  }
+                                },
                               ),
                               SizedBox(height: 3.5.h),
                               SizedBox(
                                 width: double.infinity,
                                 child: AppElevetedButton(
                                   onPressed: () async {
+                                    final provider =
+                                        Provider.of<TransactionProvider>(
+                                            context,
+                                            listen: false);
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 200));
+                                    if (!context.mounted) return;
                                     // Validate form before submitting
                                     if (_formkey.currentState!.validate()) {
                                       // Check if category is selected
-                                      final provider =
-                                          Provider.of<TransactionProvider>(
-                                              context,
-                                              listen: false);
+
                                       if (provider.categorySelected == null ||
                                           provider.categorySelected!.isEmpty) {
                                         ScaffoldMessenger.of(context)
@@ -489,9 +505,6 @@ class _AddScreenState extends State<AddScreen> {
                                                     .error_select_category));
                                         return;
                                       }
-
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
 
                                       final amount =
                                           double.parse(amountController.text);

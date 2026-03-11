@@ -4,7 +4,6 @@ import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

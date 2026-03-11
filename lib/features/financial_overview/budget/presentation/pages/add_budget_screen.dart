@@ -323,7 +323,7 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
               style: AppTextTheme.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColor.blackText,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
               decoration: InputDecoration(
                 isDense: true,

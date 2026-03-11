@@ -70,7 +70,11 @@ class TransactionProvider with ChangeNotifier {
 
   List<TranscationModel> get recentTransactions {
     final sorted = List<TranscationModel>.from(_transactions)
-      ..sort((a, b) => b.date.compareTo(a.date));
+      ..sort((a, b) {
+        int dateSort = b.date.compareTo(a.date);
+        if (dateSort != 0) return dateSort;
+        return b.id.compareTo(a.id); // Tie-breaker: latest ID first
+      });
     return sorted.take(5).toList();
   }
 
@@ -88,6 +92,7 @@ class TransactionProvider with ChangeNotifier {
 
     try {
       _transactions = await getTransactionsUseCase();
+      await refresh(); // Ensure data is sorted and categorized after loading
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -294,58 +299,68 @@ class TransactionProvider with ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    // final list = await TranscationDB.instance.getalltranscation();
+    // Strict sorting: Date first (desc), then ID (desc) as tie-breaker for same-time additions
+    _transactions.sort((a, b) {
+      int dateSort = b.date.compareTo(a.date);
+      if (dateSort != 0) return dateSort;
+      return b.id.compareTo(a.id);
+    });
 
-    // totalBalanceCheck(list);
-
-    _transactions.sort((first, second) => second.date.compareTo(first.date));
-    yesterdaylistnotifier.value.clear();
+    // Clear all notifiers before repopulating
     transcationNotifier.value.clear();
     incomelistnotifier.value.clear();
     expenselistnotifier.value.clear();
     todaylistnotifier.value.clear();
-    // spendingCycleListNotifier.value.clear();
+    yesterdaylistnotifier.value.clear();
     weeklylistnotifier.value.clear();
     monthlylistnotifier.value.clear();
 
+    // Populate the 'All' list
     transcationNotifier.value.addAll(_transactions);
 
-    final today = DateFormat().add_yMMMMd().format(DateTime.now());
-    final yesterday = DateFormat()
+    final todayStr = DateFormat().add_yMMMMd().format(DateTime.now());
+    final yesterdayStr = DateFormat()
         .add_yMMMMd()
         .format(DateTime.now().subtract(const Duration(days: 1)));
 
-    Future.forEach(_transactions, (TranscationModel transcationlist) {
-      final dates = DateFormat().add_yMMMMd().format(transcationlist.date);
-      if (transcationlist.type == 'Expense') {
-        expenselistnotifier.value.add(transcationlist);
+    for (var transaction in _transactions) {
+      final dateStr = DateFormat().add_yMMMMd().format(transaction.date);
+
+      // Category Lists
+      if (transaction.type == 'Expense') {
+        expenselistnotifier.value.add(transaction);
       } else {
-        incomelistnotifier.value.add(transcationlist);
+        incomelistnotifier.value.add(transaction);
       }
 
-      if (dates == today) {
-        todaylistnotifier.value.add(transcationlist);
-      } else if (dates == yesterday) {
-        yesterdaylistnotifier.value.add(transcationlist);
+      // Today/Yesterday Filters
+      if (dateStr == todayStr) {
+        todaylistnotifier.value.add(transaction);
+      } else if (dateStr == yesterdayStr) {
+        yesterdaylistnotifier.value.add(transaction);
       }
 
-      // Add to weekly list (last 7 days)
-      if (transcationlist.date
+      // Weekly (Last 7 days)
+      if (transaction.date
           .isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
-        weeklylistnotifier.value.add(transcationlist);
+        weeklylistnotifier.value.add(transaction);
       }
 
-      // Add to monthly list (current month)
-      if (transcationlist.date.month == DateTime.now().month &&
-          transcationlist.date.year == DateTime.now().year) {
-        monthlylistnotifier.value.add(transcationlist);
+      // Monthly (Current Month)
+      if (transaction.date.month == DateTime.now().month &&
+          transaction.date.year == DateTime.now().year) {
+        monthlylistnotifier.value.add(transaction);
       }
-    });
+    }
 
-    yesterdaylistnotifier.notifyListeners();
+    // Explicitly notify all listeners to ensure UI updates across all filters
     transcationNotifier.notifyListeners();
-    expenselistnotifier.notifyListeners();
     incomelistnotifier.notifyListeners();
+    expenselistnotifier.notifyListeners();
     todaylistnotifier.notifyListeners();
+    yesterdaylistnotifier.notifyListeners();
+    weeklylistnotifier.notifyListeners();
+    monthlylistnotifier.notifyListeners();
+    customlistnotifier.notifyListeners();
   }
 }

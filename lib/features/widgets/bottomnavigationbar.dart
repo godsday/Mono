@@ -18,7 +18,6 @@ class BottomNavigator extends StatefulWidget {
 class _BottomNavigatorState extends State<BottomNavigator> {
   int? _selectedIndex;
   List pages = [
-    // const ProfileScreen(),
     const TranscationScreen(),
     const HomePage(),
     const FinancialOverviewPage(),
@@ -37,20 +36,19 @@ class _BottomNavigatorState extends State<BottomNavigator> {
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w700),
         items: [
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: const Icon(Icons.history),
             label: context.l10n.transactions_title,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome_mosaic_outlined),
+              icon: const Icon(Icons.auto_awesome_mosaic_outlined),
               label: context.l10n.home_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined),
+              icon: const Icon(Icons.bar_chart_outlined),
               label: context.l10n.budget_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: context.l10n.settings_title),
+              icon: const Icon(Icons.settings),
+              label: context.l10n.settings_title),
         ],
         backgroundColor:
             Theme.of(context).bottomNavigationBarTheme.backgroundColor,

@@ -10,4 +10,5 @@ class RouteNames {
   static const String analytics = '/analytics';
   static const String about = '/about';
   static const String support = '/support';
+  static const String bottomNav = '/bottomNav';
 }
