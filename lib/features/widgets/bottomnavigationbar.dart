@@ -16,19 +16,27 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int? _selectedIndex;
-  List pages = [
-    const TranscationScreen(),
-    const HomePage(),
-    const FinancialOverviewPage(),
-    const SettingsScreen(),
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.index;
+  }
+
+  final List<Widget> pages = const [
+    TranscationScreen(),
+    HomePage(),
+    FinancialOverviewPage(),
+    SettingsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: pages[_selectedIndex ?? widget.index],
-      ),
+          child: IndexedStack(
+        index: _selectedIndex,
+        children: pages,
+      )),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
         selectedLabelStyle: AppTextTheme.poppins().copyWith(
@@ -55,7 +63,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         iconSize: 30,
         showUnselectedLabels: false,
         showSelectedLabels: true,
-        currentIndex: _selectedIndex ?? widget.index,
+        currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Theme.of(context).primaryColorDark,
         onTap: _onitemtap,

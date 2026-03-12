@@ -16,6 +16,11 @@ class NotificationService {
     // Initialize Timezones
     tz.initializeTimeZones();
 
+    // Get device timezone
+
+    // Set local timezone
+    tz.setLocalLocation(tz.getLocation('Asia/Kolkata'));
+
     // 1. Request Permissions (FCM)
     await _requestFCMPermissions();
 

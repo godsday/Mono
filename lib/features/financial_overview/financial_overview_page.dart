@@ -40,6 +40,7 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('FinancialOverviewPage is called');
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(

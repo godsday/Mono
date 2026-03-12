@@ -8,6 +8,7 @@ class GetTransactions {
   GetTransactions(this.repository);
 
   Future<List<TranscationModel>> call() async {
+    print('get transactions is called');
     return await repository.getTransactions();
   }
 }

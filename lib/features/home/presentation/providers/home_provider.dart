@@ -51,25 +51,29 @@ class HomeProvider with ChangeNotifier {
   String get userName => _userName;
   List<TranscationModel> get transactions => _transactions;
 
-  double get totalBalance => totalBalanceUseCase(_transactions);
+  double _totalBalance = 0.0;
+  double _totalIncome = 0.0;
+  double _totalExpense = 0.0;
+  double _thisMonthBalance = 0.0;
+  double _thisMonthIncome = 0.0;
+  double _thisMonthExpense = 0.0;
+  double _previousMonthIncome = 0.0;
+  double _previousMonthExpense = 0.0;
+  List<TopCategory> _topIncomeCategories = [];
+  List<TopCategory> _topExpenseCategories = [];
 
-  double get totalIncome => totalIncomeUseCase(_transactions);
-
-  double get totalExpense => totalExpenseUseCase(_transactions);
+  double get totalBalance => _totalBalance;
+  double get totalIncome => _totalIncome;
+  double get totalExpense => _totalExpense;
+  double get thisMonthBalance => _thisMonthBalance;
+  double get thisMonthIncome => _thisMonthIncome;
+  double get thisMonthExpense => _thisMonthExpense;
+  double get previousMonthIncome => _previousMonthIncome;
+  double get previousMonthExpense => _previousMonthExpense;
+  List<TopCategory> get topIncomeCategories => _topIncomeCategories;
+  List<TopCategory> get topExpenseCategories => _topExpenseCategories;
 
   Future<BudgetEntity?> get budgetEntity => getCurrentMonthBudgetUseCase.call();
-
-  List<TopCategory> get topIncomeCategories =>
-      getTopCategoriesUseCase.getTopCategories(
-        _transactions,
-        'Income',
-      );
-
-  List<TopCategory> get topExpenseCategories =>
-      getTopCategoriesUseCase.getTopCategories(
-        _transactions,
-        'Expense',
-      );
 
   List<TranscationModel> get spendingCycleTransactions {
     if (!_isThisMonth) return _transactions;
@@ -81,8 +85,50 @@ class HomeProvider with ChangeNotifier {
 
   // ---------------- ACTIONS ----------------
 
-  void updateTransactions(List<TranscationModel> transactions) {
+  void updateTransactions({
+    required List<TranscationModel> transactions,
+    required double totalBalance,
+    required double totalIncome,
+    required double totalExpense,
+  }) {
+    // Optimization: Skip update if data hasn't changed
+    if (_transactions == transactions &&
+        _totalBalance == totalBalance &&
+        _totalIncome == totalIncome &&
+        _totalExpense == totalExpense) {
+      return;
+    }
+
     _transactions = transactions;
+
+    // Use pre-calculated global totals from TransactionProvider
+    _totalBalance = totalBalance;
+    _totalIncome = totalIncome;
+    _totalExpense = totalExpense;
+
+    // These are still month-specific, so we calculate them once here
+    _thisMonthBalance = calculateThisMonth.getThisMonthBalance(_transactions);
+    _thisMonthIncome = calculateThisMonth.getThisMonthIncome(_transactions);
+    _thisMonthExpense = calculateThisMonth.getThisMonthExpense(_transactions);
+
+    _previousMonthIncome =
+        calculateThisMonth.getPreviousMonthIncome(_transactions);
+    _previousMonthExpense =
+        calculateThisMonth.getPreviousMonthExpense(_transactions);
+
+    // Pre-calculate top categories for L-shape widgets
+    _topIncomeCategories = getTopCategoriesUseCase.getTopCategories(
+      _transactions,
+      'Income',
+    );
+    _topExpenseCategories = getTopCategoriesUseCase.getTopCategories(
+      _transactions,
+      'Expense',
+    );
+
+    debugPrint(
+        'HomeProvider: Top categories updated. Income: ${_topIncomeCategories.length}, Expense: ${_topExpenseCategories.length}');
+
     _generateInsight();
     _checkBudgetAlerts();
     notifyListeners();
@@ -102,21 +148,6 @@ class HomeProvider with ChangeNotifier {
     _isThisMonth = value;
     notifyListeners();
   }
-
-  double get thisMonthBalance =>
-      calculateThisMonth.getThisMonthBalance(_transactions);
-
-  double get thisMonthIncome =>
-      calculateThisMonth.getThisMonthIncome(_transactions);
-
-  double get thisMonthExpense =>
-      calculateThisMonth.getThisMonthExpense(_transactions);
-
-  double get previousMonthIncome =>
-      calculateThisMonth.getPreviousMonthIncome(_transactions);
-
-  double get previousMonthExpense =>
-      calculateThisMonth.getPreviousMonthExpense(_transactions);
 
   Future<void> loadUserName() async {
     final prefs = await SharedPreferences.getInstance();

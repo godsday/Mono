@@ -32,6 +32,7 @@ class AppRouter {
       case RouteNames.addTransaction:
         final args = settings.arguments;
         final transaction = args is TranscationModel ? args : null;
+
         return _buildPageRoute(
           AddScreen(
             isDataExist: transaction,
@@ -56,6 +57,7 @@ class AppRouter {
 
       case RouteNames.transactionList:
         return _buildPageRoute(const TranscationScreen(), settings);
+
       case RouteNames.analytics:
         return _buildPageRoute(const AnalyticsScreen(), settings);
 

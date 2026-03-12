@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/theme/app_theme.dart';
@@ -34,129 +32,132 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
   Widget build(BuildContext context) {
     final style = _getStyle(widget.type);
     return InkWell(
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        onTap: () {
-          setState(() {
-            isTapped = !isTapped;
-          });
-        },
-        onHighlightChanged: (value) {
-          setState(() {
-            isExpanded = value;
-          });
-        },
-        child: AnimatedScale(
-          scale: isExpanded ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.fastOutSlowIn,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(22),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                      top: isTapped ? 8 : 16,
-                      bottom: isTapped ? 8 : 16,
-                      left: 8,
-                      right: 8),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.black,
-                        Color.fromARGB(255, 30, 35, 35),
-                        Colors.amber,
-                        Color.fromARGB(255, 3, 19, 18)
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(22),
-                    color: Colors.white.withValues(alpha: 0.08),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.15),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: style.shadowColor.withValues(alpha: 0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      )
-                    ],
-                  ),
-                  child: AnimatedSize(
-                    duration: const Duration(milliseconds: 2000),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                    alignment: Alignment.topCenter,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        AvatarGlow(
-                          glowColor: isTapped
-                              ? style.backgroundColor.withValues(alpha: 0.3)
-                              : style.backgroundColor,
-                          duration: const Duration(milliseconds: 3000),
-                          repeat: false,
-                          glowRadiusFactor: 4,
-                          curve: isTapped
-                              ? Curves.easeOutQuad
-                              : Curves.easeInOutBack,
-                          child: Container(
-                            height: 44,
-                            width: 44,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: style.backgroundColor,
-                            ),
-                            child: Icon(
-                              style.icon,
-                              color: style.iconColor,
-                            ),
-                          ),
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () {
+        setState(() {
+          isTapped = !isTapped;
+        });
+      },
+      onHighlightChanged: (value) {
+        setState(() {
+          isExpanded = value;
+        });
+      },
+      child: AnimatedScale(
+        scale: isExpanded ? 0.95 : 1.0,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.fastOutSlowIn,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            // child: BackdropFilter(
+            //   filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.fastLinearToSlowEaseIn,
+              width: double.infinity,
+              padding: EdgeInsets.only(
+                  top: isTapped ? 8 : 16,
+                  bottom: isTapped ? 8 : 16,
+                  left: 8,
+                  right: 8),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.black,
+                    Color(0xFF1E2323),
+                    Colors.amber,
+                    Color(0xFF031312)
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(22),
+                color: Colors.white.withValues(alpha: 0.08),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.15),
+                ),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: style.shadowColor.withValues(alpha: 0.15),
+                //     blurRadius: 4,
+                //     offset: const Offset(0, 10),
+                //   )
+                // ],
+              ),
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.fastLinearToSlowEaseIn,
+                alignment: Alignment.topCenter,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AvatarGlow(
+                      animate: isTapped,
+                      glowColor: isTapped
+                          ? style.backgroundColor.withValues(alpha: 0.3)
+                          : style.backgroundColor,
+                      duration: const Duration(milliseconds: 1500),
+                      repeat: false,
+                      glowRadiusFactor: 1,
+                      glowCount: 2,
+                      startDelay: const Duration(milliseconds: 500),
+                      curve:
+                          isTapped ? Curves.easeOutQuad : Curves.easeInOutBack,
+                      child: Container(
+                        height: 44,
+                        width: 44,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: style.backgroundColor,
                         ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _getLocalizedTitle(context),
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                    color: Theme.of(context)
-                                        .extension<AppGradients>()!
-                                        .textThemeBlueHeader),
+                        child: Icon(
+                          style.icon,
+                          color: style.iconColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _getLocalizedTitle(context),
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900,
+                                color: Theme.of(context)
+                                    .extension<AppGradients>()!
+                                    .textTheme),
+                          ),
+                          if (!isTapped) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              _getLocalizedMessage(context),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: style.iconColor,
+                                height: 1.4,
                               ),
-                              if (!isTapped) ...[
-                                const SizedBox(height: 6),
-                                Text(
-                                  _getLocalizedMessage(context),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).disabledColor,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+      // )
+    );
   }
 
   String _getLocalizedTitle(BuildContext context) {
@@ -209,7 +210,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
           icon: Icons.trending_up,
           iconColor: Colors.green,
           titleColor: Colors.green.shade800,
-          messageColor: Colors.green.shade700,
+          messageColor: Colors.green.shade900,
           shadowColor: Colors.green.withValues(alpha: 0.2),
         );
 
@@ -219,7 +220,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
           icon: Icons.warning_amber_rounded,
           iconColor: Colors.orange,
           titleColor: Colors.orange.shade800,
-          messageColor: Colors.orange.shade700,
+          messageColor: Colors.orange.shade900,
           shadowColor: Colors.orange.withValues(alpha: 0.2),
         );
 
@@ -229,7 +230,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
           icon: Icons.error_outline,
           iconColor: Colors.red,
           titleColor: Colors.red.shade800,
-          messageColor: Colors.red.shade700,
+          messageColor: Colors.red.shade900,
           shadowColor: Colors.red.withValues(alpha: 0.2),
         );
 
@@ -239,7 +240,7 @@ class _SmartInsightCardState extends State<SmartInsightCard> {
           icon: Icons.info_outline,
           iconColor: Colors.blue,
           titleColor: Colors.blue.shade800,
-          messageColor: Colors.blue.shade700,
+          messageColor: Colors.blue.shade900,
           shadowColor: Colors.blue.withValues(alpha: 0.15),
         );
     }

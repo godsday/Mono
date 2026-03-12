@@ -10,10 +10,11 @@ import 'package:mono/core/widgets/dialog_box.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:mono/features/add_screen/data/models/category_model.dart';
+import 'package:mono/features/add_screen/presentation/widgets/curve_clipper.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/features/widgets/add_clipper.dart';
+import 'package:mono/features/add_screen/presentation/widgets/add_clipper.dart';
 import '../../transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 
@@ -76,39 +77,7 @@ class _AddScreenState extends State<AddScreen> {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                SizedBox(height: 90.h),
-                ClipPath(
-                  clipper: CurveClipper(),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: Theme.of(context)
-                          .extension<AppGradients>()
-                          ?.primaryGradient,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    height: 40.h,
-                  ),
-                ),
-                Positioned(
-                  top: 5.h,
-                  left: 26.w,
-                  child: Text(
-                    widget.isDataExist == null
-                        ? context.l10n.add_transaction_title
-                        : context.l10n.edit_transaction_title,
-                    style: AppTextTheme.montserrart(
-                      fontSize: 18.5.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColor.whiteColor,
-                    ),
-                  ),
-                ),
+                const CurveClipperAddScreen(),
                 Positioned(
                     top: 2.h,
                     left: 13.w,

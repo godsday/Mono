@@ -2,20 +2,20 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:mono/core/notifications/notification_service.dart';
 import 'package:mono/core/storage/encrption/hive_encryption_service.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mono/features/add_screen/data/repositories/category_db.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/routes/app_router.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mono/features/transaction/data/datasources/transaction_local_data_source.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'providers/notification_provider.dart';
 import 'package:mono/features/financial_overview/asset/presentation/providers/assets_provider.dart';
@@ -32,24 +32,30 @@ import 'package:mono/core/di/injection_container.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, initialize Firebase
   await Firebase.initializeApp();
-  print('Handling a background message: ${message.messageId}');
-  print('Message data: ${message.data}');
+
+  NotificationService().init();
+  // print('Handling a background message: ${message.messageId}');
+  // print('Message data: ${message.data}');
   // You could also show a local notification here using flutter_local_notifications
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  debugPrintRebuildDirtyWidgets = true;
+  // debugPrintRebuildDirtyWidgets = true;
+
+  // debugPrintMarkNeedsLayoutStacks = true;
+  await di.init();
+  await HiveService.init();
   await Firebase.initializeApp();
+  await NotificationService().init();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
-  await HiveService.init();
-  await di.init();
-
-  await TransactionLocalDataSourceImpl.instance.getTransactions();
-  await CategoryDB.instance.initializeCategories();
+  // await TransactionLocalDataSourceImpl.instance.getTransactions();
+  // await CategoryDB.instance.initializeCategories();
 
   runApp(
     MultiProvider(providers: [
@@ -88,7 +94,12 @@ Future<void> main() async {
         update:
             (context, transactionProvider, notificationProvider, homeProvider) {
           homeProvider!.updateNotificationProvider(notificationProvider);
-          homeProvider.updateTransactions(transactionProvider.transactions);
+          homeProvider.updateTransactions(
+            transactions: transactionProvider.transactions,
+            totalBalance: transactionProvider.totalBalance,
+            totalIncome: transactionProvider.totalIncome,
+            totalExpense: transactionProvider.totalExpense,
+          );
           return homeProvider;
         },
       ),
@@ -96,11 +107,15 @@ Future<void> main() async {
           create: (_) => AddBudgetProvider(
                 saveBudgetUseCase: sl(),
               )),
-      ChangeNotifierProvider(
+      ChangeNotifierProxyProvider<TransactionProvider, BudgetProvider>(
           create: (_) => BudgetProvider(
                 getTransactions: sl(),
                 getBudgetUseCase: sl(),
-              )),
+              ),
+          update: (context, transactionProvider, budgetProvider) {
+            budgetProvider!.updateTransactions(transactionProvider.transactions);
+            return budgetProvider;
+          }),
       ChangeNotifierProvider(
           create: (_) => AssetsProvider(
                 getAssetsUseCase: sl(),

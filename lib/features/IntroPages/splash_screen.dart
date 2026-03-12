@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Navigator.pushReplacementNamed(
       context,
-      nameIsThere == null ? RouteNames.onboarding : RouteNames.home,
+      nameIsThere == null ? RouteNames.onboarding : RouteNames.bottomNav,
     );
   }
 }

@@ -12,7 +12,6 @@ import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
 import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
-
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
@@ -28,19 +27,143 @@ class TranscationScreen extends StatefulWidget {
 }
 
 class _TranscationScreenState extends State<TranscationScreen> {
-  late TooltipBehavior _tooltipBehavior;
+  @override
+  void initState() {
+    context.read<TransactionProvider>().refresh();
+    super.initState();
+  }
 
-  var item = ['Income', 'All', 'Expense'];
-  final ScrollController _scrollController = ScrollController();
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('TranscationScreen is called');
+    return const Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100), child: TranscationHeader()),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _GraphToggleSection(),
+            _ChartSection(),
+            _CategoryFilterSection(),
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _TimeFilterSection(),
+                  _HeadingSection(),
+                  _TransactionListSection(),
+                ],
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GraphToggleSection extends StatelessWidget {
+  const _GraphToggleSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final isVisible =
+        context.select<TransactionProvider, bool>((p) => p.visible);
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () => context.read<TransactionProvider>().graphView(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isVisible ? AppColor.blueContainer : Colors.amberAccent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  isVisible
+                      ? context.l10n.hide_button
+                      : context.l10n.show_button,
+                  style: AppTextStyles.poppins16w400.copyWith(
+                    fontSize: 13,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChartSection extends StatelessWidget {
+  const _ChartSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final isVisible =
+        context.select<TransactionProvider, bool>((p) => p.visible);
+    final itemValue =
+        context.select<TransactionProvider, String>((p) => p.itemvalue);
+
+    return AnimatedCrossFade(
+      firstCurve: Curves.easeOut,
+      crossFadeState:
+          isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      sizeCurve: Curves.easeIn,
+      duration: const Duration(milliseconds: 700),
+      firstChild:
+          itemValue == "All" || itemValue == "Income" || itemValue == "Expense"
+              ? const _VisibleChartWrapper()
+              : SizedBox(height: 2.h),
+      secondChild: const SizedBox.shrink(),
+    );
+  }
+}
+
+class _VisibleChartWrapper extends StatefulWidget {
+  const _VisibleChartWrapper();
+
+  @override
+  State<_VisibleChartWrapper> createState() => _VisibleChartWrapperState();
+}
+
+class _VisibleChartWrapperState extends State<_VisibleChartWrapper> {
+  late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
-    // TranscationDB.instance.refresh();
-    Provider.of<TransactionProvider>(context, listen: false).refresh();
-
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * .3,
+      width: MediaQuery.of(context).size.width,
+      child: GraphWidget(tooltipBehavior: _tooltipBehavior),
+    );
+  }
+}
+
+class _CategoryFilterSection extends StatefulWidget {
+  const _CategoryFilterSection();
+
+  @override
+  State<_CategoryFilterSection> createState() => _CategoryFilterSectionState();
+}
+
+class _CategoryFilterSectionState extends State<_CategoryFilterSection> {
+  final ScrollController _scrollController = ScrollController();
+  final List<String> items = ['Income', 'All', 'Expense'];
 
   @override
   void dispose() {
@@ -50,269 +173,88 @@ class _TranscationScreenState extends State<TranscationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(100), child: TranscationHeader()),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Provider.of<TransactionProvider>(context, listen: false)
-                            .graphView();
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Provider.of<TransactionProvider>(context,
-                                          listen: false)
-                                      .visible
-                                  ? AppColor.blueContainer
-                                  : Colors.amberAccent,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Text(
-                              Provider.of<TransactionProvider>(context,
-                                          listen: false)
-                                      .visible
-                                  ? context.l10n.hide_button
-                                  : context.l10n.show_button,
-                              style: AppTextStyles.poppins16w400.copyWith(
-                                  fontSize: 13, color: AppColor.blackColor),
-                            ),
-                          ))),
-                ],
-              ),
+    final selectedItem =
+        context.select<TransactionProvider, String>((p) => p.itemvalue);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: SizedBox(
+        width: double.infinity,
+        height: 40,
+        child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final filter = items[index];
+            final isSelected = selectedItem == filter;
+
+            if (isSelected) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_scrollController.hasClients) {
+                  double screenWidth = MediaQuery.of(context).size.width;
+                  double itemWidth = 100.0;
+                  double scrollTo =
+                      index * itemWidth - (screenWidth / 2) + (itemWidth / 2);
+                  _scrollController.animateTo(
+                    scrollTo.clamp(
+                        0.0, _scrollController.position.maxScrollExtent),
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.elasticOut,
+                  );
+                }
+              });
+            }
+
+            return _CategoryItem(
+              filter: filter,
+              isSelected: isSelected,
+              onTap: () =>
+                  context.read<TransactionProvider>().itemvalue = filter,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _CategoryItem extends StatelessWidget {
+  final String filter;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _CategoryItem({
+    required this.filter,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+      child: InkWell(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          alignment: Alignment.center,
+          child: Text(
+            _getTranslatedName(context, filter),
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              fontSize: isSelected ? 17.sp : 14.sp,
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : AppColor.textGrey,
             ),
-            AnimatedCrossFade(
-              firstCurve: Curves.easeOut,
-              crossFadeState:
-                  Provider.of<TransactionProvider>(context, listen: false)
-                          .visible
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-
-              sizeCurve: Curves.easeIn,
-
-              duration: const Duration(
-                  milliseconds: 700), // Set the animation duration
-
-              firstChild:
-                  Consumer<TransactionProvider>(builder: (context, pro, child) {
-                return pro.itemvalue == "All"
-                    ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                    : pro.itemvalue == "Income"
-                        ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                        : pro.itemvalue == "Expense"
-                            ? VisibleChart(tooltipBehavior: _tooltipBehavior)
-                            : SizedBox(height: 2.h);
-              }),
-
-              secondChild: const SizedBox.shrink(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: SizedBox(
-                width: double.infinity,
-                height: 40,
-                // alignment: Alignment.topCenter,
-                child: Consumer<TransactionProvider>(
-                  builder: (context, pro, child) {
-                    return ListView.builder(
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: item.length,
-                      itemBuilder: (context, index) {
-                        final isSelected = pro.itemvalue == item[index];
-                        // Scroll to center the selected item
-                        if (isSelected) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (_scrollController.hasClients) {
-                              double screenWidth =
-                                  MediaQuery.of(context).size.width;
-                              double itemWidth = 100.0; // Approximate width
-                              double scrollTo = index * itemWidth -
-                                  (screenWidth / 2) +
-                                  (itemWidth / 2);
-                              _scrollController.animateTo(
-                                scrollTo.clamp(0.0,
-                                    _scrollController.position.maxScrollExtent),
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.elasticOut,
-                              );
-                            }
-                          });
-                        }
-
-                        return Padding(
-                          key: ValueKey(item[index]),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5),
-                          child: InkWell(
-                            onTap: () {
-                              pro.itemvalue = item[index];
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 500),
-                              // transform: isSelected
-                              //     ? Matrix4.identity()
-                              //     : Matrix4.rotationZ(index.isEven ? 0 : 0),
-                              alignment: Alignment.center,
-                              child: RotationTransition(
-                                turns: AlwaysStoppedAnimation(
-                                    isSelected ? 1.0 : 0.0),
-                                child: ScaleTransition(
-                                  scale: Tween<double>(
-                                          begin: isSelected ? 1.2 : 1.0,
-                                          end: 1.0)
-                                      .animate(
-                                    CurvedAnimation(
-                                        parent:
-                                            const AlwaysStoppedAnimation(0.0),
-                                        curve: Curves.elasticOut),
-                                  ),
-                                  child: Text(
-                                    _getTranslatedFilterName(
-                                        context, item[index]),
-                                    style: TextStyle(
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.w500,
-                                      fontSize: isSelected ? 17.sp : 14.sp,
-                                      color: isSelected
-                                          ? Theme.of(context).primaryColor
-                                          : AppColor.textGrey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-                child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade500,
-                            blurRadius: 4,
-                            offset: const Offset(0, 0),
-                          ),
-                        ],
-                        //top bar color
-
-                        color: Theme.of(context)
-                            .extension<AppGradients>()!
-                            .transactionListBg,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildFilterChip(context.l10n.filter_today, context),
-                        _buildFilterChip(context.l10n.filter_weekly, context),
-                        _buildFilterChip(context.l10n.filter_monthly, context),
-                        IconButton(
-                          icon: Icon(
-                            Icons.calendar_month_outlined,
-                            size: 15.sp,
-                          ),
-                          color: AppColor.textGrey,
-                          onPressed: () {
-                            _showCustomDatePicker(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Consumer<TransactionProvider>(
-                      builder: (context, provider, child) {
-                    return Container(
-                        height: 4.h,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade500,
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]),
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                            ),
-                            child: Builder(builder: (context) {
-                              final headingData = provider.getHeadingData();
-                              return HeadingMethod(
-                                headtext: headingData.title,
-                                amount: headingData.amount,
-                              );
-                            })));
-                  }),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .extension<AppGradients>()!
-                              .transactionListBg,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade500,
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]),
-                      child: ValueListenableBuilder(
-                          valueListenable: Provider.of<TransactionProvider>(
-                                  context,
-                                  listen: true)
-                              .listingMethod(),
-                          builder: (BuildContext context,
-                              List<TranscationModel> newlist, _) {
-                            return newlist.isEmpty
-                                ? Stack(children: [
-                                    Lottie.asset(
-                                        'assets/images/animation/paymentshero1.json')
-                                  ])
-                                : _buildGroupedTransactionList(
-                                    Provider.of<TransactionProvider>(context,
-                                            listen: false)
-                                        .groupedTransactions,
-                                    context);
-                          }),
-                    ),
-                  ),
-                ],
-              ),
-            )),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  String _getTranslatedFilterName(BuildContext context, String filter) {
+  String _getTranslatedName(BuildContext context, String filter) {
     switch (filter) {
       case 'Income':
         return context.l10n.transaction_type_income;
@@ -326,33 +268,126 @@ class _TranscationScreenState extends State<TranscationScreen> {
   }
 }
 
-class VisibleChart extends StatelessWidget {
-  const VisibleChart({
-    super.key,
-    required TooltipBehavior tooltipBehavior,
-  }) : _tooltipBehavior = tooltipBehavior;
-
-  final TooltipBehavior _tooltipBehavior;
+class _TimeFilterSection extends StatelessWidget {
+  const _TimeFilterSection();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * .3,
-      width: MediaQuery.of(context).size.width,
-      child: GraphWidget(
-        tooltipBehavior: _tooltipBehavior,
+    return Container(
+      height: 4.h,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade500,
+            blurRadius: 4,
+            offset: const Offset(0, 0),
+          ),
+        ],
+        color: Theme.of(context).extension<AppGradients>()!.transactionListBg,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildFilterChip(context.l10n.filter_today, context),
+          _buildFilterChip(context.l10n.filter_weekly, context),
+          _buildFilterChip(context.l10n.filter_monthly, context),
+          IconButton(
+            icon: Icon(Icons.calendar_month_outlined, size: 15.sp),
+            color: AppColor.textGrey,
+            onPressed: () => _showCustomDatePicker(context),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeadingSection extends StatelessWidget {
+  const _HeadingSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final headingData =
+        context.select<TransactionProvider, ({String title, double amount})>(
+      (p) => p.getHeadingData(),
+    );
+
+    return Container(
+      height: 4.h,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade500,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: HeadingMethod(
+          headtext: headingData.title,
+          amount: headingData.amount,
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionListSection extends StatelessWidget {
+  const _TransactionListSection();
+
+  @override
+  Widget build(BuildContext context) {
+    // Select the specific notifier based on the current filter
+    final notifier = context
+        .select<TransactionProvider, ValueNotifier<List<TranscationModel>>>(
+      (p) => p.listingMethod(),
+    );
+    final provider = context.read<TransactionProvider>();
+
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).extension<AppGradients>()!.transactionListBg,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade500,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ValueListenableBuilder<List<TranscationModel>>(
+          valueListenable: notifier,
+          builder: (context, newList, _) {
+            if (newList.isEmpty) {
+              return Stack(children: [
+                Lottie.asset('assets/images/animation/paymentshero1.json'),
+              ]);
+            }
+            return _buildGroupedTransactionList(
+                provider.groupedTransactions, context);
+          },
+        ),
       ),
     );
   }
 }
 
 Widget _buildFilterChip(String displayTitle, BuildContext context) {
-  return Consumer<TransactionProvider>(
-    key: ValueKey('filter_$displayTitle'),
-    builder: (context, provider, child) {
-      final isSelected = provider.itemvalue == displayTitle;
+  return Selector<TransactionProvider, String>(
+    selector: (context, provider) => provider.itemvalue,
+    builder: (context, itemvalue, child) {
+      final isSelected = itemvalue == displayTitle;
       return GestureDetector(
         onTap: () {
+          final provider = context.read<TransactionProvider>();
           provider.itemvalue = displayTitle;
           // Refresh the data when filter changes
           provider.refresh();
@@ -381,7 +416,6 @@ Widget _buildGroupedTransactionList(
     widgets.add(
       Container(
         key: ValueKey('header_$dateDisplay'),
-        // alignment: Alignment.centerLeft,
         padding: const EdgeInsets.only(
           left: 15.0,
           top: 10.0,
@@ -439,9 +473,9 @@ Widget _buildGroupedTransactionList(
                 icon: Icons.delete,
                 label: context.l10n.action_delete,
                 onPressed: ((context) {
-                  Provider.of<TransactionProvider>(context, listen: false)
+                  context
+                      .read<TransactionProvider>()
                       .deleteTransaction(transaction.id);
-
                   final snack = customSnack(context,
                       message: context.l10n.message_deleted);
                   ScaffoldMessenger.of(context).showSnackBar(snack);
@@ -460,69 +494,56 @@ Widget _buildGroupedTransactionList(
                   width: 1,
                 ),
               ),
-              child: GestureDetector(
-                onTap: () {},
-                child: ListTile(
-                  leading: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .extension<AppGradients>()
-                          ?.transactionListBg,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColor.borderGreyWhite,
-                        width: 1,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: GetCategoryIcon(
-                          category: transaction.category,
-                          type: transaction.type),
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .extension<AppGradients>()
+                        ?.transactionListBg,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: AppColor.borderGreyWhite,
+                      width: 1,
                     ),
                   ),
-                  title: Text(
-                    transaction.category,
-                    maxLines: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: GetCategoryIcon(
+                        category: transaction.category, type: transaction.type),
+                  ),
+                ),
+                title: Text(
+                  transaction.category,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
+                subtitle: Text(
+                  context
+                      .read<TransactionProvider>()
+                      .parsedate(transaction.date),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                  ),
+                ),
+                trailing: SizedBox(
+                  width: 35.w,
+                  child: AutoSizeText(
+                    "${transaction.type == 'Expense' ? '- ' : '+ '}${context.formatCurrency(transaction.amount)}",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
                       fontSize: 16.sp,
+                      fontWeight: transaction.type == 'Expense'
+                          ? FontWeight.w600
+                          : FontWeight.bold,
+                      color: transaction.type == 'Expense'
+                          ? Colors.red
+                          : Colors.green,
                     ),
+                    maxLines: 1,
+                    textAlign: TextAlign.end,
                   ),
-                  subtitle: Text(
-                    Provider.of<TransactionProvider>(context, listen: false)
-                        .parsedate(transaction.date),
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  trailing: transaction.type == 'Expense'
-                      ? SizedBox(
-                          width: 34.w,
-                          child: AutoSizeText(
-                            "- ${context.formatCurrency(transaction.amount)}",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.end,
-                          ),
-                        )
-                      : SizedBox(
-                          width: 35.w,
-                          child: AutoSizeText(
-                            "+ ${context.formatCurrency(transaction.amount)}",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
                 ),
               ),
             ),
@@ -555,8 +576,7 @@ void _showCustomDatePicker(BuildContext context) async {
 
   if (dateRange != null) {
     if (!context.mounted) return;
-    // Update the provider with the selected date range
-    final provider = Provider.of<TransactionProvider>(context, listen: false);
+    final provider = context.read<TransactionProvider>();
     provider.itemvalue = 'Custom';
     provider.custompick(dateRange.start, dateRange.end);
     provider.refresh();

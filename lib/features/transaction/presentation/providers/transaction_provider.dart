@@ -25,7 +25,7 @@ class TransactionProvider with ChangeNotifier {
 
   List<TranscationModel> _transactions = [];
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   String? _error;
   bool _visible = false;
 
@@ -85,10 +85,17 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> checkTransactionsAvailability() async {
+    final transactions = await getTransactionsUseCase();
+    return transactions.isNotEmpty;
+  }
+
   Future<void> loadTransactions() async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
+    if (!_isLoading) {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+    }
 
     try {
       _transactions = await getTransactionsUseCase();
@@ -149,26 +156,13 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double get totalBalance => totalBalanceUseCase(_transactions);
-  double get totalIncome => totalIncomeUseCase(_transactions);
-  double get totalExpense => totalExpenseUseCase(_transactions);
+  double _totalBalance = 0.0;
+  double _totalIncome = 0.0;
+  double _totalExpense = 0.0;
 
-  // set totalBalance(double value) {
-  //   _totalBalance = value;
-  //   notifyListeners();
-  // }
-
-  // double get totalIncome => _totalIncome;
-  // set totalIncome(double value) {
-  //   _totalIncome = totalIncomeUseCase(_transactions);
-  //   notifyListeners();
-  // }
-
-  // double get totalExpense => _totalExpense;
-  // set totalExpense(double value) {
-  //   _totalExpense = totalExpenseUseCase(_transactions);
-  //   notifyListeners();
-  // }
+  double get totalBalance => _totalBalance;
+  double get totalIncome => _totalIncome;
+  double get totalExpense => _totalExpense;
 
   String? _categorySelected;
   String? get categorySelected => _categorySelected;
@@ -306,61 +300,71 @@ class TransactionProvider with ChangeNotifier {
       return b.id.compareTo(a.id);
     });
 
-    // Clear all notifiers before repopulating
-    transcationNotifier.value.clear();
-    incomelistnotifier.value.clear();
-    expenselistnotifier.value.clear();
-    todaylistnotifier.value.clear();
-    yesterdaylistnotifier.value.clear();
-    weeklylistnotifier.value.clear();
-    monthlylistnotifier.value.clear();
+    // Create temporary lists to avoid clearing observers multiple times during population
+    final List<TranscationModel> income = [];
+    final List<TranscationModel> expense = [];
+    final List<TranscationModel> today = [];
+    final List<TranscationModel> yesterday = [];
+    final List<TranscationModel> weekly = [];
+    final List<TranscationModel> monthly = [];
 
-    // Populate the 'All' list
-    transcationNotifier.value.addAll(_transactions);
-
-    final todayStr = DateFormat().add_yMMMMd().format(DateTime.now());
-    final yesterdayStr = DateFormat()
-        .add_yMMMMd()
-        .format(DateTime.now().subtract(const Duration(days: 1)));
+    final todayDate = DateTime.now();
+    final todayStr = DateFormat().add_yMMMMd().format(todayDate);
+    final yesterdayDate = todayDate.subtract(const Duration(days: 1));
+    final yesterdayStr = DateFormat().add_yMMMMd().format(yesterdayDate);
+    final weekAgo = todayDate.subtract(const Duration(days: 7));
 
     for (var transaction in _transactions) {
       final dateStr = DateFormat().add_yMMMMd().format(transaction.date);
 
       // Category Lists
       if (transaction.type == 'Expense') {
-        expenselistnotifier.value.add(transaction);
+        expense.add(transaction);
       } else {
-        incomelistnotifier.value.add(transaction);
+        income.add(transaction);
       }
 
       // Today/Yesterday Filters
       if (dateStr == todayStr) {
-        todaylistnotifier.value.add(transaction);
+        today.add(transaction);
       } else if (dateStr == yesterdayStr) {
-        yesterdaylistnotifier.value.add(transaction);
+        yesterday.add(transaction);
       }
 
       // Weekly (Last 7 days)
-      if (transaction.date
-          .isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
-        weeklylistnotifier.value.add(transaction);
+      if (transaction.date.isAfter(weekAgo)) {
+        weekly.add(transaction);
       }
 
       // Monthly (Current Month)
-      if (transaction.date.month == DateTime.now().month &&
-          transaction.date.year == DateTime.now().year) {
-        monthlylistnotifier.value.add(transaction);
+      if (transaction.date.month == todayDate.month &&
+          transaction.date.year == todayDate.year) {
+        monthly.add(transaction);
       }
     }
 
-    // Explicitly notify all listeners to ensure UI updates across all filters
-    transcationNotifier.notifyListeners();
-    incomelistnotifier.notifyListeners();
-    expenselistnotifier.notifyListeners();
-    todaylistnotifier.notifyListeners();
-    yesterdaylistnotifier.notifyListeners();
-    weeklylistnotifier.notifyListeners();
-    monthlylistnotifier.notifyListeners();
-    customlistnotifier.notifyListeners();
+    // Update all notifiers at once with the new lists.
+    // ValueNotifier only notifies if the reference changes (or if we explicitly call notifyListeners).
+    // Here we are setting newValue = List.from(tempList), which is a new reference.
+    transcationNotifier.value = List.from(_transactions);
+    incomelistnotifier.value = income;
+    expenselistnotifier.value = expense;
+    todaylistnotifier.value = today;
+    yesterdaylistnotifier.value = yesterday;
+    weeklylistnotifier.value = weekly;
+    monthlylistnotifier.value = monthly;
+
+    // Recalculate totals once
+    _totalIncome = totalIncomeUseCase(_transactions);
+    _totalExpense = totalExpenseUseCase(_transactions);
+    // Derive balance locally to avoid redundant UseCase calls
+    _totalBalance = _totalIncome - _totalExpense;
+    
+    // Custom list often depends on external state (start/end dates), so we re-apply filter if range exists
+    if (dateRange != null) {
+      custompick(start, end);
+    } else {
+      customlistnotifier.value = [];
+    }
   }
 }
