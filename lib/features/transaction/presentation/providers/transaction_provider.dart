@@ -233,7 +233,9 @@ class TransactionProvider with ChangeNotifier {
         customlistnotifier.value.add(data);
       }
     }
-    customlistnotifier.notifyListeners();
+    Future.microtask(() {
+      customlistnotifier.notifyListeners();
+    });
   }
 
   ValueNotifier<List<TranscationModel>> listingMethod() {
@@ -346,25 +348,27 @@ class TransactionProvider with ChangeNotifier {
     // Update all notifiers at once with the new lists.
     // ValueNotifier only notifies if the reference changes (or if we explicitly call notifyListeners).
     // Here we are setting newValue = List.from(tempList), which is a new reference.
-    transcationNotifier.value = List.from(_transactions);
-    incomelistnotifier.value = income;
-    expenselistnotifier.value = expense;
-    todaylistnotifier.value = today;
-    yesterdaylistnotifier.value = yesterday;
-    weeklylistnotifier.value = weekly;
-    monthlylistnotifier.value = monthly;
+    Future.microtask(() {
+      transcationNotifier.value = List.from(_transactions);
+      incomelistnotifier.value = income;
+      expenselistnotifier.value = expense;
+      todaylistnotifier.value = today;
+      yesterdaylistnotifier.value = yesterday;
+      weeklylistnotifier.value = weekly;
+      monthlylistnotifier.value = monthly;
 
-    // Recalculate totals once
-    _totalIncome = totalIncomeUseCase(_transactions);
-    _totalExpense = totalExpenseUseCase(_transactions);
-    // Derive balance locally to avoid redundant UseCase calls
-    _totalBalance = _totalIncome - _totalExpense;
-    
-    // Custom list often depends on external state (start/end dates), so we re-apply filter if range exists
-    if (dateRange != null) {
-      custompick(start, end);
-    } else {
-      customlistnotifier.value = [];
-    }
+      // Recalculate totals once
+      _totalIncome = totalIncomeUseCase(_transactions);
+      _totalExpense = totalExpenseUseCase(_transactions);
+      // Derive balance locally to avoid redundant UseCase calls
+      _totalBalance = _totalIncome - _totalExpense;
+      
+      // Custom list often depends on external state (start/end dates), so we re-apply filter if range exists
+      if (dateRange != null) {
+        custompick(start, end);
+      } else {
+        customlistnotifier.value = [];
+      }
+    });
   }
 }

@@ -33,7 +33,7 @@ class HomeProvider with ChangeNotifier {
   });
 
   List<TranscationModel> _transactions = [];
-  bool _isThisMonth = false;
+  bool _isThisMonth = true;
   String _userName = '';
   NotificationProvider? _notificationProvider;
 

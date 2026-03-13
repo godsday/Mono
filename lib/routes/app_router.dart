@@ -7,7 +7,7 @@ import 'package:mono/features/app_settings/presentation/pages/about_screen.dart'
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';

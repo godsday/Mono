@@ -29,6 +29,9 @@ class BudgetProvider extends ChangeNotifier {
     if (_budget != null) {
       _syncBudgetWithTransactions();
     }
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   Future<void> loadBudget() async {
@@ -67,11 +70,14 @@ class BudgetProvider extends ChangeNotifier {
     double othersSpent = 0.0;
     final Map<String, double> categorySpent = {};
 
+    final List<BudgetCategoryEntity> baseCategories =
+        _budget!.categories.where((c) => c.id != 'others').toList();
+
     for (var exp in currentMonthExpenses) {
       totalSpent += exp.amount;
       bool matched = false;
 
-      for (var cat in _budget!.categories) {
+      for (var cat in baseCategories) {
         if (cat.id == exp.category ||
             cat.name.toLowerCase() == exp.category.toLowerCase()) {
           categorySpent[cat.id] = (categorySpent[cat.id] ?? 0.0) + exp.amount;
@@ -86,7 +92,7 @@ class BudgetProvider extends ChangeNotifier {
     }
 
     final List<BudgetCategoryEntity> updatedCategories =
-        _budget!.categories.map((c) {
+        baseCategories.map((c) {
       return BudgetCategoryEntity(
         id: c.id,
         name: c.name,

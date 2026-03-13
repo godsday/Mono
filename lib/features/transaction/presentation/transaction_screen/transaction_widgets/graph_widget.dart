@@ -22,42 +22,35 @@ class GraphWidget extends StatefulWidget {
 class _GraphWidgetState extends State<GraphWidget> {
   @override
   Widget build(BuildContext context) {
-    final List<Chartdata> expenseData = getChart(
-        Provider.of<TransactionProvider>(context, listen: false)
-            .expenselistnotifier
-            .value);
-    final List<Chartdata> incomeData = getChart(
-        Provider.of<TransactionProvider>(context, listen: false)
-            .incomelistnotifier
-            .value);
-    final List<Chartdata> allData = getChart(
-        Provider.of<TransactionProvider>(context, listen: false)
-            .transcationNotifier
-            .value);
+    return Selector<TransactionProvider, ValueNotifier<List<TranscationModel>>>(
+      selector: (context, provider) => provider.listingMethod(),
+      builder: (context, activeNotifier, child) {
+        return ValueListenableBuilder<List<TranscationModel>>(
+          valueListenable: activeNotifier,
+          builder: (context, transactionList, child) {
+            final List<Chartdata> chartData = getChart(transactionList);
 
-    return Consumer<TransactionProvider>(builder: (context, provider, child) {
-      return SfCircularChart(
-        legend: const Legend(
-            orientation: LegendItemOrientation.horizontal,
-            isVisible: true,
-            toggleSeriesVisibility: true,
-            isResponsive: true),
-        tooltipBehavior: widget._tooltipBehavior,
-        series: <CircularSeries>[
-          DoughnutSeries<Chartdata, String>(
-            dataSource: provider.itemvalue == 'All'
-                ? allData
-                : provider.itemvalue == 'Income'
-                    ? incomeData
-                    : expenseData,
-            xValueMapper: (Chartdata data, _) => data.categories,
-            yValueMapper: (Chartdata data, _) => data.amount,
-            dataLabelSettings: const DataLabelSettings(isVisible: true),
-            enableTooltip: true,
-          )
-        ],
-      );
-    });
+            return SfCircularChart(
+              legend: const Legend(
+                  orientation: LegendItemOrientation.horizontal,
+                  isVisible: true,
+                  toggleSeriesVisibility: true,
+                  isResponsive: true),
+              tooltipBehavior: widget._tooltipBehavior,
+              series: <CircularSeries>[
+                DoughnutSeries<Chartdata, String>(
+                  dataSource: chartData,
+                  xValueMapper: (Chartdata data, _) => data.categories,
+                  yValueMapper: (Chartdata data, _) => data.amount,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  enableTooltip: true,
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
 

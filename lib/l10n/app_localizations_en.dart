@@ -25,7 +25,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Take control of your money with powerful tracking and planning tools';
 
   @override
-  String get enter_name_hint => 'Nickname';
+  String get enter_name_hint => 'Your Name';
 
   @override
   String get get_started => 'Get Started';

@@ -25,6 +25,9 @@ class CategoryDB extends CategoryDbFunctions {
 
   @override
   Future<List<CategoryModel>> getCategories() async {
+    if (categoryBox.isEmpty) {
+      await initializeCategories();
+    }
     return categoryBox.values.toList();
   }
 
@@ -58,71 +61,46 @@ class CategoryDB extends CategoryDbFunctions {
 
   Future<void> initializeCategories() async {
     // Initialize with default categories if database is empty
-    final categories = await getCategories();
-    if (categories.isEmpty) {
+    if (categoryBox.isEmpty) {
+      final Map<String, CategoryModel> initialCategories = {};
+      final now = DateTime.now().millisecondsSinceEpoch;
+      
       // Default income categories
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_salary",
-          type: CategoryType.income,
-          name: "Salary"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_gift",
-          type: CategoryType.income,
-          name: "Gift"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_rental",
-          type: CategoryType.income,
-          name: "Rental"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_credit",
-          type: CategoryType.income,
-          name: "Credit"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_other_income",
-          type: CategoryType.income,
-          name: "Other"));
+      initialCategories["${now}_salary"] = CategoryModel(
+          id: "${now}_salary", type: CategoryType.income, name: "Salary");
+      initialCategories["${now}_gift"] = CategoryModel(
+          id: "${now}_gift", type: CategoryType.income, name: "Gift");
+      initialCategories["${now}_rental"] = CategoryModel(
+          id: "${now}_rental", type: CategoryType.income, name: "Rental");
+      initialCategories["${now}_credit"] = CategoryModel(
+          id: "${now}_credit", type: CategoryType.income, name: "Credit");
+      initialCategories["${now}_other_income"] = CategoryModel(
+          id: "${now}_other_income", type: CategoryType.income, name: "Other");
 
       // Default expense categories
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_shopping",
-          type: CategoryType.expense,
-          name: "Shopping"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_travel",
-          type: CategoryType.expense,
-          name: "Travel"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_food",
-          type: CategoryType.expense,
-          name: "Food"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_medical",
-          type: CategoryType.expense,
-          name: "Medical"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_insurance",
-          type: CategoryType.expense,
-          name: "Insurance"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_utilities",
-          type: CategoryType.expense,
-          name: "Utilities"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_education",
-          type: CategoryType.expense,
-          name: "Education"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_entertainment",
-          type: CategoryType.expense,
-          name: "Entertainment"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_debit",
-          type: CategoryType.expense,
-          name: "Debit"));
-      await insertCategory(CategoryModel(
-          id: "${DateTime.now().millisecondsSinceEpoch}_other_expense",
-          type: CategoryType.expense,
-          name: "Other"));
+      initialCategories["${now}_shopping"] = CategoryModel(
+          id: "${now}_shopping", type: CategoryType.expense, name: "Shopping");
+      initialCategories["${now}_travel"] = CategoryModel(
+          id: "${now}_travel", type: CategoryType.expense, name: "Travel");
+      initialCategories["${now}_food"] = CategoryModel(
+          id: "${now}_food", type: CategoryType.expense, name: "Food");
+      initialCategories["${now}_medical"] = CategoryModel(
+          id: "${now}_medical", type: CategoryType.expense, name: "Medical");
+      initialCategories["${now}_insurance"] = CategoryModel(
+          id: "${now}_insurance", type: CategoryType.expense, name: "Insurance");
+      initialCategories["${now}_utilities"] = CategoryModel(
+          id: "${now}_utilities", type: CategoryType.expense, name: "Utilities");
+      initialCategories["${now}_education"] = CategoryModel(
+          id: "${now}_education", type: CategoryType.expense, name: "Education");
+      initialCategories["${now}_entertainment"] = CategoryModel(
+          id: "${now}_entertainment", type: CategoryType.expense, name: "Entertainment");
+      initialCategories["${now}_debit"] = CategoryModel(
+          id: "${now}_debit", type: CategoryType.expense, name: "Debit");
+      initialCategories["${now}_other_expense"] = CategoryModel(
+          id: "${now}_other_expense", type: CategoryType.expense, name: "Other");
+
+      await categoryBox.putAll(initialCategories);
+      await refreshUI();
     }
   }
 }

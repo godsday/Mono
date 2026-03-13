@@ -25,7 +25,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Toma el control de tu dinero con potentes herramientas de seguimiento y planificación';
 
   @override
-  String get enter_name_hint => 'Apodo';
+  String get enter_name_hint => 'Tu nombre';
 
   @override
   String get get_started => 'Empezar';

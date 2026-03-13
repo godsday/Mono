@@ -24,14 +24,12 @@ class FinancialOverviewPage extends StatefulWidget {
 }
 
 class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
-  // late FinancialOverviewProvider _provider;
-
   @override
   void initState() {
     super.initState();
-
-    // Load Assets and Goals data once frame is ready to access context
+    // Load data once after the first frame – providers deduplicate calls internally
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       context.read<AssetsProvider>().loadAssets();
       context.read<GoalsProvider>().loadGoals();
       context.read<BudgetProvider>().loadBudget();
@@ -164,40 +162,45 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
 
                   const SizedBox(height: 20),
 
-                  // Budget section
-
-                  Consumer<BudgetProvider>(
-                    builder: (context, provider, _) {
-                      if (provider.budget == null ||
-                          provider.budget!.totalBudget == 0) {
-                        return const FirstTimeBudgetCard();
-                      } else {
+                  // Budget section – wrapped in RepaintBoundary to isolate
+                  // the animated progress bar from repainting the rest of the
+                  // scroll view.
+                  RepaintBoundary(
+                    child: Consumer<BudgetProvider>(
+                      builder: (context, provider, _) {
+                        if (provider.budget == null ||
+                            provider.budget!.totalBudget == 0) {
+                          return const FirstTimeBudgetCard();
+                        }
                         return BudgetOverviewCard(budget: provider.budget!);
-                      }
-                    },
+                      },
+                    ),
                   ),
                   const SizedBox(height: 20),
 
-                  // Goals Section
+                  // Goals Section – single Consumer; GoalsOverviewCard now
+                  // accepts data directly and does NOT consume the provider
+                  // again internally.
                   Consumer<GoalsProvider>(
                     builder: (context, provider, _) {
                       if (provider.goals.isEmpty) {
                         return const FirstTimeGoalCard();
-                      } else {
-                        return const GoalsOverviewCard();
                       }
+                      return GoalsOverviewCard(goals: provider.goals);
                     },
                   ),
                   const SizedBox(height: 20),
 
-                  // Assets Section
+                  // Assets Section – single Consumer; same pattern as Goals.
                   Consumer<AssetsProvider>(
                     builder: (context, provider, _) {
                       if (provider.assets.isEmpty) {
                         return const FirstTimeAssetCard();
-                      } else {
-                        return const AssetsOverviewCard();
                       }
+                      return AssetsOverviewCard(
+                        assets: provider.assets,
+                        totalValue: provider.totalAssetValue,
+                      );
                     },
                   ),
                 ],

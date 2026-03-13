@@ -9,14 +9,14 @@ import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/get_category_icon.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/transcation_header.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_widgets/heading_widget.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_widgets/get_category_icon.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_widgets/transaction_header.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_widgets/heading_widget.dart';
 import 'package:mono/core/widgets/snackbar.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'transcation_widgets/graph_widget.dart';
+import 'transaction_widgets/graph_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class TranscationScreen extends StatefulWidget {

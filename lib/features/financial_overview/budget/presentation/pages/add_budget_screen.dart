@@ -362,8 +362,10 @@ class _SaveBudgetButton extends StatelessWidget {
               ? () async {
                   final success = await provider.saveBudget();
                   if (success && context.mounted) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(RouteNames.budgetOverview);
+                    Navigator.of(context).pushReplacementNamed(
+                      RouteNames.bottomNav,
+                      arguments: 2,
+                    );
                   }
                 }
               : null,

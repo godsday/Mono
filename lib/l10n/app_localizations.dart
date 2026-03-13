@@ -133,7 +133,7 @@ abstract class AppLocalizations {
   /// No description provided for @enter_name_hint.
   ///
   /// In en, this message translates to:
-  /// **'Nickname'**
+  /// **'Your Name'**
   String get enter_name_hint;
 
   /// No description provided for @get_started.

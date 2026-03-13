@@ -25,7 +25,7 @@ class AppLocalizationsHi extends AppLocalizations {
       'शक्तिशाली ट्रैकिंग और नियोजन उपकरणों के साथ अपने पैसे पर नियंत्रण रखें';
 
   @override
-  String get enter_name_hint => 'उपनाम';
+  String get enter_name_hint => 'आपका नाम';
 
   @override
   String get get_started => 'शुरू करें';

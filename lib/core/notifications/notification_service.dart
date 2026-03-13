@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -11,6 +12,9 @@ class NotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+  static const String _fcmTokenKey = 'fcm_token';
 
   Future<void> init() async {
     // Initialize Timezones
@@ -30,8 +34,8 @@ class NotificationService {
     // 3. Configure FCM Handlers
     _configureFCMHandlers();
 
-    // 4. Get FCM Token
-    _getFCMToken();
+    // 4. Get/cache FCM Token
+    await _getFCMToken();
   }
 
   Future<void> _requestFCMPermissions() async {
@@ -98,6 +102,12 @@ class NotificationService {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Message clicked! ${message.data}');
+    });
+
+    // Keep the local cache in sync whenever Firebase rotates the token
+    _fcm.onTokenRefresh.listen((newToken) async {
+      await _secureStorage.write(key: _fcmTokenKey, value: newToken);
+      print('FCM Token refreshed & re-cached: $newToken');
     });
   }
 
@@ -194,8 +204,50 @@ class NotificationService {
     await _localNotifications.cancelAll();
   }
 
+  /// Returns the locally cached FCM token, fetching from Firebase only when
+  /// no cached value is present or [forceRefresh] is true.
+  Future<String?> getFCMToken({bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      final cached = await _secureStorage.read(key: _fcmTokenKey);
+      if (cached != null && cached.isNotEmpty) {
+        print('FCM Token (cached): $cached');
+        return cached;
+      }
+    }
+    return await _fetchAndCacheToken();
+  }
+
   Future<void> _getFCMToken() async {
-    String? token = await _fcm.getToken();
-    print("FCM Token: $token");
+    await getFCMToken();
+  }
+
+  Future<String?> _fetchAndCacheToken() async {
+    try {
+      final token = await _fcm.getToken();
+      if (token != null) {
+        await _secureStorage.write(key: _fcmTokenKey, value: token);
+        print('FCM Token (fetched & cached): $token');
+      }
+      return token;
+    } catch (e) {
+      print('FCM Token fetch error: $e');
+      await Future.delayed(const Duration(seconds: 3));
+      try {
+        final token = await _fcm.getToken();
+        if (token != null) {
+          await _secureStorage.write(key: _fcmTokenKey, value: token);
+          print('FCM Token (retry & cached): $token');
+        }
+        return token;
+      } catch (retryError) {
+        print('FCM Token retry error: $retryError');
+        return null;
+      }
+    }
+  }
+
+  /// Call this to clear the cached FCM token (e.g., on logout).
+  Future<void> clearCachedFCMToken() async {
+    await _secureStorage.delete(key: _fcmTokenKey);
   }
 }
