@@ -49,10 +49,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.width;
-    MediaQuery.of(context).size.height;
-    final themepovider = Provider.of<DarkThemeProvider>(context);
-    final notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(115), child: SettingsHeader()),
@@ -78,205 +74,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                notificationProvider.notifValue
-                                    ? Icons.notifications
-                                    : Icons.notifications_off,
-                                color: themepovider.darkTheme
-                                    ? AppColor.whiteColor
-                                    : AppColor.blackColor,
-                                size: 20.sp,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                context.l10n.settings_notification,
-                                style: AppTextTheme.poppins(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          Transform.scale(
-                            scale: .70,
-                            child: Switch.adaptive(
-                                activeThumbColor: Theme.of(context)
-                                    .extension<AppGradients>()!
-                                    .switchColor,
-                                value: notificationProvider.notifValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    notificationProvider.notifValue = value;
-                                  });
-                                }),
-                          ),
-                        ],
-                      ),
+                      const NotificationSetting(),
                       const SizedBox(height: 6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                themepovider.darkTheme
-                                    ? Icons.dark_mode_outlined
-                                    : Icons.light_mode_outlined,
-                                size: 20.sp,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                context.l10n.settings_dark_mode,
-                                style: AppTextTheme.poppins(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Transform.scale(
-                                scale: .70,
-                                child: Switch.adaptive(
-                                    activeThumbColor: Theme.of(context)
-                                        .extension<AppGradients>()!
-                                        .switchColor,
-                                    value: themepovider.darkTheme,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        themepovider.darkTheme = value;
-                                      });
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      const DarkModeSetting(),
                       const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.language,
-                                color: themepovider.darkTheme
-                                    ? AppColor.whiteColor
-                                    : AppColor.blackColor,
-                                size: 20.sp,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                context.l10n.settings_language,
-                                style: AppTextTheme.poppins(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          Consumer2<AppSettingsProvider, LocaleProvider>(
-                            builder:
-                                (context, appSettings, localeProvider, child) {
-                              return DropdownButton<String>(
-                                value: appSettings.languageCode,
-                                underline: const SizedBox(),
-                                icon: const Icon(Icons.arrow_drop_down),
-                                items: L10n.all.map((locale) {
-                                  final code = locale.languageCode;
-                                  return DropdownMenuItem<String>(
-                                    value: code,
-                                    child: Text(
-                                      '${L10n.getFlag(code)} ${L10n.getLanguageName(code)}',
-                                      style:
-                                          AppTextTheme.poppins(fontSize: 14.sp),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    appSettings.updateLanguage(newValue);
-                                    localeProvider.setLocale(Locale(newValue));
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                      const LanguageSetting(),
                       const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.attach_money,
-                                color: themepovider.darkTheme
-                                    ? AppColor.whiteColor
-                                    : AppColor.blackColor,
-                                size: 20.sp,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                context.l10n.settings_currency,
-                                style: AppTextTheme.poppins(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          Consumer<AppSettingsProvider>(
-                            builder: (context, appSettings, child) {
-                              final currencies = [
-                                'USD',
-                                'EUR',
-                                'INR',
-                                'GBP',
-                                'JPY'
-                              ];
-                              return DropdownButton<String>(
-                                value: currencies
-                                        .contains(appSettings.currencyCode)
-                                    ? appSettings.currencyCode
-                                    : 'USD',
-                                underline: const SizedBox(),
-                                icon: const Icon(Icons.arrow_drop_down),
-                                items: currencies.map((String currency) {
-                                  return DropdownMenuItem<String>(
-                                    value: currency,
-                                    child: Text(
-                                      '${AppSettingsProvider.getCurrencySymbol(currency)} $currency',
-                                      style: AppTextStyles.roboto16w600Black
-                                          .copyWith(
-                                              fontSize: 14.sp,
-                                              color: Theme.of(context)
-                                                  .extension<AppGradients>()!
-                                                  .textTheme),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    appSettings.updateCurrency(newValue);
-                                  }
-                                },
-                              );
-                            },
-                          )
-                        ],
-                      ),
+                      const CurrencySetting(),
                       const Divider(
                         height: 20,
                       ),
@@ -296,7 +100,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Navigator.pushNamed(context, RouteNames.support);
                           },
                           context: context),
-
                       SubListTile(
                           isSettings: true,
                           icon: Icons.lock_outline,
@@ -307,7 +110,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             );
                           },
                           context: context),
-
                       SubListTile(
                           isSettings: true,
                           icon: Icons.delete_outline,
@@ -335,44 +137,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             );
                           },
                           context: context),
-
-                      // InkWell(
-                      //     onTap: () async {
-                      //       showAddCategoryDialog(
-                      //         context,
-                      //         isAlert: true,
-                      //         title: "Alert!!!",
-                      //         subtitle:
-                      //             "All transaction details will be deleted.\n\nDo you like to continue ?",
-                      //         onYesPressed: () async {
-                      //           print("delete all data");
-                      //           await TransactionLocalDataSourceImpl.instance
-                      //               .clearTransactions();
-                      //           await BudgetRepositoryImpl().clearBudget();
-                      //           await AssetRepositoryImpl().clearAssets();
-                      //           await GoalRepositoryImpl().clearGoals();
-
-                      //           if (context.mounted) {
-                      //             Navigator.pushNamedAndRemoveUntil(context,
-                      //                 RouteNames.splash, (route) => false);
-                      //           }
-                      //         },
-                      //       );
-                      //     },
-
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Text(
-                      //           "Reset App",
-                      //           style: AppTextTheme.poppins(
-                      //             color: Theme.of(context).disabledColor,
-                      //             fontSize: 17.sp,
-                      //             fontWeight: FontWeight.w500,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     )),
                     ],
                   ),
                 ),
@@ -380,6 +144,218 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ]),
           ),
         ));
+  }
+}
+
+class NotificationSetting extends StatelessWidget {
+  const NotificationSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final notificationProvider = Provider.of<NotificationProvider>(context);
+    final darkThemeProvider =
+        Provider.of<DarkThemeProvider>(context, listen: false);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              notificationProvider.notifValue
+                  ? Icons.notifications
+                  : Icons.notifications_off,
+              color: darkThemeProvider.darkTheme
+                  ? AppColor.whiteColor
+                  : AppColor.blackColor,
+              size: 20.sp,
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              context.l10n.settings_notification,
+              style: AppTextTheme.poppins(
+                  fontSize: 16.sp, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Transform.scale(
+          scale: .70,
+          child: Switch.adaptive(
+              activeThumbColor:
+                  Theme.of(context).extension<AppGradients>()!.switchColor,
+              value: notificationProvider.notifValue,
+              onChanged: (value) {
+                notificationProvider.notifValue = value;
+              }),
+        ),
+      ],
+    );
+  }
+}
+
+class DarkModeSetting extends StatelessWidget {
+  const DarkModeSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              themeProvider.darkTheme
+                  ? Icons.dark_mode_outlined
+                  : Icons.light_mode_outlined,
+              size: 20.sp,
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              context.l10n.settings_dark_mode,
+              style: AppTextTheme.poppins(
+                  fontSize: 16.sp, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Transform.scale(
+          scale: .70,
+          child: Switch.adaptive(
+              activeThumbColor:
+                  Theme.of(context).extension<AppGradients>()!.switchColor,
+              value: themeProvider.darkTheme,
+              onChanged: (value) {
+                themeProvider.darkTheme = value;
+              }),
+        ),
+      ],
+    );
+  }
+}
+
+class LanguageSetting extends StatelessWidget {
+  const LanguageSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark =
+        Provider.of<DarkThemeProvider>(context, listen: false).darkTheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.language,
+              color: isDark ? AppColor.whiteColor : AppColor.blackColor,
+              size: 20.sp,
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              context.l10n.settings_language,
+              style: AppTextTheme.poppins(
+                  fontSize: 16.sp, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Consumer2<AppSettingsProvider, LocaleProvider>(
+          builder: (context, appSettings, localeProvider, child) {
+            return DropdownButton<String>(
+              value: appSettings.languageCode,
+              underline: const SizedBox(),
+              icon: const Icon(Icons.arrow_drop_down),
+              items: L10n.all.map((locale) {
+                final code = locale.languageCode;
+                return DropdownMenuItem<String>(
+                  value: code,
+                  child: Text(
+                    '${L10n.getFlag(code)} ${L10n.getLanguageName(code)}',
+                    style: AppTextTheme.poppins(fontSize: 14.sp),
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  appSettings.updateLanguage(newValue);
+                  localeProvider.setLocale(Locale(newValue));
+                }
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class CurrencySetting extends StatelessWidget {
+  const CurrencySetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark =
+        Provider.of<DarkThemeProvider>(context, listen: false).darkTheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.attach_money,
+              color: isDark ? AppColor.whiteColor : AppColor.blackColor,
+              size: 20.sp,
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              context.l10n.settings_currency,
+              style: AppTextTheme.poppins(
+                  fontSize: 16.sp, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Consumer<AppSettingsProvider>(
+          builder: (context, appSettings, child) {
+            const currencies = ['USD', 'EUR', 'INR', 'GBP', 'JPY'];
+            return DropdownButton<String>(
+              value: currencies.contains(appSettings.currencyCode)
+                  ? appSettings.currencyCode
+                  : 'INR',
+              underline: const SizedBox(),
+              icon: const Icon(Icons.arrow_drop_down),
+              items: currencies.map((String currency) {
+                return DropdownMenuItem<String>(
+                  value: currency,
+                  child: Text(
+                    '${AppSettingsProvider.getCurrencySymbol(currency)} $currency',
+                    style: AppTextStyles.roboto16w600Black.copyWith(
+                        fontSize: 14.sp,
+                        color: Theme.of(context)
+                            .extension<AppGradients>()!
+                            .textTheme),
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  appSettings.updateCurrency(newValue);
+                }
+              },
+            );
+          },
+        )
+      ],
+    );
   }
 }
 

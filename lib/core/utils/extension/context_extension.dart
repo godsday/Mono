@@ -8,11 +8,11 @@ extension LocalizedContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 
   String formatCurrency(double amount) {
-    final appSettings = read<AppSettingsProvider>();
+    final appSettings = watch<AppSettingsProvider>();
     return CurrencyFormatter.format(amount, appSettings.currencyCode);
   }
 
   String get currencySymbol {
-    return read<AppSettingsProvider>().currencySymbol;
+    return watch<AppSettingsProvider>().currencySymbol;
   }
 }
