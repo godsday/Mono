@@ -4,7 +4,6 @@ class AppTextTheme {
   static const String fontFamilyPoppins = 'Poppins';
   static const String fontFamilyMontserrat = 'Montserrat';
   static const String fontFamilyInter = 'Inter';
-  static const String fontFamilyMulish = 'Mulish';
 
   // Headings
   static TextStyle heading1 = const TextStyle(
@@ -78,11 +77,6 @@ class AppTextTheme {
 
   static TextStyle inter = const TextStyle(
     fontFamily: fontFamilyInter,
-    fontWeight: FontWeight.w400,
-  );
-
-  static TextStyle mulish = const TextStyle(
-    fontFamily: fontFamilyMulish,
     fontWeight: FontWeight.w400,
   );
 

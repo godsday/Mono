@@ -122,15 +122,6 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: DancingScript
-      fonts:
-        - asset: assets/fonts/DancingScript-VariableFont_wght.ttf
-    - family: Merriweather
-      fonts:
-        - asset: assets/fonts/Merriweather-Regular.ttf  
-    - family: Courgette
-      fonts:
-        - asset: assets/fonts/Courgette-Regular.ttf
     - family: Poppins
       fonts:
         - asset: assets/fonts/PoppinsExtraLight.ttf
