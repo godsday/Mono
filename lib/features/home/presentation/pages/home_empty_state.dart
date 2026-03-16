@@ -6,6 +6,7 @@ import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/add_screen/presentation/add_screen.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeEmptyState extends StatefulWidget {
@@ -154,10 +155,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               child: AppElevetedButton(
                 appButtonText: context.l10n.add_transaction_title,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    CustomPageRoute(child: const AddScreen()),
-                  );
+                  Navigator.pushNamed(context, RouteNames.addTransaction);
                 },
               ),
             ),

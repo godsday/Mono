@@ -8,6 +8,7 @@ import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:mono/features/widgets/bottomnavigationbar.dart';
 import 'package:mono/core/widgets/navigator_animation.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
@@ -137,10 +138,8 @@ class OnboardScreen extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    Navigator.pushAndRemoveUntil(
-        context,
-        CustomPageRoute(child: const BottomNavigator(index: 1)),
-        (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, RouteNames.bottomNav, (route) => false);
   }
 }
 
