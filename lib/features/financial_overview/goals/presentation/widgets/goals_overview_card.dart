@@ -22,7 +22,7 @@ final _progressBarColor = HexColor('#3C7570');
 final _percentColor = HexColor('#C4867C');
 
 /// Accepts [goals] directly from the parent Consumer so a second
-/// Consumer<GoalsProvider> is not needed inside this widget.
+/// Consumer [GoalsProvider] is not needed inside this widget.
 class GoalsOverviewCard extends StatelessWidget {
   final List<GoalEntity> goals;
 
@@ -35,7 +35,8 @@ class GoalsOverviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: _borderColor, width: 1.5),
         boxShadow: [
-          BoxShadow(color: _shadowColor, blurRadius: 20, offset: const Offset(0, 4)),
+          BoxShadow(
+              color: _shadowColor, blurRadius: 20, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(

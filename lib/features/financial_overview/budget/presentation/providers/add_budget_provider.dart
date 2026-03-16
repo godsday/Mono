@@ -57,7 +57,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
   void updateTotalBudget(double amount) {
     _totalBudget = amount;
-    print("object$_totalBudget");
+    debugPrint("object$_totalBudget");
     notifyListeners();
   }
 
@@ -78,7 +78,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
     try {
       await saveBudgetUseCase(_totalBudget, _categoryBudgets);
-      print("add provider $_totalBudget");
+      debugPrint("add provider $_totalBudget");
       if (_totalBudget != 0) {
         isBudgetExist = _totalBudget;
         existingCategory = _availableCategories;

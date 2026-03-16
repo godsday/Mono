@@ -8,7 +8,6 @@ class UpdateTransaction {
   UpdateTransaction(this.repository);
 
   Future<void> call(TranscationModel transaction) async {
-    print('update transaction is called');
     return await repository.updateTransaction(transaction);
   }
 }

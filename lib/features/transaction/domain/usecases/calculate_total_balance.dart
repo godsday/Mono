@@ -9,7 +9,6 @@ class TotalBalanceUseCase {
   double call(List<TranscationModel> transactions) {
     double totalBalance = totalIncomeUseCase.call(transactions) -
         totalExpenseUseCase.call(transactions);
-    print('totalBalance $totalBalance');
 
     return totalBalance;
   }

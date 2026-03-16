@@ -35,25 +35,33 @@ class _TranscationScreenState extends State<TranscationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('TranscationScreen is called');
-    return const Scaffold(
-      appBar: PreferredSize(
+    final hasTransactions = context.select<TransactionProvider, bool>(
+      (p) => p.transactions.isNotEmpty,
+    );
+
+    return Scaffold(
+      appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100), child: TranscationHeader()),
       body: SafeArea(
         child: Column(
           children: [
-            _GraphToggleSection(),
-            _ChartSection(),
-            _CategoryFilterSection(),
+            if (hasTransactions) ...[
+              const _GraphToggleSection(),
+              const _ChartSection(),
+              const _CategoryFilterSection(),
+            ],
             Expanded(
                 child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _TimeFilterSection(),
-                  _HeadingSection(),
-                  _TransactionListSection(),
+                  if (hasTransactions) ...[
+                    const _TimeFilterSection(),
+                    const _HeadingSection(),
+                  ],
+                  const _TransactionListSection(),
                 ],
               ),
             )),
@@ -367,9 +375,17 @@ class _TransactionListSection extends StatelessWidget {
           valueListenable: notifier,
           builder: (context, newList, _) {
             if (newList.isEmpty) {
-              return Stack(children: [
-                Lottie.asset('assets/images/animation/paymentshero1.json'),
-              ]);
+              return SingleChildScrollView(
+                child: Column(children: [
+                  SizedBox(height: 4.h),
+                  Lottie.asset('assets/images/animation/paymentshero1.json'),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "No Records",
+                    style: AppTextStyles.poppins18w600,
+                  )
+                ]),
+              );
             }
             return _buildGroupedTransactionList(
                 provider.groupedTransactions, context);

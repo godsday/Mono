@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mono/core/constants/app_string/app_strings.dart';
 import 'package:mono/features/add_screen/data/models/category_model.dart';
@@ -62,6 +63,11 @@ class BackupService {
 
   Future<bool> exportData() async {
     try {
+      final transactionsBox =
+          Hive.box<TranscationModel>(AppStrings.transactionBoxName);
+      if (transactionsBox.isEmpty) {
+        return false;
+      }
       final jsonString = await generateBackupJson();
 
       final file = await saveBackupFile(jsonString);
@@ -73,7 +79,6 @@ class BackupService {
       await SharePlus.instance.share(params);
       return true;
     } catch (e) {
-      print("Export failed: $e");
       return false;
     }
   }
@@ -147,10 +152,10 @@ class BackupService {
         await categoriesBox.put(model.id, model);
       }
 
-      print("Import successful ✅");
+      debugPrint("Import successful ✅");
       return true;
     } catch (e) {
-      print("Import failed ❌: $e");
+      debugPrint("Import failed ❌: $e");
       return false;
     }
   }

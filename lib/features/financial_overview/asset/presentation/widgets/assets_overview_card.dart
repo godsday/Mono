@@ -16,7 +16,7 @@ final _cardGradient = LinearGradient(
 );
 
 /// Accepts [assets] and [totalValue] directly from the parent Consumer so a
-/// second Consumer<AssetsProvider> is not needed inside this widget.
+/// second Consumer[AssetsProvider]  is not needed inside this widget.
 class AssetsOverviewCard extends StatelessWidget {
   final List<AssetEntity> assets;
   final double totalValue;

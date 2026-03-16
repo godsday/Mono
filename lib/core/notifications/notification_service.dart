@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -20,22 +21,25 @@ class NotificationService {
     // Initialize Timezones
     tz.initializeTimeZones();
 
-    // Get device timezone
-
     // Set local timezone
     tz.setLocalLocation(tz.getLocation('Asia/Kolkata'));
 
-    // 1. Request Permissions (FCM)
-    await _requestFCMPermissions();
-
-    // 2. Initialize Local Notifications
+    // 1. Initialize Local Notifications
     await _initLocalNotifications();
 
-    // 3. Configure FCM Handlers
+    // 2. Configure FCM Handlers
     _configureFCMHandlers();
 
-    // 4. Get/cache FCM Token
+    // 3. Get/cache FCM Token
     await _getFCMToken();
+  }
+
+  Future<void> requestPermissions() async {
+    await _requestFCMPermissions();
+    await _localNotifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
   }
 
   Future<void> _requestFCMPermissions() async {
@@ -44,13 +48,14 @@ class NotificationService {
       badge: true,
       sound: true,
     );
+
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      debugPrint('User granted provisional permission');
     } else {
-      print('User declined or has not granted permission');
+      debugPrint('User declined or has not granted permission');
     }
   }
 
@@ -60,9 +65,9 @@ class NotificationService {
 
     const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
 
     const InitializationSettings initializationSettings =
@@ -75,7 +80,7 @@ class NotificationService {
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         // Handle notification tap
-        print("Notification tapped: ${response.payload}");
+        debugPrint("Notification tapped: ${response.payload}");
       },
     );
 
@@ -87,27 +92,26 @@ class NotificationService {
           'This channel is used for important notifications.', // description
       importance: Importance.max,
     );
+    final androidPlugin =
+        _localNotifications.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
 
-    await _localNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+    await androidPlugin?.createNotificationChannel(channel);
   }
 
   void _configureFCMHandlers() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Foreground message received: ${message.messageId}');
+      debugPrint('Foreground message received: ${message.messageId}');
       _showLocalNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message clicked! ${message.data}');
+      debugPrint('Message clicked! ${message.data}');
     });
 
     // Keep the local cache in sync whenever Firebase rotates the token
     _fcm.onTokenRefresh.listen((newToken) async {
       await _secureStorage.write(key: _fcmTokenKey, value: newToken);
-      print('FCM Token refreshed & re-cached: $newToken');
     });
   }
 
@@ -210,7 +214,6 @@ class NotificationService {
     if (!forceRefresh) {
       final cached = await _secureStorage.read(key: _fcmTokenKey);
       if (cached != null && cached.isNotEmpty) {
-        print('FCM Token (cached): $cached');
         return cached;
       }
     }
@@ -223,26 +226,14 @@ class NotificationService {
 
   Future<String?> _fetchAndCacheToken() async {
     try {
-      final token = await _fcm.getToken();
+      final token = await _fcm.getToken().timeout(const Duration(seconds: 10));
       if (token != null) {
         await _secureStorage.write(key: _fcmTokenKey, value: token);
-        print('FCM Token (fetched & cached): $token');
       }
       return token;
     } catch (e) {
-      print('FCM Token fetch error: $e');
-      await Future.delayed(const Duration(seconds: 3));
-      try {
-        final token = await _fcm.getToken();
-        if (token != null) {
-          await _secureStorage.write(key: _fcmTokenKey, value: token);
-          print('FCM Token (retry & cached): $token');
-        }
-        return token;
-      } catch (retryError) {
-        print('FCM Token retry error: $retryError');
-        return null;
-      }
+      debugPrint('FCM Token fetch error: $e');
+      return null;
     }
   }
 

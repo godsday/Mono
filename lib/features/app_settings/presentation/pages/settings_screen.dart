@@ -122,7 +122,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               subtitle:
                                   context.l10n.settings_reset_alert_subtitle,
                               onYesPressed: () async {
-                                print("delete all data");
                                 await TransactionLocalDataSourceImpl.instance
                                     .clearTransactions();
                                 await BudgetRepositoryImpl().clearBudget();
@@ -243,8 +242,8 @@ class LanguageSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark =
-        Provider.of<DarkThemeProvider>(context, listen: false).darkTheme;
+    // final isDark =
+    //     Provider.of<DarkThemeProvider>(context, listen: false).darkTheme;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,7 +252,7 @@ class LanguageSetting extends StatelessWidget {
           children: [
             Icon(
               Icons.language,
-              color: isDark ? AppColor.whiteColor : AppColor.blackColor,
+              // color: isDark ? AppColor.whiteColor : AppColor.blackColor,
               size: 20.sp,
             ),
             SizedBox(
@@ -301,9 +300,6 @@ class CurrencySetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark =
-        Provider.of<DarkThemeProvider>(context, listen: false).darkTheme;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -311,7 +307,6 @@ class CurrencySetting extends StatelessWidget {
           children: [
             Icon(
               Icons.attach_money,
-              color: isDark ? AppColor.whiteColor : AppColor.blackColor,
               size: 20.sp,
             ),
             SizedBox(

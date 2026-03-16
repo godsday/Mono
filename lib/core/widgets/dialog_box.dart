@@ -88,7 +88,7 @@ void showAddCategoryDialog(
               }
               String categoryName = categoryNameController.text.trim();
               final data = categoryName.capitalizeFirstLetter().toString();
-              print(data);
+              debugPrint(data);
               if (categoryName.isEmpty) {
                 // Show error if category name is empty
                 ScaffoldMessenger.of(context).showSnackBar(customSnack(context,
@@ -152,5 +152,63 @@ void showAddCategoryDialog(
         ),
       );
     },
+  );
+}
+
+void showConfirmationDialog({
+  required BuildContext context,
+  required String title,
+  required String subtitle,
+  required VoidCallback onConfirm,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(
+        title,
+        style: AppTextStyles.poppins18w600.copyWith(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
+      ),
+      content: Text(
+        subtitle,
+        style: AppTextStyles.poppins16w400.copyWith(
+          color: Theme.of(context).disabledColor,
+          fontSize: 14.sp,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'No',
+            style: AppTextStyles.poppins16w400.copyWith(
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColor.mainHexcolor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            'Yes',
+            style: AppTextStyles.poppins16w600.copyWith(
+              color: AppColor.whiteColor,
+            ),
+          ),
+        ),
+      ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
   );
 }

@@ -11,6 +11,7 @@ import 'package:mono/core/widgets/navigator_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/notifications/notification_service.dart';
 import 'package:provider/provider.dart';
 
 class OnboardScreen extends StatelessWidget {
@@ -130,6 +131,11 @@ class OnboardScreen extends StatelessWidget {
     final namecontrol = namecontroller.text;
     final sharedprefer = await SharedPreferences.getInstance();
     sharedprefer.setString('namekey', namecontrol);
+
+    // Prompt for notification permissions after onboarding
+    await NotificationService().requestPermissions();
+
+    if (!context.mounted) return;
 
     Navigator.pushAndRemoveUntil(
         context,

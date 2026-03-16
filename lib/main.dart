@@ -40,9 +40,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // debugPrintRebuildDirtyWidgets = true;
-
-  // debugPrintMarkNeedsLayoutStacks = true;
   await di.init();
   await HiveService.init();
   await Firebase.initializeApp();
@@ -52,9 +49,6 @@ Future<void> main() async {
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-
-  // await TransactionLocalDataSourceImpl.instance.getTransactions();
-  // await CategoryDB.instance.initializeCategories();
 
   runApp(
     MultiProvider(providers: [

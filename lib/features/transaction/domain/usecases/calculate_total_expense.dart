@@ -5,7 +5,6 @@ class TotalExpenseUseCase {
     double totalExpense = transactions
         .where((element) => element.type == "Expense")
         .fold(0, (sum, item) => sum + item.amount);
-    print("totalExpense _HomeRepositoryImp: $totalExpense");
     return totalExpense;
   }
 }
