@@ -16,7 +16,6 @@ class TotalBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Total balance card is called');
     return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
       return Container(
         height: 25.5.h,

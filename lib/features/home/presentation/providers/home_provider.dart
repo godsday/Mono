@@ -126,9 +126,6 @@ class HomeProvider with ChangeNotifier {
       'Expense',
     );
 
-    debugPrint(
-        'HomeProvider: Top categories updated. Income: ${_topIncomeCategories.length}, Expense: ${_topExpenseCategories.length}');
-
     _generateInsight();
     _checkBudgetAlerts();
     notifyListeners();

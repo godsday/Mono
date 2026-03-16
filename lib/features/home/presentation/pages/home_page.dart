@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Home is called');
     final showEmptyState = context.select<TransactionProvider, bool>(
       (p) => p.transactions.isEmpty && !p.isLoading,
     );
