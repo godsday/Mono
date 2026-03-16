@@ -321,7 +321,7 @@ class CurrencySetting extends StatelessWidget {
         ),
         Consumer<AppSettingsProvider>(
           builder: (context, appSettings, child) {
-            const currencies = ['USD', 'EUR', 'INR', 'GBP', 'JPY'];
+            const currencies = ['INR', 'EUR', 'GBP', 'JPY', 'USD'];
             return DropdownButton<String>(
               value: currencies.contains(appSettings.currencyCode)
                   ? appSettings.currencyCode

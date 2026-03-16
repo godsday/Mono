@@ -40,7 +40,7 @@ class AppSettingsProvider extends ChangeNotifier {
         return '¥';
       case 'USD':
       default:
-        return '\$';
+        return '₹';
     }
   }
 
