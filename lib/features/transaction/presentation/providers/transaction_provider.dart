@@ -12,6 +12,7 @@ import '../../domain/usecases/delete_transaction.dart';
 import '../../domain/usecases/get_transactions.dart';
 import '../../domain/usecases/update_transaction.dart';
 import '../../domain/usecases/group_transactions_by_date.dart';
+import 'package:mono/core/analytics/analytics_service.dart';
 
 class TransactionProvider with ChangeNotifier {
   final GetTransactions getTransactionsUseCase;
@@ -22,6 +23,7 @@ class TransactionProvider with ChangeNotifier {
   final TotalIncomeUseCase totalIncomeUseCase;
   final TotalExpenseUseCase totalExpenseUseCase;
   final GroupTransactionsByDateUseCase groupTransactionsUseCase;
+  final AnalyticsService analyticsService;
 
   List<TranscationModel> _transactions = [];
 
@@ -38,6 +40,7 @@ class TransactionProvider with ChangeNotifier {
     required this.totalIncomeUseCase,
     required this.totalExpenseUseCase,
     required this.groupTransactionsUseCase,
+    required this.analyticsService,
   });
 
   // double get totalBalance => homeProvider.totalBalance;
@@ -111,6 +114,11 @@ class TransactionProvider with ChangeNotifier {
   Future<void> addTransaction(TranscationModel transaction) async {
     try {
       await addTransactionUseCase(transaction);
+      // Log Analytics
+      await analyticsService.logAddTransaction(
+        type: transaction.type,
+        category: transaction.category,
+      );
       // Optimistic update or reload
       await loadTransactions();
       await refresh();
@@ -123,6 +131,8 @@ class TransactionProvider with ChangeNotifier {
   Future<void> deleteTransaction(String id) async {
     try {
       await deleteTransactionUseCase(id);
+      // Log Analytics
+      await analyticsService.logDeleteTransaction(id: id);
       await loadTransactions();
       await refresh();
     } catch (e) {

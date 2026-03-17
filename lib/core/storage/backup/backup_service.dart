@@ -12,6 +12,8 @@ import 'package:mono/features/transaction/data/models/transcation_model.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:mono/core/analytics/analytics_service.dart';
+import 'package:mono/core/di/injection_container.dart';
 
 class BackupService {
   static final BackupService instance = BackupService._();
@@ -76,6 +78,10 @@ class BackupService {
         files: [XFile(file.path)],
       );
       await SharePlus.instance.share(params);
+      
+      // Log Analytics
+      sl<AnalyticsService>().logExportBackup();
+      
       return true;
     } catch (e) {
       return false;

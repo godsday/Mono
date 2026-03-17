@@ -23,6 +23,7 @@ import 'package:mono/features/financial_overview/budget/presentation/providers/a
 import 'package:mono/features/financial_overview/budget/presentation/providers/budget_provider.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
 import 'package:mono/features/app_settings/presentation/providers/app_settings_provider.dart';
+import 'package:mono/core/analytics/analytics_service.dart';
 
 import 'package:mono/core/di/injection_container.dart' as di;
 import 'package:mono/core/di/injection_container.dart';
@@ -44,6 +45,9 @@ Future<void> main() async {
   await HiveService.init();
   await Firebase.initializeApp();
   await NotificationService().init();
+
+  // Log app_open event
+  sl<AnalyticsService>().logAppOpen();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -72,6 +76,7 @@ Future<void> main() async {
                 deleteTransactionUseCase: sl(),
                 updateTransactionUseCase: sl(),
                 groupTransactionsUseCase: sl(),
+                analyticsService: sl(),
               )),
       ChangeNotifierProxyProvider2<TransactionProvider, NotificationProvider,
           HomeProvider>(

@@ -115,13 +115,13 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                                 color: _iconColor,
                                 size: 20,
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 4),
                               Text(
                                 context.l10n.budget_overview_title,
                                 style: AppTextStyles.roboto16w600Black.copyWith(
                                   color: gradients.textTheme,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 18,
+                                  fontSize: 17,
                                 ),
                               ),
                             ],

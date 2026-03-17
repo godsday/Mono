@@ -37,6 +37,7 @@ import 'package:mono/features/app_settings/domain/usecases/update_currency_useca
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/locale_provider.dart';
+import 'package:mono/core/analytics/analytics_service.dart';
 
 final sl = GetIt.instance;
 
@@ -124,4 +125,5 @@ Future<void> init() async {
   // External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => AnalyticsService());
 }
