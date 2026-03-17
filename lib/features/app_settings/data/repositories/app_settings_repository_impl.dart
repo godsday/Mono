@@ -10,7 +10,7 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
   @override
   Future<AppSettingsEntity> getAppSettings() async {
     final languageCode = await localDataSource.getLanguageCode() ?? 'en';
-    final currencyCode = await localDataSource.getCurrencyCode() ?? 'USD';
+    final currencyCode = await localDataSource.getCurrencyCode() ?? 'INR';
 
     return AppSettingsEntity(
       languageCode: languageCode,

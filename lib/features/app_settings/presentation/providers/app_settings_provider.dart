@@ -23,7 +23,7 @@ class AppSettingsProvider extends ChangeNotifier {
   AppSettingsEntity? get appSettings => _appSettings;
   bool get isLoading => _isLoading;
 
-  String get currencyCode => _appSettings?.currencyCode ?? 'USD';
+  String get currencyCode => _appSettings?.currencyCode ?? 'INR';
   String get languageCode => _appSettings?.languageCode ?? 'en';
 
   String get currencySymbol => getCurrencySymbol(currencyCode);
@@ -39,6 +39,7 @@ class AppSettingsProvider extends ChangeNotifier {
       case 'JPY':
         return '¥';
       case 'USD':
+        return '\$';
       default:
         return '₹';
     }
