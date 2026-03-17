@@ -41,3 +41,5 @@ jobs:
         with:
           name: mono-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Set Gradle JVM max heap
+        run: echo "org.gradle.jvmargs=-Xmx4g" >> gradle.properties
