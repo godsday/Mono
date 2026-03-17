@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/core/theme/app_theme.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class AppElevetedButton extends StatelessWidget {
   final String appButtonText;

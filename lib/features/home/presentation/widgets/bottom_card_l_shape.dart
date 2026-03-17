@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:mono/models/top_category_model.dart';
 
 class LShapeWidget extends StatelessWidget {

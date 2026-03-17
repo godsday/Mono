@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart' show AppGradients;
@@ -7,7 +8,6 @@ import 'package:mono/features/financial_overview/budget/presentation/widgets/cat
 import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/budget_entity.dart';
@@ -106,8 +106,7 @@ class _BudgetOverviewCardState extends State<BudgetOverviewCard>
                         height: 4.5.h,
                         constraints: BoxConstraints(minWidth: 50.w),
                         child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 12.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [

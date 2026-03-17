@@ -4,8 +4,7 @@ import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
-import 'package:mono/features/add_screen/presentation/add_screen.dart';
-import 'package:mono/core/widgets/navigator_animation.dart';
+
 import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 

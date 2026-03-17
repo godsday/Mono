@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/financial_overview/widgets/safe_background_image.dart';
 import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
