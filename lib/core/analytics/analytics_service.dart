@@ -52,4 +52,15 @@ class AnalyticsService {
       debugPrint('Analytics Error: Failed to log export_backup: $e');
     }
   }
+
+  Future<void> logAssetNotificationTap() async {
+    try {
+      await _analytics.logEvent(
+        name: 'asset_notification_tap',
+      );
+      debugPrint('Analytics: asset_notification_tap logged');
+    } catch (e) {
+      debugPrint('Analytics Error: Failed to log asset_notification_tap: $e');
+    }
+  }
 }

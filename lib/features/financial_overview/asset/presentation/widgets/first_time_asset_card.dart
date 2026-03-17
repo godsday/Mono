@@ -6,6 +6,8 @@ import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
+import '../../../../../core/analytics/analytics_service.dart';
+import '../../../../../core/di/injection_container.dart';
 
 class FirstTimeAssetCard extends StatefulWidget {
   const FirstTimeAssetCard({super.key});
@@ -333,14 +335,39 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "🔔 ${context.l10n.first_time_asset_notification}",
-                                style: AppTextStyles.roboto18w600SemiBoldWhite(
-                                        context)!
-                                    .copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Theme.of(context).primaryColor,
+                              child: InkWell(
+                                onTap: () {
+                                  sl<AnalyticsService>()
+                                      .logAssetNotificationTap();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Done! We'll notify you once assets are launched.",
+                                        style: AppTextTheme.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      backgroundColor: Theme.of(context)
+                                          .secondaryHeaderColor,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "🔔 ${context.l10n.first_time_asset_notification}",
+                                  style:
+                                      AppTextStyles.roboto18w600SemiBoldWhite(
+                                              context)!
+                                          .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               ),
                             )
