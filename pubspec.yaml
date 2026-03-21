@@ -74,14 +74,7 @@ dependency_overrides:
   win32: ^5.2.0
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.14.4
 
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/Appicon1.png"
-  adaptive_icon_background: "assets/images/Appicon1.png"
-  adaptive_icon_foreground: "assets/images/Appicon1.png"
 
 
   
