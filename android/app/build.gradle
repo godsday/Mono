@@ -47,7 +47,7 @@ android {
     defaultConfig {
         applicationId "com.ror.mono"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
