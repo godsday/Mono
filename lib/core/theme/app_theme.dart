@@ -38,7 +38,12 @@ class Styles {
           expenseHeader: isDarkTheme
               ? AppColor.expenseHeaderDark
               : const Color(0xFFF7F6F6),
-
+          homeEmptyCardBg: isDarkTheme
+              ? AppColor.emptyHomeCardColorDark
+              : AppColor.emptyHomeCardColorLight,
+          homeEmptyCardBgGlow: isDarkTheme
+              ? AppColor.homeEmptyCardBgGlowDark
+              : AppColor.emptyHomeCardBgGlowLight,
           // home screen - transcation card- income and expense container
           incomeContainer:
               isDarkTheme ? AppColor.blackColor : AppColor.mainHexcolor,
@@ -60,6 +65,7 @@ class Styles {
               : AppColor.mainGradient,
         ),
       ],
+
 // main hex color vs light dark of the app
       primaryColor:
           isDarkTheme ? AppColor.secondaryDarkHexcolor : AppColor.mainHexcolor,
@@ -131,9 +137,13 @@ class AppGradients extends ThemeExtension<AppGradients> {
   final Color switchColor;
 
   final Color disableCardColor;
+  final Color homeEmptyCardBg;
+  final Color homeEmptyCardBgGlow;
   // final LinearGradient goalCardGradient;
 // final LinearGradient assetCardGradient;
   const AppGradients({
+    required this.homeEmptyCardBgGlow,
+    required this.homeEmptyCardBg,
     required this.switchColor,
     required this.budgetLinearGradient,
     required this.disableCardColor,
@@ -172,8 +182,12 @@ class AppGradients extends ThemeExtension<AppGradients> {
     Color? assetCardTheme,
     Color? disableCardColor,
     Color? switchColor,
+    Color? homeEmptyCardBg,
+    Color? homeEmptyCardBgGlow,
   }) {
     return AppGradients(
+      homeEmptyCardBgGlow: homeEmptyCardBgGlow ?? this.homeEmptyCardBgGlow,
+      homeEmptyCardBg: homeEmptyCardBg ?? this.homeEmptyCardBg,
       switchColor: switchColor ?? this.switchColor,
       budgetLinearGradient: budgetLinearGradient ?? this.budgetLinearGradient,
       disableCardColor: disableCardColor ?? this.disableCardColor,
@@ -200,6 +214,9 @@ class AppGradients extends ThemeExtension<AppGradients> {
     if (other is! AppGradients) return this;
 
     return AppGradients(
+      homeEmptyCardBgGlow:
+          Color.lerp(homeEmptyCardBgGlow, other.homeEmptyCardBgGlow, t)!,
+      homeEmptyCardBg: Color.lerp(homeEmptyCardBg, other.homeEmptyCardBg, t)!,
       switchColor: Color.lerp(switchColor, other.switchColor, t)!,
       budgetLinearGradient: LinearGradient.lerp(
           budgetLinearGradient, other.budgetLinearGradient, t)!,
@@ -223,6 +240,7 @@ class AppGradients extends ThemeExtension<AppGradients> {
       budgetCardTheme: Color.lerp(budgetCardTheme, other.budgetCardTheme, t)!,
       goalCardTheme: Color.lerp(goalCardTheme, other.goalCardTheme, t)!,
       assetCardTheme: Color.lerp(assetCardTheme, other.assetCardTheme, t)!,
+
       // goalCardGradient:
       //     LinearGradient.lerp(goalCardGradient, other.goalCardGradient, t)!,
     );

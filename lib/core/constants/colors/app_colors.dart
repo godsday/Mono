@@ -52,6 +52,11 @@ class AppColor {
   static Color transparent = Colors.transparent;
 
   static Color blackColor = Colors.black;
+  static Color emptyHomeCardColorLight = const Color(0xFFFCF6BC);
+  static Color emptyHomeCardColorDark = const Color(0xFF37474F);
+
+  static Color emptyHomeCardBgGlowLight = const Color(0xFFF8EEA2);
+  static Color homeEmptyCardBgGlowDark = const Color(0xFF37474F);
 
   static LinearGradient mainGradient = const LinearGradient(
     colors: [Color(0xFF429690), Color(0xFF1E4744)],

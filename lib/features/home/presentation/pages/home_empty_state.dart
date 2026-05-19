@@ -85,11 +85,14 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(12),
-                  color: const Color.fromARGB(
-                      255, 252, 246, 188), // 25% opacity glow
-                  boxShadow: const [
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .homeEmptyCardBg, // 25% opacity glow
+                  boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(255, 248, 238, 162),
+                      color: Theme.of(context)
+                          .extension<AppGradients>()!
+                          .homeEmptyCardBgGlow,
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),
@@ -139,7 +142,9 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
                 style: AppTextStyles.poppins15w400(context)!.copyWith(
                   fontWeight: FontWeight.normal,
                   fontSize: 15.sp,
-                  color: Colors.black54, // 70% opacity
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .textTheme, // 70% opacity
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 2,
@@ -214,7 +219,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
             context.l10n.home_empty_info_text,
             style: const TextStyle(
               fontSize: 12,
-              color: Colors.black26, // 40% opacity
+              // 40% opacity
             ),
             textAlign: TextAlign.center,
           ),
@@ -238,7 +243,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               context.l10n.home_empty_state_footer,
               style: const TextStyle(
                 fontSize: 12,
-                color: Colors.black26, // 40% opacity
+                // 40% opacity
               ),
               textAlign: TextAlign.center,
             ),
