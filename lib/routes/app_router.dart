@@ -12,7 +12,7 @@ import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';
 import '../features/app_settings/presentation/pages/settings_screen.dart';
-import '../features/IntroPages/onbording_screen.dart';
+import '../features/IntroPages/onboarding_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {

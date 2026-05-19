@@ -18,17 +18,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currency_symbol => '₹';
 
   @override
-  String get onboarding_title => 'Spend Smarter Save More';
+  String get onboarding_title => 'Small Steps. Better Habits';
 
   @override
   String get onboarding_subtitle =>
-      'Take control of your money with powerful tracking and planning tools';
+      'A simple way to stay aware of your daily spending.';
 
   @override
-  String get enter_name_hint => 'Your Name';
+  String get enter_name_hint => 'What should we call you?';
 
   @override
-  String get get_started => 'Get Started';
+  String get get_started => 'Continue';
 
   @override
   String get select_language => 'Select Language';
@@ -483,11 +483,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categories_title => 'Categories';
 
   @override
-  String get home_empty_state_title => 'Start Your Financial Journey';
+  String get home_empty_state_title => 'Take control of your spending';
 
   @override
   String get home_empty_state_subtitle =>
-      'Add your first transaction to begin tracking your money.';
+      'Understand where your money goes. Budget smarter. Save more.';
 
   @override
   String get home_empty_state_footer => 'Your data is safely encrypted.';
@@ -544,4 +544,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get insight_default_message => 'Your financial activity looks stable.';
+
+  @override
+  String get home_empty_info_text =>
+      'How it works: Enter your daily expenses, and we\'ll help you understand your spending habits. No bank connections, no automatic deductions.';
+
+  @override
+  String get home_empty_verified_info =>
+      'Personal budget planner - never syncs to your bank.';
+
+  @override
+  String get home_empty_privacy_info1 =>
+      'You control every entry - nothing is automatic.';
+
+  @override
+  String get home_empty_privacy_info2 =>
+      'See spending patterns - make informed decisions.';
+
+  @override
+  String get home_empty_privacy_info3 =>
+      'We never sell or share your personal data.';
+
+  @override
+  String get add_first_expense => 'Add Your First Expense';
 }

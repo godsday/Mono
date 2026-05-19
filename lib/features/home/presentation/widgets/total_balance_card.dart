@@ -134,7 +134,7 @@ class TotalBalanceCard extends StatelessWidget {
                           style: AppTextStyles.poppins12w300White(context)!
                               .copyWith(
                             fontWeight: FontWeight.w400,
-                            fontSize: 13.sp,
+                            fontSize: 12.3.sp,
                           ),
                         ),
                     ],

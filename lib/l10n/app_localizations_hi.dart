@@ -545,4 +545,27 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get insight_default_message => 'आपकी वित्तीय गतिविधि स्थिर दिखती है।';
+
+  @override
+  String get home_empty_info_text =>
+      'How it works: Enter your daily expenses, and we\'ll help you understand your spending habits. No bank connections, no automatic deductions.';
+
+  @override
+  String get home_empty_verified_info =>
+      'Personal budget planner - never syncs to your bank.';
+
+  @override
+  String get home_empty_privacy_info1 =>
+      'You control every entry - nothing is automatic.';
+
+  @override
+  String get home_empty_privacy_info2 =>
+      'See spending patterns - make informed decisions.';
+
+  @override
+  String get home_empty_privacy_info3 =>
+      'We never sell or share your personal data.';
+
+  @override
+  String get add_first_expense => 'Add Your First Expense';
 }

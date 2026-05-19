@@ -121,25 +121,25 @@ abstract class AppLocalizations {
   /// No description provided for @onboarding_title.
   ///
   /// In en, this message translates to:
-  /// **'Spend Smarter Save More'**
+  /// **'Small Steps. Better Habits'**
   String get onboarding_title;
 
   /// No description provided for @onboarding_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Take control of your money with powerful tracking and planning tools'**
+  /// **'A simple way to stay aware of your daily spending.'**
   String get onboarding_subtitle;
 
   /// No description provided for @enter_name_hint.
   ///
   /// In en, this message translates to:
-  /// **'Your Name'**
+  /// **'What should we call you?'**
   String get enter_name_hint;
 
   /// No description provided for @get_started.
   ///
   /// In en, this message translates to:
-  /// **'Get Started'**
+  /// **'Continue'**
   String get get_started;
 
   /// No description provided for @select_language.
@@ -1015,13 +1015,13 @@ abstract class AppLocalizations {
   /// No description provided for @home_empty_state_title.
   ///
   /// In en, this message translates to:
-  /// **'Start Your Financial Journey'**
+  /// **'Take control of your spending'**
   String get home_empty_state_title;
 
   /// No description provided for @home_empty_state_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Add your first transaction to begin tracking your money.'**
+  /// **'Understand where your money goes. Budget smarter. Save more.'**
   String get home_empty_state_subtitle;
 
   /// No description provided for @home_empty_state_footer.
@@ -1113,6 +1113,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your financial activity looks stable.'**
   String get insight_default_message;
+
+  /// No description provided for @home_empty_info_text.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works: Enter your daily expenses, and we\'ll help you understand your spending habits. No bank connections, no automatic deductions.'**
+  String get home_empty_info_text;
+
+  /// No description provided for @home_empty_verified_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal budget planner - never syncs to your bank.'**
+  String get home_empty_verified_info;
+
+  /// No description provided for @home_empty_privacy_info1.
+  ///
+  /// In en, this message translates to:
+  /// **'You control every entry - nothing is automatic.'**
+  String get home_empty_privacy_info1;
+
+  /// No description provided for @home_empty_privacy_info2.
+  ///
+  /// In en, this message translates to:
+  /// **'See spending patterns - make informed decisions.'**
+  String get home_empty_privacy_info2;
+
+  /// No description provided for @home_empty_privacy_info3.
+  ///
+  /// In en, this message translates to:
+  /// **'We never sell or share your personal data.'**
+  String get home_empty_privacy_info3;
+
+  /// No description provided for @add_first_expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Your First Expense'**
+  String get add_first_expense;
 }
 
 class _AppLocalizationsDelegate

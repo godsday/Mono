@@ -17,7 +17,7 @@ class HomeHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "${context.l10n.home_greeting_prefix} ${homeProvider.userName.capitalizeFirstLetter()}",
+              "${context.l10n.home_greeting_prefix} ${getDisplayName(homeProvider.userName)}",
               style: AppTextTheme.montserrart(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -43,5 +43,18 @@ class HomeHeader extends StatelessWidget {
     if (hour < 12) return context.l10n.greeting_morning;
     if (hour < 17) return context.l10n.greeting_afternoon;
     return context.l10n.greeting_evening;
+  }
+
+  String getDisplayName(String name) {
+    if (name.isEmpty) return '';
+    final words = name.trim().split(' ');
+    final validWords =
+        words.where((word) => word.isNotEmpty && word.length >= 3).toList();
+
+    if (validWords.isEmpty) return '';
+
+    validWords.sort((a, b) => a.length.compareTo(b.length));
+
+    return validWords.first.capitalizeFirstLetter();
   }
 }

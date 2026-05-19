@@ -115,11 +115,11 @@ class OnboardScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(
-                top: 10,
-                right: 20,
-                child: _LanguageSelector(),
-              ),
+              //  Positioned(
+              //   top: 10,
+              //   right: 20,
+              //   child: _LanguageSelector(),
+              // ),
             ],
           ),
         ),
@@ -190,6 +190,7 @@ class _OnboardButtonState extends State<_OnboardButton> {
   }
 }
 
+// ignore: unused_element
 class _LanguageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -197,22 +198,27 @@ class _LanguageSelector extends StatelessWidget {
       builder: (context, provider, child) {
         return PopupMenuButton<Locale>(
           initialValue: provider.locale,
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.8),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 4,
+          icon: Row(
+            children: [
+              const Icon(Icons.language),
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.8),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Text(
-              L10n.getFlag(provider.locale?.languageCode ?? 'en'),
-              style: const TextStyle(fontSize: 20),
-            ),
+                child: Text(
+                  L10n.getFlag(provider.locale?.countryCode ?? 'en'),
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
           ),
           onSelected: (locale) {
             provider.setLocale(locale);
@@ -279,19 +285,65 @@ class _NameTextfieldWidgetState extends State<NameTextfieldWidget> {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
       child: TextFormField(
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your name';
+          }
+          final wordCount =
+              value.trim().split(' ').where((word) => word.isNotEmpty).length;
+          if (wordCount > 3) {
+            return 'Only 3 words accepted';
+          }
+          return null;
+        },
         inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-          LengthLimitingTextInputFormatter(5),
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+          LengthLimitingTextInputFormatter(50),
         ],
         textAlign: TextAlign.center,
         keyboardType: TextInputType.text,
         controller: widget.namecontroller,
         focusNode: _focusNode,
         onChanged: (value) {
-          if (value.length == 5) {
-            FocusScope.of(context).unfocus();
+          // Count words
+          final wordCount =
+              value.trim().split(' ').where((word) => word.isNotEmpty).length;
+
+          // If more than 2 words, restrict and show warning
+          if (wordCount > 3) {
+            // Show warning message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Only 3 words accepted'),
+                duration: Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+
+            // Keep only first 3 words
+            final words = value
+                .trim()
+                .split(' ')
+                .where((word) => word.isNotEmpty)
+                .toList();
+            final newValue = words.take(3).join(' ');
+
+            // Update controller without triggering onChanged again
+            widget.namecontroller.value = TextEditingValue(
+              text: newValue.capitalizeFirstLetter(),
+              selection: TextSelection.fromPosition(
+                TextPosition(offset: newValue.length),
+              ),
+            );
+          } else {
+            // Normal capitalization
+            widget.namecontroller.value = TextEditingValue(
+              text: value.capitalizeFirstLetter(),
+              selection: TextSelection.fromPosition(
+                TextPosition(offset: value.length),
+              ),
+            );
           }
-          widget.namecontroller.text = value.capitalizeFirstLetter();
         },
         decoration: InputDecoration(
             contentPadding:
