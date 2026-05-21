@@ -130,7 +130,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 1.h),
 
           // Subtitle with animation
           FadeTransition(
@@ -151,7 +151,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 3.h),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -190,7 +190,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 2.h),
 
           // Primary Button with animation
           Padding(
@@ -209,7 +209,6 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               ),
             ),
           ),
-          const SizedBox(height: 28),
 
           // Footer text
 

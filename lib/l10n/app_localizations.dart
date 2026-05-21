@@ -217,13 +217,13 @@ abstract class AppLocalizations {
   /// No description provided for @add_transaction_title.
   ///
   /// In en, this message translates to:
-  /// **'Add Transaction'**
+  /// **'Add'**
   String get add_transaction_title;
 
   /// No description provided for @edit_transaction_title.
   ///
   /// In en, this message translates to:
-  /// **'Edit Transaction'**
+  /// **'Edit'**
   String get edit_transaction_title;
 
   /// No description provided for @transaction_type.
@@ -751,7 +751,7 @@ abstract class AppLocalizations {
   /// No description provided for @recent_transactions.
   ///
   /// In en, this message translates to:
-  /// **'Recent Transactions'**
+  /// **'Recent Records'**
   String get recent_transactions;
 
   /// No description provided for @filter_all.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 // ignore: depend_on_referenced_packages
 import 'package:uuid/uuid.dart';
@@ -139,6 +140,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   filled: true,
                   fillColor: Colors.white,
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z]*$'))
+                ],
                 validator: (value) => value == null || value.isEmpty
                     ? 'Please enter a title'
                     : null,
@@ -159,6 +163,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   filled: true,
                   fillColor: Colors.white,
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                  LengthLimitingTextInputFormatter(10),
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter target amount';
@@ -183,6 +191,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   filled: true,
                   fillColor: Colors.white,
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                  LengthLimitingTextInputFormatter(10),
+                ],
               ),
               const SizedBox(height: 20),
 

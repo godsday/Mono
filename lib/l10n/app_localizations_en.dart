@@ -68,10 +68,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'All transaction details will be deleted.\n\nDo you like to continue ?';
 
   @override
-  String get add_transaction_title => 'Add Transaction';
+  String get add_transaction_title => 'Add';
 
   @override
-  String get edit_transaction_title => 'Edit Transaction';
+  String get edit_transaction_title => 'Edit';
 
   @override
   String get transaction_type => 'Transaction Type';
@@ -340,7 +340,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get show_button => 'Show';
 
   @override
-  String get recent_transactions => 'Recent Transactions';
+  String get recent_transactions => 'Recent Records';
 
   @override
   String get filter_all => 'All';

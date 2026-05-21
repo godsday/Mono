@@ -111,16 +111,17 @@ class _AddScreenState extends State<AddScreen> {
                             ),
                             SizedBox(
                               width: double.infinity,
-                              child: Builder(
-                                builder: (context) {
-                                  final selectedType = context.select((TransactionProvider p) => p.selectedType);
-                                  return Row(
+                              child: Builder(builder: (context) {
+                                final selectedType = context.select(
+                                    (TransactionProvider p) => p.selectedType);
+                                return Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       RadioGroup<String>(
                                           groupValue: selectedType,
                                           onChanged: (String? value) {
-                                            final provider = context.read<TransactionProvider>();
+                                            final provider = context
+                                                .read<TransactionProvider>();
                                             provider.selectedType = value!;
                                             // Clear category selection when switching type
                                             provider.categorySelected = null;
@@ -171,7 +172,7 @@ class _AddScreenState extends State<AddScreen> {
                                             ],
                                           )),
                                     ]);
-                                  }),
+                              }),
                             ),
                             SizedBox(
                               height: 1.h,
@@ -230,56 +231,53 @@ class _AddScreenState extends State<AddScreen> {
                             SizedBox(
                               height: .5.h,
                             ),
-                            Builder(
-                                builder: (context) {
-                                  final selectedDate = context.select((TransactionProvider p) => p.selectedDate);
-                                  return InkWell(
-                                      onTap: () async {
-                                        final provider = context.read<TransactionProvider>();
-                                        final date =
-                                            await provider.pickDate(context);
-                                        if (date == null) return;
+                            Builder(builder: (context) {
+                              final selectedDate = context.select(
+                                  (TransactionProvider p) => p.selectedDate);
+                              return InkWell(
+                                onTap: () async {
+                                  final provider =
+                                      context.read<TransactionProvider>();
+                                  final date = await provider.pickDate(context);
+                                  if (date == null) return;
 
-                                        provider.selectedDate = date;
-                                      },
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          border: Border.all(
-                                              color: AppColor.grey, width: 1),
+                                  provider.selectedDate = date;
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                        color: AppColor.grey, width: 1),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, right: 8.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month,
+                                          color: AppColor.grey500,
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10.0, right: 8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.calendar_month,
-                                                color: AppColor.grey500,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${selectedDate.day} / ${selectedDate.month} / ${selectedDate.year}',
-                                                style: AppTextStyles
-                                                    .poppins16w600
-                                                    .copyWith(
-                                                  color: Theme.of(context)
-                                                      .extension<
-                                                          AppGradients>()!
-                                                      .textTheme,
-                                                ),
-                                              ),
-                                            ],
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '${selectedDate.day} / ${selectedDate.month} / ${selectedDate.year}',
+                                          style: AppTextStyles.poppins16w600
+                                              .copyWith(
+                                            color: Theme.of(context)
+                                                .extension<AppGradients>()!
+                                                .textTheme,
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -292,10 +290,15 @@ class _AddScreenState extends State<AddScreen> {
                             ),
                             Builder(
                               builder: (context) {
-                                final selectedType = context.select((TransactionProvider p) => p.selectedType);
-                                final allCategories = context.select((TransactionProvider p) => p.allCategories);
-                                final categorySelected = context.select((TransactionProvider p) => p.categorySelected);
-                                final provider = context.read<TransactionProvider>();
+                                final selectedType = context.select(
+                                    (TransactionProvider p) => p.selectedType);
+                                final allCategories = context.select(
+                                    (TransactionProvider p) => p.allCategories);
+                                final categorySelected = context.select(
+                                    (TransactionProvider p) =>
+                                        p.categorySelected);
+                                final provider =
+                                    context.read<TransactionProvider>();
 
                                 // Filter categories based on selected transaction type
                                 final categories = allCategories
@@ -316,7 +319,8 @@ class _AddScreenState extends State<AddScreen> {
                                 String? validCategory;
                                 if (categorySelected != null &&
                                     categorySelected.isNotEmpty) {
-                                  if (categories.any((c) => c.name == categorySelected)) {
+                                  if (categories
+                                      .any((c) => c.name == categorySelected)) {
                                     validCategory = categorySelected;
                                   }
                                 }
@@ -428,8 +432,9 @@ class _AddScreenState extends State<AddScreen> {
                               height: .5.h,
                             ),
                             TextFormField(
+                              keyboardType: TextInputType.multiline,
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(10)
+                                LengthLimitingTextInputFormatter(200)
                               ],
                               style: AppTextStyles.poppins16w600.copyWith(
                                 color: Theme.of(context)
@@ -437,10 +442,8 @@ class _AddScreenState extends State<AddScreen> {
                                     .textTheme,
                               ),
                               controller: notesController,
-                              keyboardType: TextInputType.text,
                               decoration: textfielddecor(
                                   context, context.l10n.transaction_notes_hint),
-                              maxLines: 2,
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
                                   notesController.text =

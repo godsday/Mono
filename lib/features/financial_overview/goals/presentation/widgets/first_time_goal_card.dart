@@ -1,7 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/features/financial_overview/goals/presentation/pages/add_goal_screen.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
@@ -126,15 +128,15 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    _showCard = !_showCard;
-                                  });
-                                  /*   Navigator.push(
-                                   context,
+                                  // setState(() {
+                                  //   _showCard = !_showCard;
+                                  // });
+                                  Navigator.push(
+                                    context,
                                     MaterialPageRoute(
-                                       builder: (context) =>
-                                           const AddGoalScreen()),
-                                  );*/
+                                        builder: (context) =>
+                                            const AddGoalScreen()),
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -142,14 +144,15 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                           .extension<AppGradients>()!
                                           .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
-                                      // gradient: LinearGradient(
-                                      //   end: Alignment.bottomRight,
-                                      //   begin: Alignment.topLeft,
-                                      // colors: [
-                                      //   HexColor('#429690'),
-                                      //   HexColor('#1E4744').withValues(alpha: 0.8),
-                                      // ],
-                                      // ),
+                                      gradient: LinearGradient(
+                                        end: Alignment.bottomRight,
+                                        begin: Alignment.topLeft,
+                                        colors: [
+                                          HexColor('#429690'),
+                                          HexColor('#1E4744')
+                                              .withValues(alpha: 0.8),
+                                        ],
+                                      ),
                                       border: Border.all(
                                           width: 2,
                                           color: Theme.of(context)

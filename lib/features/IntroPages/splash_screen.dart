@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> startSplash() async {
     await Future.delayed(const Duration(seconds: 2));
-    setState(() => _fontSize = 1.1);
+    setState(() => _fontSize = 1.78);
 
     await Future.delayed(const Duration(seconds: 1));
     setState(() => _containerOpacity = 1.0);

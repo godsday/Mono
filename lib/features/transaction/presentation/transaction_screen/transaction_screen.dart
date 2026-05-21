@@ -499,71 +499,7 @@ Widget _buildGroupedTransactionList(
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Card(
-              shadowColor: AppColor.borderGreyWhite,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(
-                  color: Colors.white24,
-                  width: 1,
-                ),
-              ),
-              child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .extension<AppGradients>()
-                        ?.transactionListBg,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: AppColor.borderGreyWhite,
-                      width: 1,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: GetCategoryIcon(
-                        category: transaction.category, type: transaction.type),
-                  ),
-                ),
-                title: Text(
-                  transaction.category,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
-                ),
-                subtitle: Text(
-                  context
-                      .read<TransactionProvider>()
-                      .parsedate(transaction.date),
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                  ),
-                ),
-                trailing: SizedBox(
-                  width: 35.w,
-                  child: AutoSizeText(
-                    "${transaction.type == 'Expense' ? '- ' : '+ '}${context.formatCurrency(transaction.amount)}",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: transaction.type == 'Expense'
-                          ? FontWeight.w600
-                          : FontWeight.bold,
-                      color: transaction.type == 'Expense'
-                          ? Colors.red
-                          : Colors.green,
-                    ),
-                    maxLines: 1,
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          child: _TransactionCardWidget(transaction: transaction),
         ),
       );
     }
@@ -596,5 +532,163 @@ void _showCustomDatePicker(BuildContext context) async {
     provider.itemvalue = 'Custom';
     provider.custompick(dateRange.start, dateRange.end);
     provider.refresh();
+  }
+}
+
+class _TransactionCardWidget extends StatefulWidget {
+  final TranscationModel transaction;
+
+  const _TransactionCardWidget({
+    required this.transaction,
+  });
+
+  @override
+  State<_TransactionCardWidget> createState() => _TransactionCardWidgetState();
+}
+
+class _TransactionCardWidgetState extends State<_TransactionCardWidget> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final transaction = widget.transaction;
+    final notes = transaction.purpose;
+    final hasNotes = notes != null && notes.trim().isNotEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Card(
+        shadowColor: AppColor.borderGreyWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(
+            color: Colors.white24,
+            width: 1,
+          ),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: hasNotes
+              ? () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                }
+              : null,
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.transactionListBg,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColor.borderGreyWhite,
+                        width: 1,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GetCategoryIcon(
+                          category: transaction.category,
+                          type: transaction.type),
+                    ),
+                  ),
+                  title: Text(
+                    transaction.category,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                  subtitle: Text(
+                    context
+                        .read<TransactionProvider>()
+                        .parsedate(transaction.date),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  trailing: AutoSizeText(
+                    "${transaction.type == 'Expense' ? '- ' : '+ '}${context.formatCurrency(transaction.amount)}",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: transaction.type == 'Expense'
+                          ? FontWeight.w600
+                          : FontWeight.bold,
+                      color: transaction.type == 'Expense'
+                          ? Colors.red
+                          : Colors.green,
+                    ),
+                    maxLines: 1,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+                if (_isExpanded) ...[
+                  const Divider(
+                    height: 1,
+                    indent: 16,
+                    endIndent: 16,
+                    color: Colors.white24,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.notes_outlined,
+                              size: 14.sp,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              context.l10n.transaction_notes,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13.sp,
+                                color: AppColor.textGrey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            hasNotes ? notes : "No notes",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: hasNotes
+                                  ? null
+                                  : AppColor.textGrey.withValues(alpha: 0.7),
+                              fontStyle: hasNotes
+                                  ? FontStyle.normal
+                                  : FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
