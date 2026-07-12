@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
@@ -153,6 +154,10 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           ),
           const SizedBox(height: 12),
           TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+              LengthLimitingTextInputFormatter(10)
+            ],
             controller: totalController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: AppTextTheme.montserrart(
@@ -175,13 +180,11 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
                       : AppColor.textSecondary.withValues(alpha: 0.3)),
             ),
             onChanged: (value) {
-              if (value.isEmpty) {
+              if (value.isNotEmpty && RegExp(r'^[0-9]*$').hasMatch(value)) {
+                final amount = double.tryParse(value);
+                provider.updateTotalBudget(amount!);
+              } else {
                 provider.updateTotalBudget(0);
-                return;
-              }
-              final amount = double.tryParse(value);
-              if (amount != null) {
-                provider.updateTotalBudget(amount);
               }
             },
           ),
@@ -317,6 +320,10 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
             ),
             child: TextFormField(
               controller: _controller,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                LengthLimitingTextInputFormatter(10)
+              ],
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.end,

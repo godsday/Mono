@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -331,8 +332,9 @@ class _InfoColumn extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
+        AutoSizeText(
           value,
+          maxLines: 1,
           style: AppTextStyles.roboto18w600SemiBoldWhite(context)!.copyWith(
             fontSize: 18,
             fontWeight: FontWeight.w700,

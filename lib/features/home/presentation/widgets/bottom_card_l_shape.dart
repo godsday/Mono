@@ -188,7 +188,7 @@ class LShapeWidget extends StatelessWidget {
             Positioned(
               top: 0,
               left:
-                  orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 5.5.w,
+                  orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 5.3.w,
               right: 0,
               height: totalHeight * 0.20, // Adjust height of header
               child: Container(

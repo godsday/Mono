@@ -60,15 +60,15 @@ class GoalsOverviewCard extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Positioned(
-                  left: 9.w,
-                  child: SafeBackgroundImage(
-                    imagePath: 'assets/images/arrow-first.png',
-                    fit: BoxFit.contain,
-                    fallback: Icon(Icons.kayaking,
-                        size: 80, color: Colors.grey.withValues(alpha: 0.2)),
-                  ),
-                ),
+                // Positioned(
+                //   left: 9.w,
+                //   child: SafeBackgroundImage(
+                //     imagePath: 'assets/images/arrow-first.png',
+                //     fit: BoxFit.contain,
+                //     fallback: Icon(Icons.kayaking,
+                //         size: 80, color: Colors.grey.withValues(alpha: 0.2)),
+                //   ),
+                // ),
                 Positioned(
                   right: 0,
                   top: 0,

@@ -68,9 +68,10 @@ class AppRouter {
         return _buildPageRoute(const SupportScreen(), settings);
 
       case RouteNames.bottomNav:
+        final index = (settings.arguments as int?) ?? 1;
         return _buildPageRoute(
-            const BottomNavigator(
-              index: 1,
+            BottomNavigator(
+              index: index,
             ),
             settings);
 

@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               // name and greeting Header
               Positioned(
-                top: 2.5.h,
+                top: 1.5.h,
                 left: 7.w,
                 child: const HomeHeader(),
               ),
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               // Detail card (Dark background card)
               Positioned(
-                top: 28.h,
+                top: 25.h,
                 left: 12.w,
                 child: Container(
                   height: 12.h,
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               // total balance card
               Positioned(
-                top: 12.h,
+                top: 9.h,
                 left: 7.w,
                 right: 7.w,
                 child: const TotalBalanceCard(),
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               // Decorative elements
               Positioned(
-                top: 14.h,
+                top: 10.h,
                 child: Image(
                   width: 67.w,
                   image: const AssetImage('assets/images/rings.png'),
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               // Smart Insight
               Positioned(
-                bottom: 2.h,
+                bottom: 1.h,
                 left: 0,
                 right: 0,
                 child: Consumer<HomeProvider>(
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               ),
               Positioned(
                 right: 5.w,
-                bottom: 6.h,
+                bottom: 9.h,
                 child: ClipRect(
                   child: Align(
                     alignment: Alignment.topCenter,
@@ -278,7 +278,7 @@ class HomepageCurveShape extends StatelessWidget {
               ),
             ],
           ),
-          height: 67.h,
+          height: 62.h,
         ),
       ),
     );

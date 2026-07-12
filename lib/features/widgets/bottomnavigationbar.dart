@@ -23,6 +23,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     _selectedIndex = widget.index;
   }
 
+  @override
+  void didUpdateWidget(covariant BottomNavigator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      setState(() {
+        _selectedIndex = widget.index;
+      });
+    }
+  }
+
   final List<Widget> pages = const [
     TranscationScreen(),
     HomePage(),

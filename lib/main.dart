@@ -24,6 +24,7 @@ import 'package:mono/features/financial_overview/budget/presentation/providers/b
 import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
 import 'package:mono/features/app_settings/presentation/providers/app_settings_provider.dart';
 import 'package:mono/core/analytics/analytics_service.dart';
+import 'firebase_options.dart';
 
 import 'package:mono/core/di/injection_container.dart' as di;
 import 'package:mono/core/di/injection_container.dart';
@@ -31,7 +32,9 @@ import 'package:mono/core/di/injection_container.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, initialize Firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   NotificationService().init();
   // print('Handling a background message: ${message.messageId}');
@@ -43,7 +46,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   await HiveService.init();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await NotificationService().init();
 
   // Log app_open event
@@ -166,20 +171,27 @@ class _MyAppState extends State<MyApp> {
     return Sizer(builder: (context, orientation, deviceType) {
       return Consumer2<DarkThemeProvider, LocaleProvider>(
           builder: (context, darkThemeValue, localeValue, child) {
-        return MaterialApp(
-          locale: localeValue.locale,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: L10n.all,
-          debugShowCheckedModeBanner: false,
-          theme: Styles.themeData(darkThemeValue.darkTheme, context),
-          initialRoute: RouteNames.splash,
-          onGenerateRoute: AppRouter.onGenerateRoute,
-          themeMode: ThemeMode.system,
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 450,
+            ),
+            child: MaterialApp(
+              locale: localeValue.locale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: L10n.all,
+              debugShowCheckedModeBanner: false,
+              theme: Styles.themeData(darkThemeValue.darkTheme, context),
+              initialRoute: RouteNames.splash,
+              onGenerateRoute: AppRouter.onGenerateRoute,
+              themeMode: ThemeMode.system,
+            ),
+          ),
         );
       });
     });
