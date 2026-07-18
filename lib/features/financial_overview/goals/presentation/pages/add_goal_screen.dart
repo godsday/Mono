@@ -62,8 +62,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         double.tryParse(_targetAmountController.text.trim()) ?? 0.0;
     final savedAmount =
         double.tryParse(_savedAmountController.text.trim()) ?? 0.0;
-    final deadline = _selectedDeadline ??
-        DateTime.now().add(const Duration(days: 365));
+    final deadline =
+        _selectedDeadline ?? DateTime.now().add(const Duration(days: 365));
 
     final newGoal = GoalEntity(
       id: const Uuid().v4(),
@@ -118,7 +118,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.mainHexcolor.withOpacity(0.05),
+                color: AppColor.mainHexcolor.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -130,7 +130,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               height: 350,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.mainHexcolor.withOpacity(0.03),
+                color: AppColor.mainHexcolor.withValues(alpha: 0.03),
               ),
             ),
           ),
@@ -143,7 +143,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   child: _buildHeader(),
                 ),
                 SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 20.0),
                   sliver: SliverToBoxAdapter(
                     child: Form(
                       key: _formKey,
@@ -201,7 +202,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         gradient: LinearGradient(
           colors: [
             AppColor.mainHexcolor,
-            AppColor.mainHexcolor.withOpacity(0.8),
+            AppColor.mainHexcolor.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -212,7 +213,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColor.mainHexcolor.withOpacity(0.3),
+            color: AppColor.mainHexcolor.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -221,7 +222,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20), // Top padding for safe area logic with overlapping button
+          const SizedBox(
+              height:
+                  20), // Top padding for safe area logic with overlapping button
           Text(
             "Add Dream / Goal",
             style: AppTextTheme.montserrart(
@@ -236,7 +239,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
         ],
@@ -272,13 +275,14 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? LinearGradient(
                           colors: [
                             AppColor.mainHexcolor,
-                            AppColor.mainHexcolor.withOpacity(0.8),
+                            AppColor.mainHexcolor.withValues(alpha: 0.8),
                           ],
                         )
                       : null,
@@ -287,12 +291,12 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   border: Border.all(
                     color: isSelected
                         ? Colors.transparent
-                        : AppColor.mainHexcolor.withOpacity(0.5),
+                        : AppColor.mainHexcolor.withValues(alpha: 0.5),
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppColor.mainHexcolor.withOpacity(0.3),
+                            color: AppColor.mainHexcolor.withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           )
@@ -335,9 +339,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           formatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
           ],
-          validator: (value) => value == null || value.isEmpty
-              ? 'Please enter a title'
-              : null,
+          validator: (value) =>
+              value == null || value.isEmpty ? 'Please enter a title' : null,
         ),
         const SizedBox(height: 16),
         _buildCustomTextField(
@@ -374,7 +377,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               border: Border.all(color: Colors.grey[200]!),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -421,7 +424,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -484,8 +487,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         borderRadius: BorderRadius.circular(24),
         gradient: LinearGradient(
           colors: [
-            AppColor.mainHexcolor.withOpacity(0.05),
-            Colors.white.withOpacity(0.8),
+            AppColor.mainHexcolor.withValues(alpha: 0.05),
+            Colors.white.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -493,7 +496,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         border: Border.all(color: Colors.white, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: AppColor.mainHexcolor.withOpacity(0.05),
+            color: AppColor.mainHexcolor.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -523,7 +526,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColor.mainHexcolor.withOpacity(0.1),
+                        color: AppColor.mainHexcolor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -596,7 +599,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            AppColor.mainHexcolor.withOpacity(0.7),
+                            AppColor.mainHexcolor.withValues(alpha: 0.7),
                             AppColor.mainHexcolor,
                           ],
                         ),
@@ -624,9 +627,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColor.mainHexcolor.withOpacity(0.08),
+        color: AppColor.mainHexcolor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColor.mainHexcolor.withOpacity(0.2)),
+        border: Border.all(color: AppColor.mainHexcolor.withValues(alpha: 0.2)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -671,7 +674,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColor.mainHexcolor.withOpacity(0.3),
+              color: AppColor.mainHexcolor.withValues(alpha: 0.3),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
