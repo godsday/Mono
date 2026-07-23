@@ -1,5 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import '../../domain/entities/budget_discipline_data.dart';
 
 class BudgetDisciplineChart extends StatelessWidget {
@@ -10,7 +12,7 @@ class BudgetDisciplineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.last6MonthsData.isEmpty) {
-      return const Center(child: Text("No budget data"));
+      return Center(child: Text(AppLocalizations.of(context)!.no_budget_data));
     }
 
     List<BarChartGroupData> groups = [];
@@ -33,17 +35,19 @@ class BudgetDisciplineChart extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: budget,
-            color: Colors.blue.withValues(alpha: 0.5),
-            width: 12,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+            color: Colors.blue.withValues(alpha: 0.3),
+            width: 14,
+            borderRadius: BorderRadius.circular(4),
+            borderSide:
+                BorderSide(color: Colors.blue.withValues(alpha: 0.5), width: 1),
           ),
           BarChartRodData(
             toY: actual,
-            color: actual > budget ? Colors.red : Colors.green,
-            width: 12,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+            color: actual > budget
+                ? Colors.redAccent.withValues(alpha: 0.8)
+                : Colors.greenAccent.withValues(alpha: 0.8),
+            width: 14,
+            borderRadius: BorderRadius.circular(4),
           ),
         ],
       ));
@@ -61,8 +65,9 @@ class BudgetDisciplineChart extends StatelessWidget {
             touchTooltipData: BarTouchTooltipData(
                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final isBudget = rodIndex == 0;
+              final l10n = AppLocalizations.of(context)!;
               return BarTooltipItem(
-                '${isBudget ? 'Budget: ' : 'Spent: '}₹${rod.toY.toStringAsFixed(0)}',
+                '${isBudget ? l10n.budget_tooltip : l10n.spent_tooltip}${context.formatCurrency(rod.toY)}',
                 const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
               );

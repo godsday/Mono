@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_theme.dart';
 
-SnackBar customSnak(BuildContext context, {required message}) {
+SnackBar customSnack(BuildContext context, {required message}) {
   return SnackBar(
-      backgroundColor: AppColor.mainHexcolor,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       duration: const Duration(milliseconds: 1500),
       content: Text(
         message,
-        style: TextStyle(color: Theme.of(context).focusColor),
+        style: AppTextStyles.poppins15w400(context)!.copyWith(
+            color: Theme.of(context).extension<AppGradients>()!.textTheme,
+            fontWeight: FontWeight.w600),
       ));
 }

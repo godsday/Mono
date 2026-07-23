@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/features/add_screen/add_screen.dart';
-import 'package:mono/core/widgets/navigator_animation.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
+
+import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeEmptyState extends StatefulWidget {
@@ -67,55 +71,58 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Illustration with glow effect and animation
-          FadeTransition(
-            opacity: _illustrationAnimation,
-            child: Center(
+          SizedBox(height: 2.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: FadeTransition(
+              opacity: _illustrationAnimation,
               child: Container(
-                width: 200,
-                height: 200,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(64, 138, 234, 226), // 25% opacity glow
+                width: double.infinity,
+                height: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(12),
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .homeEmptyCardBg, // 25% opacity glow
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(64, 22, 162, 232),
+                      color: Theme.of(context)
+                          .extension<AppGradients>()!
+                          .homeEmptyCardBgGlow,
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),
                   ],
                 ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/images/piggybank.png',
-                    width: 40.w,
-                    height: 80.w,
-                  ),
+                child: Image.asset(
+                  'assets/images/piggybank.png',
+                  width: 40.w,
+                  height: 80.w,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          // const SizedBox(height: 24),
 
           // Title with gradient text and animation
           FadeTransition(
             opacity: _textAnimation,
             child: ShaderMask(
               shaderCallback: (bounds) {
-                return const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 7, 70, 91),
-                    Color.fromARGB(255, 45, 105, 113),
-                  ],
-                ).createShader(bounds);
+                return Theme.of(context)
+                    .extension<AppGradients>()!
+                    .cardGradient
+                    .createShader(bounds);
               },
-              child: const Text(
-                "Start Your Financial Journey",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
+              child: Text(
+                context.l10n.home_empty_state_title,
+                style: AppTextStyles.roboto16w600Black.copyWith(
+                  fontSize: 19.sp,
+                  fontWeight: FontWeight.w900,
                   color: Colors
                       .white, // This color will be ignored due to ShaderMask
                 ),
@@ -123,68 +130,168 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 1.h),
 
           // Subtitle with animation
           FadeTransition(
             opacity: _textAnimation,
-            child: const Text(
-              "Add your first transaction to begin tracking your money.",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.normal,
-                color: Colors.black54, // 70% opacity
+            child: SizedBox(
+              width: 80.w,
+              child: Text(
+                context.l10n.home_empty_state_subtitle,
+                style: AppTextStyles.poppins15w400(context)!.copyWith(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                  color: Theme.of(context)
+                      .extension<AppGradients>()!
+                      .textTheme, // 70% opacity
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 3.h),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: const Color.fromARGB(255, 41, 41, 41),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 151, 151, 151))),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    VerifiedMessage(
+                        context: context,
+                        message: context.l10n.home_empty_verified_info),
+                    const SizedBox(height: 10),
+                    VerifiedMessage(
+                        context: context,
+                        message: context.l10n.home_empty_privacy_info1),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    VerifiedMessage(
+                        context: context,
+                        message: context.l10n.home_empty_privacy_info2),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    VerifiedMessage(
+                        context: context,
+                        message: context.l10n.home_empty_privacy_info3),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 2.h),
 
           // Primary Button with animation
-          FadeTransition(
-            opacity: _buttonAnimation,
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    CustomPageRoute(child: const AddScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.mainHexcolor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  elevation: 4,
-                ),
-                child: const Text(
-                  "Add Transaction",
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: FadeTransition(
+              opacity: _buttonAnimation,
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: AppElevetedButton(
+                  appButtonText: context.l10n.add_first_expense,
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.addTransaction);
+                  },
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 28),
 
           // Footer text
-          const Text(
-            "Your data is safely encrypted.",
-            style: TextStyle(
+
+          SizedBox(height: 2.h),
+
+          Text(
+            context.l10n.home_empty_info_text,
+            style: const TextStyle(
               fontSize: 12,
-              color: Colors.black26, // 40% opacity
+              // 40% opacity
             ),
             textAlign: TextAlign.center,
           ),
+
+          SizedBox(height: 2.h),
+
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColor.greenContainer.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColor.greenContainer.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Text(
+              context.l10n.home_empty_state_footer,
+              style: const TextStyle(
+                fontSize: 12,
+                // 40% opacity
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class VerifiedMessage extends StatelessWidget {
+  const VerifiedMessage({
+    super.key,
+    required this.context,
+    required this.message,
+  });
+
+  final BuildContext context;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: Icon(Icons.check_circle_outline, color: Colors.green[400])),
+        const SizedBox(width: 15),
+        Expanded(
+          child: Text(
+            message,
+            maxLines: 2,
+            overflow: TextOverflow.visible,
+            softWrap: true,
+            style: AppTextStyles.poppins16w400.copyWith(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w700,
+              color: const Color.fromARGB(255, 255, 255,
+                  255), // This color will be ignored due to ShaderMask
+            ),
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
     );
   }
 }

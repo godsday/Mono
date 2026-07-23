@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/l10n/app_localizations.dart';
 
 class AssetAllocationChart extends StatefulWidget {
   final Map<String, double> allocation;
@@ -25,7 +26,7 @@ class _AssetAllocationChartState extends State<AssetAllocationChart> {
   @override
   Widget build(BuildContext context) {
     if (widget.allocation.isEmpty) {
-      return const Center(child: Text("No asset data"));
+      return Center(child: Text(AppLocalizations.of(context)!.no_asset_data));
     }
 
     double total = widget.allocation.values.fold(0, (sum, val) => sum + val);

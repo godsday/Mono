@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mono/core/constants/app_string/app_strings.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/repositories/budget_repository.dart';
 import '../models/budget_model.dart';
@@ -21,19 +22,22 @@ class BudgetRepositoryImpl implements BudgetRepository {
       double totalBudget, Map<String, double> categoryAllocations) async {
     // Fetch category names for the IDs (mocking the join)
     final allCategories = await CategoryDB.instance.getCategories();
-    final categoriesList = <CategoryEntity>[];
+    final expenseCategories =
+        allCategories.where((c) => c.type == CategoryType.expense).toList();
+
+    final categoriesList = <BudgetCategoryEntity>[];
 
     categoryAllocations.forEach((id, amount) {
       String name = "Unknown";
-      try {
-        final match = allCategories.firstWhere((e) => e.id == id);
-        name = match.name;
-      } catch (e) {
+      final matchIndex = expenseCategories.indexWhere((e) => e.id == id);
+      if (matchIndex != -1) {
+        name = expenseCategories[matchIndex].name;
+      } else {
         name = id;
       }
 
       if (amount > 0) {
-        categoriesList.add(CategoryEntity(
+        categoriesList.add(BudgetCategoryEntity(
           id: id,
           name: name,
           amount: amount,

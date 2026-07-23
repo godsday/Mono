@@ -4,7 +4,7 @@ class AppTextTheme {
   static const String fontFamilyPoppins = 'Poppins';
   static const String fontFamilyMontserrat = 'Montserrat';
   static const String fontFamilyInter = 'Inter';
-  static const String fontFamilyMulish = 'Mulish';
+  static const String fontFamilyRobotoSlab = 'RobotoSlab';
 
   // Headings
   static TextStyle heading1 = const TextStyle(
@@ -81,11 +81,6 @@ class AppTextTheme {
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle mulish = const TextStyle(
-    fontFamily: fontFamilyMulish,
-    fontWeight: FontWeight.w400,
-  );
-
   // Helper method to create text styles with overrides
   static TextStyle poppins({
     double? fontSize,
@@ -118,6 +113,26 @@ class AppTextTheme {
   }) {
     return TextStyle(
       fontFamily: AppTextTheme.fontFamilyMontserrat,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      decoration: decoration,
+    );
+  }
+
+  static TextStyle robotoSlab({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    FontStyle fontsStyle = FontStyle.normal,
+    TextDecoration? decoration,
+  }) {
+    return TextStyle(
+      fontFamily: fontFamilyRobotoSlab,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,

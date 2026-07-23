@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/financial_overview/financial_overview_page.dart';
-import 'package:mono/features/setting_screen/settings_screen.dart';
-import 'package:mono/features/transaction/presentation/transcation_screen/transcation_screen.dart';
+import 'package:mono/features/app_settings/presentation/pages/settings_screen.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_screen.dart';
+import 'package:sizer/sizer.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class BottomNavigator extends StatefulWidget {
   final int index;
@@ -15,43 +16,66 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  int? _selectedIndex;
-  List pages = [
-    // const ProfileScreen(),
-    const TranscationScreen(),
-    const HomePage(),
-    const FinancialOverviewPage(),
-    const SettingsScreen(),
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.index;
+  }
+
+  @override
+  void didUpdateWidget(covariant BottomNavigator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      setState(() {
+        _selectedIndex = widget.index;
+      });
+    }
+  }
+
+  final List<Widget> pages = const [
+    TranscationScreen(),
+    HomePage(),
+    FinancialOverviewPage(),
+    SettingsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_selectedIndex ?? widget.index],
+      body: SafeArea(
+          child: IndexedStack(
+        index: _selectedIndex,
+        children: pages,
+      )),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
-        selectedLabelStyle: AppTextTheme.montserrart().copyWith(
-            color: AppColor.mainHexcolor, fontWeight: FontWeight.w700),
-        items: const [
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.person_2_rounded), label: "Profile"),
+        selectedLabelStyle: AppTextTheme.poppins().copyWith(
+            fontSize: 14.sp,
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w700),
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: "More",
+            icon: const Icon(Icons.history),
+            label: context.l10n.transactions_title,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome_mosaic_outlined), label: "Home"),
+              icon: const Icon(Icons.auto_awesome_mosaic_outlined),
+              label: context.l10n.home_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined), label: "Finance"),
+              icon: const Icon(Icons.bar_chart_outlined),
+              label: context.l10n.budget_title),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
+              icon: const Icon(Icons.settings),
+              label: context.l10n.settings_title),
         ],
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         iconSize: 30,
         showUnselectedLabels: false,
         showSelectedLabels: true,
-        currentIndex: _selectedIndex ?? widget.index,
-        selectedItemColor: AppColor.mainHexcolor,
-        unselectedItemColor: Colors.black45,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Theme.of(context).primaryColorDark,
         onTap: _onitemtap,
       ),
     );

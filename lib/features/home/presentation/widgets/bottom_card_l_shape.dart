@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/home/presentation/widgets/shapes/curveshape_l_card.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:mono/models/top_category_model.dart';
 
 class LShapeWidget extends StatelessWidget {
@@ -80,7 +82,7 @@ class LShapeWidget extends StatelessWidget {
                                   style:
                                       AppTextStyles.poppins12w300White(context)
                                           ?.copyWith(
-                                    color: Colors.black,
+                                    color: Theme.of(context).disabledColor,
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -132,7 +134,7 @@ class LShapeWidget extends StatelessWidget {
                                   style:
                                       AppTextStyles.poppins12w300White(context)
                                           ?.copyWith(
-                                    color: Colors.black,
+                                    color: Theme.of(context).disabledColor,
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -174,8 +176,11 @@ class LShapeWidget extends StatelessWidget {
               right: 0,
               height: totalHeight * 0.04.h, // Adjust height of content area
               child: Text(
-                '₹ ${totalAmount.toStringAsFixed(0)}',
-                style: AppTextStyles.roboto16w600Black.copyWith(fontSize: 18),
+                context.formatCurrency(totalAmount),
+                style: AppTextStyles.roboto16w600Black.copyWith(
+                    fontSize: 18,
+                    color:
+                        Theme.of(context).extension<AppGradients>()?.textTheme),
               ),
             ),
 
@@ -183,12 +188,18 @@ class LShapeWidget extends StatelessWidget {
             Positioned(
               top: 0,
               left:
-                  orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 5.5.w,
+                  orientation == LShapeOrientation.leftLegOnLeft ? -1.w : 5.3.w,
               right: 0,
               height: totalHeight * 0.20, // Adjust height of header
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 247, 246, 246),
+                decoration: BoxDecoration(
+                  color: orientation == LShapeOrientation.leftLegOnLeft
+                      ? Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.incomeHeader
+                      : Theme.of(context)
+                          .extension<AppGradients>()
+                          ?.expenseHeader,
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -200,7 +211,9 @@ class LShapeWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: HexColor('#525252'),
+                        color: Theme.of(context)
+                            .extension<AppGradients>()
+                            ?.textThemeBlueHeader,
                       ),
                     ),
                     SizedBox(

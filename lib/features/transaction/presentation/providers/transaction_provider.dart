@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/transaction/domain/usecases/calcuate_total_income.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_balance.dart';
 import 'package:mono/features/transaction/domain/usecases/calculate_total_expense.dart';
 
-import 'package:mono/models/category_model/category_model.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/usecases/add_transaction.dart';
 import '../../domain/usecases/delete_transaction.dart';
 import '../../domain/usecases/get_transactions.dart';
 import '../../domain/usecases/update_transaction.dart';
 import '../../domain/usecases/group_transactions_by_date.dart';
+import 'package:mono/core/analytics/analytics_service.dart';
 
 class TransactionProvider with ChangeNotifier {
   final GetTransactions getTransactionsUseCase;
@@ -22,10 +23,11 @@ class TransactionProvider with ChangeNotifier {
   final TotalIncomeUseCase totalIncomeUseCase;
   final TotalExpenseUseCase totalExpenseUseCase;
   final GroupTransactionsByDateUseCase groupTransactionsUseCase;
+  final AnalyticsService analyticsService;
 
   List<TranscationModel> _transactions = [];
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   String? _error;
   bool _visible = false;
 
@@ -38,6 +40,7 @@ class TransactionProvider with ChangeNotifier {
     required this.totalIncomeUseCase,
     required this.totalExpenseUseCase,
     required this.groupTransactionsUseCase,
+    required this.analyticsService,
   });
 
   // double get totalBalance => homeProvider.totalBalance;
@@ -70,7 +73,11 @@ class TransactionProvider with ChangeNotifier {
 
   List<TranscationModel> get recentTransactions {
     final sorted = List<TranscationModel>.from(_transactions)
-      ..sort((a, b) => b.date.compareTo(a.date));
+      ..sort((a, b) {
+        int dateSort = b.date.compareTo(a.date);
+        if (dateSort != 0) return dateSort;
+        return b.id.compareTo(a.id); // Tie-breaker: latest ID first
+      });
     return sorted.take(5).toList();
   }
 
@@ -81,13 +88,21 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> checkTransactionsAvailability() async {
+    final transactions = await getTransactionsUseCase();
+    return transactions.isNotEmpty;
+  }
+
   Future<void> loadTransactions() async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
+    if (!_isLoading) {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+    }
 
     try {
       _transactions = await getTransactionsUseCase();
+      await refresh(); // Ensure data is sorted and categorized after loading
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -99,6 +114,11 @@ class TransactionProvider with ChangeNotifier {
   Future<void> addTransaction(TranscationModel transaction) async {
     try {
       await addTransactionUseCase(transaction);
+      // Log Analytics
+      await analyticsService.logAddTransaction(
+        type: transaction.type,
+        category: transaction.category,
+      );
       // Optimistic update or reload
       await loadTransactions();
       await refresh();
@@ -111,6 +131,8 @@ class TransactionProvider with ChangeNotifier {
   Future<void> deleteTransaction(String id) async {
     try {
       await deleteTransactionUseCase(id);
+      // Log Analytics
+      await analyticsService.logDeleteTransaction(id: id);
       await loadTransactions();
       await refresh();
     } catch (e) {
@@ -144,26 +166,13 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double get totalBalance => totalBalanceUseCase(_transactions);
-  double get totalIncome => totalIncomeUseCase(_transactions);
-  double get totalExpense => totalExpenseUseCase(_transactions);
+  double _totalBalance = 0.0;
+  double _totalIncome = 0.0;
+  double _totalExpense = 0.0;
 
-  // set totalBalance(double value) {
-  //   _totalBalance = value;
-  //   notifyListeners();
-  // }
-
-  // double get totalIncome => _totalIncome;
-  // set totalIncome(double value) {
-  //   _totalIncome = totalIncomeUseCase(_transactions);
-  //   notifyListeners();
-  // }
-
-  // double get totalExpense => _totalExpense;
-  // set totalExpense(double value) {
-  //   _totalExpense = totalExpenseUseCase(_transactions);
-  //   notifyListeners();
-  // }
+  double get totalBalance => _totalBalance;
+  double get totalIncome => _totalIncome;
+  double get totalExpense => _totalExpense;
 
   String? _categorySelected;
   String? get categorySelected => _categorySelected;
@@ -234,7 +243,9 @@ class TransactionProvider with ChangeNotifier {
         customlistnotifier.value.add(data);
       }
     }
-    customlistnotifier.notifyListeners();
+    Future.microtask(() {
+      customlistnotifier.notifyListeners();
+    });
   }
 
   ValueNotifier<List<TranscationModel>> listingMethod() {
@@ -264,30 +275,27 @@ class TransactionProvider with ChangeNotifier {
     return groupTransactionsUseCase(listingMethod().value);
   }
 
-  ({String title, String amount}) getHeadingData() {
+  ({String title, double amount}) getHeadingData() {
     if (itemvalue == "Income") {
-      return (title: 'Savings', amount: totalIncome.toStringAsFixed(0));
+      return (title: 'Savings', amount: totalIncome);
     } else if (itemvalue == 'Expense') {
-      return (title: 'Spendings', amount: totalExpense.toStringAsFixed(0));
+      return (title: 'Spendings', amount: totalExpense);
     } else if (itemvalue == 'Today') {
       double todayTotal = totalBalanceUseCase.call(todaylistnotifier.value);
-      return (title: 'Today', amount: todayTotal.toStringAsFixed(0));
+      return (title: 'Today', amount: todayTotal);
     } else if (itemvalue == 'Yesterday') {
-      return (title: 'Yesterday', amount: '');
+      return (title: 'Yesterday', amount: 0.0);
     } else if (itemvalue == 'Weekly') {
       double weeklyTotal = totalBalanceUseCase.call(weeklylistnotifier.value);
-      return (title: 'This Week', amount: weeklyTotal.toStringAsFixed(0));
+      return (title: 'This Week', amount: weeklyTotal);
     } else if (itemvalue == 'Monthly') {
       double monthlyTotal = totalBalanceUseCase.call(monthlylistnotifier.value);
-      return (title: 'This Month', amount: monthlyTotal.toStringAsFixed(0));
+      return (title: 'This Month', amount: monthlyTotal);
     } else if (itemvalue == 'Custom') {
       double customTotal = totalBalanceUseCase.call(customlistnotifier.value);
-      return (title: 'Custom', amount: customTotal.toStringAsFixed(0));
+      return (title: 'Custom', amount: customTotal);
     } else {
-      return (
-        title: 'All Transcations',
-        amount: totalBalance.toStringAsFixed(0)
-      );
+      return (title: 'All Transcations', amount: totalBalance);
     }
   }
 
@@ -297,58 +305,80 @@ class TransactionProvider with ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    // final list = await TranscationDB.instance.getalltranscation();
-
-    // totalBalanceCheck(list);
-
-    _transactions.sort((first, second) => second.date.compareTo(first.date));
-    yesterdaylistnotifier.value.clear();
-    transcationNotifier.value.clear();
-    incomelistnotifier.value.clear();
-    expenselistnotifier.value.clear();
-    todaylistnotifier.value.clear();
-    // spendingCycleListNotifier.value.clear();
-    weeklylistnotifier.value.clear();
-    monthlylistnotifier.value.clear();
-
-    transcationNotifier.value.addAll(_transactions);
-
-    final today = DateFormat().add_yMMMMd().format(DateTime.now());
-    final yesterday = DateFormat()
-        .add_yMMMMd()
-        .format(DateTime.now().subtract(const Duration(days: 1)));
-
-    Future.forEach(_transactions, (TranscationModel transcationlist) {
-      final dates = DateFormat().add_yMMMMd().format(transcationlist.date);
-      if (transcationlist.type == 'Expense') {
-        expenselistnotifier.value.add(transcationlist);
-      } else {
-        incomelistnotifier.value.add(transcationlist);
-      }
-
-      if (dates == today) {
-        todaylistnotifier.value.add(transcationlist);
-      } else if (dates == yesterday) {
-        yesterdaylistnotifier.value.add(transcationlist);
-      }
-
-      // Add to weekly list (last 7 days)
-      if (transcationlist.date
-          .isAfter(DateTime.now().subtract(const Duration(days: 7)))) {
-        weeklylistnotifier.value.add(transcationlist);
-      }
-
-      // Add to monthly list (current month)
-      if (transcationlist.date.month == DateTime.now().month &&
-          transcationlist.date.year == DateTime.now().year) {
-        monthlylistnotifier.value.add(transcationlist);
-      }
+    // Strict sorting: Date first (desc), then ID (desc) as tie-breaker for same-time additions
+    _transactions.sort((a, b) {
+      int dateSort = b.date.compareTo(a.date);
+      if (dateSort != 0) return dateSort;
+      return b.id.compareTo(a.id);
     });
 
-    yesterdaylistnotifier.notifyListeners();
-    transcationNotifier.notifyListeners();
-    expenselistnotifier.notifyListeners();
-    incomelistnotifier.notifyListeners();
-    todaylistnotifier.notifyListeners();
+    // Create temporary lists to avoid clearing observers multiple times during population
+    final List<TranscationModel> income = [];
+    final List<TranscationModel> expense = [];
+    final List<TranscationModel> today = [];
+    final List<TranscationModel> yesterday = [];
+    final List<TranscationModel> weekly = [];
+    final List<TranscationModel> monthly = [];
+
+    final todayDate = DateTime.now();
+    final todayStr = DateFormat().add_yMMMMd().format(todayDate);
+    final yesterdayDate = todayDate.subtract(const Duration(days: 1));
+    final yesterdayStr = DateFormat().add_yMMMMd().format(yesterdayDate);
+    final weekAgo = todayDate.subtract(const Duration(days: 7));
+
+    for (var transaction in _transactions) {
+      final dateStr = DateFormat().add_yMMMMd().format(transaction.date);
+
+      // Category Lists
+      if (transaction.type == 'Expense') {
+        expense.add(transaction);
+      } else {
+        income.add(transaction);
+      }
+
+      // Today/Yesterday Filters
+      if (dateStr == todayStr) {
+        today.add(transaction);
+      } else if (dateStr == yesterdayStr) {
+        yesterday.add(transaction);
+      }
+
+      // Weekly (Last 7 days)
+      if (transaction.date.isAfter(weekAgo)) {
+        weekly.add(transaction);
+      }
+
+      // Monthly (Current Month)
+      if (transaction.date.month == todayDate.month &&
+          transaction.date.year == todayDate.year) {
+        monthly.add(transaction);
+      }
+    }
+
+    // Update all notifiers at once with the new lists.
+    // ValueNotifier only notifies if the reference changes (or if we explicitly call notifyListeners).
+    // Here we are setting newValue = List.from(tempList), which is a new reference.
+    Future.microtask(() {
+      transcationNotifier.value = List.from(_transactions);
+      incomelistnotifier.value = income;
+      expenselistnotifier.value = expense;
+      todaylistnotifier.value = today;
+      yesterdaylistnotifier.value = yesterday;
+      weeklylistnotifier.value = weekly;
+      monthlylistnotifier.value = monthly;
+
+      // Recalculate totals once
+      _totalIncome = totalIncomeUseCase(_transactions);
+      _totalExpense = totalExpenseUseCase(_transactions);
+      // Derive balance locally to avoid redundant UseCase calls
+      _totalBalance = _totalIncome - _totalExpense;
+      
+      // Custom list often depends on external state (start/end dates), so we re-apply filter if range exists
+      if (dateRange != null) {
+        custompick(start, end);
+      } else {
+        customlistnotifier.value = [];
+      }
+    });
   }
 }

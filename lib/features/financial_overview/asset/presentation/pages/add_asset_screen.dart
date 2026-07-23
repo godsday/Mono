@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/asset_entity.dart';
 import '../providers/assets_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddAssetScreen extends StatefulWidget {
   const AddAssetScreen({super.key});
@@ -45,7 +45,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
 
     final newAsset = AssetEntity(
-      id: const Uuid().v4(),
+      id: '',
       name: name,
       type: _selectedType,
       currentValue: amount,
@@ -116,7 +116,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
               // Type Dropdown directly
               DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(
@@ -143,7 +143,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 keyboardType: TextInputType.number,
                 style: AppTextTheme.poppins(color: Colors.black),
                 decoration: InputDecoration(
-                  labelText: 'Current Value (₹)',
+                  labelText: 'Current Value (${context.currencySymbol})',
                   hintText: '0.00',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -152,8 +152,9 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter value';
+                  }
                   if (double.tryParse(value) == null) return 'Invalid number';
                   return null;
                 },

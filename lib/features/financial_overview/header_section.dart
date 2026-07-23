@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_texttheme.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:sizer/sizer.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -11,17 +13,16 @@ class HeaderSection extends StatelessWidget {
     return Stack(
       children: [
         Column(
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: double.infinity,
-              height: 15.h,
+              // height: 14.h,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF429690), Color(0xFF1E4744)],
-                ),
+                gradient: Theme.of(context)
+                    .extension<AppGradients>()!
+                    .primaryGradient,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withAlpha(15),
@@ -35,27 +36,28 @@ class HeaderSection extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, top: 24, bottom: 24),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Financial Hub',
+                      context.l10n.financial_hub_title,
                       style: AppTextTheme.montserrart(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.white,
+                        fontSize: 18.5.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.whiteColor,
                       ),
                     ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      'Your Budget, Assets & Dreams — all in one place',
-                      style: AppTextTheme.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.lightGrey,
+                    SizedBox(height: 1.5.h),
+                    FittedBox(
+                      child: Text(
+                        context.l10n.financial_hub_subtitle,
+                        style: AppTextTheme.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.lightGrey,
+                        ),
                       ),
                     ),
                   ],

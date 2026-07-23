@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/l10n/app_localizations.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import '../../domain/entities/net_worth_data.dart';
 
 class NetWorthChart extends StatelessWidget {
@@ -12,7 +14,7 @@ class NetWorthChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.historyLast6Months.isEmpty) {
-      return const Center(child: Text("No data available"));
+      return Center(child: Text(AppLocalizations.of(context)!.no_data_available));
     }
 
     List<FlSpot> spots = [];
@@ -72,8 +74,9 @@ class NetWorthChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
-                    if (value < 0 || value >= xLabels.length)
+                    if (value < 0 || value >= xLabels.length) {
                       return const SizedBox();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
@@ -101,7 +104,7 @@ class NetWorthChart extends StatelessWidget {
                   LineTouchTooltipData(getTooltipItems: (touchedSpots) {
                 return touchedSpots.map((spot) {
                   return LineTooltipItem(
-                    '₹${spot.y.toStringAsFixed(0)}',
+                    context.formatCurrency(spot.y),
                     const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   );

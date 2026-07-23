@@ -1,27 +1,30 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../core/constants/colors/app_colors.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class IncomeExpenseCard extends StatelessWidget {
   final String transactionType;
   final double value;
+  final bool isIncome;
 
   const IncomeExpenseCard({
     super.key,
     required this.transactionType,
     required this.value,
+    required this.isIncome,
   });
 
   @override
   Widget build(BuildContext context) {
-    bool isIncome = transactionType == "Earnings";
+    final theme = Theme.of(context);
+    final gradients = theme.extension<AppGradients>()!;
 
     return Container(
       decoration: BoxDecoration(
-        color: isIncome
-            ? AppColor.mainHexcolor
-            : const Color.fromARGB(255, 105, 55, 55),
+        color:
+            isIncome ? gradients.incomeContainer : gradients.expenseContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -58,7 +61,7 @@ class IncomeExpenseCard extends StatelessWidget {
               ],
             ),
             AutoSizeText(
-              '₹ ${value.toStringAsFixed(0)}',
+              context.formatCurrency(value),
               maxLines: 1,
               style: const TextStyle(
                 color: Colors.white,

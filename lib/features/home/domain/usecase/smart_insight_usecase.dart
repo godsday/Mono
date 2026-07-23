@@ -23,8 +23,7 @@ class GenerateInsightsUseCase {
             InsightModel(
               id: "budget_warning",
               title: "Almost There",
-              message:
-                  "You have only ₹${remaining.toStringAsFixed(0)} left in your budget.",
+              message: remaining.toStringAsFixed(0),
               type: InsightType.warning,
               priority: 4,
             ),
@@ -34,8 +33,7 @@ class GenerateInsightsUseCase {
             InsightModel(
               id: "budget_safe",
               title: "On Track",
-              message:
-                  "You're ₹${remaining.toStringAsFixed(0)} under budget. Keep it up.",
+              message: remaining.toStringAsFixed(0),
               type: InsightType.positive,
               priority: 3,
             ),
@@ -46,8 +44,7 @@ class GenerateInsightsUseCase {
           InsightModel(
             id: "budget_exceeded",
             title: "Budget Alert",
-            message:
-                "You've exceeded your budget by ₹${remaining.abs().toStringAsFixed(0)}",
+            message: remaining.abs().toStringAsFixed(0),
             type: InsightType.warning,
             priority: 5,
           ),
@@ -77,8 +74,7 @@ class GenerateInsightsUseCase {
           InsightModel(
             id: "daily_safe",
             title: "Smart Tip",
-            message:
-                "To stay on track, keep today's spending under ₹${safeSpend.toStringAsFixed(0)}",
+            message: safeSpend.toStringAsFixed(0),
             type: InsightType.neutral,
             priority: 4,
           ),
@@ -94,8 +90,7 @@ class GenerateInsightsUseCase {
         InsightModel(
           id: "savings",
           title: "Savings Update",
-          message:
-              "You've saved ₹${savings.toStringAsFixed(0)} so far this month.",
+          message: savings.toStringAsFixed(0),
           type: InsightType.positive,
           priority: 3,
         ),

@@ -14,11 +14,11 @@ class CalculateThisMonth {
     return filtered;
   }
 
-  String getSpendingCycleLabel() {
+  String getSpendingCycleLabel(String label) {
     final today = DateTime.now();
     final start = today.subtract(const Duration(days: 30));
     final formatter = DateFormat('MMM dd'); // Example: Jun 12
-    return 'Spending Cycle: ${formatter.format(start)} – ${formatter.format(today)}';
+    return '$label: ${formatter.format(start)} – ${formatter.format(today)}';
   }
 
   double getThisMonthIncome(List<TranscationModel> transactions) {
@@ -49,5 +49,39 @@ class CalculateThisMonth {
         getThisMonthIncome(transactions) - getThisMonthExpense(transactions);
 
     return thisMonthTotalBalance;
+  }
+
+  double getPreviousMonthIncome(List<TranscationModel> transactions) {
+    DateTime today = DateTime.now();
+    DateTime currentCycleStart = today.subtract(const Duration(days: 30));
+    DateTime previousCycleStart =
+        currentCycleStart.subtract(const Duration(days: 30));
+
+    List<TranscationModel> prevMonthTransactions = transactions.where((t) {
+      return t.date
+              .isAfter(previousCycleStart.subtract(const Duration(days: 1))) &&
+          t.date.isBefore(currentCycleStart);
+    }).toList();
+
+    return prevMonthTransactions
+        .where((t) => t.type == 'Income')
+        .fold(0, (sum, t) => sum + t.amount);
+  }
+
+  double getPreviousMonthExpense(List<TranscationModel> transactions) {
+    DateTime today = DateTime.now();
+    DateTime currentCycleStart = today.subtract(const Duration(days: 30));
+    DateTime previousCycleStart =
+        currentCycleStart.subtract(const Duration(days: 30));
+
+    List<TranscationModel> prevMonthTransactions = transactions.where((t) {
+      return t.date
+              .isAfter(previousCycleStart.subtract(const Duration(days: 1))) &&
+          t.date.isBefore(currentCycleStart);
+    }).toList();
+
+    return prevMonthTransactions
+        .where((t) => t.type == 'Expense')
+        .fold(0, (sum, t) => sum + t.amount);
   }
 }

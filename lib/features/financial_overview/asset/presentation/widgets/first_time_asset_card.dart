@@ -1,11 +1,13 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:sizer/sizer.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
+import '../../../../../core/analytics/analytics_service.dart';
+import '../../../../../core/di/injection_container.dart';
 
 class FirstTimeAssetCard extends StatefulWidget {
   const FirstTimeAssetCard({super.key});
@@ -39,8 +41,11 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: HexColor('#E6F5F4'),
+                    color: Theme.of(context)
+                        .extension<AppGradients>()!
+                        .assetCardTheme,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColor.borderGreyWhite),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -48,14 +53,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                         offset: const Offset(0, 4),
                       ),
                     ],
-                    gradient: LinearGradient(
-                      colors: [
-                        HexColor('#E6F5F4'),
-                        HexColor('#F0FDFB'),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    // gradient: LinearGradient(
+                    //   colors: [
+                    //     HexColor('#E6F5F4'),
+                    //     HexColor('#F0FDFB'),
+                    //   ],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   child: Stack(
                     children: [
@@ -68,7 +73,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           opacity: 0.8,
                           child: SafeBackgroundImage(
                             imagePath:
-                                'assets/images/building-big.png', // Placeholder
+                                'assets/images/building4x.png', // Placeholder
                             fit: BoxFit.contain,
                             fallback: Icon(Icons.location_city_rounded,
                                 size: 80,
@@ -91,17 +96,21 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   ),
                                   child: Icon(
                                     Icons.account_balance_wallet,
-                                    color: AppColor.textPrimary,
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
                                     size: 20,
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Track Your Assets',
+                                  context.l10n.first_time_asset_title,
                                   style: AppTextTheme.poppins(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    color: AppColor.textPrimary,
+                                    color: Theme.of(context)
+                                        .extension<AppGradients>()!
+                                        .textTheme,
                                   ),
                                 ),
                               ],
@@ -111,11 +120,11 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               width:
                                   200, // Limit width to avoid overlapping image
                               child: Text(
-                                'Add what you own to understand your net worth',
+                                context.l10n.first_time_asset_subtitle,
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColor.textGrey,
+                                  color: Theme.of(context).disabledColor,
                                 ),
                               ),
                             ),
@@ -136,10 +145,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      color: Colors.blueGrey.shade100,
+                                      color: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                          color: Colors.blueGrey.shade100,
+                                          color: Theme.of(context)
+                                              .extension<AppGradients>()!
+                                              .disableCardColor,
                                           width: 2
                                           // color: HexColor('#21988C'),
                                           ),
@@ -154,7 +167,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
-                                    'Add Assets',
+                                    context.l10n.first_time_asset_button,
                                     style: AppTextTheme.poppins(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -181,8 +194,12 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: HexColor('#E6F5F4'),
+                    color: Theme.of(context)
+                        .extension<AppGradients>()!
+                        .assetCardTheme,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColor.borderGreyWhite),
+
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -190,14 +207,14 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                         offset: const Offset(0, 4),
                       ),
                     ],
-                    gradient: LinearGradient(
-                      colors: [
-                        HexColor('#E6F5F4'),
-                        HexColor('#F0FDFB'),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    // gradient: LinearGradient(
+                    //   colors: [
+                    //     HexColor('#E6F5F4'),
+                    //     HexColor('#F0FDFB'),
+                    //   ],
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                   ),
                   child: Stack(
                     children: [
@@ -210,7 +227,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           opacity: 0.8,
                           child: SafeBackgroundImage(
                             imagePath:
-                                'assets/images/building-big.png', // Placeholder
+                                'assets/images/building4x.png', // Placeholder
                             fit: BoxFit.contain,
                             fallback: Icon(Icons.location_city_rounded,
                                 size: 80,
@@ -226,11 +243,13 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Asset & Net Worth Tracking',
+                              context.l10n.first_time_asset_title_expanded,
                               style: AppTextTheme.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                color: AppColor.textPrimary,
+                                color: Theme.of(context)
+                                    .extension<AppGradients>()!
+                                    .textTheme,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -238,39 +257,39 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
                               width:
                                   200, // Limit width to avoid overlapping image
                               child: Text(
-                                '\u2022 Net worth growth chart',
+                                '\u2022 ${context.l10n.first_time_asset_feature_1}',
                                 style: AppTextTheme.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColor.textGrey,
+                                  color: Theme.of(context).disabledColor,
                                 ),
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Asset allocation breakdown',
+                              '\u2022 ${context.l10n.first_time_asset_feature_2}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Monthly growth insights',
+                              '\u2022 ${context.l10n.first_time_asset_feature_3}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              '\u2022 Long-term wealth tracking',
+                              '\u2022 ${context.l10n.first_time_asset_feature_4}',
                               style: AppTextTheme.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                color: AppColor.textGrey,
+                                color: Theme.of(context).disabledColor,
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -316,14 +335,39 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '🔔 Notify Me When It Launches',
-                                style: AppTextStyles.roboto18w600SemiBoldWhite(
-                                        context)!
-                                    .copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: HexColor('#2D6763'),
+                              child: InkWell(
+                                onTap: () {
+                                  sl<AnalyticsService>()
+                                      .logAssetNotificationTap();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Done! We'll notify you once assets are launched.",
+                                        style: AppTextTheme.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      backgroundColor: Theme.of(context)
+                                          .secondaryHeaderColor,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "🔔 ${context.l10n.first_time_asset_notification}",
+                                  style:
+                                      AppTextStyles.roboto18w600SemiBoldWhite(
+                                              context)!
+                                          .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               ),
                             )

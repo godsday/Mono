@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../database/categories_DB/category_db.dart';
-import '../../../../../models/category_model/category_model.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
+import '../../../../add_screen/data/repositories/category_db.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../../domain/entities/budget_entity.dart';
 
@@ -57,7 +57,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
   void updateTotalBudget(double amount) {
     _totalBudget = amount;
-    print("object$_totalBudget");
+    debugPrint("object$_totalBudget");
     notifyListeners();
   }
 
@@ -78,7 +78,7 @@ class AddBudgetProvider extends ChangeNotifier {
 
     try {
       await saveBudgetUseCase(_totalBudget, _categoryBudgets);
-      print("add provider $_totalBudget");
+      debugPrint("add provider $_totalBudget");
       if (_totalBudget != 0) {
         isBudgetExist = _totalBudget;
         existingCategory = _availableCategories;

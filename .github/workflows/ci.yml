@@ -14,6 +14,9 @@ jobs:
   flutter-ci:
     runs-on: ubuntu-latest
 
+    env:
+      GRADLE_OPTS: "-Xmx6g"
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -21,26 +24,44 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.5'
+          flutter-version: "3.38.5"
           cache: true
+
+      - name: Decode Android Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/upload-keystore.jks
+     
+      - name: Verify Keystore
+        run: |
+          ls -l android
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Analyze (safe mode)
+      - name: Analyze
         run: flutter analyze || true
 
-      # - name: Check formatting
-      #   run: dart format --set-exit-if-changed .
-
-      # - name: Run tests
-      #   run: flutter test
-
-      - name: Mono APK (Release)
+      - name: Build APK
         run: flutter build apk --release
 
-      - name: Upload Mono APK
+      - name: Build App Bundle
+        run: flutter build appbundle --release
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: mono-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: mono-aab
+          path: build/app/outputs/bundle/release/app-release.aab

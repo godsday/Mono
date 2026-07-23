@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/providers/wealth_analytics_provider.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/widgets/budget_discipline_chart.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/widgets/expense_trend_chart.dart';
@@ -46,19 +50,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Analytics',
-          style: TextStyle(
-            color: Colors.black87,
+        title: Text(
+          context.l10n.analytics_title,
+          style: AppTextStyles.montserrat18w600.copyWith(
+            color: Theme.of(context).extension<AppGradients>()!.textTheme,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme: IconThemeData(
+            color: Theme.of(context).extension<AppGradients>()!.textTheme),
       ),
       body: Consumer<WealthAnalyticsProvider>(
         builder: (context, provider, child) {
@@ -92,8 +97,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   const SizedBox(height: 16),*/
                   /*  _buildSectionCard(
                     title: 'Net Worth Growth',
-                    subtitle:
-                        '₹${provider.netWorthData!.currentNetWorth.toStringAsFixed(0)}',
+                    subtitle: context.formatCurrency(
+                        provider.netWorthData!.currentNetWorth),
                     child: NetWorthChart(data: provider.netWorthData!),
                   ),*/
                   // const SizedBox(height: 16),
@@ -163,7 +168,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   //     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   //     child: Center(
                   //       child: Text(
-                  //         '₹${provider.futureProjection!.toStringAsFixed(0)}',
+                  //         context.formatCurrency(provider.futureProjection!),
                   //         style: const TextStyle(
                   //             fontSize: 32,
                   //             fontWeight: FontWeight.bold,
@@ -190,8 +195,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColor.borderGreyWhite),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -208,20 +214,21 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             if (!removePadding) ...[
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Theme.of(context).extension<AppGradients>()!.textTheme,
                 ),
               ),
               if (subtitle != null) ...[
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color:
+                        Theme.of(context).extension<AppGradients>()!.textTheme,
                   ),
                 ),
               ],

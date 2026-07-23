@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mono/features/app_settings/presentation/pages/support_screen.dart';
 import 'package:mono/features/financial_overview/analytics/presentation/pages/analytics_screen.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/features/financial_overview/budget/presentation/pages/add_budget_screen.dart';
-import 'package:mono/features/setting_screen/settings_widgets/about_screen.dart';
+import 'package:mono/features/app_settings/presentation/pages/about_screen.dart';
+import 'package:mono/features/financial_overview/financial_overview_page.dart';
+import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
+import 'package:mono/features/transaction/presentation/transaction_screen/transaction_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
-import '../features/add_screen/add_screen.dart';
-import '../features/setting_screen/settings_screen.dart';
-import '../features/IntroPages/onbording_screen.dart';
+import '../features/add_screen/presentation/add_screen.dart';
+import '../features/app_settings/presentation/pages/settings_screen.dart';
+import '../features/IntroPages/onboarding_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -20,7 +24,7 @@ class AppRouter {
         );
 
       case RouteNames.home:
-        return _buildPageRoute(const BottomNavigator(index: 1), settings);
+        return _buildPageRoute(const HomePage(), settings);
 
       case RouteNames.onboarding:
         return MaterialPageRoute(builder: (_) => OnboardScreen());
@@ -28,6 +32,7 @@ class AppRouter {
       case RouteNames.addTransaction:
         final args = settings.arguments;
         final transaction = args is TranscationModel ? args : null;
+
         return _buildPageRoute(
           AddScreen(
             isDataExist: transaction,
@@ -39,7 +44,7 @@ class AppRouter {
         return _buildPageRoute(const SettingsScreen(), settings);
 
       case RouteNames.budgetOverview:
-        return _buildPageRoute(const BottomNavigator(index: 2), settings);
+        return _buildPageRoute(const FinancialOverviewPage(), settings);
 
       case RouteNames.addBudget:
         final args = settings.arguments;
@@ -51,16 +56,24 @@ class AppRouter {
             settings);
 
       case RouteNames.transactionList:
-        return _buildPageRoute(
-            const BottomNavigator(
-              index: 0,
-            ),
-            settings);
+        return _buildPageRoute(const TranscationScreen(), settings);
+
       case RouteNames.analytics:
         return _buildPageRoute(const AnalyticsScreen(), settings);
 
       case RouteNames.about:
         return _buildPageRoute(const AboutScreen(), settings);
+
+      case RouteNames.support:
+        return _buildPageRoute(const SupportScreen(), settings);
+
+      case RouteNames.bottomNav:
+        final index = (settings.arguments as int?) ?? 1;
+        return _buildPageRoute(
+            BottomNavigator(
+              index: index,
+            ),
+            settings);
 
       default:
         return MaterialPageRoute(

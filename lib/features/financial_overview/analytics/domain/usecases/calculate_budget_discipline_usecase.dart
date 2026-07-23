@@ -18,8 +18,7 @@ class CalculateBudgetDisciplineUseCase {
       // Find budget for this month
       BudgetEntity? budgetForMonth;
       for (var b in budgets) {
-        if (b.month == monthKey || (b.month.isEmpty && i == 0)) {
-          // Sometimes budget for current month might not have month set properly, check if i == 0 and take latest
+        if (b.month == monthKey) {
           budgetForMonth = b;
           break;
         }

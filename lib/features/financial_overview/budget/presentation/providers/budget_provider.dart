@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../../domain/usecases/get_current_month_budget_usecase.dart';
@@ -17,10 +18,21 @@ class BudgetProvider extends ChangeNotifier {
     required this.getTransactions,
   });
 
+  List<TranscationModel> _transactions = [];
   BudgetEntity? get budget => _budget;
   // bool get isFirstTimeUser => _isFirstTimeUser;
   bool get isLoading => _isLoading;
   bool get hasBudget => _budget != null;
+
+  void updateTransactions(List<TranscationModel> transactions) {
+    _transactions = transactions;
+    if (_budget != null) {
+      _syncBudgetWithTransactions();
+    }
+    Future.microtask(() {
+      notifyListeners();
+    });
+  }
 
   Future<void> loadBudget() async {
     _isLoading = true;
@@ -30,69 +42,7 @@ class BudgetProvider extends ChangeNotifier {
       _budget = await getBudgetUseCase();
       if (_budget == null) return;
 
-      // Sync expenses
-      final transactions = await getTransactions();
-      final now = DateTime.now();
-
-      // Filter transactions for current month, Expense type
-      final List<TranscationModel> currentMonthExpenses =
-          transactions.where((t) {
-        final bool isSameMonth =
-            t.date.year == now.year && t.date.month == now.month;
-        final bool isExpense = t.type == 'Expense';
-        return isSameMonth && isExpense;
-      }).toList();
-
-      double totalSpent = 0.0;
-      double othersSpent = 0.0;
-      final Map<String, double> categorySpent = {};
-
-      for (var exp in currentMonthExpenses) {
-        totalSpent += exp.amount;
-        bool matched = false;
-
-        for (var cat in _budget!.categories) {
-          if (cat.id == exp.category ||
-              cat.name.toLowerCase() == exp.category.toLowerCase()) {
-            categorySpent[cat.id] = (categorySpent[cat.id] ?? 0.0) + exp.amount;
-            matched = true;
-            break;
-          }
-        }
-
-        if (!matched) {
-          othersSpent += exp.amount;
-        }
-      }
-
-      final List<CategoryEntity> updatedCategories =
-          _budget!.categories.map((c) {
-        return CategoryEntity(
-          id: c.id,
-          name: c.name,
-          amount: c.amount,
-          spentAmount: categorySpent[c.id] ?? 0.0,
-        );
-      }).toList();
-
-      if (othersSpent > 0) {
-        updatedCategories.add(CategoryEntity(
-          id: 'others',
-          name: 'Others',
-          amount: 0.0,
-          spentAmount: othersSpent,
-        ));
-      }
-
-      // Update BudgetEntity with calculated spent amount
-      _budget = BudgetEntity(
-        month: DateTime.now().month.toString(),
-        totalBudget: _budget!.totalBudget,
-        spentAmount: totalSpent,
-        remainingAmount: _budget!.totalBudget - totalSpent,
-        categories: updatedCategories,
-      );
-      // }
+      _syncBudgetWithTransactions();
     } catch (e) {
       // Handle error, maybe log it
       _budget = null;
@@ -101,5 +51,73 @@ class BudgetProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void _syncBudgetWithTransactions() {
+    if (_budget == null) return;
+    final now = DateTime.now();
+
+    // Filter transactions for current month, Expense type
+    final List<TranscationModel> currentMonthExpenses =
+        _transactions.where((t) {
+      final bool isSameMonth =
+          t.date.year == now.year && t.date.month == now.month;
+      final bool isExpense = t.type == 'Expense';
+      return isSameMonth && isExpense;
+    }).toList();
+
+    double totalSpent = 0.0;
+    double othersSpent = 0.0;
+    final Map<String, double> categorySpent = {};
+
+    final List<BudgetCategoryEntity> baseCategories =
+        _budget!.categories.where((c) => c.id != 'others').toList();
+
+    for (var exp in currentMonthExpenses) {
+      totalSpent += exp.amount;
+      bool matched = false;
+
+      for (var cat in baseCategories) {
+        if (cat.id == exp.category ||
+            cat.name.toLowerCase() == exp.category.toLowerCase()) {
+          categorySpent[cat.id] = (categorySpent[cat.id] ?? 0.0) + exp.amount;
+          matched = true;
+          break;
+        }
+      }
+
+      if (!matched) {
+        othersSpent += exp.amount;
+      }
+    }
+
+    final List<BudgetCategoryEntity> updatedCategories =
+        baseCategories.map((c) {
+      return BudgetCategoryEntity(
+        id: c.id,
+        name: c.name,
+        amount: c.amount,
+        spentAmount: categorySpent[c.id] ?? 0.0,
+      );
+    }).toList();
+
+    if (othersSpent > 0) {
+      updatedCategories.add(BudgetCategoryEntity(
+        id: 'others',
+        name: 'Others',
+        amount: 0.0,
+        spentAmount: othersSpent,
+      ));
+    }
+
+    // Update BudgetEntity with calculated spent amount
+    final monthKey = DateFormat('MMM yyyy').format(DateTime.now());
+    _budget = BudgetEntity(
+      month: monthKey,
+      totalBudget: _budget!.totalBudget,
+      spentAmount: totalSpent,
+      remainingAmount: _budget!.totalBudget - totalSpent,
+      categories: updatedCategories,
+    );
   }
 }

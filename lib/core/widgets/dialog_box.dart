@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
 import 'package:mono/core/widgets/decoration_functions.dart';
 import 'package:mono/core/widgets/snackbar.dart';
-import 'package:mono/database/categories_DB/category_db.dart';
+import 'package:mono/features/add_screen/data/repositories/category_db.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
-import 'package:mono/models/category_model/category_model.dart';
 import 'package:sizer/sizer.dart';
 
 void showAddCategoryDialog(
@@ -42,7 +43,7 @@ void showAddCategoryDialog(
                   Text(
                     subtitle!,
                     style: AppTextStyles.poppins16w400.copyWith(
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                       fontSize: 16.sp,
                     ),
                   ),
@@ -55,14 +56,14 @@ void showAddCategoryDialog(
                   Text(
                     'Enter a name for your new category',
                     style: AppTextStyles.poppins16w400.copyWith(
-                      color: AppColor.textGrey,
+                      color: Theme.of(context).disabledColor,
                       fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 1.h),
                   TextField(
                     controller: categoryNameController,
-                    decoration: textfielddecor("Category name"),
+                    decoration: textfielddecor(context, "Category name"),
                     autofocus: true,
                   ),
                 ],
@@ -75,7 +76,7 @@ void showAddCategoryDialog(
             child: Text(
               isAlert ? 'No' : 'Cancel',
               style: AppTextStyles.poppins16w400.copyWith(
-                color: AppColor.grey600,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
             ),
           ),
@@ -87,10 +88,10 @@ void showAddCategoryDialog(
               }
               String categoryName = categoryNameController.text.trim();
               final data = categoryName.capitalizeFirstLetter().toString();
-              print(data);
+              debugPrint(data);
               if (categoryName.isEmpty) {
                 // Show error if category name is empty
-                ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
+                ScaffoldMessenger.of(context).showSnackBar(customSnack(context,
                     message: "Category name cannot be empty"));
                 return;
               }
@@ -109,7 +110,7 @@ void showAddCategoryDialog(
 
               if (categoryExists) {
                 // Show error if category already exists
-                ScaffoldMessenger.of(context).showSnackBar(customSnak(context,
+                ScaffoldMessenger.of(context).showSnackBar(customSnack(context,
                     message: "Category '$categoryName' already exists"));
                 return;
               }
@@ -141,7 +142,7 @@ void showAddCategoryDialog(
             child: Text(
               isAlert ? 'Yes' : 'Save',
               style: AppTextStyles.poppins16w600.copyWith(
-                color: AppColor.white,
+                color: AppColor.whiteColor,
               ),
             ),
           ),
@@ -151,5 +152,63 @@ void showAddCategoryDialog(
         ),
       );
     },
+  );
+}
+
+void showConfirmationDialog({
+  required BuildContext context,
+  required String title,
+  required String subtitle,
+  required VoidCallback onConfirm,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(
+        title,
+        style: AppTextStyles.poppins18w600.copyWith(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
+      ),
+      content: Text(
+        subtitle,
+        style: AppTextStyles.poppins16w400.copyWith(
+          color: Theme.of(context).disabledColor,
+          fontSize: 14.sp,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'No',
+            style: AppTextStyles.poppins16w400.copyWith(
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColor.mainHexcolor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            'Yes',
+            style: AppTextStyles.poppins16w600.copyWith(
+              color: AppColor.whiteColor,
+            ),
+          ),
+        ),
+      ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
   );
 }

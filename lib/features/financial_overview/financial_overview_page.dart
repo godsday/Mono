@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
+import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
+import 'package:sizer/sizer.dart';
 import 'budget/presentation/providers/budget_provider.dart';
 import 'budget/presentation/widgets/budget_overview_card.dart';
 import 'budget/presentation/widgets/first_time_budget_card.dart';
@@ -21,14 +24,12 @@ class FinancialOverviewPage extends StatefulWidget {
 }
 
 class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
-  // late FinancialOverviewProvider _provider;
-
   @override
   void initState() {
     super.initState();
-
-    // Load Assets and Goals data once frame is ready to access context
+    // Load data once after the first frame – providers deduplicate calls internally
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       context.read<AssetsProvider>().loadAssets();
       context.read<GoalsProvider>().loadGoals();
       context.read<BudgetProvider>().loadBudget();
@@ -37,13 +38,17 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('FinancialOverviewPage is called');
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 13.5.h),
+        child: const HeaderSection(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HeaderSection(),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -77,9 +82,9 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                               end: Alignment.bottomRight,
                               colors: [
                                 Colors.black,
-                                Color.fromARGB(255, 30, 35, 35),
+                                Color(0xFF1E2323),
                                 Colors.amber,
-                                Color.fromARGB(255, 3, 19, 18)
+                                Color(0xFF031312)
                               ],
                             ),
                             borderRadius: BorderRadius.circular(22),
@@ -102,16 +107,20 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Analytics",
+                                  context.l10n.analytics_title,
                                   style: AppTextStyles.poppins16w400.copyWith(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 18,
-                                      color: const Color(0xFF21435D)),
+                                      color: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .textThemeBlueHeader),
                                 ),
-                                const Icon(
+                                Icon(
                                   Icons.arrow_forward_ios,
                                   size: 23,
-                                  color: Color(0xFF21435D),
+                                  color: Theme.of(context)
+                                      .extension<AppGradients>()!
+                                      .textThemeBlueHeader,
                                 )
                               ],
                             ),
@@ -153,40 +162,45 @@ class _FinancialOverviewPageState extends State<FinancialOverviewPage> {
 
                   const SizedBox(height: 20),
 
-                  // Budget section
-
-                  Consumer<BudgetProvider>(
-                    builder: (context, provider, _) {
-                      if (provider.budget == null ||
-                          provider.budget!.totalBudget == 0) {
-                        return const FirstTimeBudgetCard();
-                      } else {
+                  // Budget section – wrapped in RepaintBoundary to isolate
+                  // the animated progress bar from repainting the rest of the
+                  // scroll view.
+                  RepaintBoundary(
+                    child: Consumer<BudgetProvider>(
+                      builder: (context, provider, _) {
+                        if (provider.budget == null ||
+                            provider.budget!.totalBudget == 0) {
+                          return const FirstTimeBudgetCard();
+                        }
                         return BudgetOverviewCard(budget: provider.budget!);
-                      }
-                    },
+                      },
+                    ),
                   ),
                   const SizedBox(height: 20),
 
-                  // Goals Section
+                  // Goals Section – single Consumer; GoalsOverviewCard now
+                  // accepts data directly and does NOT consume the provider
+                  // again internally.
                   Consumer<GoalsProvider>(
                     builder: (context, provider, _) {
                       if (provider.goals.isEmpty) {
                         return const FirstTimeGoalCard();
-                      } else {
-                        return const GoalsOverviewCard();
                       }
+                      return GoalsOverviewCard(goals: provider.goals);
                     },
                   ),
                   const SizedBox(height: 20),
 
-                  // Assets Section
+                  // Assets Section – single Consumer; same pattern as Goals.
                   Consumer<AssetsProvider>(
                     builder: (context, provider, _) {
                       if (provider.assets.isEmpty) {
                         return const FirstTimeAssetCard();
-                      } else {
-                        return const AssetsOverviewCard();
                       }
+                      return AssetsOverviewCard(
+                        assets: provider.assets,
+                        totalValue: provider.totalAssetValue,
+                      );
                     },
                   ),
                 ],

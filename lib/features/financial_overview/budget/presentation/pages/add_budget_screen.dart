@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/features/add_screen/data/models/category_model.dart';
 import 'package:mono/features/financial_overview/budget/domain/entities/budget_entity.dart';
 import 'package:mono/routes/route_names.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
-import '../../../../../models/category_model/category_model.dart';
 import '../../data/repositories/budget_repository_impl.dart';
 import '../../domain/usecases/save_monthly_budget_usecase.dart';
 import '../providers/add_budget_provider.dart';
+import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddBudgetScreen extends StatelessWidget {
   final BudgetEntity? budget;
@@ -27,22 +30,25 @@ class AddBudgetScreen extends StatelessWidget {
         return provider;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColor.blackText),
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
             budget?.totalBudget != null
-                ? 'Edit Monthly Budget'
-                : 'Set Monthly Budget',
+                ? context.l10n.edit_budget_title
+                : context.l10n.set_budget_title,
             style: AppTextTheme.montserrart(
               fontSize: 20,
               fontWeight: FontWeight.w700,
-              color: AppColor.blackText,
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
           ),
           centerTitle: true,
@@ -93,7 +99,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Plan your spending for this month',
+            context.l10n.plan_spending_subtitle,
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -106,18 +112,17 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           _buildRemainingIndicator(context, provider, widget.isBudgetExist),
           const SizedBox(height: 32),
           Text(
-            'Allocate by Category',
+            context.l10n.allocate_by_category,
             style: AppTextTheme.montserrart(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColor.mainHexcolor,
-            ),
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor),
           ),
           const SizedBox(height: 16),
           if (provider.availableCategories.isEmpty && provider.isLoading)
             const Center(child: CircularProgressIndicator())
           else if (provider.availableCategories.isEmpty)
-            const Text("No expense categories found.")
+            Text(context.l10n.no_expense_categories)
           else
             ...provider.availableCategories.map(
               (category) => _CategoryBudgetInput(category: category),
@@ -132,7 +137,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColor.blueContainer.withValues(alpha: 0.3),
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColor.blueContainer),
       ),
@@ -140,48 +145,52 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Monthly Budget',
+            context.l10n.total_monthly_budget_label,
             style: AppTextTheme.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColor.mainHexcolor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           const SizedBox(height: 12),
           TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+              LengthLimitingTextInputFormatter(10)
+            ],
             controller: totalController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: AppTextTheme.montserrart(
               fontSize: 32,
               fontWeight: FontWeight.w700,
-              color: AppColor.blackText,
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
             decoration: InputDecoration(
-              prefixText: '₹ ',
+              prefixText: '${context.currencySymbol} ',
               prefixStyle: AppTextTheme.montserrart(
                 fontSize: 32,
                 fontWeight: FontWeight.w700,
-                color: AppColor.textSecondary,
+                color: Theme.of(context).disabledColor,
               ),
               border: InputBorder.none,
               hintText: '0',
               hintStyle: TextStyle(
-                  color: AppColor.textSecondary.withValues(alpha: 0.3)),
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColor.lightGrey
+                      : AppColor.textSecondary.withValues(alpha: 0.3)),
             ),
             onChanged: (value) {
-              if (value.isEmpty) {
+              if (value.isNotEmpty && RegExp(r'^[0-9]*$').hasMatch(value)) {
+                final amount = double.tryParse(value);
+                provider.updateTotalBudget(amount!);
+              } else {
                 provider.updateTotalBudget(0);
-                return;
-              }
-              final amount = double.tryParse(value);
-              if (amount != null) {
-                provider.updateTotalBudget(amount);
               }
             },
           ),
           const SizedBox(height: 8),
           Text(
-            'Recommended: 70–80% of income',
+            context.l10n.recommended_budget_hint,
             style: AppTextTheme.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w400,
@@ -213,7 +222,9 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isOverBudget ? 'Over Budget' : 'Remaining to Allocate',
+              isOverBudget
+                  ? context.l10n.over_budget_label
+                  : context.l10n.remaining_to_allocate_label,
               style: AppTextTheme.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -222,7 +233,7 @@ class _AddBudgetBodyState extends State<_AddBudgetBody> {
               ),
             ),
             Text(
-              '₹${remaining.abs().toStringAsFixed(0)}',
+              context.formatCurrency(remaining.abs()),
               style: AppTextTheme.montserrart(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -281,8 +292,9 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColor.lightGrey,
+              color: Theme.of(context).primaryColorLight,
               shape: BoxShape.circle,
+              border: Border.all(color: AppColor.borderGreyWhite),
             ),
             child: Icon(Icons.category_outlined,
                 color: AppColor.grey700, size: 20),
@@ -294,7 +306,7 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
               style: AppTextTheme.poppins(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: AppColor.blackText,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
             ),
           ),
@@ -302,26 +314,30 @@ class _CategoryBudgetInputState extends State<_CategoryBudgetInput> {
             width: 100,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColor.grey.withValues(alpha: 0.3)),
             ),
             child: TextFormField(
               controller: _controller,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                LengthLimitingTextInputFormatter(10)
+              ],
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.end,
               style: AppTextTheme.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColor.blackText,
+                color: Theme.of(context).extension<AppGradients>()!.textTheme,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
                 border: InputBorder.none,
-                prefixText: '₹',
-                prefixStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                prefixText: context.currencySymbol,
+                prefixStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                 hintText: '0',
               ),
               onChanged: (value) {
@@ -346,19 +362,22 @@ class _SaveBudgetButton extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ElevatedButton(
           onPressed: provider.isValid && !provider.isLoading
               ? () async {
                   final success = await provider.saveBudget();
                   if (success && context.mounted) {
-                    Navigator.of(context).pushNamed(RouteNames.budgetOverview);
+                    Navigator.of(context).pushReplacementNamed(
+                      RouteNames.bottomNav,
+                      arguments: 2,
+                    );
                   }
                 }
               : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.mainHexcolor,
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
             disabledBackgroundColor: AppColor.grey.withValues(alpha: 0.3),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -374,7 +393,9 @@ class _SaveBudgetButton extends StatelessWidget {
                       color: Colors.white, strokeWidth: 2),
                 )
               : Text(
-                  budget?.totalBudget != null ? 'Update Budget' : 'Save Budget',
+                  budget?.totalBudget != null
+                      ? context.l10n.update_budget_button
+                      : context.l10n.save_budget_button,
                   style: AppTextTheme.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

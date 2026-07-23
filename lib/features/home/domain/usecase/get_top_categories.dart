@@ -13,7 +13,6 @@ class GetTopCategories {
       categoryTotals[t.category] = (categoryTotals[t.category] ?? 0) + t.amount;
       totalTypeAmount += t.amount;
     }
-    // print("${categoryTotals.entries} ----  ${totalTypeAmount}");
     // Convert to TopCategory list
     List<TopCategory> topCategories = categoryTotals.entries.map((entry) {
       return TopCategory(
