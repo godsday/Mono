@@ -53,14 +53,113 @@
 
   <title>Mono</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9998;
+      background-color: white;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .desktop-warning {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10000;
+      background-color: white;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    .desktop-warning h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .desktop-warning p {
+      color: #666;
+    }
+
+    /* Desktop breakpoint (e.g. >= 600px) */
+    @media (min-width: 600px) {
+      .desktop-warning {
+        display: flex;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="loader-container" id="loader-container">
+    <div class="spinner"></div>
+    <p style="margin-top: 16px; color: #555;">Loading Mono...</p>
+  </div>
+
+  <div class="desktop-warning">
+    <h1>Desktop version is not available</h1>
+    <p>Please open this app on a mobile device.</p>
+  </div>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
+
+    // Observe when Flutter adds its elements to the DOM to hide the loader
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length > 0) {
+          for (var i = 0; i < mutation.addedNodes.length; i++) {
+            var node = mutation.addedNodes[i];
+            if (node.tagName === 'FLT-GLASS-PANE' || node.tagName === 'FLUTTER-VIEW') {
+              var loader = document.getElementById('loader-container');
+              if (loader) {
+                loader.style.display = 'none';
+              }
+              observer.disconnect();
+            }
+          }
+        }
+      });
+    });
+    observer.observe(document.body, { childList: true });
+
     function loadMainDartJs() {
       if (scriptLoaded) {
         return;
