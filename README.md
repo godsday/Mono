@@ -1,17 +1,157 @@
-# Mono -Money Management Applications.
 
-Mono is money management application .Which contains mainly six screen.
-1 - Splash screen.
-2 - Onboarding screen.
-3 - Home screen.
-4 - Financial details screen.
-5 - Add transaction screen.
-6 - Setting screen.
+# 💜 Mono – Personal Finance
 
-   This app starts with animated splash screen then it move to next screen Onboarding ,Which have a text field for the user name and an elevated button .The Home screen has been designed using stack , which displays user name ,total balance ,total income and total expense and it also contains bottom navigation and a button to add transaction screen. financial details screen contain the details data in a list and the graphical representation of it .The view can be customize.
-Setting screen contain notification and dark theme toggle button and about.Transaction add screen contains dependent drop down for income and expense  and we should  specify the amount ,data and the category.
+> Track where your money goes.
+
+Mono is a modern, offline-first personal finance application built with Flutter. It helps users record income and expenses, manage budgets, analyze spending patterns, and achieve financial goals through a clean and intuitive experience.
+
+---
+
+## 📱 Platforms
+
+- ✅ Android
+- ✅ Web (Firebase Hosting)
+
+---
+
+## ✨ Features
+
+### 💰 Money Management
+- Add income & expenses
+- Categorize transactions
+- Search & filter transactions
+- Monthly cash flow tracking
+
+### 📊 Analytics
+- Expense insights
+- Income vs Expense
+- Category breakdown
+- Monthly trends
+
+### 🎯 Dreams & Goals
+- Create financial goals
+- Track saved amount
+- Target amount & deadline
+- Progress visualization
+
+### 💳 Budget
+- Monthly budget planning
+- Budget usage tracking
+- Remaining balance
+
+### 🌍 Localization
+- Multiple language support
+- Easy language switching
+
+### 🔒 Security
+- Offline-first architecture
+- Local data persistence
+- Firebase integration
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Usage |
+|------------|-------|
+| Flutter | Cross-platform development |
+| Dart | Programming language |
+| Provider | State Management |
+| Hive | Local Database |
+| Firebase | Hosting & Services |
+| GitHub Actions | CI/CD |
+| Material 3 | UI Design |
+
+---
+
+# 📸 Screenshots
 
 ![img](./screenshot/first.png)
 ![img](./screenshot/second.png)
 
-# PlayStore Link  [Mono](https://play.google.com/store/apps/details?id=in.ror.mono)
+| Home | Analytics | Goals |
+|------|-----------|-------|
+| Screenshot | Screenshot | Screenshot |
+
+---
+
+# 🌐 Live Demo
+
+Web App
+
+https://mono-b47e2.web.app
+
+---
+
+# 🧪 CI/CD
+
+GitHub Actions automatically:
+
+- Flutter Analyze
+- Build Release APK
+- Build Release AAB
+- Upload Build Artifacts
+
+---
+
+# 📂 Project Structure
+
+```
+lib/
+│
+├── core/
+├── features/
+│   ├── home/
+│   ├── transactions/
+│   ├── budget/
+│   ├── dreams/
+│   ├── analytics/
+│   └── settings/
+│
+├── shared/
+├── services/
+├── widgets/
+└── main.dart
+```
+
+---
+
+# 🗺 Roadmap
+
+- [x] Expense Tracking
+- [x] Income Tracking
+- [x] Budget Planning
+- [x] Analytics
+- [x] Dreams & Goals
+- [x] Firebase Hosting
+- [x] Android Release
+- [ ] Cloud Backup
+- [ ] Recurring Transactions
+- [ ] AI Spending Insights
+- [ ] PDF Reports
+- [ ] Export & Import
+- [ ] iOS Support
+
+---
+
+# 🤝 Contributing
+
+Contributions, feature requests, and bug reports are welcome.
+
+Feel free to open an Issue or submit a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Developer
+
+**Muhammed Rafi**
+
+Flutter Developer
+
+Made with ❤️ using Flutter.
