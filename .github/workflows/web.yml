@@ -1,0 +1,24 @@
+web:
+  if: github.ref == 'refs/heads/mono-web'
+  runs-on: ubuntu-latest
+
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.38.5"
+        cache: true
+
+    - run: flutter pub get
+
+    - run: flutter analyze || true
+
+    - name: Build Web
+      run: flutter build web --release
+
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
+
+    - name: Deploy to Firebase
+      run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
