@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 
@@ -102,11 +103,13 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: OnboardButton(
-                              onTap: () {
+                            child: AppElevetedButton(
+                              height: 6.h,
+                              width: double.infinity,
+                              appButtonText: l10n.get_started,
+                              onPressed: () {
                                 gotohome(context);
                               },
-                              text: l10n.get_started,
                             ),
                           ),
                         ],
@@ -139,57 +142,6 @@ class OnboardScreen extends StatelessWidget {
 
     Navigator.pushNamedAndRemoveUntil(
         context, RouteNames.bottomNav, (route) => false);
-  }
-}
-
-class OnboardButton extends StatefulWidget {
-  final VoidCallback onTap;
-  final String text;
-
-  const OnboardButton({
-    super.key,
-    required this.onTap,
-    required this.text,
-  });
-
-  @override
-  State<OnboardButton> createState() => _OnboardButtonState();
-}
-
-class _OnboardButtonState extends State<OnboardButton> {
-  bool pressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient:
-              Theme.of(context).extension<AppGradients>()!.primaryGradient,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: widget.onTap,
-          onHighlightChanged: (value) {
-            setState(() => pressed = value);
-          },
-          child: AnimatedScale(
-            scale: pressed ? .96 : 1,
-            duration: const Duration(milliseconds: 100),
-            child: SizedBox(
-              width: double.infinity,
-              height: 6.h,
-              child: Center(
-                child: Text(widget.text),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 
