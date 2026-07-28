@@ -102,7 +102,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: _OnboardButton(
+                            child: OnboardButton(
                               onTap: () {
                                 gotohome(context);
                               },
@@ -142,48 +142,51 @@ class OnboardScreen extends StatelessWidget {
   }
 }
 
-class _OnboardButton extends StatefulWidget {
+class OnboardButton extends StatefulWidget {
   final VoidCallback onTap;
   final String text;
 
-  const _OnboardButton({required this.onTap, required this.text});
+  const OnboardButton({
+    super.key,
+    required this.onTap,
+    required this.text,
+  });
 
   @override
-  State<_OnboardButton> createState() => _OnboardButtonState();
+  State<OnboardButton> createState() => _OnboardButtonState();
 }
 
-class _OnboardButtonState extends State<_OnboardButton> {
-  bool _isPressed = false;
+class _OnboardButtonState extends State<OnboardButton> {
+  bool pressed = false;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-          width: double.infinity,
-          height: 6.h,
-          decoration: BoxDecoration(
-            gradient:
-                Theme.of(context).extension<AppGradients>()!.primaryGradient,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: HexColor('#3F8782').withValues(alpha: 0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient:
+              Theme.of(context).extension<AppGradients>()!.primaryGradient,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: widget.onTap,
+          onHighlightChanged: (value) {
+            setState(() => pressed = value);
+          },
+          child: AnimatedScale(
+            scale: pressed ? .96 : 1,
+            duration: const Duration(milliseconds: 100),
+            child: SizedBox(
+              width: double.infinity,
+              height: 6.h,
+              child: Center(
+                child: Text(widget.text),
               ),
-            ],
+            ),
           ),
-          alignment: Alignment.center,
-          child: Text(widget.text,
-              style: AppTextStyles.poppins16w600
-                  .copyWith(color: Colors.white, fontSize: 17.sp)),
         ),
       ),
     );
