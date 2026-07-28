@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mono/core/notifications/notification_service.dart';
 import 'package:mono/core/storage/encrption/hive_encryption_service.dart';
@@ -49,7 +50,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await NotificationService().init();
+  if (!kIsWeb) {
+    await NotificationService().init();
+  }
 
   // Log app_open event
   sl<AnalyticsService>().logAppOpen();
