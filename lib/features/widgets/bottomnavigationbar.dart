@@ -47,36 +47,39 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         index: _selectedIndex,
         children: pages,
       )),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 1,
-        selectedLabelStyle: AppTextTheme.poppins().copyWith(
-            fontSize: 14.sp,
-            color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.w700),
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.history),
-            label: context.l10n.transactions_title,
-          ),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.auto_awesome_mosaic_outlined),
-              label: context.l10n.home_title),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.bar_chart_outlined),
-              label: context.l10n.budget_title),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.settings),
-              label: context.l10n.settings_title),
-        ],
-        backgroundColor:
-            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-        iconSize: 30,
-        showUnselectedLabels: false,
-        showSelectedLabels: true,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Theme.of(context).primaryColorDark,
-        onTap: _onitemtap,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: BottomNavigationBar(
+          elevation: 0,
+          selectedLabelStyle: AppTextTheme.poppins().copyWith(
+              fontSize: 14.sp,
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.w700),
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.history),
+              label: context.l10n.transactions_title,
+            ),
+            BottomNavigationBarItem(
+                icon: const Icon(Icons.auto_awesome_mosaic_outlined),
+                label: context.l10n.home_title),
+            BottomNavigationBarItem(
+                icon: const Icon(Icons.bar_chart_outlined),
+                label: context.l10n.budget_title),
+            BottomNavigationBarItem(
+                icon: const Icon(Icons.settings),
+                label: context.l10n.settings_title),
+          ],
+          backgroundColor:
+              Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+          iconSize: 30,
+          showUnselectedLabels: false,
+          showSelectedLabels: true,
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Theme.of(context).primaryColorDark,
+          onTap: _onitemtap,
+        ),
       ),
     );
   }

@@ -445,9 +445,14 @@ class _AddScreenState extends State<AddScreen> {
                               decoration: textfielddecor(
                                   context, context.l10n.transaction_notes_hint),
                               onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  notesController.text =
-                                      value.capitalizeFirstLetter();
+                                final text = value.capitalizeFirstLetter();
+
+                                if (text != notesController.text) {
+                                  notesController.value = TextEditingValue(
+                                    text: text,
+                                    selection: TextSelection.collapsed(
+                                        offset: text.length),
+                                  );
                                 }
                               },
                             ),
