@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -11,7 +13,6 @@ import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:mono/core/notifications/notification_service.dart';
 import 'package:provider/provider.dart';
 
 class OnboardScreen extends StatelessWidget {
@@ -129,18 +130,20 @@ class OnboardScreen extends StatelessWidget {
     );
   }
 
-  gotohome(context) async {
-    final namecontrol = namecontroller.text;
-    final sharedprefer = await SharedPreferences.getInstance();
-    sharedprefer.setString('namekey', namecontrol);
-
-    // Prompt for notification permissions after onboarding
-    await NotificationService().requestPermissions();
+  Future<void> gotohome(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('namekey', namecontroller.text);
 
     if (!context.mounted) return;
 
     Navigator.pushNamedAndRemoveUntil(
-        context, RouteNames.bottomNav, (route) => false);
+      context,
+      RouteNames.bottomNav,
+      (_) => false,
+    );
+
+    // Ask for notification permission after navigation.
+    // unawaited(NotificationService().requestPermissions());
   }
 }
 
