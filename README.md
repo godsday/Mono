@@ -131,10 +131,11 @@ lib/
 - [x] Android Release
 - [ ] Cloud Backup
 - [ ] Recurring Transactions
-- [ ] AI Spending Insights
+- [x] AI Spending Insights
 - [ ] PDF Reports
-- [ ] Export & Import
+- [x] Export & Import
 - [ ] iOS Support
+- [x] web support
 
 ---
 
