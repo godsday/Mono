@@ -230,52 +230,33 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
         return Scaffold(
           backgroundColor: Colors.grey[50],
-          body: Stack(
-            children: [
-              // Background Accents
-              Positioned(
-                top: -80,
-                right: -80,
-                child: Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.mainHexcolor.withValues(alpha: 0.05),
+          body: SafeArea(
+            bottom: false,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: _buildHeader(activeGoal),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(20.0),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildProgressCard(activeGoal, pctStr, targetDateStr),
+                        const SizedBox(height: 20),
+                        _buildMetricsGrid(activeGoal),
+                        const SizedBox(height: 24),
+                        _buildAddMoneyButton(activeGoal),
+                        if (!activeGoal.isCompleted) const SizedBox(height: 28),
+                        _buildContributionHistory(activeGoal),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SafeArea(
-                bottom: false,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: _buildHeader(activeGoal),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(20.0),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildProgressCard(
-                                activeGoal, pctStr, targetDateStr),
-                            const SizedBox(height: 20),
-                            _buildMetricsGrid(activeGoal),
-                            const SizedBox(height: 24),
-                            _buildAddMoneyButton(activeGoal),
-                            if (!activeGoal.isCompleted)
-                              const SizedBox(height: 28),
-                            _buildContributionHistory(activeGoal),
-                            const SizedBox(height: 40),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -285,9 +266,11 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   Widget _buildHeader(GoalEntity activeGoal) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(top: 20, bottom: 28, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 28, left: 16, right: 16),
       decoration: BoxDecoration(
-        gradient: AppColor.mainGradient,
+        gradient: Theme.of(context).brightness == Brightness.dark
+            ? AppColor.darkThemeGradient
+            : AppColor.mainGradient,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(28),
           bottomRight: Radius.circular(28),
@@ -312,11 +295,11 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                     icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                     onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: 1.w),
+                  SizedBox(width: .5.w),
                   Text(
                     activeGoal.title,
                     style: AppTextTheme.montserrart(
-                      fontSize: 26,
+                      fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),

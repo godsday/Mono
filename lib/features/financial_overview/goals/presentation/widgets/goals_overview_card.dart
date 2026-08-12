@@ -60,7 +60,9 @@ class GoalsOverviewCard extends StatelessWidget {
                   offset: Offset(0, 4),
                 ),
               ],
-              gradient: _headerGradient,
+              gradient: Theme.of(context).brightness == Brightness.dark
+                  ? AppColor.darkThemeGradient
+                  : _headerGradient,
             ),
             child: Stack(
               children: [
@@ -96,7 +98,10 @@ class GoalsOverviewCard extends StatelessWidget {
                                 .copyWith(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: AppColor.blackText,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColor.whiteColor
+                                  : AppColor.blackText,
                             ),
                           ),
                         ],
@@ -111,7 +116,10 @@ class GoalsOverviewCard extends StatelessWidget {
                           style: AppTextTheme.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: AppColor.textGrey,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColor.lightGrey
+                                    : AppColor.textGrey,
                           ),
                         ),
                       ),
@@ -124,7 +132,9 @@ class GoalsOverviewCard extends StatelessWidget {
           SizedBox(height: .5.h),
           Container(
               width: double.infinity,
-              color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColor.blackColor
+                  : Colors.white,
               child: const GoalsSection()),
           Consumer<GoalsProvider>(
             builder: (context, provider, _) {
@@ -165,9 +175,11 @@ class GoalsOverviewCard extends StatelessWidget {
                 },
                 child: Container(
                   key: ValueKey<String>(provider.selectedFilter.name),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColor.blackColor
+                        : Colors.white,
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(24),
                       bottomRight: Radius.circular(24),
                     ),
@@ -233,7 +245,9 @@ class _GoalItem extends StatelessWidget {
                     style: AppTextTheme.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: AppColor.blackText,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColor.whiteColor
+                          : AppColor.blackText,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),

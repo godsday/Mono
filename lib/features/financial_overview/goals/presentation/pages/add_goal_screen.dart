@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 // ignore: depend_on_referenced_packages
 import 'package:uuid/uuid.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
@@ -124,89 +125,51 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50], // Very soft light background
-      body: Stack(
-        children: [
-          // 6. Soft Background Elements
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.mainHexcolor.withValues(alpha: 0.05),
-              ),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Colors.grey[50], // Very soft light background
+      body: SafeArea(
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: _buildHeader(),
             ),
-          ),
-          Positioned(
-            bottom: 200,
-            left: -150,
-            child: Container(
-              width: 350,
-              height: 350,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.mainHexcolor.withValues(alpha: 0.03),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            bottom: false,
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: _buildHeader(),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 20.0),
-                  sliver: SliverToBoxAdapter(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSuggestedChips(),
-                          const SizedBox(height: 30),
-                          Text(
-                            'Dream Details',
-                            style: AppTextTheme.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          _buildInputFields(),
-                          const SizedBox(height: 30),
-                          _buildDreamPreview(),
-                          const SizedBox(height: 20),
-                          _buildMotivationCard(),
-                          const SizedBox(height: 30),
-                          _buildSaveButton(),
-                          const SizedBox(height: 40),
-                        ],
+            SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              sliver: SliverToBoxAdapter(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSuggestedChips(),
+                      const SizedBox(height: 30),
+                      Text(
+                        'Dream Details',
+                        style: AppTextTheme.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      _buildInputFields(),
+                      const SizedBox(height: 30),
+                      _buildDreamPreview(),
+                      const SizedBox(height: 20),
+                      _buildMotivationCard(),
+                      const SizedBox(height: 30),
+                      _buildSaveButton(),
+                      const SizedBox(height: 40),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-
-          // Back Button Overlay
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 10,
-            left: 10,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -215,16 +178,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(top: 40, bottom: 40, left: 24, right: 24),
+      padding: const EdgeInsets.only(top: 20, bottom: 20, left: 16, right: 16),
       decoration: BoxDecoration(
-        gradient: AppColor.mainGradient,
+        gradient: Theme.of(context).brightness == Brightness.dark
+            ? AppColor.darkThemeGradient
+            : AppColor.mainGradient,
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(28),
+          bottomRight: Radius.circular(28),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColor.mainHexcolor.withValues(alpha: 0.3),
+            color: AppColor.mainHexcolor.withValues(alpha: 0.25),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -233,27 +198,46 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-              height:
-                  20), // Top padding for safe area logic with overlapping button
-          Text(
-            widget.goal != null
-                ? context.l10n.edit_goal_title
-                : "Add Dream / Goal",
-            style: AppTextTheme.montserrart(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  SizedBox(
+                    width: .5.w,
+                  ),
+                  Text(
+                    widget.goal != null
+                        ? context.l10n.edit_goal_title
+                        : "Add Goal",
+                    style: AppTextTheme.montserrart(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            "Turn small savings into meaningful milestones ✨",
-            style: AppTextTheme.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.white.withValues(alpha: 0.9),
-            ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Turn small savings into meaningful milestones✨",
+                  style: AppTextTheme.poppins(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
