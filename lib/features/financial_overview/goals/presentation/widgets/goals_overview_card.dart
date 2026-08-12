@@ -3,11 +3,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 import 'package:mono/features/financial_overview/widgets/safe_background_image.dart';
+import 'package:mono/routes/route_names.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
-import '../pages/add_goal_screen.dart';
 
 // Module-level cached colours – allocated once, never again.
 final _borderColor = const Color(0xffA5C9FF);
@@ -60,15 +60,6 @@ class GoalsOverviewCard extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                // Positioned(
-                //   left: 9.w,
-                //   child: SafeBackgroundImage(
-                //     imagePath: 'assets/images/arrow-first.png',
-                //     fit: BoxFit.contain,
-                //     fallback: Icon(Icons.kayaking,
-                //         size: 80, color: Colors.grey.withValues(alpha: 0.2)),
-                //   ),
-                // ),
                 Positioned(
                   right: 0,
                   top: 0,
@@ -107,10 +98,9 @@ class GoalsOverviewCard extends StatelessWidget {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.push(
+                        onTap: () => Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                              builder: (_) => const AddGoalScreen()),
+                          RouteNames.addGoal,
                         ),
                         child: Text(
                           'Add +',
@@ -169,49 +159,65 @@ class _GoalItem extends StatelessWidget {
     // Pre-compute the percentage string once instead of in multiple Text nodes.
     final pct = '${(goal.progress * 100).toStringAsFixed(0)} %';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          RouteNames.goalDetails,
+          arguments: goal,
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              goal.title,
-              style: AppTextTheme.poppins(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: AppColor.blackText,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    goal.title,
+                    style: AppTextTheme.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.blackText,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Text(
+                  pct,
+                  style: AppTextTheme.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: _percentColor,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: goal.progress,
+              backgroundColor: _progressBgColor,
+              valueColor: AlwaysStoppedAnimation<Color>(_progressBarColor),
+              borderRadius: BorderRadius.circular(4),
+              minHeight: 4,
+            ),
+            const SizedBox(height: 6),
             Text(
-              pct,
+              '${context.formatCurrency(goal.savedAmount)} / ${context.formatCurrency(goal.targetAmount)}',
               style: AppTextTheme.poppins(
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: _percentColor,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: goal.progress,
-          backgroundColor: _progressBgColor,
-          // AlwaysStoppedAnimation is cached per item here via final field.
-          valueColor: AlwaysStoppedAnimation<Color>(_progressBarColor),
-          borderRadius: BorderRadius.circular(4),
-          minHeight: 4,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          '${context.formatCurrency(goal.savedAmount)} / ${context.formatCurrency(goal.targetAmount)}',
-          style: AppTextTheme.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
+

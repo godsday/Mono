@@ -278,7 +278,7 @@ class HomepageCurveShape extends StatelessWidget {
               ),
             ],
           ),
-          height: 62.h,
+          height: 60.h,
         ),
       ),
     );

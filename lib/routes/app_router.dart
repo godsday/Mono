@@ -8,6 +8,9 @@ import 'package:mono/features/financial_overview/financial_overview_page.dart';
 import 'package:mono/features/home/presentation/pages/home_page.dart';
 import 'package:mono/features/transaction/data/models/transcation_model.dart';
 import 'package:mono/features/transaction/presentation/transaction_screen/transaction_screen.dart';
+import 'package:mono/features/financial_overview/goals/domain/entities/goal_entity.dart';
+import 'package:mono/features/financial_overview/goals/presentation/pages/add_goal_screen.dart';
+import 'package:mono/features/financial_overview/goals/presentation/pages/goal_details_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';
@@ -74,6 +77,29 @@ class AppRouter {
               index: index,
             ),
             settings);
+
+      case RouteNames.goalDetails:
+        final args = settings.arguments;
+        final goal = args is GoalEntity ? args : null;
+        if (goal == null) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Goal not found')),
+            ),
+          );
+        }
+        return _buildPageRoute(
+          GoalDetailsScreen(goal: goal),
+          settings,
+        );
+
+      case RouteNames.addGoal:
+        final args = settings.arguments;
+        final goal = args is GoalEntity ? args : null;
+        return _buildPageRoute(
+          AddGoalScreen(goal: goal),
+          settings,
+        );
 
       default:
         return MaterialPageRoute(

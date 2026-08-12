@@ -11,7 +11,9 @@ import '../providers/goals_provider.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 
 class AddGoalScreen extends StatefulWidget {
-  const AddGoalScreen({super.key});
+  final GoalEntity? goal;
+
+  const AddGoalScreen({super.key, this.goal});
 
   @override
   State<AddGoalScreen> createState() => _AddGoalScreenState();
@@ -39,6 +41,13 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.goal != null) {
+      _titleController.text = widget.goal!.title;
+      _targetAmountController.text =
+          widget.goal!.targetAmount.toStringAsFixed(0);
+      _savedAmountController.text = widget.goal!.savedAmount.toStringAsFixed(0);
+      _selectedDeadline = widget.goal!.deadline;
+    }
     _titleController.addListener(() => setState(() {}));
     _targetAmountController.addListener(() => setState(() {}));
     _savedAmountController.addListener(() => setState(() {}));
@@ -65,15 +74,24 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     final deadline =
         _selectedDeadline ?? DateTime.now().add(const Duration(days: 365));
 
-    final newGoal = GoalEntity(
-      id: const Uuid().v4(),
-      title: title,
-      targetAmount: targetAmount,
-      savedAmount: savedAmount,
-      deadline: deadline,
-    );
-
-    await context.read<GoalsProvider>().addGoal(newGoal);
+    if (widget.goal != null) {
+      final updatedGoal = widget.goal!.copyWith(
+        title: title,
+        targetAmount: targetAmount,
+        savedAmount: savedAmount,
+        deadline: deadline,
+      );
+      await context.read<GoalsProvider>().updateGoal(updatedGoal);
+    } else {
+      final newGoal = GoalEntity(
+        id: const Uuid().v4(),
+        title: title,
+        targetAmount: targetAmount,
+        savedAmount: savedAmount,
+        deadline: deadline,
+      );
+      await context.read<GoalsProvider>().addGoal(newGoal);
+    }
 
     if (mounted) {
       Navigator.pop(context, true);
@@ -199,14 +217,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 40, bottom: 40, left: 24, right: 24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColor.mainHexcolor,
-            AppColor.mainHexcolor.withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: AppColor.mainGradient,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
@@ -226,7 +237,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               height:
                   20), // Top padding for safe area logic with overlapping button
           Text(
-            "Add Dream / Goal",
+            widget.goal != null
+                ? context.l10n.edit_goal_title
+                : "Add Dream / Goal",
             style: AppTextTheme.montserrart(
               fontSize: 28,
               fontWeight: FontWeight.w800,
@@ -693,7 +706,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           child: _isSaving
               ? const CircularProgressIndicator(color: Colors.white)
               : Text(
-                  'Start This Dream',
+                  widget.goal != null
+                      ? context.l10n.update_goal_button
+                      : 'Start This Dream',
                   style: AppTextTheme.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

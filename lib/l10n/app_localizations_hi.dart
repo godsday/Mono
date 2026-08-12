@@ -568,4 +568,57 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get add_first_expense => 'Add Your First Expense';
+
+  @override
+  String get goal_details_title => 'लक्ष्य विवरण';
+
+  @override
+  String get edit_goal_title => 'लक्ष्य संपादित करें';
+
+  @override
+  String get add_money_title => 'पैसे जोड़ें';
+
+  @override
+  String get add_money_button => '+ पैसे जोड़ें';
+
+  @override
+  String get saved_label => 'बचाया गया';
+
+  @override
+  String get remaining_label => 'शेष';
+
+  @override
+  String get target_amount_label => 'लक्ष्य राशि';
+
+  @override
+  String get target_date_label => 'लक्ष्य तिथि';
+
+  @override
+  String get progress_label => 'प्रगति';
+
+  @override
+  String get contribution_history_title => 'योगदान इतिहास';
+
+  @override
+  String get no_contributions_yet => 'अभी तक कोई योगदान नहीं जोड़ा गया।';
+
+  @override
+  String get delete_goal_title => 'लक्ष्य हटाएं';
+
+  @override
+  String get delete_goal_confirmation =>
+      'क्या आप वाकई इस लक्ष्य को हटाना चाहते हैं? यह क्रिया वापस नहीं ली जा सकती।';
+
+  @override
+  String get amount_required_error => 'कृपया एक राशि दर्ज करें';
+
+  @override
+  String get amount_greater_than_zero_error => 'राशि 0 से अधिक होनी चाहिए';
+
+  @override
+  String get amount_exceeds_remaining_warning =>
+      'राशि शेष लक्ष्य राशि से अधिक है';
+
+  @override
+  String get update_goal_button => 'लक्ष्य अपडेट करें';
 }

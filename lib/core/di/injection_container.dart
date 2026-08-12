@@ -28,6 +28,9 @@ import 'package:mono/features/financial_overview/goals/domain/repositories/goal_
 import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/get_goals_usecase.dart';
 import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_progress_usecase.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/update_goal_usecase.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/delete_goal_usecase.dart';
+import 'package:mono/features/financial_overview/goals/domain/usecases/add_goal_contribution_usecase.dart';
 import 'package:mono/features/app_settings/data/datasources/app_settings_local_data_source.dart';
 import 'package:mono/features/app_settings/data/repositories/app_settings_repository_impl.dart';
 import 'package:mono/features/app_settings/domain/repositories/app_settings_repository.dart';
@@ -100,6 +103,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetGoalsUseCase(sl()));
   sl.registerLazySingleton(() => AddGoalUseCase(sl()));
   sl.registerLazySingleton(() => UpdateGoalProgressUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateGoalUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteGoalUseCase(sl()));
+  sl.registerLazySingleton(() => AddGoalContributionUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<GoalRepository>(

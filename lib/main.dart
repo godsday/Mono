@@ -134,6 +134,9 @@ Future<void> main() async {
           getGoalsUseCase: sl(),
           addGoalUseCase: sl(),
           updateGoalProgressUseCase: sl(),
+          updateGoalUseCase: sl(),
+          deleteGoalUseCase: sl(),
+          addGoalContributionUseCase: sl(),
         ),
         update: (context, notificationProvider, goalsProvider) {
           goalsProvider!.updateNotificationProvider(notificationProvider);

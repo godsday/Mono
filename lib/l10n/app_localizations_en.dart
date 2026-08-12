@@ -567,4 +567,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add_first_expense => 'Add Your First Expense';
+
+  @override
+  String get goal_details_title => 'Goal Details';
+
+  @override
+  String get edit_goal_title => 'Edit Dream / Goal';
+
+  @override
+  String get add_money_title => 'Add Money';
+
+  @override
+  String get add_money_button => '+ Add Money';
+
+  @override
+  String get saved_label => 'Saved';
+
+  @override
+  String get remaining_label => 'Remaining';
+
+  @override
+  String get target_amount_label => 'Target Amount';
+
+  @override
+  String get target_date_label => 'Target Date';
+
+  @override
+  String get progress_label => 'Progress';
+
+  @override
+  String get contribution_history_title => 'Contribution History';
+
+  @override
+  String get no_contributions_yet => 'No contributions saved yet.';
+
+  @override
+  String get delete_goal_title => 'Delete Goal';
+
+  @override
+  String get delete_goal_confirmation =>
+      'Are you sure you want to delete this goal? This action cannot be undone.';
+
+  @override
+  String get amount_required_error => 'Please enter an amount';
+
+  @override
+  String get amount_greater_than_zero_error => 'Amount must be greater than 0';
+
+  @override
+  String get amount_exceeds_remaining_warning =>
+      'Amount exceeds remaining target amount';
+
+  @override
+  String get update_goal_button => 'Update Goal';
 }

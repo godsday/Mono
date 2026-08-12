@@ -1149,6 +1149,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Your First Expense'**
   String get add_first_expense;
+
+  /// No description provided for @goal_details_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Details'**
+  String get goal_details_title;
+
+  /// No description provided for @edit_goal_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Dream / Goal'**
+  String get edit_goal_title;
+
+  /// No description provided for @add_money_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Money'**
+  String get add_money_title;
+
+  /// No description provided for @add_money_button.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add Money'**
+  String get add_money_button;
+
+  /// No description provided for @saved_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved_label;
+
+  /// No description provided for @remaining_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get remaining_label;
+
+  /// No description provided for @target_amount_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Amount'**
+  String get target_amount_label;
+
+  /// No description provided for @target_date_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Date'**
+  String get target_date_label;
+
+  /// No description provided for @progress_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progress_label;
+
+  /// No description provided for @contribution_history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution History'**
+  String get contribution_history_title;
+
+  /// No description provided for @no_contributions_yet.
+  ///
+  /// In en, this message translates to:
+  /// **'No contributions saved yet.'**
+  String get no_contributions_yet;
+
+  /// No description provided for @delete_goal_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Goal'**
+  String get delete_goal_title;
+
+  /// No description provided for @delete_goal_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this goal? This action cannot be undone.'**
+  String get delete_goal_confirmation;
+
+  /// No description provided for @amount_required_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an amount'**
+  String get amount_required_error;
+
+  /// No description provided for @amount_greater_than_zero_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0'**
+  String get amount_greater_than_zero_error;
+
+  /// No description provided for @amount_exceeds_remaining_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount exceeds remaining target amount'**
+  String get amount_exceeds_remaining_warning;
+
+  /// No description provided for @update_goal_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Goal'**
+  String get update_goal_button;
 }
 
 class _AppLocalizationsDelegate
