@@ -84,15 +84,16 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                     autofocus: true,
                     decoration: InputDecoration(
                       hintText: context.l10n.transaction_amount_hint,
-                      prefixIcon: const Icon(Icons.account_balance_wallet_outlined),
+                      prefixIcon:
+                          const Icon(Icons.account_balance_wallet_outlined),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(color: Colors.grey[300]!),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(
-                            color: AppColor.mainHexcolor, width: 2),
+                        borderSide:
+                            BorderSide(color: AppColor.mainHexcolor, width: 2),
                       ),
                     ),
                     validator: (val) {
@@ -225,8 +226,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
         final targetDateStr =
             DateFormat('dd MMM yyyy').format(activeGoal.deadline);
-        final pctStr =
-            '${(activeGoal.progress * 100).toStringAsFixed(0)}%';
+        final pctStr = '${(activeGoal.progress * 100).toStringAsFixed(0)}%';
 
         return Scaffold(
           backgroundColor: Colors.grey[50],
@@ -258,12 +258,14 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildProgressCard(activeGoal, pctStr, targetDateStr),
+                            _buildProgressCard(
+                                activeGoal, pctStr, targetDateStr),
                             const SizedBox(height: 20),
                             _buildMetricsGrid(activeGoal),
                             const SizedBox(height: 24),
                             _buildAddMoneyButton(activeGoal),
-                            const SizedBox(height: 28),
+                            if (!activeGoal.isCompleted)
+                              const SizedBox(height: 28),
                             _buildContributionHistory(activeGoal),
                             const SizedBox(height: 40),
                           ],
@@ -285,14 +287,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 20, bottom: 28, left: 20, right: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColor.mainHexcolor,
-            AppColor.mainHexcolor.withValues(alpha: 0.85),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: AppColor.mainGradient,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(28),
           bottomRight: Radius.circular(28),
@@ -311,39 +306,14 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: Colors.white),
-                    tooltip: context.l10n.edit_goal_title,
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        RouteNames.addGoal,
-                        arguments: activeGoal,
-                      );
-                    },
+                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.white),
-                    tooltip: context.l10n.delete_goal_title,
-                    onPressed: () => _confirmDeleteGoal(activeGoal),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
+                  SizedBox(width: 1.w),
+                  Text(
                     activeGoal.title,
                     style: AppTextTheme.montserrart(
                       fontSize: 26,
@@ -353,16 +323,39 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+              Row(
+                children: [
+                  if (!activeGoal.isCompleted) ...[
+                    IconButton(
+                      icon:
+                          const Icon(Icons.edit_outlined, color: Colors.white),
+                      tooltip: context.l10n.edit_goal_title,
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          RouteNames.addGoal,
+                          arguments: activeGoal,
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon:
+                          const Icon(Icons.delete_outline, color: Colors.white),
+                      tooltip: context.l10n.delete_goal_title,
+                      onPressed: () => _confirmDeleteGoal(activeGoal),
+                    ),
+                  ],
+                ],
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
@@ -406,7 +399,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                context.l10n.progress_label,
+                activeGoal.isCompleted
+                    ? "Congrats 🎉"
+                    : context.l10n.progress_label,
                 style: AppTextTheme.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -430,8 +425,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               value: activeGoal.progress,
               minHeight: 10,
               backgroundColor: Colors.grey[200],
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(AppColor.mainHexcolor),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColor.mainHexcolor),
             ),
           ),
           const SizedBox(height: 14),
@@ -484,19 +478,20 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            Expanded(
-              child: _buildMetricTile(
-                title: context.l10n.remaining_label,
-                value: context.formatCurrency(activeGoal.remainingAmount),
-                icon: Icons.hourglass_bottom_outlined,
-                color: Colors.orangeAccent,
+        if (!activeGoal.isCompleted) const SizedBox(height: 14),
+        if (!activeGoal.isCompleted)
+          Row(
+            children: [
+              Expanded(
+                child: _buildMetricTile(
+                  title: context.l10n.remaining_label,
+                  value: context.formatCurrency(activeGoal.remainingAmount),
+                  icon: Icons.hourglass_bottom_outlined,
+                  color: Colors.orangeAccent,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
       ],
     );
   }
@@ -562,6 +557,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   Widget _buildAddMoneyButton(GoalEntity activeGoal) {
+    if (activeGoal.isCompleted) {
+      return const SizedBox.shrink();
+    }
     return SizedBox(
       width: double.infinity,
       child: Container(

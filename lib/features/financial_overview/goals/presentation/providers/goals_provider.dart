@@ -7,6 +7,7 @@ import '../../domain/usecases/update_goal_usecase.dart';
 import '../../domain/usecases/delete_goal_usecase.dart';
 import '../../domain/usecases/add_goal_contribution_usecase.dart';
 import 'package:mono/providers/notification_provider.dart';
+import '../widgets/goal_filter.dart';
 
 class GoalsProvider extends ChangeNotifier {
   final GetGoalsUseCase getGoalsUseCase;
@@ -19,6 +20,7 @@ class GoalsProvider extends ChangeNotifier {
   List<GoalEntity> _goals = [];
   bool _isLoading = false;
   NotificationProvider? _notificationProvider;
+  GoalFilter _selectedFilter = GoalFilter.inProgress;
 
   GoalsProvider({
     required this.getGoalsUseCase,
@@ -31,6 +33,31 @@ class GoalsProvider extends ChangeNotifier {
 
   List<GoalEntity> get goals => _goals;
   bool get isLoading => _isLoading;
+
+  GoalFilter get selectedFilter => _selectedFilter;
+
+  /// Goals currently matching the active filter.
+  List<GoalEntity> get filteredGoals {
+    switch (_selectedFilter) {
+      case GoalFilter.inProgress:
+        return _goals.where((g) => !g.isCompleted).toList();
+      case GoalFilter.completed:
+        return _goals.where((g) => g.isCompleted).toList();
+    }
+  }
+
+  /// In-progress goals count (useful for badges / empty states).
+  int get inProgressCount => _goals.where((g) => !g.isCompleted).length;
+
+  /// Completed goals count.
+  int get completedCount => _goals.where((g) => g.isCompleted).length;
+
+  /// Called by the segmented control to switch the active filter.
+  void setGoalFilter(GoalFilter filter) {
+    if (_selectedFilter == filter) return;
+    _selectedFilter = filter;
+    notifyListeners();
+  }
 
   double get overallProgress {
     if (_goals.isEmpty) return 0.0;
@@ -125,7 +152,8 @@ class GoalsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addContribution(String goalId, double amount, [DateTime? date]) async {
+  Future<void> addContribution(String goalId, double amount,
+      [DateTime? date]) async {
     _isLoading = true;
     notifyListeners();
 
@@ -161,4 +189,3 @@ class GoalsProvider extends ChangeNotifier {
     }
   }
 }
-

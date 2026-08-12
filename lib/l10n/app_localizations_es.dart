@@ -594,6 +594,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get add_money_button => '+ Agregar dinero';
 
   @override
+  String get goals_in_progress => 'In Progress';
+
+  @override
+  String get goals_completed => 'Completed';
+
+  @override
+  String get goals_empty_state => 'No goals in this category.';
+
+  @override
   String get saved_label => 'Ahorrado';
 
   @override

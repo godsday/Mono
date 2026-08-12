@@ -1,13 +1,17 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
+import 'package:mono/features/financial_overview/goals/presentation/widgets/goals_section.dart';
 import 'package:mono/features/financial_overview/widgets/safe_background_image.dart';
 import 'package:mono/routes/route_names.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
+import '../providers/goals_provider.dart';
 
 // Module-level cached colours – allocated once, never again.
 final _borderColor = const Color(0xffA5C9FF);
@@ -107,7 +111,7 @@ class GoalsOverviewCard extends StatelessWidget {
                           style: AppTextTheme.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: AppColor.textGrey,
                           ),
                         ),
                       ),
@@ -119,29 +123,76 @@ class GoalsOverviewCard extends StatelessWidget {
           ),
           SizedBox(height: .5.h),
           Container(
-            decoration: const BoxDecoration(
+              width: double.infinity,
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x0D000000), // black 5%
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
+              child: const GoalsSection()),
+          Consumer<GoalsProvider>(
+            builder: (context, provider, _) {
+              final displayedGoals = provider.filteredGoals;
+              if (displayedGoals.isEmpty) {
+                return Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      'No goals yet.',
+                      style: AppTextTheme.poppins(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return SharedAxisTransition(
+                      fillColor: Colors.transparent,
+                      animation: animation,
+                      secondaryAnimation: secondaryAnimation,
+                      transitionType: SharedAxisTransitionType.horizontal,
+                      child: child);
+                },
+                child: Container(
+                  key: ValueKey<String>(provider.selectedFilter.name),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x0D000000), // black 5%
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(20),
+                    itemCount:
+                        displayedGoals.length > 5 ? 5 : displayedGoals.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 24),
+                    itemBuilder: (_, index) =>
+                        _GoalItem(goal: displayedGoals[index]),
+                  ),
                 ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(20),
-              itemCount: goals.length > 5 ? 5 : goals.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 24),
-              itemBuilder: (_, index) => _GoalItem(goal: goals[index]),
-            ),
+              );
+            },
           ),
         ],
       ),
@@ -220,4 +271,3 @@ class _GoalItem extends StatelessWidget {
     );
   }
 }
-

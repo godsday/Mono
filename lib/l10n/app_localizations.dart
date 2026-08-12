@@ -1174,6 +1174,24 @@ abstract class AppLocalizations {
   /// **'+ Add Money'**
   String get add_money_button;
 
+  /// No description provided for @goals_in_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get goals_in_progress;
+
+  /// No description provided for @goals_completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get goals_completed;
+
+  /// No description provided for @goals_empty_state.
+  ///
+  /// In en, this message translates to:
+  /// **'No goals in this category.'**
+  String get goals_empty_state;
+
   /// No description provided for @saved_label.
   ///
   /// In en, this message translates to:
