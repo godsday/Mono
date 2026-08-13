@@ -31,9 +31,10 @@ class AppElevetedButton extends StatelessWidget {
               Theme.of(context).extension<AppGradients>()!.primaryGradient,
           boxShadow: [
             BoxShadow(
-              color: HexColor('#3C7570').withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 6),
+              color:
+                  Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
           borderRadius: BorderRadius.circular(12),

@@ -238,7 +238,8 @@ class _AddScreenState extends State<AddScreen> {
                                 onTap: () async {
                                   final provider =
                                       context.read<TransactionProvider>();
-                                  final date = await provider.pickDate(context);
+                                  final date =
+                                      await provider.pickDate(context, false);
                                   if (date == null) return;
 
                                   provider.selectedDate = date;

@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/features/transaction/presentation/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 // ignore: depend_on_referenced_packages
@@ -99,28 +102,28 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     }
   }
 
-  Future<void> _pickDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: now.add(const Duration(days: 30)),
-      firstDate: now,
-      lastDate: now.add(const Duration(days: 365 * 10)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColor.mainHexcolor,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() => _selectedDeadline = picked);
-    }
-  }
+  // Future<void> _pickDate() async {
+  //   final now = DateTime.now();
+  //   final picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: now.add(const Duration(days: 30)),
+  //     firstDate: now,
+  //     lastDate: now.add(const Duration(days: 365 * 10)),
+  //     builder: (context, child) {
+  //       return Theme(
+  //         data: Theme.of(context).copyWith(
+  //           colorScheme: ColorScheme.light(
+  //             primary: AppColor.mainHexcolor,
+  //           ),
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+  //   if (picked != null) {
+  //     setState(() => _selectedDeadline = picked);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +154,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                         style: AppTextTheme.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.titleMedium?.color,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -215,9 +218,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                         ? context.l10n.edit_goal_title
                         : "Add Goal",
                     style: AppTextTheme.montserrart(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      fontSize: 18.5.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColor.whiteColor,
                     ),
                   ),
                 ],
@@ -276,24 +279,25 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   gradient: isSelected
-                      ? LinearGradient(
-                          colors: [
-                            AppColor.mainHexcolor,
-                            AppColor.mainHexcolor.withValues(alpha: 0.8),
-                          ],
-                        )
+                      ? Theme.of(context)
+                          .extension<AppGradients>()!
+                          .primaryGradient
                       : null,
-                  color: isSelected ? null : Colors.white,
+                  color: isSelected
+                      ? null
+                      : Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: isSelected
                         ? Colors.transparent
-                        : AppColor.mainHexcolor.withValues(alpha: 0.5),
+                        : Theme.of(context).primaryColor.withValues(alpha: 0.5),
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppColor.mainHexcolor.withValues(alpha: 0.3),
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           )
@@ -310,8 +314,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       style: AppTextTheme.poppins(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color:
-                            isSelected ? Colors.white : AppColor.mainHexcolor,
+                        color: isSelected
+                            ? Colors.white
+                            : Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -364,12 +369,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         ),
         const SizedBox(height: 16),
         InkWell(
-          onTap: _pickDate,
+          onTap: () async {
+            final provider = context.read<TransactionProvider>();
+            final date = await provider.pickDate(context, true);
+            if (date == null) return;
+
+            setState(() => _selectedDeadline = date);
+          },
           borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: Colors.grey[200]!),
               boxShadow: [
@@ -394,7 +405,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       fontSize: 15,
                       color: _selectedDeadline == null
                           ? Colors.grey[500]
-                          : Colors.black87,
+                          : Theme.of(context)
+                              .extension<AppGradients>()!
+                              .textTheme,
                     ),
                   ),
                 ),
@@ -417,7 +430,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -430,11 +443,13 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       child: TextFormField(
         controller: controller,
         keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-        style: AppTextTheme.poppins(color: Colors.black87, fontSize: 15),
+        style: AppTextTheme.poppins(
+            color: Theme.of(context).extension<AppGradients>()!.textTheme,
+            fontSize: 15),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle:
-              AppTextTheme.poppins(color: Colors.grey[600], fontSize: 14),
+          labelStyle: AppTextTheme.poppins(
+              color: Theme.of(context).disabledColor, fontSize: 14),
           hintText: hint,
           hintStyle:
               AppTextTheme.poppins(color: Colors.grey[400], fontSize: 14),
@@ -449,10 +464,11 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: AppColor.mainHexcolor, width: 1.5),
+            borderSide:
+                BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).scaffoldBackgroundColor,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         ),
@@ -664,43 +680,13 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   // 7. Maintain Existing CTA Style
   Widget _buildSaveButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.mainHexcolor.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: _isSaving ? null : _saveGoal,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.mainHexcolor,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 0,
-          ),
-          child: _isSaving
-              ? const CircularProgressIndicator(color: Colors.white)
-              : Text(
-                  widget.goal != null
-                      ? context.l10n.update_goal_button
-                      : 'Start This Dream',
-                  style: AppTextTheme.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-        ),
-      ),
+    return AppElevetedButton(
+      height: 6.h,
+      onPressed: () {
+        _isSaving ? null : _saveGoal();
+      },
+      appButtonText:
+          widget.goal != null ? context.l10n.update_goal_button : 'Save Goal ',
     );
   }
 }

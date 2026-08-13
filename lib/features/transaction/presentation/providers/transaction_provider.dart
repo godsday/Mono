@@ -210,12 +210,14 @@ class TransactionProvider with ChangeNotifier {
     custompick(start, end);
   }
 
-  Future<DateTime?> pickDate(context) async {
+  Future<DateTime?> pickDate(context, flag) async {
     final selected = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
+      lastDate: flag
+          ? DateTime.now().add(const Duration(days: 365 * 10))
+          : DateTime.now(),
     );
 
     if (selected != null && selected != _selectedDate) {
@@ -372,7 +374,7 @@ class TransactionProvider with ChangeNotifier {
       _totalExpense = totalExpenseUseCase(_transactions);
       // Derive balance locally to avoid redundant UseCase calls
       _totalBalance = _totalIncome - _totalExpense;
-      
+
       // Custom list often depends on external state (start/end dates), so we re-apply filter if range exists
       if (dateRange != null) {
         custompick(start, end);

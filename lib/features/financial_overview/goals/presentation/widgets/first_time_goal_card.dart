@@ -145,15 +145,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                           .extension<AppGradients>()!
                                           .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
-                                      gradient: LinearGradient(
-                                        end: Alignment.bottomRight,
-                                        begin: Alignment.topLeft,
-                                        colors: [
-                                          HexColor('#429690'),
-                                          HexColor('#1E4744')
-                                              .withValues(alpha: 0.8),
-                                        ],
-                                      ),
+                                      gradient: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .primaryGradient,
                                       border: Border.all(
                                           width: 2,
                                           color: Theme.of(context)
