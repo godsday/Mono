@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/financial_overview/goals/presentation/pages/add_goal_screen.dart';
 import 'package:sizer/sizer.dart';

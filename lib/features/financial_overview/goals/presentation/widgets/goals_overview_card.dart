@@ -22,7 +22,6 @@ final _headerGradient = LinearGradient(
   end: Alignment.bottomRight,
 );
 final _progressBgColor = HexColor('#E0E0E0');
-final _progressBarColor = HexColor('#3C7570');
 final _percentColor = HexColor('#C4867C');
 
 /// Accepts [goals] directly from the parent Consumer so a second
@@ -183,7 +182,7 @@ class GoalsOverviewCard extends StatelessWidget {
                       bottomLeft: Radius.circular(24),
                       bottomRight: Radius.circular(24),
                     ),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Color(0x0D000000), // black 5%
                         blurRadius: 8,
