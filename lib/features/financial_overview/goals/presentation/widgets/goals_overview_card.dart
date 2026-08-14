@@ -266,7 +266,10 @@ class _GoalItem extends StatelessWidget {
             LinearProgressIndicator(
               value: goal.progress,
               backgroundColor: _progressBgColor,
-              valueColor: AlwaysStoppedAnimation<Color>(_progressBarColor),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.blue
+                      : AppColor.mainHexcolor),
               borderRadius: BorderRadius.circular(4),
               minHeight: 4,
             ),
@@ -276,7 +279,7 @@ class _GoalItem extends StatelessWidget {
               style: AppTextTheme.poppins(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Colors.grey,
+                color: Theme.of(context).disabledColor,
               ),
             ),
           ],

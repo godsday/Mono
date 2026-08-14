@@ -394,7 +394,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
             child: Row(
               children: [
                 Icon(Icons.calendar_today_outlined,
-                    color: AppColor.mainHexcolor, size: 22),
+                    color: Theme.of(context).primaryColor, size: 22),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -453,7 +453,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           hintText: hint,
           hintStyle:
               AppTextTheme.poppins(color: Colors.grey[400], fontSize: 14),
-          prefixIcon: Icon(icon, color: AppColor.mainHexcolor, size: 22),
+          prefixIcon:
+              Icon(icon, color: Theme.of(context).primaryColor, size: 22),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(color: Colors.grey[200]!),
@@ -500,8 +501,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         borderRadius: BorderRadius.circular(24),
         gradient: LinearGradient(
           colors: [
-            AppColor.mainHexcolor.withValues(alpha: 0.05),
-            Colors.white.withValues(alpha: 0.8),
+            Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.05),
+            Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -532,14 +533,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       style: AppTextTheme.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        color: Theme.of(context)
+                            .extension<AppGradients>()!
+                            .textTheme,
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColor.mainHexcolor.withValues(alpha: 0.1),
+                        color: Theme.of(context)
+                            .secondaryHeaderColor
+                            .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -547,7 +552,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                         style: AppTextTheme.poppins(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color: AppColor.mainHexcolor,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -563,14 +568,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                         Text(
                           'Saved',
                           style: AppTextTheme.poppins(
-                              fontSize: 12, color: Colors.grey[600]),
+                            fontSize: 12,
+                            color: Theme.of(context).disabledColor,
+                          ),
                         ),
                         Text(
                           '${context.currencySymbol}${saved.toStringAsFixed(0)}',
                           style: AppTextTheme.poppins(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: AppColor.mainHexcolor,
+                            color: Theme.of(context)
+                                .extension<AppGradients>()!
+                                .textTheme,
                           ),
                         ),
                       ],
@@ -581,14 +590,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                         Text(
                           'Target',
                           style: AppTextTheme.poppins(
-                              fontSize: 12, color: Colors.grey[600]),
+                            fontSize: 12,
+                            color: Theme.of(context).disabledColor,
+                          ),
                         ),
                         Text(
                           '${context.currencySymbol}${target.toStringAsFixed(0)}',
                           style: AppTextTheme.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black87,
+                            color: Theme.of(context)
+                                .extension<AppGradients>()!
+                                .textTheme,
                           ),
                         ),
                       ],
@@ -612,8 +625,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            AppColor.mainHexcolor.withValues(alpha: 0.7),
-                            AppColor.mainHexcolor,
+                            Theme.of(context)
+                                .secondaryHeaderColor
+                                .withValues(alpha: 0.7),
+                            Theme.of(context).secondaryHeaderColor,
                           ],
                         ),
                         borderRadius: BorderRadius.circular(4),
@@ -625,7 +640,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 Text(
                   '${(progress * 100).toStringAsFixed(1)}% completed',
                   style: AppTextTheme.poppins(
-                      fontSize: 12, color: Colors.grey[600]),
+                      fontSize: 12, color: Theme.of(context).disabledColor),
                 ),
               ],
             ),
@@ -647,7 +662,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.auto_awesome, color: AppColor.mainHexcolor, size: 24),
+          Icon(Icons.auto_awesome,
+              color: Theme.of(context).primaryColor, size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -658,7 +674,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   style: AppTextTheme.poppins(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+                    color:
+                        Theme.of(context).extension<AppGradients>()!.textTheme,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -667,7 +684,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                   style: AppTextTheme.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey[600],
+                    color: Theme.of(context).disabledColor,
                   ),
                 ),
               ],

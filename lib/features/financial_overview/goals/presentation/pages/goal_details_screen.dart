@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:mono/core/theme/app_theme.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
@@ -229,7 +231,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         final pctStr = '${(activeGoal.progress * 100).toStringAsFixed(0)}%';
 
         return Scaffold(
-          backgroundColor: Colors.grey[50],
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
             bottom: false,
             child: CustomScrollView(
@@ -365,8 +367,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColor.borderGreyWhite),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -388,7 +391,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                 style: AppTextTheme.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey[700],
+                  color: Theme.of(context).extension<AppGradients>()!.textTheme,
                 ),
               ),
               Text(
@@ -396,7 +399,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                 style: AppTextTheme.montserrart(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: AppColor.mainHexcolor,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ],
@@ -408,7 +411,10 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               value: activeGoal.progress,
               minHeight: 10,
               backgroundColor: Colors.grey[200],
-              valueColor: AlwaysStoppedAnimation<Color>(AppColor.mainHexcolor),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.blue
+                      : AppColor.mainHexcolor),
             ),
           ),
           const SizedBox(height: 14),
@@ -419,7 +425,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                 '${context.l10n.target_date_label}:',
                 style: AppTextTheme.poppins(
                   fontSize: 13,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).disabledColor,
                 ),
               ),
               Text(
@@ -427,7 +433,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                 style: AppTextTheme.poppins(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppColor.blackText,
+                  color: Theme.of(context).disabledColor,
                 ),
               ),
             ],
@@ -488,7 +494,8 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
+        border: Border.all(color: AppColor.borderGreyWhite),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -517,7 +524,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                   title,
                   style: AppTextTheme.poppins(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: Theme.of(context).disabledColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -530,7 +537,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             style: AppTextTheme.montserrart(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: AppColor.blackText,
+              color: Theme.of(context).extension<AppGradients>()!.textTheme,
             ),
             overflow: TextOverflow.ellipsis,
           ),
@@ -543,41 +550,28 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     if (activeGoal.isCompleted) {
       return const SizedBox.shrink();
     }
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.mainHexcolor.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ElevatedButton.icon(
-          onPressed: () => _openAddMoneyBottomSheet(activeGoal),
-          icon: const Icon(Icons.add_circle_outline, color: Colors.white),
-          label: Text(
-            context.l10n.add_money_button,
-            style: AppTextTheme.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.mainHexcolor,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            elevation: 0,
-          ),
-        ),
-      ),
+    return AppElevetedButton(
+      height: 6.h,
+      onPressed: () => _openAddMoneyBottomSheet(activeGoal),
+      // icon: const Icon(Icons.add_circle_outline, color: Colors.white),
+      appButtonText: context.l10n.add_money_button,
+      // style: AppTextTheme.poppins(
+      //   fontSize: 16,
+      //   fontWeight: FontWeight.w600,
+      //   color: Theme.of(context).scaffoldBackgroundColor,
     );
+
+    // style: ElevatedButton.styleFrom(
+    //   backgroundColor: Theme.of(context).extension<AppGradients>()!.primaryGradient,
+
+    //   padding: const EdgeInsets.symmetric(vertical: 16),
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.circular(18),
+    //   ),
+    //   elevation: 0,
+    // ),
+    //   ),
+    // ),
   }
 
   Widget _buildContributionHistory(GoalEntity activeGoal) {
@@ -591,7 +585,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           style: AppTextTheme.montserrart(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppColor.blackText,
+            color: Theme.of(context).extension<AppGradients>()!.textTheme,
           ),
         ),
         const SizedBox(height: 14),
@@ -600,9 +594,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.grey[200]!),
+              border: Border.all(color: AppColor.borderGreyWhite),
             ),
             child: Column(
               children: [
