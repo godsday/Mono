@@ -1,13 +1,17 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
+import 'package:mono/features/financial_overview/goals/presentation/widgets/goals_section.dart';
 import 'package:mono/features/financial_overview/widgets/safe_background_image.dart';
+import 'package:mono/routes/route_names.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../domain/entities/goal_entity.dart';
-import '../pages/add_goal_screen.dart';
+import '../providers/goals_provider.dart';
 
 // Module-level cached colours – allocated once, never again.
 final _borderColor = const Color(0xffA5C9FF);
@@ -56,19 +60,12 @@ class GoalsOverviewCard extends StatelessWidget {
                   offset: Offset(0, 4),
                 ),
               ],
-              gradient: _headerGradient,
+              gradient: Theme.of(context).brightness == Brightness.dark
+                  ? AppColor.darkThemeGradient
+                  : _headerGradient,
             ),
             child: Stack(
               children: [
-                // Positioned(
-                //   left: 9.w,
-                //   child: SafeBackgroundImage(
-                //     imagePath: 'assets/images/arrow-first.png',
-                //     fit: BoxFit.contain,
-                //     fallback: Icon(Icons.kayaking,
-                //         size: 80, color: Colors.grey.withValues(alpha: 0.2)),
-                //   ),
-                // ),
                 Positioned(
                   right: 0,
                   top: 0,
@@ -101,23 +98,28 @@ class GoalsOverviewCard extends StatelessWidget {
                                 .copyWith(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: AppColor.blackText,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColor.whiteColor
+                                  : AppColor.blackText,
                             ),
                           ),
                         ],
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.push(
+                        onTap: () => Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                              builder: (_) => const AddGoalScreen()),
+                          RouteNames.addGoal,
                         ),
                         child: Text(
                           'Add +',
                           style: AppTextTheme.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColor.lightGrey
+                                    : AppColor.textGrey,
                           ),
                         ),
                       ),
@@ -129,29 +131,80 @@ class GoalsOverviewCard extends StatelessWidget {
           ),
           SizedBox(height: .5.h),
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x0D000000), // black 5%
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
+              width: double.infinity,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColor.blackColor
+                  : Colors.white,
+              child: const GoalsSection()),
+          Consumer<GoalsProvider>(
+            builder: (context, provider, _) {
+              final displayedGoals = provider.filteredGoals;
+              if (displayedGoals.isEmpty) {
+                return Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      'No goals yet.',
+                      style: AppTextTheme.poppins(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return SharedAxisTransition(
+                      fillColor: Colors.transparent,
+                      animation: animation,
+                      secondaryAnimation: secondaryAnimation,
+                      transitionType: SharedAxisTransitionType.horizontal,
+                      child: child);
+                },
+                child: Container(
+                  key: ValueKey<String>(provider.selectedFilter.name),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColor.blackColor
+                        : Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x0D000000), // black 5%
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(20),
+                    itemCount:
+                        displayedGoals.length > 5 ? 5 : displayedGoals.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 24),
+                    itemBuilder: (_, index) =>
+                        _GoalItem(goal: displayedGoals[index]),
+                  ),
                 ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(20),
-              itemCount: goals.length > 5 ? 5 : goals.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 24),
-              itemBuilder: (_, index) => _GoalItem(goal: goals[index]),
-            ),
+              );
+            },
           ),
         ],
       ),
@@ -169,49 +222,69 @@ class _GoalItem extends StatelessWidget {
     // Pre-compute the percentage string once instead of in multiple Text nodes.
     final pct = '${(goal.progress * 100).toStringAsFixed(0)} %';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          RouteNames.goalDetails,
+          arguments: goal,
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              goal.title,
-              style: AppTextTheme.poppins(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: AppColor.blackText,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    goal.title,
+                    style: AppTextTheme.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColor.whiteColor
+                          : AppColor.blackText,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Text(
+                  pct,
+                  style: AppTextTheme.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: _percentColor,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: goal.progress,
+              backgroundColor: _progressBgColor,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.blue
+                      : AppColor.mainHexcolor),
+              borderRadius: BorderRadius.circular(4),
+              minHeight: 4,
+            ),
+            const SizedBox(height: 6),
             Text(
-              pct,
+              '${context.formatCurrency(goal.savedAmount)} / ${context.formatCurrency(goal.targetAmount)}',
               style: AppTextTheme.poppins(
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: _percentColor,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).disabledColor,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: goal.progress,
-          backgroundColor: _progressBgColor,
-          // AlwaysStoppedAnimation is cached per item here via final field.
-          valueColor: AlwaysStoppedAnimation<Color>(_progressBarColor),
-          borderRadius: BorderRadius.circular(4),
-          minHeight: 4,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          '${context.formatCurrency(goal.savedAmount)} / ${context.formatCurrency(goal.targetAmount)}',
-          style: AppTextTheme.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

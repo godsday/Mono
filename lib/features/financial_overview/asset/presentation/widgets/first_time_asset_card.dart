@@ -26,6 +26,7 @@ class _FirstTimeAssetCardState extends State<FirstTimeAssetCard> {
         transitionBuilder: (Widget child, Animation<double> animation,
             Animation<double> secondaryAnimation) {
           return SharedAxisTransition(
+              fillColor: Colors.transparent,
               animation: animation,
               secondaryAnimation: secondaryAnimation,
               transitionType: SharedAxisTransitionType.horizontal,

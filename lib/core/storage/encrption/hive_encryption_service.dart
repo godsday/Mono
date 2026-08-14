@@ -46,6 +46,9 @@ class HiveService {
     if (!Hive.isAdapterRegistered(GoalModelAdapter().typeId)) {
       Hive.registerAdapter(GoalModelAdapter());
     }
+    if (!Hive.isAdapterRegistered(GoalContributionModelAdapter().typeId)) {
+      Hive.registerAdapter(GoalContributionModelAdapter());
+    }
 
     Future<Box<T>> isOpenBox<T>(String boxName) async {
       if (Hive.isBoxOpen(boxName)) {

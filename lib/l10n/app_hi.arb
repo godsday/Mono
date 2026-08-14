@@ -172,5 +172,22 @@
   "insight_savings_title": "बचत अपडेट",
   "insight_savings_message": "आपने इस महीने अब तक {amount} बचाए हैं।",
   "insight_default_title": "सब ठीक है",
-  "insight_default_message": "आपकी वित्तीय गतिविधि स्थिर दिखती है।"
+  "insight_default_message": "आपकी वित्तीय गतिविधि स्थिर दिखती है।",
+  "goal_details_title": "लक्ष्य विवरण",
+  "edit_goal_title": "लक्ष्य संपादित करें",
+  "add_money_title": "पैसे जोड़ें",
+  "add_money_button": "+ पैसे जोड़ें",
+  "saved_label": "बचाया गया",
+  "remaining_label": "शेष",
+  "target_amount_label": "लक्ष्य राशि",
+  "target_date_label": "लक्ष्य तिथि",
+  "progress_label": "प्रगति",
+  "contribution_history_title": "योगदान इतिहास",
+  "no_contributions_yet": "अभी तक कोई योगदान नहीं जोड़ा गया।",
+  "delete_goal_title": "लक्ष्य हटाएं",
+  "delete_goal_confirmation": "क्या आप वाकई इस लक्ष्य को हटाना चाहते हैं? यह क्रिया वापस नहीं ली जा सकती।",
+  "amount_required_error": "कृपया एक राशि दर्ज करें",
+  "amount_greater_than_zero_error": "राशि 0 से अधिक होनी चाहिए",
+  "amount_exceeds_remaining_warning": "राशि शेष लक्ष्य राशि से अधिक है",
+  "update_goal_button": "लक्ष्य अपडेट करें"
 }

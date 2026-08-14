@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
-import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
+import 'package:mono/core/widgets/app_button_decoration.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 
@@ -11,7 +13,6 @@ import 'package:mono/routes/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
-import 'package:mono/core/notifications/notification_service.dart';
 import 'package:provider/provider.dart';
 
 class OnboardScreen extends StatelessWidget {
@@ -102,11 +103,13 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: _OnboardButton(
-                              onTap: () {
+                            child: AppElevetedButton(
+                              height: 6.h,
+                              width: double.infinity,
+                              appButtonText: l10n.get_started,
+                              onPressed: () {
                                 gotohome(context);
                               },
-                              text: l10n.get_started,
                             ),
                           ),
                         ],
@@ -127,66 +130,20 @@ class OnboardScreen extends StatelessWidget {
     );
   }
 
-  gotohome(context) async {
-    final namecontrol = namecontroller.text;
-    final sharedprefer = await SharedPreferences.getInstance();
-    sharedprefer.setString('namekey', namecontrol);
-
-    // Prompt for notification permissions after onboarding
-    await NotificationService().requestPermissions();
+  Future<void> gotohome(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('namekey', namecontroller.text);
 
     if (!context.mounted) return;
 
     Navigator.pushNamedAndRemoveUntil(
-        context, RouteNames.bottomNav, (route) => false);
-  }
-}
-
-class _OnboardButton extends StatefulWidget {
-  final VoidCallback onTap;
-  final String text;
-
-  const _OnboardButton({required this.onTap, required this.text});
-
-  @override
-  State<_OnboardButton> createState() => _OnboardButtonState();
-}
-
-class _OnboardButtonState extends State<_OnboardButton> {
-  bool _isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-          width: double.infinity,
-          height: 6.h,
-          decoration: BoxDecoration(
-            gradient:
-                Theme.of(context).extension<AppGradients>()!.primaryGradient,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: HexColor('#3F8782').withValues(alpha: 0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Text(widget.text,
-              style: AppTextStyles.poppins16w600
-                  .copyWith(color: Colors.white, fontSize: 17.sp)),
-        ),
-      ),
+      context,
+      RouteNames.bottomNav,
+      (_) => false,
     );
+
+    // Ask for notification permission after navigation.
+    // unawaited(NotificationService().requestPermissions());
   }
 }
 

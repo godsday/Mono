@@ -69,7 +69,7 @@ class _HomeEmptyStateState extends State<HomeEmptyState>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 18.sp),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

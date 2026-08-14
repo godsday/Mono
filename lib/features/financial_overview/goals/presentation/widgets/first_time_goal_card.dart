@@ -1,9 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/theme/app_theme.dart';
 import 'package:mono/features/financial_overview/goals/presentation/pages/add_goal_screen.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
 import '../../../../../core/theme/app_texttheme.dart';
 import '../../../widgets/safe_background_image.dart';
@@ -26,6 +26,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
       transitionBuilder: (Widget child, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return SharedAxisTransition(
+            fillColor: Colors.transparent,
             animation: animation,
             secondaryAnimation: secondaryAnimation,
             transitionType: SharedAxisTransitionType.horizontal,
@@ -144,15 +145,9 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                           .extension<AppGradients>()!
                                           .disableCardColor,
                                       borderRadius: BorderRadius.circular(12),
-                                      gradient: LinearGradient(
-                                        end: Alignment.bottomRight,
-                                        begin: Alignment.topLeft,
-                                        colors: [
-                                          HexColor('#429690'),
-                                          HexColor('#1E4744')
-                                              .withValues(alpha: 0.8),
-                                        ],
-                                      ),
+                                      gradient: Theme.of(context)
+                                          .extension<AppGradients>()!
+                                          .primaryGradient,
                                       border: Border.all(
                                           width: 2,
                                           color: Theme.of(context)
@@ -266,7 +261,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                                   .textTheme,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 26),
                           Text(
                             '\u2022 ${context.l10n.first_time_goal_feature_1}',
                             style: AppTextTheme.poppins(
@@ -275,7 +270,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               color: Theme.of(context).disabledColor,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Text(
                             '\u2022 ${context.l10n.first_time_goal_feature_2}',
                             style: AppTextTheme.poppins(
@@ -284,7 +279,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               color: Theme.of(context).disabledColor,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Text(
                             '\u2022 ${context.l10n.first_time_goal_feature_3}',
                             style: AppTextTheme.poppins(
@@ -293,7 +288,7 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               color: Theme.of(context).disabledColor,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Text(
                             '\u2022 ${context.l10n.first_time_goal_feature_4}',
                             style: AppTextTheme.poppins(
@@ -302,59 +297,8 @@ class _FirstTimeGoalCardState extends State<FirstTimeGoalCard> {
                               color: Theme.of(context).disabledColor,
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                context.l10n.first_time_goal_coming_soon,
-                                style: AppTextStyles.roboto18w600SemiBoldWhite(
-                                        context)!
-                                    .copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-
-                                //  Container(
-                                //   decoration: BoxDecoration(
-                                //       color: Colors.blueGrey.shade100,
-                                //       borderRadius: BorderRadius.circular(12),
-                                // gradient: LinearGradient(
-                                //   end: Alignment.bottomRight,
-                                //   begin: Alignment.topLeft,
-                                // colors: [
-                                //   HexColor('#429690'),
-                                //   HexColor('#1E4744').withValues(alpha: 0.8),
-                                // ],
-                                // ),
-                                //     border: Border.all(
-                                //         width: 2,
-                                //         color: Colors.blueGrey.shade100),
-                                //     boxShadow: [
-                                //       BoxShadow(
-                                //         color: Colors.blueGrey.shade100,
-                                //         // color: HexColor('#3C7570')
-                                //         //     .withValues(alpha: 0.3),
-                                //         blurRadius: 6,
-                                //         offset: const Offset(0, 3),
-                                //       ),
-                                //     ]),
-                                // padding: const EdgeInsets.symmetric(
-                                //     vertical: 12, horizontal: 24),
-                                // child: Text(
-                                //   'Start Dreaming',
-                                //   style: AppTextTheme.poppins(
-                                //     fontSize: 16,
-                                //     fontWeight: FontWeight.w600,
-                                //     color: Colors.white,
-                                //   ),
-                                // ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 8,
+                          SizedBox(
+                            height: 6.h,
                           )
                         ],
                       ),

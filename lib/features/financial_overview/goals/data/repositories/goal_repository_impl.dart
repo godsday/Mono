@@ -19,6 +19,17 @@ class GoalRepositoryImpl implements GoalRepository {
   }
 
   @override
+  Future<void> updateGoal(GoalEntity goal) async {
+    final model = GoalModel.fromEntity(goal);
+    await _box.put(goal.id, model);
+  }
+
+  @override
+  Future<void> deleteGoal(String id) async {
+    await _box.delete(id);
+  }
+
+  @override
   Future<void> updateGoalProgress(String id, double amount,
       {bool isAddition = true}) async {
     final model = _box.get(id);
@@ -28,7 +39,6 @@ class GoalRepositoryImpl implements GoalRepository {
       if (isAddition) {
         newSavedAmount = model.savedAmount + amount;
       } else {
-        // Assuming subtraction if isAddition is false, based on previous logic attempt
         newSavedAmount = model.savedAmount - amount;
       }
 
@@ -43,9 +53,42 @@ class GoalRepositoryImpl implements GoalRepository {
         targetAmount: model.targetAmount,
         savedAmount: newSavedAmount,
         deadline: model.deadline,
+        contributions: model.contributions,
       );
 
       await _box.put(id, updatedModel);
+    }
+  }
+
+  @override
+  Future<void> addContribution(
+      String goalId, double amount, DateTime date) async {
+    final model = _box.get(goalId);
+    if (model != null) {
+      final newSavedAmount = (model.savedAmount + amount).clamp(0.0, model.targetAmount);
+      final currentContributions = model.contributions != null
+          ? List<GoalContributionModel>.from(model.contributions!)
+          : <GoalContributionModel>[];
+
+      final newContribution = GoalContributionModel(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        amount: amount,
+        date: date,
+      );
+
+      // Insert newest contribution at top
+      currentContributions.insert(0, newContribution);
+
+      final updatedModel = GoalModel(
+        id: model.id,
+        title: model.title,
+        targetAmount: model.targetAmount,
+        savedAmount: newSavedAmount,
+        deadline: model.deadline,
+        contributions: currentContributions,
+      );
+
+      await _box.put(goalId, updatedModel);
     }
   }
 
@@ -54,3 +97,4 @@ class GoalRepositoryImpl implements GoalRepository {
     await _box.clear();
   }
 }
+

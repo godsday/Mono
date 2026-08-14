@@ -580,4 +580,66 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get add_first_expense => 'Add Your First Expense';
+
+  @override
+  String get goal_details_title => 'Detalles del objetivo';
+
+  @override
+  String get edit_goal_title => 'Editar objetivo';
+
+  @override
+  String get add_money_title => 'Agregar dinero';
+
+  @override
+  String get add_money_button => '+ Agregar dinero';
+
+  @override
+  String get goals_in_progress => 'In Progress';
+
+  @override
+  String get goals_completed => 'Completed';
+
+  @override
+  String get goals_empty_state => 'No goals in this category.';
+
+  @override
+  String get saved_label => 'Ahorrado';
+
+  @override
+  String get remaining_label => 'Restante';
+
+  @override
+  String get target_amount_label => 'Monto objetivo';
+
+  @override
+  String get target_date_label => 'Fecha objetivo';
+
+  @override
+  String get progress_label => 'Progreso';
+
+  @override
+  String get contribution_history_title => 'Historial de contribuciones';
+
+  @override
+  String get no_contributions_yet => 'Aún no hay contribuciones guardadas.';
+
+  @override
+  String get delete_goal_title => 'Eliminar objetivo';
+
+  @override
+  String get delete_goal_confirmation =>
+      '¿Estás seguro de que deseas eliminar este objetivo? Esta acción no se puede deshacer.';
+
+  @override
+  String get amount_required_error => 'Por favor ingresa un monto';
+
+  @override
+  String get amount_greater_than_zero_error => 'El monto debe ser mayor que 0';
+
+  @override
+  String get amount_exceeds_remaining_warning =>
+      'El monto excede el objetivo restante';
+
+  @override
+  String get update_goal_button => 'Actualizar objetivo';
 }
