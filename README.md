@@ -75,7 +75,9 @@ Mono is a modern, offline-first personal finance application built with Flutter.
 
 | Home | Analytics | Goals |
 |------|-----------|-------|
-| Screenshot | Screenshot | Screenshot |
+| ![img](./screenshot/Screenshot_1786754084.png) | ![img](./screenshot/Screenshot_1786754106.png) | ![img](./screenshot/Screenshot_1786754192.png) |
+| ![img](./screenshot/Screenshot_1786754262.png) | ![img](./screenshot/Screenshot_1786754268.png) | ![img](./screenshot/Screenshot_1786754320.png) |
+| ![img](./screenshot/Screenshot_1786754336.png) | ![img](./screenshot/Screenshot_1786754367.png) | ![img](./screenshot/Screenshot_1786754381.png) |
 
 ---
 
