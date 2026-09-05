@@ -5,6 +5,8 @@ abstract class AppSettingsLocalDataSource {
   Future<void> setLanguageCode(String code);
   Future<String?> getCurrencyCode();
   Future<void> setCurrencyCode(String code);
+  Future<bool> getSmartTransactionCapture();
+  Future<void> setSmartTransactionCapture(bool enabled);
 }
 
 class AppSettingsLocalDataSourceImpl implements AppSettingsLocalDataSource {
@@ -12,6 +14,7 @@ class AppSettingsLocalDataSourceImpl implements AppSettingsLocalDataSource {
 
   static const _languageKey = 'app_settings_language_code';
   static const _currencyKey = 'app_settings_currency_code';
+  static const _smartSmsCaptureKey = 'app_settings_smart_sms_capture';
 
   AppSettingsLocalDataSourceImpl({required this.sharedPreferences});
 
@@ -34,4 +37,15 @@ class AppSettingsLocalDataSourceImpl implements AppSettingsLocalDataSource {
   Future<void> setCurrencyCode(String code) async {
     await sharedPreferences.setString(_currencyKey, code);
   }
+
+  @override
+  Future<bool> getSmartTransactionCapture() async {
+    return sharedPreferences.getBool(_smartSmsCaptureKey) ?? false;
+  }
+
+  @override
+  Future<void> setSmartTransactionCapture(bool enabled) async {
+    await sharedPreferences.setBool(_smartSmsCaptureKey, enabled);
+  }
 }
+

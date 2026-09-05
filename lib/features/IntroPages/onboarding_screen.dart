@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/utils/extension/app_extension.dart';
-import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/features/widgets/decoration_widgets/app_button_decoration.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 

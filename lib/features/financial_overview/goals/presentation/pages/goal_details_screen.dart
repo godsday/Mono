@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mono/core/theme/app_theme.dart';
-import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/features/widgets/decoration_widgets/app_button_decoration.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/constants/colors/app_colors.dart';
@@ -288,53 +288,56 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  SizedBox(width: .5.w),
-                  Text(
-                    activeGoal.title,
-                    style: AppTextTheme.montserrart(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  if (!activeGoal.isCompleted) ...[
+          FittedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
                     IconButton(
                       icon:
-                          const Icon(Icons.edit_outlined, color: Colors.white),
-                      tooltip: context.l10n.edit_goal_title,
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          RouteNames.addGoal,
-                          arguments: activeGoal,
-                        );
-                      },
+                          const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.delete_outline, color: Colors.white),
-                      tooltip: context.l10n.delete_goal_title,
-                      onPressed: () => _confirmDeleteGoal(activeGoal),
+                    SizedBox(width: .5.w),
+                    Text(
+                      activeGoal.title,
+                      style: AppTextTheme.montserrart(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                ],
-              ),
-            ],
+                ),
+                Row(
+                  children: [
+                    if (!activeGoal.isCompleted) ...[
+                      IconButton(
+                        icon: const Icon(Icons.edit_outlined,
+                            color: Colors.white),
+                        tooltip: context.l10n.edit_goal_title,
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            RouteNames.addGoal,
+                            arguments: activeGoal,
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline,
+                            color: Colors.white),
+                        tooltip: context.l10n.delete_goal_title,
+                        onPressed: () => _confirmDeleteGoal(activeGoal),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           Padding(

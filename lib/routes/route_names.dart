@@ -13,5 +13,7 @@ class RouteNames {
   static const String bottomNav = '/bottomNav';
   static const String goalDetails = '/goal-details';
   static const String addGoal = '/add-goal';
+  static const String smsParserDebug = '/sms-parser-debug';
 }
+
 

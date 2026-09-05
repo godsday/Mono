@@ -11,6 +11,7 @@ import 'package:mono/features/transaction/presentation/transaction_screen/transa
 import 'package:mono/features/financial_overview/goals/domain/entities/goal_entity.dart';
 import 'package:mono/features/financial_overview/goals/presentation/pages/add_goal_screen.dart';
 import 'package:mono/features/financial_overview/goals/presentation/pages/goal_details_screen.dart';
+import 'package:mono/features/sms_transaction/presentation/pages/sms_parser_debug_screen.dart';
 import '../features/IntroPages/splash_screen.dart';
 import '../features/widgets/bottomnavigationbar.dart';
 import '../features/add_screen/presentation/add_screen.dart';
@@ -98,6 +99,12 @@ class AppRouter {
         final goal = args is GoalEntity ? args : null;
         return _buildPageRoute(
           AddGoalScreen(goal: goal),
+          settings,
+        );
+
+      case RouteNames.smsParserDebug:
+        return _buildPageRoute(
+          const SmsParserDebugScreen(),
           settings,
         );
 

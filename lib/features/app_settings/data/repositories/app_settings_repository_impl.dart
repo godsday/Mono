@@ -11,10 +11,12 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
   Future<AppSettingsEntity> getAppSettings() async {
     final languageCode = await localDataSource.getLanguageCode() ?? 'en';
     final currencyCode = await localDataSource.getCurrencyCode() ?? 'INR';
+    final smartCapture = await localDataSource.getSmartTransactionCapture();
 
     return AppSettingsEntity(
       languageCode: languageCode,
       currencyCode: currencyCode,
+      smartTransactionCapture: smartCapture,
     );
   }
 
@@ -27,4 +29,10 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
   Future<void> updateCurrencyCode(String currencyCode) async {
     await localDataSource.setCurrencyCode(currencyCode);
   }
+
+  @override
+  Future<void> updateSmartTransactionCapture(bool enabled) async {
+    await localDataSource.setSmartTransactionCapture(enabled);
+  }
 }
+

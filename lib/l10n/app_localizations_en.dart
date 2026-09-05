@@ -49,6 +49,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_currency => 'Currency';
 
   @override
+  String get settings_smart_sms_capture => 'Smart SMS Capture';
+
+  @override
+  String get settings_smart_sms_capture_subtitle =>
+      'Automatically capture expenses from bank & UPI SMS';
+
+  @override
+  String get settings_sms_parser_debug => 'Test SMS Parser [Debug]';
+
+  @override
+  String get sms_permission_denied =>
+      'SMS permission is required to capture transactions';
+
+  @override
   String get settings_about => 'About';
 
   @override

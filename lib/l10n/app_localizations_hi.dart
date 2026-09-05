@@ -49,6 +49,20 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settings_currency => 'मुद्रा';
 
   @override
+  String get settings_smart_sms_capture => 'स्मार्ट एसएमएस कैप्चर';
+
+  @override
+  String get settings_smart_sms_capture_subtitle =>
+      'बैंक और यूपीआई एसएमएस से स्वतः खर्च रिकॉर्ड करें';
+
+  @override
+  String get settings_sms_parser_debug => 'एसएमएस पार्सर टेस्ट [डीबग]';
+
+  @override
+  String get sms_permission_denied =>
+      'लेनदेन कैप्चर करने के लिए एसएमएस अनुमति आवश्यक है';
+
+  @override
   String get settings_about => 'ऐप के बारे में';
 
   @override

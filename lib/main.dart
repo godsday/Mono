@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mono/core/notifications/notification_service.dart';
 import 'package:mono/core/storage/encrption/hive_encryption_service.dart';
 import 'package:mono/features/home/presentation/providers/home_provider.dart';
+import 'package:mono/features/sms_transaction/sms_transaction_service.dart';
 import 'package:mono/l10n/app_localizations.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +55,9 @@ Future<void> main() async {
   if (!kIsWeb) {
     await NotificationService().init();
   }
+  if (!kIsWeb && Platform.isAndroid) {
+    await sl<SmsTransactionService>().initialize();
+  }
 
   // Log app_open event
   sl<AnalyticsService>().logAppOpen();
@@ -72,20 +77,28 @@ Future<void> main() async {
           getAppSettingsUseCase: sl(),
           updateLanguageUseCase: sl(),
           updateCurrencyUseCase: sl(),
+          updateSmartTransactionCaptureUseCase: sl(),
         ),
       ),
       ChangeNotifierProvider(
-          create: (_) => TransactionProvider(
-                totalBalanceUseCase: sl(),
-                totalIncomeUseCase: sl(),
-                totalExpenseUseCase: sl(),
-                getTransactionsUseCase: sl(),
-                addTransactionUseCase: sl(),
-                deleteTransactionUseCase: sl(),
-                updateTransactionUseCase: sl(),
-                groupTransactionsUseCase: sl(),
-                analyticsService: sl(),
-              )),
+          create: (_) {
+            final provider = TransactionProvider(
+              totalBalanceUseCase: sl(),
+              totalIncomeUseCase: sl(),
+              totalExpenseUseCase: sl(),
+              getTransactionsUseCase: sl(),
+              addTransactionUseCase: sl(),
+              deleteTransactionUseCase: sl(),
+              updateTransactionUseCase: sl(),
+              groupTransactionsUseCase: sl(),
+              analyticsService: sl(),
+            );
+            sl<SmsTransactionService>().addListener((_) {
+              provider.loadTransactions();
+            });
+            return provider;
+          }),
+
       ChangeNotifierProxyProvider2<TransactionProvider, NotificationProvider,
           HomeProvider>(
         create: (_) => HomeProvider(

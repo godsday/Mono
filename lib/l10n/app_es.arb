@@ -13,7 +13,12 @@
   "settings_dark_mode": "Modo oscuro",
   "settings_language": "Idioma",
   "settings_currency": "Moneda",
+  "settings_smart_sms_capture": "Captura inteligente de SMS",
+  "settings_smart_sms_capture_subtitle": "Registrar gastos automáticamente desde SMS bancarios y UPI",
+  "settings_sms_parser_debug": "Probar analizador de SMS [Debug]",
+  "sms_permission_denied": "Se requiere permiso de SMS para capturar transacciones",
   "settings_about": "Acerca de",
+
   "settings_support": "Soporte",
   "settings_secure_data": "Datos seguros",
   "settings_reset_app": "Reiniciar aplicación",

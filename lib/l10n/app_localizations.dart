@@ -178,6 +178,30 @@ abstract class AppLocalizations {
   /// **'Currency'**
   String get settings_currency;
 
+  /// No description provided for @settings_smart_sms_capture.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart SMS Capture'**
+  String get settings_smart_sms_capture;
+
+  /// No description provided for @settings_smart_sms_capture_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically capture expenses from bank & UPI SMS'**
+  String get settings_smart_sms_capture_subtitle;
+
+  /// No description provided for @settings_sms_parser_debug.
+  ///
+  /// In en, this message translates to:
+  /// **'Test SMS Parser [Debug]'**
+  String get settings_sms_parser_debug;
+
+  /// No description provided for @sms_permission_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS permission is required to capture transactions'**
+  String get sms_permission_denied;
+
   /// No description provided for @settings_about.
   ///
   /// In en, this message translates to:

@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:mono/core/constants/app_textstyle/app_textstyle.dart';
 import 'package:mono/core/constants/colors/app_colors.dart';
 import 'package:mono/core/theme/app_theme.dart';
-import 'package:mono/core/widgets/app_button_decoration.dart';
+import 'package:mono/features/widgets/decoration_widgets/app_button_decoration.dart';
 import 'package:mono/core/utils/extension/context_extension.dart';
 
 import 'package:mono/routes/route_names.dart';

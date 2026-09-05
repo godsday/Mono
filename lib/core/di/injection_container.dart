@@ -37,10 +37,21 @@ import 'package:mono/features/app_settings/domain/repositories/app_settings_repo
 import 'package:mono/features/app_settings/domain/usecases/get_app_settings_usecase.dart';
 import 'package:mono/features/app_settings/domain/usecases/update_language_usecase.dart';
 import 'package:mono/features/app_settings/domain/usecases/update_currency_usecase.dart';
+import 'package:mono/features/app_settings/domain/usecases/update_smart_transaction_capture_usecase.dart';
+import 'package:mono/features/sms_transaction/data/datasources/sms_native_data_source.dart';
+import 'package:mono/features/sms_transaction/domain/parser/candidate_detector.dart';
+import 'package:mono/features/sms_transaction/domain/parser/transaction_template_registry.dart';
+import 'package:mono/features/sms_transaction/domain/services/sms_deduplication_service.dart';
+import 'package:mono/features/sms_transaction/domain/usecases/parse_sms_draft_usecase.dart';
+import 'package:mono/features/sms_transaction/domain/usecases/process_sms_usecase.dart';
+import 'package:mono/features/sms_transaction/domain/validation/transaction_draft_validator.dart';
+import 'package:mono/features/sms_transaction/sms_transaction_service.dart';
+import 'package:mono/core/notifications/notification_service.dart';
 import 'package:mono/providers/theme_provider.dart';
 import 'package:mono/providers/notification_provider.dart';
 import 'package:mono/providers/locale_provider.dart';
 import 'package:mono/core/analytics/analytics_service.dart';
+
 
 final sl = GetIt.instance;
 
@@ -117,6 +128,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAppSettingsUseCase(sl()));
   sl.registerLazySingleton(() => UpdateLanguageUseCase(sl()));
   sl.registerLazySingleton(() => UpdateCurrencyUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateSmartTransactionCaptureUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<AppSettingsRepository>(
@@ -128,8 +140,31 @@ Future<void> init() async {
     () => AppSettingsLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
+  // Features - SMS Transaction Capture
+  sl.registerLazySingleton(() => NotificationService());
+  sl.registerLazySingleton(
+      () => SmsDeduplicationService(sharedPreferences: sl()));
+  sl.registerLazySingleton(() => TransactionDraftValidator());
+  sl.registerLazySingleton(() => CandidateDetector());
+  sl.registerLazySingleton(() => TransactionTemplateRegistry());
+  sl.registerLazySingleton<SmsNativeDataSource>(
+      () => SmsNativeDataSourceImpl());
+  sl.registerLazySingleton(() => ParseSmsDraftUseCase());
+  sl.registerLazySingleton(() => ProcessSmsUseCase(
+        addTransactionUseCase: sl(),
+        deduplicationService: sl(),
+        validator: sl(),
+        notificationService: sl(),
+      ));
+  sl.registerLazySingleton(() => SmsTransactionService(
+        nativeDataSource: sl(),
+        processSmsUseCase: sl(),
+        appSettingsLocalDataSource: sl(),
+      ));
+
   // External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => AnalyticsService());
 }
+
